@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PortalEquador.Data.Groups;
 
 namespace PortalEquador.Data
 {
@@ -9,5 +10,9 @@ namespace PortalEquador.Data
             : base(options)
         {
         }
+
+        public DbSet<Group> Groups { get; set; }
+
+        public DbSet<GroupItem> GroupItems { get; set; }
     }
 }
