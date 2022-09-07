@@ -2,28 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data;
 using PortalEquador.Data.GroupTypes;
+using PortalEquador.Models.GroupTypes;
 
 namespace PortalEquador.Controllers.GroupTypes
 {
     public class GroupsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper mapper;
 
-        public GroupsController(ApplicationDbContext context)
+        public GroupsController(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            this.mapper = mapper;
         }
 
         // GET: Groups
         public async Task<IActionResult> Index()
         {
+            var group = mapper.Map<List<GroupsViewModel>>(await _context.Groups.ToListAsync());
+
               return _context.Groups != null ? 
-                          View(await _context.Groups.ToListAsync()) :
+                          View(group) :
                           Problem("Entity set 'ApplicationDbContext.Groups'  is null.");
         }
 
