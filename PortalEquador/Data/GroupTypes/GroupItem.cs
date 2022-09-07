@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PortalEquador.Data.Groups
+namespace PortalEquador.Data.GroupTypes
 {
     public class GroupItem : BaseEntity
     {

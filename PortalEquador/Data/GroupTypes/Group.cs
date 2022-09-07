@@ -1,4 +1,4 @@
-﻿namespace PortalEquador.Data
+﻿namespace PortalEquador.Data.GroupTypes
 {
     public class Group: BaseEntity
     {

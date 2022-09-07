@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using PortalEquador.Data.Groups;
+using PortalEquador.Data.GroupTypes;
 
 namespace PortalEquador.Data
 {
