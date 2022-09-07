@@ -8,9 +8,11 @@ namespace PortalEquador.Models.GroupTypes
         public int Id { get; set; }
 
         [Display(Name = "Descrição")]
+        [Required(ErrorMessage ="Campo obrigatório")]
         public string Description { get; set; }
 
         [Display(Name = "Observação")]
+        [MaxLength(140, ErrorMessage ="Excedido o numero máximo de caractéres")]
         public string? Observation { get; set; }
     }
 }

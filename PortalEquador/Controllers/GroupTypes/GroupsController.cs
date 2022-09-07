@@ -62,15 +62,17 @@ namespace PortalEquador.Controllers.GroupTypes
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Description,Observation,Id,DateCreated,DateModified")] Group @group)
+        public async Task<IActionResult> Create(GroupsViewModel @groupViewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(@group);
+                var group = mapper.Map<Group>(@groupViewModel);
+
+                _context.Add(group);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(@group);
+            return View(@groupViewModel);
         }
 
         // GET: Groups/Edit/5
