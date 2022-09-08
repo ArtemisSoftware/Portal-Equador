@@ -88,7 +88,9 @@ namespace PortalEquador.Controllers.GroupTypes
             {
                 return NotFound();
             }
-            return View(@group);
+
+            var groupsViewModel = mapper.Map<GroupsViewModel>(@group);
+            return View(groupsViewModel);
         }
 
         // POST: Groups/Edit/5
@@ -96,9 +98,9 @@ namespace PortalEquador.Controllers.GroupTypes
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Description,Observation,Id,DateCreated,DateModified")] Group @group)
+        public async Task<IActionResult> Edit(int id, GroupsViewModel @groupViewModel)
         {
-            if (id != @group.Id)
+            if (id != @groupViewModel.Id)
             {
                 return NotFound();
             }
@@ -107,12 +109,13 @@ namespace PortalEquador.Controllers.GroupTypes
             {
                 try
                 {
+                    var group = mapper.Map<Group>(@groupViewModel);
                     _context.Update(@group);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GroupExists(@group.Id))
+                    if (!GroupExists(@groupViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -123,7 +126,7 @@ namespace PortalEquador.Controllers.GroupTypes
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(@group);
+            return View(@groupViewModel);
         }
 
         // GET: Groups/Delete/5
