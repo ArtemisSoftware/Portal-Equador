@@ -41,14 +41,14 @@ namespace PortalEquador.Controllers.GroupTypes
                 return NotFound();
             }
 
-            var @group = await _context.Groups
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var @group = await _context.Groups.FindAsync(id);
             if (@group == null)
             {
                 return NotFound();
             }
 
-            return View(@group);
+            var groupsViewModel = mapper.Map<GroupsViewModel>(@group);
+            return View(groupsViewModel);
         }
 
         // GET: Groups/Create
