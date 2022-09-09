@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Configurations;
+using PortalEquador.Contracts;
 using PortalEquador.Data;
+using PortalEquador.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 
 
 
-
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 
