@@ -1,4 +1,5 @@
-﻿using PortalEquador.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using PortalEquador.Contracts;
 using PortalEquador.Data;
 
 namespace PortalEquador.Repositories
@@ -31,12 +32,12 @@ namespace PortalEquador.Repositories
             var entity = await GetAsync(id);
             return entity != null;
         }
-        /*
+        
         public async Task<List<T>> GetAllAsync()
         {
             return await context.Set<T>().ToListAsync();
         }
-*/
+
         public async Task<T?> GetAsync(int? id)
         {
             if (id == null)
