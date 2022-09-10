@@ -14,14 +14,14 @@ namespace PortalEquador.Configurations.Entities
                 new IdentityRole
                 {
                     Id = "cac43a6e-f7bb-4448-baaf-1add431ccbbf",
-                    Name = Roles.Administrator,
-                    NormalizedName = Roles.Administrator.ToUpper()
+                    Name = /*Roles.*/"Administrator",
+                    NormalizedName = /*Roles.Administrator*/"Administrator".ToUpper()
                 },
                 new IdentityRole
                 {
                     Id = "cac43a7e-f7cb-4148-baaf-1acb431eabbf",
-                    Name = Roles.User,
-                    NormalizedName = Roles.User.ToUpper()
+                    Name = /*Roles.*/"User",
+                    NormalizedName = /*Roles.*/"User".ToUpper()
                 }
 
             );
