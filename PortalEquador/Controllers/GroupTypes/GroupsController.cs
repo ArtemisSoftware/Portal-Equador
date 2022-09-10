@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PortalEquador.Constants;
 using PortalEquador.Contracts;
 using PortalEquador.Data;
 using PortalEquador.Data.GroupTypes;
@@ -14,7 +15,7 @@ using PortalEquador.Models.GroupTypes;
 
 namespace PortalEquador.Controllers.GroupTypes
 {
-    [Authorize(Roles ="Administrator")]
+    [Authorize(Roles =Roles.Administrator)]
     public class GroupsController : Controller
     {
         private readonly IGroupRepository groupRepository;
