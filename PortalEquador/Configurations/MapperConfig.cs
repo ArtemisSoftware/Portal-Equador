@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using PortalEquador.Data.CurriculumVitae;
 using PortalEquador.Data.GroupTypes;
+using PortalEquador.Models.CurriculumVitae;
 using PortalEquador.Models.GroupTypes;
 
 namespace PortalEquador.Configurations
@@ -9,6 +11,9 @@ namespace PortalEquador.Configurations
         public MapperConfig()
         {
             CreateMap<Group, GroupsViewModel>().ReverseMap();
+
+            CreateMap<PersonalInformation, PersonalInformationViewModel>().ReverseMap();
+            CreateMap<Curriculum, CurriculumViewModel>().ReverseMap();
         }
     }
 }
