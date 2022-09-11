@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using PortalEquador.Constants;
 using PortalEquador.Data;
 
 namespace PortalEquador.Areas.Identity.Pages.Account
@@ -134,7 +135,7 @@ namespace PortalEquador.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    await _userManager.AddToRoleAsync(user, "User");
+                    await _userManager.AddToRoleAsync(user, Roles.User);
 
 
                     var userId = await _userManager.GetUserIdAsync(user);
