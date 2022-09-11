@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Configurations.Entities;
+using PortalEquador.Data.CurriculumVitae;
 using PortalEquador.Data.GroupTypes;
 
 namespace PortalEquador.Data
@@ -25,5 +26,8 @@ namespace PortalEquador.Data
         public DbSet<Group> Groups { get; set; }
 
         public DbSet<GroupItem> GroupItems { get; set; }
+
+        public DbSet<Curriculum> Curriculum { get; set; }
+        public DbSet<PersonalInformation> PersonalInformation { get; set; }
     }
 }

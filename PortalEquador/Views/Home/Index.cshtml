@@ -7,6 +7,33 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card text-start">
+                <div class="card-body">
+                    <h4 class="card-title"><i class="fa-solid fa-database"></i> Curriculos</h4>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a asp-controller="Groups" asp-action="Index" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Administradores</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-primary">Gerir Administradores</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+    <br />
+
+
+
     @if(User.IsInRole(Roles.Administrator)){
         <div class="row">
             <div class="col-sm-6">
