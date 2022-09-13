@@ -11,6 +11,7 @@ namespace PortalEquador.Configurations
         public MapperConfig()
         {
             CreateMap<Group, GroupsViewModel>().ReverseMap();
+            CreateMap<GroupItem, GroupItemViewModel>().ReverseMap();
 
             CreateMap<PersonalInformation, PersonalInformationViewModel>().ReverseMap();
             CreateMap<Curriculum, CurriculumViewModel>().ReverseMap();

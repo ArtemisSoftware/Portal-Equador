@@ -7,5 +7,7 @@ namespace PortalEquador.Contracts
 
 
         Task<bool> GroupItemExists(int groupId, string description);
+
+        Task<List<GroupItem>> GetAllAsync(int groupId);
     }
 }

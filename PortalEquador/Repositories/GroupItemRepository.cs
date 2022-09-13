@@ -17,11 +17,18 @@ namespace PortalEquador.Repositories
         public async Task<bool> GroupItemExists(int groupId, string description)
         {
             return await context.GroupItems.AnyAsync(
-                item => 
-                item.GroupId == groupId
-                && 
-                item.Description == description
-            );
+                item => item.GroupId == groupId
+                && item.Description == description
+                );
+        }
+
+
+        public async Task<List<GroupItem>> GetAllAsync(int groupId)
+        {
+            return await context.GroupItems
+                .Include(item => item.Group)
+                .Where(item => item.GroupId == groupId).ToListAsync();
         }
     }
+    
 }

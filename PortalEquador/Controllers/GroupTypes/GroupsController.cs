@@ -15,7 +15,7 @@ using PortalEquador.Models.GroupTypes;
 
 namespace PortalEquador.Controllers.GroupTypes
 {
-    [Authorize(Roles =Roles.Administrator)]
+    [Authorize(Roles = Roles.Administrator)]
     public class GroupsController : Controller
     {
         private readonly IGroupRepository groupRepository;
@@ -102,12 +102,12 @@ namespace PortalEquador.Controllers.GroupTypes
                 try
                 {
                     var group = mapper.Map<Group>(@groupViewModel);
-                    
+
                     await groupRepository.UpdateAsync(group);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (! await groupRepository.Exists(@groupViewModel.Id))
+                    if (!await groupRepository.Exists(@groupViewModel.Id))
                     {
                         return NotFound();
                     }
@@ -132,5 +132,11 @@ namespace PortalEquador.Controllers.GroupTypes
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ShowGroupItems(int id, GroupsViewModel @groupViewModel)
+        {
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
