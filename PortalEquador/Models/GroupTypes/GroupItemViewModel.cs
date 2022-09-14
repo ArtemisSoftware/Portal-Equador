@@ -19,5 +19,7 @@ namespace PortalEquador.Models.GroupTypes
 
         [Required]
         public int GroupId { get; set; }
+
+        public string? Occurred { get; set; }
     }
 }

@@ -74,14 +74,24 @@ namespace PortalEquador.Controllers.GroupTypes
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(GroupItemViewModel groupItemViewModel)
         {
+
             if (ModelState.IsValid)
             {
                 var groupItem = mapper.Map<GroupItem>(groupItemViewModel);
-                await groupItemRepository.AddAsync(groupItem);
-                return RedirectToAction(nameof(Index), new { id = groupItem.GroupId });
-            }
+                var itemExists = await groupItemRepository.GroupItemExists(groupItemViewModel.GroupId, groupItemViewModel.Description);
 
-            ViewData["GroupId"] = @groupItemViewModel.GroupId;
+                if (itemExists)
+                {
+                    ModelState.AddModelError(nameof(groupItemViewModel.Occurred), "A descrição já existe para o grupo especificado");
+                }
+                else
+                {
+                    await groupItemRepository.AddAsync(groupItem);
+                    return RedirectToAction(nameof(Index), new { id = groupItem.GroupId });
+                }
+            }
+            
+            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Id", groupItemViewModel.GroupId);
             return View(@groupItemViewModel);
         }
 
