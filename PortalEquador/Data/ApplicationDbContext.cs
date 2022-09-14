@@ -4,6 +4,7 @@ using PortalEquador.Configurations.Entities;
 using PortalEquador.Data.CurriculumVitae;
 using PortalEquador.Data.GroupTypes;
 using PortalEquador.Models.Users;
+using PortalEquador.Models.CurriculumVitae;
 
 namespace PortalEquador.Data
 {

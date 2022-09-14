@@ -18,7 +18,7 @@ namespace PortalEquador.Configurations
             CreateMap<User, UserListViewModel>().ReverseMap();
 
             CreateMap<PersonalInformation, PersonalInformationViewModel>().ReverseMap();
-            CreateMap<Curriculum, CurriculumViewModel>().ReverseMap();
+            CreateMap<PersonalInformation, CurriculumListViewModel>().ReverseMap();
         }
     }
 }
