@@ -23,6 +23,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<IGroupItemRepository, GroupItemRepository>();
 builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepository>();
+builder.Services.AddScoped<ICurriculumRepository, CurriculumRepository>();
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 

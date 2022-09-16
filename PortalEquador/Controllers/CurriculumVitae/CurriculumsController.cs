@@ -20,29 +20,29 @@ namespace PortalEquador.Controllers.CurriculumVitae
         private readonly UserManager<User> userManager;
         private readonly IMapper mapper;
         private readonly IPersonalInformationRepository personalInformationRepository;
-        //private readonly ILeaveTypeRepository leaveTypeRepository;
+        private readonly ICurriculumRepository curriculumRepository;
 
         public CurriculumsController(
             UserManager<User> userManager,
             IMapper mapper,
-            IPersonalInformationRepository personalInformationRepository
-            //ILeaveAllocationRepository leaveAllocationRepository,
-            //ILeaveTypeRepository leaveTypeRepository
+            IPersonalInformationRepository personalInformationRepository,
+            ICurriculumRepository curriculumRepository
             )
         {
             this.userManager = userManager;
             this.mapper = mapper;
             this.personalInformationRepository = personalInformationRepository;
-            //this.leaveTypeRepository = leaveTypeRepository;
+            this.curriculumRepository = curriculumRepository;
         }
 
 
 
 
         // GET: CurriculumsController
-        public ActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var list = new List<CurriculumListViewModel>();
+            var result = await personalInformationRepository.GetAllAsync();
+            var list = mapper.Map<List<CurriculumListViewModel>>(result);
             return View(list);
         }
 
@@ -74,7 +74,11 @@ namespace PortalEquador.Controllers.CurriculumVitae
                 }
                 else
                 {
-                    //await personalInformationRepository.AddAsync(personalInformation);
+                    var curriculum = new Curriculum();
+                    curriculum = await curriculumRepository.AddAsync(curriculum);
+
+                    personalInformation.CurriculumId = curriculum.Id; 
+                    await personalInformationRepository.AddAsync(personalInformation);
                     return RedirectToAction(nameof(Index));
                 }
             }

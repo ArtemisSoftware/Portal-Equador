@@ -19,10 +19,7 @@
                 @Html.DisplayNameFor(model => model.IdentityCard)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @Html.DisplayNameFor(model => model.FullName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DateModified)
@@ -40,18 +37,23 @@
                 @Html.DisplayFor(modelItem => item.IdentityCard)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+               @Html.DisplayFor(modelItem => item.FullName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DateModified)
             </td>
             <td>
+
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fas fa-pencil-alt"></i></a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"> <i class="fas fa-info-circle"></i></a>
+                    <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button"> <i class="far fa-trash-alt"></i></button>
+                    <a asp-controller="GroupItems" asp-action="Index" asp-route-id="@item.CurriculumId" class="btn btn-info"> <i class="fas fa-info-circle"></i></a>
+
+                <!--
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                -->
             </td>
         </tr>
 }

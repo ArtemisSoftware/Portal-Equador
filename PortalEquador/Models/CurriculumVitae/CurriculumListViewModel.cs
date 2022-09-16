@@ -9,6 +9,7 @@ namespace PortalEquador.Models.CurriculumVitae
 
         public int CurriculumId { get; set; }
 
+        [Display(Name = "Bilhete de Identidade")]
         public string IdentityCard { get; set; }
 
         [Display(Name = "First Name")]
@@ -26,5 +27,13 @@ namespace PortalEquador.Models.CurriculumVitae
         [Required]
         public int PersonalInformationId { get; set; }
         */
+
+        [Display(Name = "Nome")]
+        public string FullName { 
+            get
+            {
+                return FirstName + " " + LastName;
+            } 
+        }
     }
 }
