@@ -22,6 +22,7 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<IGroupItemRepository, GroupItemRepository>();
+builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepository>();
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 

@@ -2,8 +2,15 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using PortalEquador.Contracts;
 using PortalEquador.Data;
+using PortalEquador.Data.CurriculumVitae;
+using PortalEquador.Data.GroupTypes;
 using PortalEquador.Models.CurriculumVitae;
+using PortalEquador.Models.GroupTypes;
+using PortalEquador.Repositories;
 
 namespace PortalEquador.Controllers.CurriculumVitae
 {
@@ -12,19 +19,20 @@ namespace PortalEquador.Controllers.CurriculumVitae
 
         private readonly UserManager<User> userManager;
         private readonly IMapper mapper;
-        //private readonly ILeaveAllocationRepository leaveAllocationRepository;
+        private readonly IPersonalInformationRepository personalInformationRepository;
         //private readonly ILeaveTypeRepository leaveTypeRepository;
 
         public CurriculumsController(
             UserManager<User> userManager,
-            IMapper mapper
+            IMapper mapper,
+            IPersonalInformationRepository personalInformationRepository
             //ILeaveAllocationRepository leaveAllocationRepository,
             //ILeaveTypeRepository leaveTypeRepository
             )
         {
             this.userManager = userManager;
             this.mapper = mapper;
-            //this.leaveAllocationRepository = leaveAllocationRepository;
+            this.personalInformationRepository = personalInformationRepository;
             //this.leaveTypeRepository = leaveTypeRepository;
         }
 
@@ -53,8 +61,27 @@ namespace PortalEquador.Controllers.CurriculumVitae
         // POST: CurriculumsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> Create(PersonalInformationViewModel personalInformationViewModel)
         {
+            if (ModelState.IsValid)
+            {
+                var personalInformation = mapper.Map<PersonalInformation>(personalInformationViewModel);
+                var itemExists = await personalInformationRepository.PersonalInformationExists(personalInformationViewModel.IdentityCard);
+
+                if (itemExists)
+                {
+                    ModelState.AddModelError(nameof(personalInformationViewModel.Occurred), "O bilhete de identidade já se encontra registado");
+                }
+                else
+                {
+                    //await personalInformationRepository.AddAsync(personalInformation);
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            return View(@personalInformationViewModel);
+
+            /*
             try
             {
                 return RedirectToAction(nameof(Index));
@@ -63,6 +90,7 @@ namespace PortalEquador.Controllers.CurriculumVitae
             {
                 return View();
             }
+            */
         }
 
         // GET: CurriculumsController/Edit/5
