@@ -28,12 +28,9 @@ namespace PortalEquador.Models.CurriculumVitae
         public int PersonalInformationId { get; set; }
         */
 
-        [Display(Name = "Nome")]
+        [Display(Name = "Nome Completo")]
         public string FullName { 
-            get
-            {
-                return FirstName + " " + LastName;
-            } 
+            get { return FirstName + " " + LastName;  } 
         }
     }
 }

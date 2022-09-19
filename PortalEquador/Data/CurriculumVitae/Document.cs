@@ -1,4 +1,5 @@
 ﻿using PortalEquador.Data.GroupTypes;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PortalEquador.Data.CurriculumVitae
@@ -6,12 +7,14 @@ namespace PortalEquador.Data.CurriculumVitae
     public class Document : BaseEntity
     {
 
-
         public string FileExtension { get; set; }
+
+        [NotMapped]
+        public IFormFile ImageFile { get; set; }
 
 
         [ForeignKey("CurriculumId")]
-        public Curriculum Curriculum { get; set; }
+        public PersonalInformation PersonalInformation { get; set; }
 
         public int CurriculumId { get; set; }
 

@@ -31,5 +31,6 @@ namespace PortalEquador.Data
 
         public DbSet<Curriculum> Curriculum { get; set; }
         public DbSet<PersonalInformation> PersonalInformation { get; set; }
+        public DbSet<Document> Documents { get; set; }
     }
 }
