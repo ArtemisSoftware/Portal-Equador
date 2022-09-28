@@ -1,4 +1,4 @@
-﻿@model PortalEquador.Data.CurriculumVitae.Document
+﻿@model PortalEquador.Models.Documents.DocumentCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -8,33 +8,42 @@
 
 <h4>Document</h4>
 <hr />
+<!--
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input asp-for="ImageFile" accept="image/*" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+-->
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="FileExtension" class="control-label"></label>
-                <input asp-for="FileExtension" class="form-control" />
-                <span asp-validation-for="FileExtension" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CurriculumId" class="control-label"></label>
-                <select asp-for="CurriculumId" class ="form-control" asp-items="ViewBag.CurriculumId"></select>
-            </div>
+
             <div class="form-group">
                 <label asp-for="GroupItemId" class="control-label"></label>
-                <select asp-for="GroupItemId" class ="form-control" asp-items="ViewBag.GroupItemId"></select>
+                <select asp-for="GroupItemId" class="form-select" asp-items="Model.DocumentTypes"></select>
             </div>
+            <br />
             <div class="form-group">
-                <label asp-for="DateCreated" class="control-label"></label>
-                <input asp-for="DateCreated" class="form-control" />
-                <span asp-validation-for="DateCreated" class="text-danger"></span>
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input asp-for="ImageFile" accept="image/*" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DateModified" class="control-label"></label>
-                <input asp-for="DateModified" class="form-control" />
-                <span asp-validation-for="DateModified" class="text-danger"></span>
-            </div>
+
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

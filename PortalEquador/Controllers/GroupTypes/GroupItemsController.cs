@@ -28,16 +28,15 @@ namespace PortalEquador.Controllers.GroupTypes
         }
 
         // GET: GroupItems
-        public async Task<IActionResult> Index(int? id)
+        public async Task<IActionResult> Index(int? GroupId)
         {
-
-            if (id == null)
+            if (GroupId == null)
             {
                 return NotFound();
             }
 
-            var group = mapper.Map<List<GroupItemViewModel>>(await groupItemRepository.GetAllAsync(id.Value));
-
+            var group = mapper.Map<List<GroupItemViewModel>>(await groupItemRepository.GetAllAsync(GroupId.Value));
+            ViewData["GroupId"] = GroupId;
             return View(group);
         }
 
@@ -56,14 +55,15 @@ namespace PortalEquador.Controllers.GroupTypes
             {
                 return NotFound();
             }
-
             return View(groupItem);
         }
 
         // GET: GroupItems/Create
-        public IActionResult Create()
+        public IActionResult Create(int? GroupId)
         {
-            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Id");
+            if (GroupId == null) return NotFound();
+            ViewData["GroupId"] = GroupId;
+            //ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Id");
             return View();
         }
 
@@ -72,7 +72,7 @@ namespace PortalEquador.Controllers.GroupTypes
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(GroupItemViewModel groupItemViewModel)
+        public async Task<IActionResult> Create(int? id, GroupItemViewModel groupItemViewModel)
         {
 
             if (ModelState.IsValid)

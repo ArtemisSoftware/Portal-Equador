@@ -5,27 +5,73 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PortalEquador.Contracts;
 using PortalEquador.Data;
 using PortalEquador.Data.CurriculumVitae;
+using PortalEquador.Data.GroupTypes;
+using PortalEquador.Models.Documents;
+using PortalEquador.Repositories;
 
-namespace PortalEquador.Views
+namespace PortalEquador.Controllers.CurriculumVitae
 {
     public class DocumentsController : Controller
     {
+        private readonly IDocumentRepository documentRepository;
         private readonly ApplicationDbContext _context;
-
-        public DocumentsController(ApplicationDbContext context)
+        public DocumentsController(
+            ApplicationDbContext context,
+            IDocumentRepository documentRepository
+         )
         {
-            _context = context;
+            _context = context; 
+            this.documentRepository = documentRepository;
         }
 
         // GET: Documents
         public async Task<IActionResult> Index()
         {
+            /*
             var applicationDbContext = _context.Documents.Include(d => d.GroupItem).Include(d => d.PersonalInformation);
-            return View(await applicationDbContext.ToListAsync());
+            var lolo = await applicationDbContext.ToListAsync();
+            return View(lolo);
+            */
+            var result = await documentRepository.GetAllPersonalDocAsync();
+            return View(result);
         }
 
+        // GET: Documents/Create
+        public IActionResult Create()
+        {
+
+            var model = new DocumentCreateViewModel
+            {
+                DocumentTypes = new SelectList(_context.GroupItems.Where(x => x.GroupId == 7), "Id", "Description")
+            };
+
+            //ViewData["GroupItemId"] = new SelectList(_context.GroupItems.Where(x => x.GroupId == 7), "Id", "Description");
+            ViewData["CurriculumId"] = new SelectList(_context.PersonalInformation, "Id", "Id");
+            return View(model);
+        }
+
+        // POST: Documents/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("FileExtension,CurriculumId,GroupItemId,Id,DateCreated,DateModified")] Document document)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(document);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Description", document.GroupItemId);
+            ViewData["CurriculumId"] = new SelectList(_context.PersonalInformation, "Id", "Id", document.CurriculumId);
+            return View(document);
+        }
+
+        /*
         // GET: Documents/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -46,31 +92,9 @@ namespace PortalEquador.Views
             return View(document);
         }
 
-        // GET: Documents/Create
-        public IActionResult Create()
-        {
-            ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Id");
-            ViewData["CurriculumId"] = new SelectList(_context.PersonalInformation, "Id", "Id");
-            return View();
-        }
 
-        // POST: Documents/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FileExtension,CurriculumId,GroupItemId,Id,DateCreated,DateModified")] Document document)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(document);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Id", document.GroupItemId);
-            ViewData["CurriculumId"] = new SelectList(_context.PersonalInformation, "Id", "Id", document.CurriculumId);
-            return View(document);
-        }
+
+
 
         // GET: Documents/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -161,14 +185,14 @@ namespace PortalEquador.Views
             {
                 _context.Documents.Remove(document);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool DocumentExists(int id)
         {
-          return _context.Documents.Any(e => e.Id == id);
-        }
+            return _context.Documents.Any(e => e.Id == id);
+        }*/
     }
 }
