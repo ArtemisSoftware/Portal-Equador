@@ -9,5 +9,7 @@
         public string FullName { get; set; }
 
         public int NumberOfDocuments { get; set; }
+
+        public string ProfilePicture { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace PortalEquador.Models.Documents
 
         public SelectList? DocumentTypes { get; set; }
 
+        [Display(Name = "dfgdfgd")]
         [NotMapped]
         public IFormFile ImageFile { get; set; }
 

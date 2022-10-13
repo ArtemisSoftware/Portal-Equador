@@ -8,38 +8,22 @@
 
 <h4>Document</h4>
 <hr />
-<!--
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-           
-            <div class="form-group">
-                <label asp-for="ImageFile" class="control-label"></label>
-                <input asp-for="ImageFile" accept="image/*" />
-                <span asp-validation-for="ImageFile" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
--->
+
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
                 <label asp-for="GroupItemId" class="control-label"></label>
                 <select asp-for="GroupItemId" class="form-select" asp-items="Model.DocumentTypes"></select>
             </div>
+            <input type="hidden" asp-for="CurriculumId" />
             <br />
             <div class="form-group">
-                <label asp-for="ImageFile" class="control-label"></label>
-                <input asp-for="ImageFile" accept="image/*" />
+                <label asp-for="ImageFile" class="form-label"></label>
+                <input asp-for="ImageFile" accept="image/*" onchange="preview()" class="form-control" type="file" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
 
@@ -48,6 +32,12 @@
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
+    </div>
+
+    <div class="col-md-8">
+        <label for="Image" class="form-label">Pré-visualização</label>
+        <br />
+        <img id="frame" src="" class="img-fluid" />
     </div>
 </div>
 
@@ -55,3 +45,14 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section Scripts{
+    <script>
+        function preview() {
+            frame.src = URL.createObjectURL(event.target.files[0]);
+        }
+        function clearImage() {
+            document.getElementById('formFile').value = null;
+            frame.src = "";
+        }
+    </script>
+}

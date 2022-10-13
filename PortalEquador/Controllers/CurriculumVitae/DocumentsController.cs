@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using PortalEquador.Contracts;
 using PortalEquador.Data;
 using PortalEquador.Data.CurriculumVitae;
 using PortalEquador.Data.GroupTypes;
 using PortalEquador.Models.Documents;
+using PortalEquador.Models.GroupTypes;
 using PortalEquador.Repositories;
 
 namespace PortalEquador.Controllers.CurriculumVitae
@@ -17,14 +21,21 @@ namespace PortalEquador.Controllers.CurriculumVitae
     public class DocumentsController : Controller
     {
         private readonly IDocumentRepository documentRepository;
+        private readonly IWebHostEnvironment _hostEnvironment;
         private readonly ApplicationDbContext _context;
+        private readonly IMapper mapper;
+
         public DocumentsController(
             ApplicationDbContext context,
-            IDocumentRepository documentRepository
+            IDocumentRepository documentRepository, 
+            IWebHostEnvironment hostEnvironment,
+            IMapper mapper
          )
         {
             _context = context; 
             this.documentRepository = documentRepository;
+            this._hostEnvironment = hostEnvironment;
+            this.mapper = mapper;
         }
 
         // GET: Documents
@@ -40,7 +51,7 @@ namespace PortalEquador.Controllers.CurriculumVitae
         }
 
         // GET: Documents/Create
-        public IActionResult Create()
+        public IActionResult Create(int CurriculumId)
         {
 
             var model = new DocumentCreateViewModel
@@ -49,7 +60,7 @@ namespace PortalEquador.Controllers.CurriculumVitae
             };
 
             //ViewData["GroupItemId"] = new SelectList(_context.GroupItems.Where(x => x.GroupId == 7), "Id", "Description");
-            ViewData["CurriculumId"] = new SelectList(_context.PersonalInformation, "Id", "Id");
+            ViewData["CurriculumId"] = CurriculumId;
             return View(model);
         }
 
@@ -58,17 +69,38 @@ namespace PortalEquador.Controllers.CurriculumVitae
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FileExtension,CurriculumId,GroupItemId,Id,DateCreated,DateModified")] Document document)
+        public async Task<IActionResult> Create(DocumentCreateViewModel documentCreateViewModel)
         {
+ 
             if (ModelState.IsValid)
             {
-                _context.Add(document);
-                await _context.SaveChangesAsync();
+                string fileName = Path.GetFileNameWithoutExtension(documentCreateViewModel.ImageFile.FileName);
+                string extension = Path.GetExtension(documentCreateViewModel.ImageFile.FileName);
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string root = wwwRootPath + "/images/" + documentCreateViewModel.CurriculumId + "/";
+                fileName = documentCreateViewModel.GroupItemId +  extension;
+                
+                if (!Directory.Exists(root))
+                {
+                    Directory.CreateDirectory(root);
+                }
+
+                string path = Path.Combine(root, fileName);
+
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                 {
+                     await documentCreateViewModel.ImageFile.CopyToAsync(fileStream);
+                 }
+
+                var document = mapper.Map<Document>(documentCreateViewModel);
+                document.FileExtension = extension;
+                await documentRepository.AddAsync(document);
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Description", document.GroupItemId);
-            ViewData["CurriculumId"] = new SelectList(_context.PersonalInformation, "Id", "Id", document.CurriculumId);
-            return View(document);
+            ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Description", documentCreateViewModel.GroupItemId);
+            ViewData["CurriculumId"] = new SelectList(_context.PersonalInformation, "Id", "Id", documentCreateViewModel.CurriculumId);
+            return View(documentCreateViewModel);
         }
 
         /*

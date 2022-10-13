@@ -3,6 +3,7 @@ using PortalEquador.Data;
 using PortalEquador.Data.CurriculumVitae;
 using PortalEquador.Data.GroupTypes;
 using PortalEquador.Models.CurriculumVitae;
+using PortalEquador.Models.Documents;
 using PortalEquador.Models.GroupTypes;
 using PortalEquador.Models.Users;
 
@@ -19,6 +20,7 @@ namespace PortalEquador.Configurations
 
             CreateMap<PersonalInformation, PersonalInformationViewModel>().ReverseMap();
             CreateMap<PersonalInformation, CurriculumListViewModel>().ReverseMap();
+            CreateMap<Document, DocumentCreateViewModel>().ReverseMap();
         }
     }
 }
