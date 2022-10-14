@@ -34,7 +34,10 @@
                 <td class ="align-middle">
                     @if (item.NumberOfDocuments > 0)
                     {
-                        <a asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                        <a asp-action="Details" asp-route-curriculumId="@item.CurriculumId" class="btn btn-primary">
+                            Documentos <span class="badge badge-light">@Html.DisplayFor(modelItem => item.NumberOfDocuments)</span>
+                         </a>
+
                     }
                     else{
                         <a asp-action="Create" asp-route-CurriculumId="@item.CurriculumId">Create New</a>

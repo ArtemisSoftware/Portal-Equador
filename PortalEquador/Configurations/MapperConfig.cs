@@ -21,6 +21,7 @@ namespace PortalEquador.Configurations
             CreateMap<PersonalInformation, PersonalInformationViewModel>().ReverseMap();
             CreateMap<PersonalInformation, CurriculumListViewModel>().ReverseMap();
             CreateMap<Document, DocumentCreateViewModel>().ReverseMap();
+            CreateMap<Document, DocumentDetailViewModel>().ReverseMap();
         }
     }
 }

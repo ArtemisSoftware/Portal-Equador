@@ -103,29 +103,23 @@ namespace PortalEquador.Controllers.CurriculumVitae
             return View(documentCreateViewModel);
         }
 
-        /*
+        
         // GET: Documents/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? curriculumId)
         {
-            if (id == null || _context.Documents == null)
+            if (curriculumId == null)
             {
                 return NotFound();
             }
 
-            var document = await _context.Documents
-                .Include(d => d.GroupItem)
-                .Include(d => d.PersonalInformation)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (document == null)
-            {
-                return NotFound();
-            }
+            var result = await documentRepository.GetAllDocumentsAsync((int)curriculumId);
+            var documents = mapper.Map<List<DocumentDetailViewModel>>(result);
 
-            return View(document);
+            return View(documents);
         }
 
 
-
+        /*
 
 
         // GET: Documents/Edit/5

@@ -7,5 +7,6 @@ namespace PortalEquador.Contracts
     public interface IDocumentRepository : IGenericRepository<Document>
     {
         Task<List<DocumentsViewModel>> GetAllPersonalDocAsync();
+        Task<List<Document>> GetAllDocumentsAsync(int curriculumId);
     }
 }
