@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using NuGet.Packaging;
 using PortalEquador.Contracts;
 using PortalEquador.Data;
 
@@ -51,6 +53,12 @@ namespace PortalEquador.Repositories
         {
             context.Update(entity);
             await context.SaveChangesAsync();
+        }
+
+        public SelectList GroupItems(int groupId)
+        {
+            var result =  context.GroupItems.Where(x => x.GroupId == groupId);
+            return  new SelectList(result, "Id", "Description");
         }
     }
 }

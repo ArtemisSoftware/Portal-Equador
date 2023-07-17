@@ -1,0 +1,61 @@
+﻿@model PortalEquador.Data.DriversLicence.Entities.DriversLicenceEntity
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>DriversLicenceEntity</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CurriculumId" class="control-label"></label>
+                <input asp-for="CurriculumId" class="form-control" />
+                <span asp-validation-for="CurriculumId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpirationDate" class="control-label"></label>
+                <input asp-for="ExpirationDate" class="form-control" />
+                <span asp-validation-for="ExpirationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProvisionalRenewalNumber" class="control-label"></label>
+                <input asp-for="ProvisionalRenewalNumber" class="form-control" />
+                <span asp-validation-for="ProvisionalRenewalNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProvisionalExpirationDate" class="control-label"></label>
+                <input asp-for="ProvisionalExpirationDate" class="form-control" />
+                <span asp-validation-for="ProvisionalExpirationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GroupItemId" class="control-label"></label>
+                <select asp-for="GroupItemId" class="form-control" asp-items="ViewBag.GroupItemId"></select>
+                <span asp-validation-for="GroupItemId" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="DateCreated" class="control-label"></label>
+                <input asp-for="DateCreated" class="form-control" />
+                <span asp-validation-for="DateCreated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateModified" class="control-label"></label>
+                <input asp-for="DateModified" class="form-control" />
+                <span asp-validation-for="DateModified" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
+using PortalEquador.Constants;
 using PortalEquador.Contracts;
 using PortalEquador.Data;
 using PortalEquador.Data.CurriculumVitae;
@@ -56,10 +57,8 @@ namespace PortalEquador.Controllers.CurriculumVitae
 
             var model = new DocumentCreateViewModel
             {
-                DocumentTypes = new SelectList(_context.GroupItems.Where(x => x.GroupId == 7), "Id", "Description")
+                DocumentTypes = new SelectList(_context.GroupItems.Where(x => x.GroupId == Groups.DOCUMENTS), "Id", "Description")
             };
-
-            //ViewData["GroupItemId"] = new SelectList(_context.GroupItems.Where(x => x.GroupId == 7), "Id", "Description");
             ViewData["CurriculumId"] = CurriculumId;
             return View(model);
         }

@@ -3,7 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using PortalEquador.Configurations;
 using PortalEquador.Contracts;
 using PortalEquador.Data;
+using PortalEquador.Domain.Repositories;
 using PortalEquador.Repositories;
+using PortalEquador.Data.DriversLicence.Repository;
+using PortalEquador.Domain.Converters;
+using PortalEquador.Data.Converters;
+using PortalEquador.Domain.UseCases.DriversLicence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +30,10 @@ builder.Services.AddScoped<IGroupItemRepository, GroupItemRepository>();
 builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepository>();
 builder.Services.AddScoped<ICurriculumRepository, CurriculumRepository>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+builder.Services.AddScoped<DriversLicenceRepository, DriversLicenceRepositoryImpl>();
+builder.Services.AddScoped<ImageHelper, ImageHelperImpl>();
+builder.Services.AddScoped<SaveDriversLicenceUseCaseImpl>();
 builder.Services.AddAutoMapper(typeof(MapperConfig));
-
 
 
 

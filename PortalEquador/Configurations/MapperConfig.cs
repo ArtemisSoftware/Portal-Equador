@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using PortalEquador.Data;
 using PortalEquador.Data.CurriculumVitae;
+using PortalEquador.Data.DriversLicence.Entities;
 using PortalEquador.Data.GroupTypes;
+using PortalEquador.Domain.Models.DriversLicence;
 using PortalEquador.Models.CurriculumVitae;
 using PortalEquador.Models.Documents;
 using PortalEquador.Models.GroupTypes;
@@ -22,6 +24,8 @@ namespace PortalEquador.Configurations
             CreateMap<PersonalInformation, CurriculumListViewModel>().ReverseMap();
             CreateMap<Document, DocumentCreateViewModel>().ReverseMap();
             CreateMap<Document, DocumentDetailViewModel>().ReverseMap();
+
+            CreateMap<DriversLicenceEntity, DriversLicenceCreateViewModel>().ReverseMap();
         }
     }
 }

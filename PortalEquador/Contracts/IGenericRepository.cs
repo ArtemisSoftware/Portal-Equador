@@ -1,4 +1,6 @@
-﻿namespace PortalEquador.Contracts
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace PortalEquador.Contracts
 {
     public interface IGenericRepository<T> where T : class
     {
@@ -8,5 +10,6 @@
         Task<bool> Exists(int id);
         Task DeleteAsync(int id);
         Task UpdateAsync(T entity);
+        SelectList GroupItems(int groupId);
     }
 }

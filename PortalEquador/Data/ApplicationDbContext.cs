@@ -5,6 +5,7 @@ using PortalEquador.Data.CurriculumVitae;
 using PortalEquador.Data.GroupTypes;
 using PortalEquador.Models.Users;
 using PortalEquador.Models.CurriculumVitae;
+using PortalEquador.Data.DriversLicence.Entities;
 
 namespace PortalEquador.Data
 {
@@ -32,5 +33,7 @@ namespace PortalEquador.Data
         public DbSet<Curriculum> Curriculum { get; set; }
         public DbSet<PersonalInformation> PersonalInformation { get; set; }
         public DbSet<Document> Documents { get; set; }
+
+        public DbSet<DriversLicenceEntity> DriversLicenceEntity { get; set; }
     }
 }
