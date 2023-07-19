@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Constants;
 using PortalEquador.Data;
+using PortalEquador.Data.CurriculumVitae;
 using PortalEquador.Data.DriversLicence.Entities;
 using PortalEquador.Data.Migrations;
 using PortalEquador.Domain.Converters;
 using PortalEquador.Domain.Models.DriversLicence;
 using PortalEquador.Domain.Repositories;
+using PortalEquador.Domain.UseCases.Documents;
 using PortalEquador.Domain.UseCases.DriversLicence;
 using PortalEquador.Models.Documents;
 
@@ -24,24 +26,25 @@ namespace PortalEquador.Controllers.DriversLicence
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly DriversLicenceRepository _driversLicenceRepository;
-        private readonly SaveDriversLicenceUseCaseImpl _saveDriversLicenceUseCase;
-        private readonly ImageHelper _imageHelper;
+        private readonly SaveDriversLicenceUseCase _saveDriversLicenceUseCase;
+        private readonly SaveDocumentUseCase _saveDocumentUseCase;
 
         public DriversLicenceController(
             ApplicationDbContext context, 
             DriversLicenceRepository driversLicenceRepository,
             IWebHostEnvironment hostEnvironment,
             IMapper mapper,
-            ImageHelper imageHelper,
-            SaveDriversLicenceUseCaseImpl saveDriversLicenceUseCase
+            SaveDriversLicenceUseCase saveDriversLicenceUseCase,
+            SaveDocumentUseCase saveDocumentUseCase
             )
         {
             _context = context;
             _hostEnvironment = hostEnvironment;
             _mapper = mapper;
             _driversLicenceRepository = driversLicenceRepository;
-            _imageHelper = imageHelper;
+
             _saveDriversLicenceUseCase = saveDriversLicenceUseCase;
+            _saveDocumentUseCase = saveDocumentUseCase;
         }
 
         // GET: DriversLicence
@@ -75,6 +78,7 @@ namespace PortalEquador.Controllers.DriversLicence
         {
             var model = new DriversLicenceCreateViewModel
             {
+                CurriculumId = 1,
                 LicenceTypes = _driversLicenceRepository.GroupItems(Groups.DRIVERS_LICENCE)
             };
 
@@ -87,22 +91,25 @@ namespace PortalEquador.Controllers.DriversLicence
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DriversLicenceCreateViewModel driversLicenceCreateViewModel)
+        public async Task<IActionResult> Create(DriversLicenceCreateViewModel model)
         {
+ 
             if (ModelState.IsValid)
-            {
-                _imageHelper.CreateImage(driversLicenceCreateViewModel.ImageFile, driversLicenceCreateViewModel.CurriculumId, driversLicenceCreateViewModel.GroupItemId);
-                /*
-                _context.Add(driversLicenceEntity);
-                await _context.SaveChangesAsync();
+            {/*
+                if(model.ImageFile != null) {
+                    var document = _mapper.Map<Document>(model);
+                    await _saveDocumentUseCase.Invoke(document);
+                }
                 */
+                 await _saveDriversLicenceUseCase.Invoke(model);
+ 
                 return RedirectToAction(nameof(Index));
             }
             /*
             ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Id", driversLicenceEntity.GroupItemId);
             return View(driversLicenceEntity);
             */
-            return View();
+            return View(model);
         }
 
         // GET: DriversLicence/Edit/5

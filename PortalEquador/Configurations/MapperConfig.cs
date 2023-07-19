@@ -26,6 +26,7 @@ namespace PortalEquador.Configurations
             CreateMap<Document, DocumentDetailViewModel>().ReverseMap();
 
             CreateMap<DriversLicenceEntity, DriversLicenceCreateViewModel>().ReverseMap();
+            CreateMap<Document, DriversLicenceCreateViewModel>().ReverseMap();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace PortalEquador.Domain.Models.DriversLicence
     {
         public int CurriculumId { get; set; }
 
-        [Display(Name = "Carta de condução")]
+        [Display(Name = "Tipo de carta")]
         [Required]
         public int GroupItemId { get; set; }
 
@@ -21,6 +21,9 @@ namespace PortalEquador.Domain.Models.DriversLicence
         public DateTime? ExpirationDate { get; set; }
 
         [NotMapped]
-        public IFormFile ImageFile { get; set; }
+        public bool ExpirationDateAvailable { get; set; }
+
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; }
     }
 }

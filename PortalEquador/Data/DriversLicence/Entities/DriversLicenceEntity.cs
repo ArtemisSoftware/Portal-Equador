@@ -1,4 +1,5 @@
-﻿using PortalEquador.Data.GroupTypes;
+﻿using PortalEquador.Data.CurriculumVitae;
+using PortalEquador.Data.GroupTypes;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PortalEquador.Data.DriversLicence.Entities
@@ -6,6 +7,9 @@ namespace PortalEquador.Data.DriversLicence.Entities
     public class DriversLicenceEntity : BaseEntity
     {
         public int CurriculumId { get; set; }
+
+        [ForeignKey("CurriculumId")]
+        public PersonalInformation PersonalInformation { get; set; }
 
         public DateTime? ExpirationDate { get; set; }
 

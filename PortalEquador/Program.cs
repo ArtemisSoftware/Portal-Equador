@@ -9,6 +9,7 @@ using PortalEquador.Data.DriversLicence.Repository;
 using PortalEquador.Domain.Converters;
 using PortalEquador.Data.Converters;
 using PortalEquador.Domain.UseCases.DriversLicence;
+using PortalEquador.Domain.UseCases.Documents;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +33,12 @@ builder.Services.AddScoped<ICurriculumRepository, CurriculumRepository>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddScoped<DriversLicenceRepository, DriversLicenceRepositoryImpl>();
 builder.Services.AddScoped<ImageHelper, ImageHelperImpl>();
-builder.Services.AddScoped<SaveDriversLicenceUseCaseImpl>();
+
+//Use cases
+builder.Services.AddScoped<SaveDriversLicenceUseCase>();
+builder.Services.AddScoped<SaveDocumentUseCase>();
+
+
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 
 

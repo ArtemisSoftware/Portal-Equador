@@ -19,7 +19,9 @@ namespace PortalEquador.Data.DriversLicence.Repository
         public async Task<List<DriversLicenceEntity>> GetAllDriversLicenceAsync()
         {
             return await context.DriversLicenceEntity
-                .Include(item => item.GroupItemId).ToListAsync();
+                .Include(item => item.GroupItemId)
+                .Include(item => item.CurriculumId)
+                .ToListAsync();
         }
 
     }
