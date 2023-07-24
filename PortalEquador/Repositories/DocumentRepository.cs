@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using PortalEquador.Models.CurriculumVitae;
 using PortalEquador.Data.GroupTypes;
 using PortalEquador.Models.Documents;
+using PortalEquador.Domain.Models.Document;
+using PortalEquador.Util;
 
 namespace PortalEquador.Repositories
 {
@@ -46,5 +48,28 @@ namespace PortalEquador.Repositories
                 .Where(item => item.CurriculumId == curriculumId).ToListAsync();
         }
 
+        public async Task<List<DocumentViewModel>> GetDocumentsByTypeAsync(int curriculumId, List<int> documentTypeIds)
+        {
+            List<DocumentViewModel> models = new List<DocumentViewModel>();
+
+            var results = await context.Documents
+                .Include(item => item.GroupItem)
+                .Where(item => item.CurriculumId == curriculumId & documentTypeIds.Contains(item.GroupItemId)).ToListAsync();
+
+            foreach (var result in results)
+            {
+                models.Add(
+                    new DocumentViewModel
+                    {
+                        Id = result.Id,
+                        GroupItemId = result.GroupItemId,
+                        Name = result.GroupItem.Description,
+                        FilePath = ImagesUtil.GetFilePath(result.CurriculumId, result.GroupItemId, result.FileExtension),
+                    }
+                );
+            }
+
+            return models;
+        }
     }
 }

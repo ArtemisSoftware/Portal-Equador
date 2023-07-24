@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using PortalEquador.Configurations.Entities;
 using PortalEquador.Data.CurriculumVitae;
 using PortalEquador.Data.GroupTypes;
-using PortalEquador.Models.Users;
-using PortalEquador.Models.CurriculumVitae;
 using PortalEquador.Data.DriversLicence.Entities;
 
 namespace PortalEquador.Data

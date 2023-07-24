@@ -16,6 +16,7 @@ using PortalEquador.Domain.Models.DriversLicence;
 using PortalEquador.Domain.Repositories;
 using PortalEquador.Domain.UseCases.Documents;
 using PortalEquador.Domain.UseCases.DriversLicence;
+using PortalEquador.Domain.UseCases.PersonalInformation;
 using PortalEquador.Models.Documents;
 
 namespace PortalEquador.Controllers.DriversLicence
@@ -28,6 +29,9 @@ namespace PortalEquador.Controllers.DriversLicence
         private readonly DriversLicenceRepository _driversLicenceRepository;
         private readonly SaveDriversLicenceUseCase _saveDriversLicenceUseCase;
         private readonly SaveDocumentUseCase _saveDocumentUseCase;
+        private readonly GetAllDriversLicencesUseCase _getAllDriversLicencesUseCase;
+        private readonly GetDriversLicenceCreationInfoUseCase _getDriversLicenceCreationInfoUseCase;
+        private readonly GetDriversLicenceUseCase _getDriversLicenceUseCase;
 
         public DriversLicenceController(
             ApplicationDbContext context, 
@@ -35,7 +39,10 @@ namespace PortalEquador.Controllers.DriversLicence
             IWebHostEnvironment hostEnvironment,
             IMapper mapper,
             SaveDriversLicenceUseCase saveDriversLicenceUseCase,
-            SaveDocumentUseCase saveDocumentUseCase
+            SaveDocumentUseCase saveDocumentUseCase,
+            GetAllDriversLicencesUseCase getAllDriversLicencesUseCase,
+            GetDriversLicenceCreationInfoUseCase getDriversLicenceCreationInfoUseCase,
+            GetDriversLicenceUseCase getDriversLicenceUseCase
             )
         {
             _context = context;
@@ -45,44 +52,41 @@ namespace PortalEquador.Controllers.DriversLicence
 
             _saveDriversLicenceUseCase = saveDriversLicenceUseCase;
             _saveDocumentUseCase = saveDocumentUseCase;
+            _getAllDriversLicencesUseCase = getAllDriversLicencesUseCase;
+            _getDriversLicenceCreationInfoUseCase = getDriversLicenceCreationInfoUseCase;
+            _getDriversLicenceUseCase = getDriversLicenceUseCase;
         }
 
         // GET: DriversLicence
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.DriversLicenceEntity.Include(d => d.GroupItem);
-            return View(await applicationDbContext.ToListAsync());
+            var result = await _getAllDriversLicencesUseCase.Invoke();
+            return View(result);
         }
 
         // GET: DriversLicence/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? CurriculumId)
         {
-            if (id == null || _context.DriversLicenceEntity == null)
+            if (CurriculumId == null)
             {
                 return NotFound();
             }
-
-            var driversLicenceEntity = await _context.DriversLicenceEntity
-                .Include(d => d.GroupItem)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (driversLicenceEntity == null)
+            else
             {
-                return NotFound();
+                var model = await _getDriversLicenceUseCase.Invoke((int)CurriculumId);
+                if (model == null)
+                {
+                    return NotFound();
+                }
+                return View(model);
             }
-
-            return View(driversLicenceEntity);
         }
 
         // GET: DriversLicence/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int CurriculumId)
         {
-            var model = new DriversLicenceCreateViewModel
-            {
-                CurriculumId = 1,
-                LicenceTypes = _driversLicenceRepository.GroupItems(Groups.DRIVERS_LICENCE)
-            };
+            var model = await _getDriversLicenceCreationInfoUseCase.Invoke(CurriculumId);
 
-            ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Id");
             return View(model);
         }
 
@@ -95,20 +99,17 @@ namespace PortalEquador.Controllers.DriversLicence
         {
  
             if (ModelState.IsValid)
-            {/*
+            {
                 if(model.ImageFile != null) {
                     var document = _mapper.Map<Document>(model);
                     await _saveDocumentUseCase.Invoke(document);
                 }
-                */
+                
                  await _saveDriversLicenceUseCase.Invoke(model);
  
                 return RedirectToAction(nameof(Index));
             }
-            /*
-            ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Id", driversLicenceEntity.GroupItemId);
-            return View(driversLicenceEntity);
-            */
+            
             return View(model);
         }
 

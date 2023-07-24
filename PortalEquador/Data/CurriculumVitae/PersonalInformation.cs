@@ -17,11 +17,10 @@ namespace PortalEquador.Data.CurriculumVitae
         public DateTime DateOfBirth { get; set; }
 
 
-
+        public int CurriculumId { get; set; }
 
         [ForeignKey("CurriculumId")]
         public Curriculum Curriculum { get; set; }
 
-        public int CurriculumId { get; set; }
     }
 }

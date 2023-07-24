@@ -11,11 +11,7 @@ namespace PortalEquador.Data.CurriculumVitae
 
         [NotMapped]
         public IFormFile ImageFile { get; set; }
-
-
-        [ForeignKey("CurriculumId")]
-        public PersonalInformation PersonalInformation { get; set; }
-
+        
         public int CurriculumId { get; set; }
 
 

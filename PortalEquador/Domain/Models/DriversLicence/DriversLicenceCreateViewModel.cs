@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using PortalEquador.Constants;
+using PortalEquador.Data.PInformation;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Linq;
@@ -9,13 +11,13 @@ namespace PortalEquador.Domain.Models.DriversLicence
     {
         public int CurriculumId { get; set; }
 
-        [Display(Name = "Tipo de carta")]
+        [Display(Name = StringConstants.Display.DRIVERS_LICENCE_TYPE)]
         [Required]
         public int GroupItemId { get; set; }
 
         public SelectList? LicenceTypes { get; set; }
 
-        [Display(Name = "Data de expiração")]
+        [Display(Name = StringConstants.Display.EXPIRATION_DATE)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
         [DataType(DataType.Date)]
         public DateTime? ExpirationDate { get; set; }
@@ -25,5 +27,8 @@ namespace PortalEquador.Domain.Models.DriversLicence
 
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
+
+        [NotMapped]
+        public ProfileInformation? Profile { get; set; }
     }
 }

@@ -10,6 +10,7 @@ using PortalEquador.Domain.Converters;
 using PortalEquador.Data.Converters;
 using PortalEquador.Domain.UseCases.DriversLicence;
 using PortalEquador.Domain.UseCases.Documents;
+using PortalEquador.Domain.UseCases.PersonalInformation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,9 +36,15 @@ builder.Services.AddScoped<DriversLicenceRepository, DriversLicenceRepositoryImp
 builder.Services.AddScoped<ImageHelper, ImageHelperImpl>();
 
 //Use cases
+builder.Services.AddScoped<GetPersonalInformationUseCase>();
+builder.Services.AddScoped < GetDriversLicenceCreationInfoUseCase>();
+
+builder.Services.AddScoped<GetDocumentsByTypeUseCase>();
+
 builder.Services.AddScoped<SaveDriversLicenceUseCase>();
 builder.Services.AddScoped<SaveDocumentUseCase>();
-
+builder.Services.AddScoped<GetAllDriversLicencesUseCase>();
+builder.Services.AddScoped<GetDriversLicenceUseCase>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 

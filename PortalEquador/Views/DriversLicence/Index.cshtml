@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PortalEquador.Data.DriversLicence.Entities.DriversLicenceEntity>
+﻿@model IEnumerable<PortalEquador.Domain.Models.DriversLicence.DriversLicenceViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -12,60 +12,98 @@
 <table class="table">
     <thead>
         <tr>
+            <th></th>
             <th>
-                @Html.DisplayNameFor(model => model.CurriculumId)
+                @Html.DisplayNameFor(model => model.FullName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ExpirationDate)
+                @Html.DisplayNameFor(model => model.Licence)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProvisionalRenewalNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProvisionalExpirationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GroupItem)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateModified)
+                @Html.DisplayNameFor(model => model.Status)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.CurriculumId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExpirationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProvisionalRenewalNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProvisionalExpirationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GroupItem.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateModified)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="align-middle" width="100">
+                    <img src="@Url.Content(item.ProfilePicturePath)" class="img-thumbnail rounded-circle" width="52" height="52">
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Licence)
+                </td>
+                <td class="align-middle">
+                    @switch (item.Status)
+                    {
+                        case PortalEquador.Models.Documents.LicenceStatus.Updated:
+                            <span class="badge bg-success">@item.StatusDescription</span>
+                            break;
+                        case PortalEquador.Models.Documents.LicenceStatus.Expired:
+                            <span class="badge bg-danger">@item.StatusDescription</span>
+                            break;
+                        case PortalEquador.Models.Documents.LicenceStatus.Provisional_Renewal_Updated:
+                            <span class="badge bg-primary">@item.StatusDescription</span>
+                            break;
+                        case PortalEquador.Models.Documents.LicenceStatus.Provisional_Renewal_Expired:
+                            <span class="badge bg-warning">@item.StatusDescription</span>
+                            break;
+                        case PortalEquador.Models.Documents.LicenceStatus.No_Expiration_Date:
+                            <span class="badge bg-danger">@item.StatusDescription</span>
+                            break;
+                        default:
+                            break;
+                    }
+                </td>
+                <td class="align-middle">
+                    @if (item.Licence == null)
+                    {
+                        <a asp-action="Create" asp-route-CurriculumId="@item.CurriculumId" class="btn btn-primary" title="Criar documento"><i class="fas fa-pencil-square"></i></a>
+                    }
+                    else
+                    {
+                        @if (item.Status != PortalEquador.Models.Documents.LicenceStatus.Updated)
+                        {
+                            <a asp-action="Create" asp-route-CurriculumId="@item.CurriculumId" class="btn btn-success"><i class="fas fa-refresh" title="Renovar documento"></i></a>
+                        }
+                        <a asp-action="Details" asp-route-CurriculumId="@item.CurriculumId" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                        <a asp-action="Edit" asp-route-CurriculumId="@item.CurriculumId" class="btn btn-warning"><i class="fas fa-pencil-alt"></i></a>
+                        <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button"> <i class="far fa-trash-alt"></i></button>
+                    }
+                </td>
+            </tr>
+        }
+
     </tbody>
 </table>
+@section Scripts{
+    <script>
+        $(function () {
+
+            $('.table').DataTable();
+
+            $('.deleteBtn').click(function (e) {
+                swal({
+                    title: "Remover Grupo",
+                    text: "Tem a certeza que pretende eliminar o registo?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var btn = $(this);
+                        var id = btn.data("id");
+                        $('#groupId').val(id);
+                        $('#deleteFrom').submit();
+
+                    }
+                });
+            });
+        });
+    </script>
+}

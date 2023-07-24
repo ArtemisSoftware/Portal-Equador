@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Linq;
 
 namespace PortalEquador.Models.CurriculumVitae
@@ -23,7 +24,11 @@ namespace PortalEquador.Models.CurriculumVitae
         [Required(ErrorMessage = "Campo obrigatório")]
         public DateTime DateOfBirth { get; set; }
 
-
+        [NotMapped]
+        public string FullName { get {
+                return FirstName + " " + LastName;
+            }
+        }
 
         public string? Occurred { get; set; }
     }

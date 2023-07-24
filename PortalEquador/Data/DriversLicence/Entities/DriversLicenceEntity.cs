@@ -8,9 +8,6 @@ namespace PortalEquador.Data.DriversLicence.Entities
     {
         public int CurriculumId { get; set; }
 
-        [ForeignKey("CurriculumId")]
-        public PersonalInformation PersonalInformation { get; set; }
-
         public DateTime? ExpirationDate { get; set; }
 
         public int? ProvisionalRenewalNumber { get; set; }

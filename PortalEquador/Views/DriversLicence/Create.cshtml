@@ -4,14 +4,28 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Criar Carta de condução</h1>
+<div class="row">
+    <div class="row align-items-center">
+        <div class="col-md-1">
+            <img src="@Url.Content(Model.Profile.ProfilePicturePath)" class="img-thumbnail rounded-circle" width="80" height="80">
+        </div>
+        <div class="col-md-4">
+            <h6>@Html.DisplayFor(modelItem => Model.Profile.FullName)</h6>
+        </div>
+    </div>
+</div>
 
-<h4>Carta de condução</h4>
 <hr />
+
+
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="CurriculumId" />
 
             <div class="form-group">
                 <label asp-for="GroupItemId" class="control-label"></label>

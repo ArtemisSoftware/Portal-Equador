@@ -24,7 +24,7 @@ namespace PortalEquador.Domain.UseCases.DriversLicence
         public async Task Invoke(DriversLicenceCreateViewModel model)
         {
             DriversLicenceEntity entity = _mapper.Map<DriversLicenceEntity>(model);
-            //--await _driversLicenceRepository.AddAsync(entity);
+            await _driversLicenceRepository.AddAsync(entity);
         }
     }
 }

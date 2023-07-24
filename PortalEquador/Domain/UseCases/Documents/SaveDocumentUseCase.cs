@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PortalEquador.Constants;
 using PortalEquador.Contracts;
 using PortalEquador.Data.CurriculumVitae;
 using PortalEquador.Domain.Repositories;
@@ -23,23 +24,23 @@ namespace PortalEquador.Domain.UseCases.Documents
             string fileName = Path.GetFileNameWithoutExtension(document.ImageFile.FileName);
             string extension = Path.GetExtension(document.ImageFile.FileName);
             string wwwRootPath = _hostEnvironment.WebRootPath;
-            string root = wwwRootPath + "/images/" + document.CurriculumId + "/";
+            string root = wwwRootPath + "/" + FoldersConstants.IMAGES + "/" + document.CurriculumId + "/";
             fileName = document.GroupItemId + extension;
 
             if (!Directory.Exists(root))
             {
-                //--Directory.CreateDirectory(root);
+                Directory.CreateDirectory(root);
             }
 
             string path = Path.Combine(root, fileName);
 
             using (var fileStream = new FileStream(path, FileMode.Create))
             {
-                //--await imageFile.CopyToAsync(fileStream);
+                await document.ImageFile.CopyToAsync(fileStream);
             }
             
             document.FileExtension = extension;
-           //--await _documentRepository.AddAsync(document);
+           await _documentRepository.AddAsync(document);
         }
     }
 }
