@@ -1,12 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
-using PortalEquador.Contracts;
 using PortalEquador.Data.DriversLicence.Entities;
 using PortalEquador.Domain.Models.DriversLicence;
 using PortalEquador.Domain.Repositories;
-using PortalEquador.Models.Documents;
-using PortalEquador.Repositories;
 
 namespace PortalEquador.Domain.UseCases.DriversLicence
 {

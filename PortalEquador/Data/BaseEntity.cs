@@ -1,7 +1,10 @@
-﻿namespace PortalEquador.Data
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PortalEquador.Data
 {
     public partial class BaseEntity
     {
+        [Key]
         public int Id { get; set; }
 
         public DateTime DateCreated { get; set; }

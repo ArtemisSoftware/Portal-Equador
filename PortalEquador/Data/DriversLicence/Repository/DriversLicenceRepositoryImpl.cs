@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging;
 using PortalEquador.Constants;
 using PortalEquador.Contracts;
@@ -19,10 +20,12 @@ namespace PortalEquador.Data.DriversLicence.Repository
     public class DriversLicenceRepositoryImpl : GenericRepository<DriversLicenceEntity>, DriversLicenceRepository
     {
         private readonly ApplicationDbContext context;
+        private readonly IMapper _mapper;
 
-        public DriversLicenceRepositoryImpl(ApplicationDbContext context) : base(context)
+        public DriversLicenceRepositoryImpl(ApplicationDbContext context, IMapper mapper) : base(context)
         {
             this.context = context;
+            _mapper = mapper;
         }
 
         public async Task<List<DriversLicenceViewModel>> GetAllDriversLicenceAsync()
@@ -72,6 +75,36 @@ namespace PortalEquador.Data.DriversLicence.Repository
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task<DriversLicenceViewModel__?> GetDriversLicenceAsync__(int curriculumId)
+        {
+            var query = from personal in context.PersonalInformation
+                        join driversLicence in context.DriversLicenceEntity
+                            on personal.CurriculumId equals driversLicence.CurriculumId into result_table
+                        from driversLicence in result_table.DefaultIfEmpty()
+                        join groupItem in context.GroupItems
+                            on driversLicence.GroupItemId equals groupItem.Id into group_result_table
+                        from groupItem in group_result_table.DefaultIfEmpty()
+                        where personal.CurriculumId == curriculumId
+
+                        select new DriversLicenceViewModel__
+                        {
+                            CurriculumId = curriculumId,
+                            Id = driversLicence.Id,
+                            GroupItemId = groupItem.Id,
+                            Licence = groupItem.Description,
+                            Status = GetStatus(driversLicence.Id, driversLicence.ExpirationDate, driversLicence.ProvisionalExpirationDate),
+                            ExpirationDate = driversLicence.ExpirationDate,
+                            ProvisionalExpirationDate = driversLicence.ProvisionalExpirationDate,
+                            ProvisionalRenewalNumber = driversLicence.ProvisionalRenewalNumber,
+                            DateCreated = driversLicence.DateCreated,
+                            DateModified = driversLicence.DateModified,
+                        };
+            return await query.FirstOrDefaultAsync();
+        }
+
+
+
+
         private static LicenceStatus? GetStatus(int? id, DateTime? expirationDate, DateTime? provisionalExpirationDate)
         {
 
@@ -98,6 +131,13 @@ namespace PortalEquador.Data.DriversLicence.Repository
             }
 
             return LicenceStatus.Updated;
+        }
+
+
+        public async Task RenewLicence(DriversLicenceViewModel__ model)
+        {
+            var entity = _mapper.Map<DriversLicenceEntity>(model);
+            await UpdateAsync(entity);
         }
 
     }

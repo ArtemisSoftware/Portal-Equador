@@ -16,5 +16,11 @@
             public const string PROVISIONAL_EXPIRATION_DATE = "Data de expiração do verbete";
             public const string PROVISIONAL_UPDATE_NUMBER = "Nº de atualizações realizadas";
         }
+
+        public static class Dates
+        {
+            public const string YYYY_MM_DD = "{0:yyyy-MM-dd}";
+            public const string DD_MM_YYYY = "{0:dd-MM-yyyy}";
+        }
     }
 }

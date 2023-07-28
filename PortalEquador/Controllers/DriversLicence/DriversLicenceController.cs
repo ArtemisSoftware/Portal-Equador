@@ -11,9 +11,10 @@ using PortalEquador.Data;
 using PortalEquador.Data.CurriculumVitae;
 using PortalEquador.Data.DriversLicence.Entities;
 using PortalEquador.Data.Migrations;
-using PortalEquador.Domain.Converters;
+using PortalEquador.Domain.Models.Document;
 using PortalEquador.Domain.Models.DriversLicence;
 using PortalEquador.Domain.Repositories;
+using PortalEquador.Domain.UseCases;
 using PortalEquador.Domain.UseCases.Documents;
 using PortalEquador.Domain.UseCases.DriversLicence;
 using PortalEquador.Domain.UseCases.PersonalInformation;
@@ -28,10 +29,13 @@ namespace PortalEquador.Controllers.DriversLicence
         private readonly IMapper _mapper;
         private readonly DriversLicenceRepository _driversLicenceRepository;
         private readonly SaveDriversLicenceUseCase _saveDriversLicenceUseCase;
+        private readonly SaveDriversLicenceUseCase__ _saveDriversLicenceUseCase__;
         private readonly SaveDocumentUseCase _saveDocumentUseCase;
         private readonly GetAllDriversLicencesUseCase _getAllDriversLicencesUseCase;
         private readonly GetDriversLicenceCreationInfoUseCase _getDriversLicenceCreationInfoUseCase;
         private readonly GetDriversLicenceUseCase _getDriversLicenceUseCase;
+        private readonly GetDriversLicenceUseCase__ _getDriversLicenceUseCase__;
+        private readonly RenewDriversLicenceUseCase _renewDriversLicenceUseCase;
 
         public DriversLicenceController(
             ApplicationDbContext context, 
@@ -39,10 +43,13 @@ namespace PortalEquador.Controllers.DriversLicence
             IWebHostEnvironment hostEnvironment,
             IMapper mapper,
             SaveDriversLicenceUseCase saveDriversLicenceUseCase,
+            SaveDriversLicenceUseCase__ saveDriversLicenceUseCase__,
             SaveDocumentUseCase saveDocumentUseCase,
             GetAllDriversLicencesUseCase getAllDriversLicencesUseCase,
             GetDriversLicenceCreationInfoUseCase getDriversLicenceCreationInfoUseCase,
-            GetDriversLicenceUseCase getDriversLicenceUseCase
+            GetDriversLicenceUseCase getDriversLicenceUseCase,
+            GetDriversLicenceUseCase__ getDriversLicenceUseCase__,
+            RenewDriversLicenceUseCase renewDriversLicenceUseCase
             )
         {
             _context = context;
@@ -51,10 +58,13 @@ namespace PortalEquador.Controllers.DriversLicence
             _driversLicenceRepository = driversLicenceRepository;
 
             _saveDriversLicenceUseCase = saveDriversLicenceUseCase;
+            _saveDriversLicenceUseCase__ = saveDriversLicenceUseCase__;
             _saveDocumentUseCase = saveDocumentUseCase;
             _getAllDriversLicencesUseCase = getAllDriversLicencesUseCase;
             _getDriversLicenceCreationInfoUseCase = getDriversLicenceCreationInfoUseCase;
             _getDriversLicenceUseCase = getDriversLicenceUseCase;
+            _getDriversLicenceUseCase__ = getDriversLicenceUseCase__;
+            _renewDriversLicenceUseCase = renewDriversLicenceUseCase;
         }
 
         // GET: DriversLicence
@@ -65,8 +75,17 @@ namespace PortalEquador.Controllers.DriversLicence
         }
 
         // GET: DriversLicence/Details/5
-        public async Task<IActionResult> Details(int? CurriculumId)
+        public async Task<IActionResult> Details(int CurriculumId)
         {
+
+            var model = await _getDriversLicenceUseCase__.Invoke((int)CurriculumId);
+            if (model == null)
+            {
+                return NotFound();
+            }
+            return View(model);
+
+            /*
             if (CurriculumId == null)
             {
                 return NotFound();
@@ -80,6 +99,8 @@ namespace PortalEquador.Controllers.DriversLicence
                 }
                 return View(model);
             }
+            */
+            return NotFound();
         }
 
         // GET: DriversLicence/Create
@@ -114,20 +135,21 @@ namespace PortalEquador.Controllers.DriversLicence
         }
 
         // GET: DriversLicence/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int? CurriculumId)
         {
-            if (id == null || _context.DriversLicenceEntity == null)
+            if (CurriculumId == null)
             {
                 return NotFound();
             }
 
-            var driversLicenceEntity = await _context.DriversLicenceEntity.FindAsync(id);
-            if (driversLicenceEntity == null)
+            var model = await _getDriversLicenceUseCase__.Invoke((int)CurriculumId);
+
+            if (model == null)
             {
                 return NotFound();
             }
-            ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Id", driversLicenceEntity.GroupItemId);
-            return View(driversLicenceEntity);
+           ViewData["GroupItemId"] = model.LicenceTypes;
+            return View(model);
         }
 
         // POST: DriversLicence/Edit/5
@@ -135,12 +157,17 @@ namespace PortalEquador.Controllers.DriversLicence
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CurriculumId,ExpirationDate,ProvisionalRenewalNumber,ProvisionalExpirationDate,GroupItemId,Id,DateCreated,DateModified")] DriversLicenceEntity driversLicenceEntity)
+        public async Task<IActionResult> Edit(DriversLicenceViewModel__ model)
         {
+
+             await _saveDriversLicenceUseCase__.Invoke(model, OperationType.Update);
+            return RedirectToAction(nameof(Index));
+
+            /*
             if (id != driversLicenceEntity.Id)
-            {
-                return NotFound();
-            }
+            {*/
+            return NotFound();
+            /*}
 
             if (ModelState.IsValid)
             {
@@ -164,6 +191,7 @@ namespace PortalEquador.Controllers.DriversLicence
             }
             ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Id", driversLicenceEntity.GroupItemId);
             return View(driversLicenceEntity);
+            */
         }
 
         // GET: DriversLicence/Delete/5
@@ -203,6 +231,131 @@ namespace PortalEquador.Controllers.DriversLicence
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
+        // GET: DriversLicence/RenewLicence
+        public async Task<IActionResult> RenewLicence(int? CurriculumId)
+        {
+            if (CurriculumId == null)
+            {
+                return NotFound();
+            }
+
+            var model = await _getDriversLicenceUseCase__.Invoke((int)CurriculumId);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+            return View(model);
+        }
+
+
+        // POST: DriversLicence/RenewLicence/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RenewLicence(DriversLicenceViewModel__ model)
+        {
+
+            await _renewDriversLicenceUseCase.Invoke(model);
+            return RedirectToAction(nameof(Index));
+
+            /*
+            if (id != driversLicenceEntity.Id)
+            {*/
+            return NotFound();
+            /*}
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(driversLicenceEntity);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!DriversLicenceEntityExists(driversLicenceEntity.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Id", driversLicenceEntity.GroupItemId);
+            return View(driversLicenceEntity);
+            */
+        }
+
+
+
+        // GET: DriversLicence/RenewLicence
+        public async Task<IActionResult> RenewProvisional(int? CurriculumId)
+        {
+            if (CurriculumId == null)
+            {
+                return NotFound();
+            }
+
+            var model = await _getDriversLicenceUseCase__.Invoke((int)CurriculumId);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+            return View(model);
+        }
+
+        // POST: DriversLicence/RenewLicence/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RenewProvisional(DriversLicenceViewModel__ model)
+        {
+
+            await _saveDriversLicenceUseCase__.Invoke(model, OperationType.Update);
+
+            if (model.ImageFile != null) {
+               // await _saveDocumentUseCase.Invoke()
+             }
+
+            return RedirectToAction(nameof(Index));
+
+            /*
+            if (id != driversLicenceEntity.Id)
+            {*/
+            return NotFound();
+            /*}
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(driversLicenceEntity);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!DriversLicenceEntityExists(driversLicenceEntity.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Id", driversLicenceEntity.GroupItemId);
+            return View(driversLicenceEntity);
+            */
+        }
+
+
 
         private bool DriversLicenceEntityExists(int id)
         {

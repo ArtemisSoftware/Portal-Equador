@@ -1,0 +1,99 @@
+﻿@model PortalEquador.Domain.Models.DriversLicence.DriversLicenceViewModel__
+
+@{
+    ViewData["Title"] = "RenewLicence";
+}
+
+<h1>Renovar Carta de condução</h1>
+<div class="row">
+    <div class="row align-items-center">
+        <div class="col-md-1">
+
+        </div>
+        <div class="col-md-4">
+
+        </div>
+    </div>
+</div>
+
+<hr />
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="RenewLicence" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CurriculumId" />
+            <input type="hidden" asp-for="GroupItemId" />
+
+
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Licence)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Licence)
+                </dd>
+             </dl>
+
+
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Status)
+                </dt>
+                <dd class="col-sm-8">
+                    <h5>
+                        @switch (@Model.Status)
+                        {
+                            case PortalEquador.Models.Documents.LicenceStatus.Updated:
+                                <span class="badge bg-success">@Html.DisplayFor(model => model.StatusDescription)</span>
+                                break;
+                            case PortalEquador.Models.Documents.LicenceStatus.Expired:
+                                <span class="badge bg-danger">@Html.DisplayFor(model => model.StatusDescription)</span>
+                                break;
+                            case PortalEquador.Models.Documents.LicenceStatus.Provisional_Renewal_Updated:
+                                <span class="badge bg-primary">@Html.DisplayFor(model => model.StatusDescription)</span>
+                                break;
+                            case PortalEquador.Models.Documents.LicenceStatus.Provisional_Renewal_Expired:
+                                <span class="badge bg-warning">@Html.DisplayFor(model => model.StatusDescription)</span>
+                                break;
+                            case PortalEquador.Models.Documents.LicenceStatus.No_Expiration_Date:
+                                <span class="badge bg-danger">@Html.DisplayFor(model => model.StatusDescription)</span>
+                                break;
+                            default:
+                                break;
+                        }
+                    </h5>
+                </dd>
+            </dl>
+
+
+
+            <div class="form-group">
+                <label asp-for="ExpirationDate" class="control-label"></label>
+                <input id="expirationDate" asp-for="ExpirationDate" class="form-control" />
+            </div>
+
+            <br />
+
+
+            <div class="form-group">
+                <a asp-action="Index" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <input type="submit" value="Guardar Alterações" class="btn btn-warning" />
+            </div>
+
+        </form>
+    </div>
+
+    <div class="col-md-8">
+        @foreach (var item in Model.Documents)
+        {
+            <img id="frame" src="@Url.Content(@item.FilePath)" class="img-fluid">
+        }
+    </div>
+
+</div>
+
+

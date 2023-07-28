@@ -6,11 +6,13 @@ using PortalEquador.Data;
 using PortalEquador.Domain.Repositories;
 using PortalEquador.Repositories;
 using PortalEquador.Data.DriversLicence.Repository;
-using PortalEquador.Domain.Converters;
-using PortalEquador.Data.Converters;
 using PortalEquador.Domain.UseCases.DriversLicence;
 using PortalEquador.Domain.UseCases.Documents;
 using PortalEquador.Domain.UseCases.PersonalInformation;
+using PortalEquador.Domain.UseCases.CurriculumVitae;
+using CurriculumRepository = PortalEquador.Repositories.CurriculumRepository;
+using CurriculumRepository_ = PortalEquador.Domain.Repositories.CurriculumRepository;
+using PortalEquador.Data.CurriculumVitae.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,11 +31,13 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<IGroupItemRepository, GroupItemRepository>();
+
+//-----
 builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepository>();
 builder.Services.AddScoped<ICurriculumRepository, CurriculumRepository>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddScoped<DriversLicenceRepository, DriversLicenceRepositoryImpl>();
-builder.Services.AddScoped<ImageHelper, ImageHelperImpl>();
+
 
 //Use cases
 builder.Services.AddScoped<GetPersonalInformationUseCase>();
@@ -45,6 +49,16 @@ builder.Services.AddScoped<SaveDriversLicenceUseCase>();
 builder.Services.AddScoped<SaveDocumentUseCase>();
 builder.Services.AddScoped<GetAllDriversLicencesUseCase>();
 builder.Services.AddScoped<GetDriversLicenceUseCase>();
+builder.Services.AddScoped<GetDriversLicenceUseCase__>();
+builder.Services.AddScoped<SaveDriversLicenceUseCase__>();
+builder.Services.AddScoped<RenewDriversLicenceUseCase>();
+//---
+
+//Repositories
+builder.Services.AddScoped<CurriculumRepository_, CurriculumRepositoryImpl>();
+
+//Use cases
+builder.Services.AddScoped<GetCurriculumDashboardUseCase>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 

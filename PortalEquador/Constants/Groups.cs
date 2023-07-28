@@ -13,6 +13,10 @@
         {
             public const int PROFILE_PICTURE = 10;
             public const int DRIVERS_LICENCE = 11;
+            /// <summary>
+            /// Verbete
+            /// </summary>
+            public const int PROVISIONAL_DRIVERS_LICENCE = 13;
         }
     }
 }

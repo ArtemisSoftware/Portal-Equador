@@ -10,5 +10,10 @@ namespace PortalEquador.Domain.Repositories
         public Task<List<DriversLicenceViewModel>> GetAllDriversLicenceAsync();
 
         public Task<DriversLicenceDetailViewModel?> GetDriversLicenceAsync(int curriculumId);
+
+        public Task<DriversLicenceViewModel__?> GetDriversLicenceAsync__(int curriculumId);
+
+        public Task RenewLicence(DriversLicenceViewModel__ model);
+
     }
 }

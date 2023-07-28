@@ -20,12 +20,25 @@ namespace PortalEquador.Configurations
 
             CreateMap<User, UserListViewModel>().ReverseMap();
 
+            //---
             CreateMap<PersonalInformation, PersonalInformationViewModel>().ReverseMap();
             CreateMap<PersonalInformation, CurriculumListViewModel>().ReverseMap();
             CreateMap<Document, DocumentCreateViewModel>().ReverseMap();
             CreateMap<Document, DocumentDetailViewModel>().ReverseMap();
+            //---
+
+            //Curriculum
+
+            //Personal information
+
+            //Document
+
+            //Drivers Licence
+
 
             CreateMap<DriversLicenceEntity, DriversLicenceCreateViewModel>().ReverseMap();
+            CreateMap<DriversLicenceEntity, DriversLicenceViewModel__>().ReverseMap();
+
             CreateMap<Document, DriversLicenceCreateViewModel>().ReverseMap();
         }
     }

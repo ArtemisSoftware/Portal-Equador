@@ -7,16 +7,14 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
 </p>
+<br />
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.CurriculumId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdentityCard)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FullName)
@@ -34,9 +32,6 @@
                 @Html.DisplayFor(modelItem => item.CurriculumId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdentityCard)
-            </td>
-            <td>
                @Html.DisplayFor(modelItem => item.FullName)
             </td>
             <td>
@@ -44,12 +39,14 @@
             </td>
             <td>
 
+                    <a asp-action="Dashboard" asp-route-id="@item.CurriculumId" class="btn btn-info"><i class="fas fa-th"></i></a>
+                    <!--
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fas fa-pencil-alt"></i></a>
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"> <i class="fas fa-info-circle"></i></a>
                     <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button"> <i class="far fa-trash-alt"></i></button>
                     <a asp-controller="GroupItems" asp-action="Index" asp-route-id="@item.CurriculumId" class="btn btn-info"> <i class="fas fa-info-circle"></i></a>
 
-                <!--
+
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
@@ -59,3 +56,29 @@
 }
     </tbody>
 </table>
+@section Scripts{
+    <script>
+        $(function () {
+
+            $('.table').DataTable();
+
+            $('.deleteBtn').click(function (e) {
+                swal({
+                    title: "Remover Grupo",
+                    text: "Tem a certeza que pretende eliminar o registo?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var btn = $(this);
+                        var id = btn.data("id");
+                        $('#groupId').val(id);
+                        $('#deleteFrom').submit();
+
+                    }
+                });
+            });
+        });
+    </script>
+}

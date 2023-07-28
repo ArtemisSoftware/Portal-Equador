@@ -8,6 +8,7 @@ using PortalEquador.Contracts;
 using PortalEquador.Data;
 using PortalEquador.Data.CurriculumVitae;
 using PortalEquador.Data.GroupTypes;
+using PortalEquador.Domain.UseCases.CurriculumVitae;
 using PortalEquador.Models.CurriculumVitae;
 using PortalEquador.Models.GroupTypes;
 using PortalEquador.Repositories;
@@ -22,13 +23,20 @@ namespace PortalEquador.Controllers.CurriculumVitae
         private readonly IPersonalInformationRepository personalInformationRepository;
         private readonly ICurriculumRepository curriculumRepository;
 
+
+        //private readonly GetCurriculumDashboardUseCase _getCurriculumDashboardUseCase;
+
+
         public CurriculumsController(
             UserManager<User> userManager,
             IMapper mapper,
             IPersonalInformationRepository personalInformationRepository,
             ICurriculumRepository curriculumRepository
+            //GetCurriculumDashboardUseCase getCurriculumDashboardUseCase
             )
         {
+            //_getCurriculumDashboardUseCase = getCurriculumDashboardUseCase;
+
             this.userManager = userManager;
             this.mapper = mapper;
             this.personalInformationRepository = personalInformationRepository;
@@ -117,6 +125,15 @@ namespace PortalEquador.Controllers.CurriculumVitae
                 return View();
             }
         }
+
+        // GET: CurriculumsController/Dashboard
+        public async Task<IActionResult> Dashboard(int curriculumId)
+        {
+            //var model = await getCurriculumDashboardUseCase.Invoke(curriculumId)
+            //return View(model);
+            return View();
+        }
+
 
         // GET: CurriculumsController/Delete/5
         public ActionResult Delete(int id)

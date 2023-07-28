@@ -1,111 +1,108 @@
-﻿@model PortalEquador.Domain.Models.DriversLicence.DriversLicenceDetailViewModel
+﻿@model PortalEquador.Domain.Models.DriversLicence.DriversLicenceViewModel__
 
 @{
     ViewData["Title"] = "Details";
 }
 
 <h1>Detalhes</h1>
+<h4>Nome da pessoa</h4>
+<hr />
+
+<div class="row">
+   
+    <div class="col-md-6">
+
+        <dl class="row">
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Licence)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Licence)
+            </dd>
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.ExpirationDate)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.ExpirationDate)
+            </dd>
 
 
-<div>
-    <h4>Carta de condução</h4>
-    <hr />
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+            <dd class="col-sm-8">
+                <h5>
+                    @switch (@Model.Status)
+                    {
+                        case PortalEquador.Models.Documents.LicenceStatus.Updated:
+                            <span class="badge bg-success">@Html.DisplayFor(model => model.StatusDescription)</span>
+                            break;
+                        case PortalEquador.Models.Documents.LicenceStatus.Expired:
+                            <span class="badge bg-danger">@Html.DisplayFor(model => model.StatusDescription)</span>
+                            break;
+                        case PortalEquador.Models.Documents.LicenceStatus.Provisional_Renewal_Updated:
+                            <span class="badge bg-primary">@Html.DisplayFor(model => model.StatusDescription)</span>
+                            break;
+                        case PortalEquador.Models.Documents.LicenceStatus.Provisional_Renewal_Expired:
+                            <span class="badge bg-warning">@Html.DisplayFor(model => model.StatusDescription)</span>
+                            break;
+                        case PortalEquador.Models.Documents.LicenceStatus.No_Expiration_Date:
+                            <span class="badge bg-danger">@Html.DisplayFor(model => model.StatusDescription)</span>
+                            break;
+                        default:
+                            break;
+                    }
+                </h5>
+            </dd>
+        </dl>
 
-    <div class="row">
-        <div class="col-md-6">
+        @if (@Model.Status != PortalEquador.Models.Documents.LicenceStatus.Updated && @Model.ProvisionalExpirationDate != null)
+        {
+            <div class="row">
+                <div class="col-md-8">
+                    <h4>Verbete</h4>
+                    <hr />
+                </div>
+            </div>
 
 
             <dl class="row">
-
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.Licence)
+                <dt class="col-sm-8">
+                    @Html.DisplayNameFor(model => model.ProvisionalExpirationDate)
                 </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Licence)
+                <dd class="col-sm-4">
+                    @Html.DisplayFor(model => model.ProvisionalExpirationDate)
                 </dd>
 
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.ExpirationDate)
+                <dt class="col-sm-8">
+                    @Html.DisplayNameFor(model => model.ProvisionalRenewalNumber)
                 </dt>
-                <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.ExpirationDate)
-                </dd>
-
-
-                <dt class="col-sm-4">
-                    @Html.DisplayNameFor(model => model.Status)
-                </dt>
-                <dd class="col-sm-8">
-                    <h5>
-                        @switch (@Model.Status)
-                        {
-                            case PortalEquador.Models.Documents.LicenceStatus.Updated:
-                                <span class="badge bg-success">@Html.DisplayFor(model => model.StatusDescription)</span>
-                                break;
-                            case PortalEquador.Models.Documents.LicenceStatus.Expired:
-                                <span class="badge bg-danger">@Html.DisplayFor(model => model.StatusDescription)</span>
-                                break;
-                            case PortalEquador.Models.Documents.LicenceStatus.Provisional_Renewal_Updated:
-                                <span class="badge bg-primary">@Html.DisplayFor(model => model.StatusDescription)</span>
-                                break;
-                            case PortalEquador.Models.Documents.LicenceStatus.Provisional_Renewal_Expired:
-                                <span class="badge bg-warning">@Html.DisplayFor(model => model.StatusDescription)</span>
-                                break;
-                            case PortalEquador.Models.Documents.LicenceStatus.No_Expiration_Date:
-                                <span class="badge bg-danger">@Html.DisplayFor(model => model.StatusDescription)</span>
-                                break;
-                            default:
-                                break;
-                        }
-                    </h5>
+                <dd class="col-sm-4">
+                    @Html.DisplayFor(model => model.ProvisionalRenewalNumber)
                 </dd>
             </dl>
 
-            @if (@Model.Status != PortalEquador.Models.Documents.LicenceStatus.Updated)
-            {
-                <div class="row">
-                    <div class="col-md-8">
-                        <h4>Verbete</h4>
-                        <hr />
-                    </div>
-                </div>
+        }
 
 
-                <dl class="row">
-                    <dt class="col-sm-8">
-                        @Html.DisplayNameFor(model => model.ProvisionalExpirationDate)
-                    </dt>
-                    <dd class="col-sm-4">
-                        @Html.DisplayFor(model => model.ProvisionalExpirationDate)
-                    </dd>
-
-                    <dt class="col-sm-8">
-                        @Html.DisplayNameFor(model => model.ProvisionalRenewalNumber)
-                    </dt>
-                    <dd class="col-sm-4">
-                        @Html.DisplayFor(model => model.ProvisionalRenewalNumber)
-                    </dd>
-                </dl>
-
-            }
-
-            <div>
-                <a asp-action="Edit" asp-route-id="@Model?.CurriculumId">Edit</a> |
-                <a asp-action="Index">Back to List</a>
-            </div>
-
+        <div class="form-group">
+            <a asp-action="Index" class="btn btn-dark">Regressar ao index</a>
         </div>
 
-        <div class="col-md-6">
+    </div>
 
-            @foreach (var item in Model.Documents)
-            {
-                <h5>@item.Name</h5>
-                <hr />
-                <img src="@Url.Content(@item.FilePath)" class="img-fluid">
-                <br />
-                <br />
-            }
-        </div>
+    <div class="col-md-6">
+
+        @foreach (var item in Model.Documents)
+        {
+            <h5>@item.Name</h5>
+            <hr />
+            <img src="@Url.Content(@item.FilePath)" class="img-fluid">
+            <br />
+            <br />
+        }
     </div>
-    </div>
+
+</div>
