@@ -1,13 +1,11 @@
-﻿using PortalEquador.Data.CurriculumVitae;
-using PortalEquador.Data.CurriculumVitae.Entities;
-using System.ComponentModel.DataAnnotations;
+﻿using PortalEquador.Data.CurriculumVitae.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.InteropServices;
 
-namespace PortalEquador.Data.PInformation.Entities
+namespace PortalEquador.Data.PersonalInformation.Entities
 {
     public class PersonalInformationEntity : BaseEntity
     {
+
         public int CurriculumId { get; set; }
 
         /// <summary>
@@ -33,9 +31,5 @@ namespace PortalEquador.Data.PInformation.Entities
 
         public int MaritalStatusId { get; set; }
 
-
-
-        [ForeignKey("CurriculumId")]
-        public CurriculumEntity Curriculum { get; set; }
     }
 }

@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using PortalEquador.Constants;
 using PortalEquador.Contracts;
-using PortalEquador.Data.CurriculumVitae;
-using PortalEquador.Domain.Repositories;
-using PortalEquador.Models.Documents;
-using PortalEquador.Repositories;
+using PortalEquador.Data.Document.Entities;
 
 namespace PortalEquador.Domain.UseCases.Documents
 {
@@ -19,7 +16,7 @@ namespace PortalEquador.Domain.UseCases.Documents
             _documentRepository = documentRepository;
         }
 
-        public async Task Invoke(Document document)
+        public async Task Invoke(DocumentEntity document)
         {
             string fileName = Path.GetFileNameWithoutExtension(document.ImageFile.FileName);
             string extension = Path.GetExtension(document.ImageFile.FileName);

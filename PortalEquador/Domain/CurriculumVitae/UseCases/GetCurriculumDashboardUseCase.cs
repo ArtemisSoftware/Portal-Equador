@@ -1,9 +1,9 @@
 ﻿using PortalEquador.Contracts;
-using PortalEquador.Domain.Models.CurriculumVitae;
+using PortalEquador.Domain.CurriculumVitae.Repository;
+using PortalEquador.Domain.CurriculumVitae.ViewModels;
 using PortalEquador.Domain.Models.Document;
-using PortalEquador.Domain.Repositories;
 
-namespace PortalEquador.Domain.UseCases.CurriculumVitae
+namespace PortalEquador.Domain.CurriculumVitae.UseCases
 {
     public class GetCurriculumDashboardUseCase
     {

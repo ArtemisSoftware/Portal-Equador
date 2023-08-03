@@ -7,10 +7,11 @@ using PortalEquador.Data.GroupTypes;
 using PortalEquador.Models.Documents;
 using PortalEquador.Domain.Models.Document;
 using PortalEquador.Util;
+using PortalEquador.Data.Document.Entities;
 
 namespace PortalEquador.Repositories
 {
-    public class DocumentRepository : GenericRepository<Document>, IDocumentRepository
+    public class DocumentRepository : GenericRepository<DocumentEntity>, IDocumentRepository
     {
         private readonly ApplicationDbContext context;
 
@@ -21,6 +22,8 @@ namespace PortalEquador.Repositories
 
         public async Task<List<DocumentsViewModel>> GetAllPersonalDocAsync()
         {
+            return new List<DocumentsViewModel>();
+            /*
             var result = await (
                 from personal in context.PersonalInformation
                 join document in context.Documents on personal.CurriculumId equals document.CurriculumId  into docs_table
@@ -38,20 +41,24 @@ namespace PortalEquador.Repositories
              .ToListAsync();
 
             return result;  
+            */
         }
 
 
-        public async Task<List<Document>> GetAllDocumentsAsync(int curriculumId)
+        public async Task<List<DocumentEntity>> GetAllDocumentsAsync(int curriculumId)
         {
+            return new List<DocumentEntity>();
+            /*
             return await context.Documents
                 .Include(item => item.GroupItem)
                 .Where(item => item.CurriculumId == curriculumId).ToListAsync();
+            */
         }
 
         public async Task<List<DocumentViewModel>> GetDocumentsByTypeAsync(int curriculumId, List<int> documentTypeIds)
         {
             List<DocumentViewModel> models = new List<DocumentViewModel>();
-
+            /*
             var results = await context.Documents
                 .Include(item => item.GroupItem)
                 .Where(item => item.CurriculumId == curriculumId & documentTypeIds.Contains(item.GroupItemId)).ToListAsync();
@@ -68,7 +75,7 @@ namespace PortalEquador.Repositories
                     }
                 );
             }
-
+            */
             return models;
         }
     }

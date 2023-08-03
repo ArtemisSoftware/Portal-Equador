@@ -118,11 +118,12 @@ namespace PortalEquador.Controllers.DriversLicence
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DriversLicenceCreateViewModel model)
         {
- 
+            return RedirectToAction(nameof(Index));
+            /*
             if (ModelState.IsValid)
             {
                 if(model.ImageFile != null) {
-                    var document = _mapper.Map<Document>(model);
+                    var document = _mapper.Map<DocumentEntity>(model);
                     await _saveDocumentUseCase.Invoke(document);
                 }
                 
@@ -132,6 +133,7 @@ namespace PortalEquador.Controllers.DriversLicence
             }
             
             return View(model);
+            */
         }
 
         // GET: DriversLicence/Edit/5
@@ -197,6 +199,8 @@ namespace PortalEquador.Controllers.DriversLicence
         // GET: DriversLicence/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            return NotFound();
+            /*
             if (id == null || _context.DriversLicenceEntity == null)
             {
                 return NotFound();
@@ -211,6 +215,7 @@ namespace PortalEquador.Controllers.DriversLicence
             }
 
             return View(driversLicenceEntity);
+            */
         }
 
         // POST: DriversLicence/Delete/5
@@ -218,6 +223,8 @@ namespace PortalEquador.Controllers.DriversLicence
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            return NotFound();
+            /*
             if (_context.DriversLicenceEntity == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.DriversLicenceEntity'  is null.");
@@ -230,6 +237,7 @@ namespace PortalEquador.Controllers.DriversLicence
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+            */
         }
 
 
@@ -359,7 +367,7 @@ namespace PortalEquador.Controllers.DriversLicence
 
         private bool DriversLicenceEntityExists(int id)
         {
-          return (_context.DriversLicenceEntity?.Any(e => e.Id == id)).GetValueOrDefault();
+          return /*(_context.DriversLicenceEntity?.Any(e => e.Id == id)).GetValueOrDefault()*/true;
         }
     }
 }

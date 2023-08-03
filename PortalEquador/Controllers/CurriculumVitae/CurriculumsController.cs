@@ -8,7 +8,7 @@ using PortalEquador.Contracts;
 using PortalEquador.Data;
 using PortalEquador.Data.CurriculumVitae;
 using PortalEquador.Data.GroupTypes;
-using PortalEquador.Domain.UseCases.CurriculumVitae;
+using PortalEquador.Data.PersonalInformation.Entities;
 using PortalEquador.Models.CurriculumVitae;
 using PortalEquador.Models.GroupTypes;
 using PortalEquador.Repositories;
@@ -73,7 +73,7 @@ namespace PortalEquador.Controllers.CurriculumVitae
         {
             if (ModelState.IsValid)
             {
-                var personalInformation = mapper.Map<PersonalInformation>(personalInformationViewModel);
+                var personalInformation = mapper.Map<PersonalInformationEntity>(personalInformationViewModel);
                 var itemExists = await personalInformationRepository.PersonalInformationExists(personalInformationViewModel.IdentityCard);
 
                 if (itemExists)

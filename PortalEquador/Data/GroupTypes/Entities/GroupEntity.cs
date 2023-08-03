@@ -1,6 +1,6 @@
-﻿namespace PortalEquador.Data.GroupTypes
+﻿namespace PortalEquador.Data.GroupTypes.Entities
 {
-    public class Group: BaseEntity
+    public class GroupEntity : BaseEntity
     {
 
         public string Description { get; set; }

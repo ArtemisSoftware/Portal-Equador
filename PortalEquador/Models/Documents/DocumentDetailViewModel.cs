@@ -1,4 +1,4 @@
-﻿using PortalEquador.Data.GroupTypes;
+﻿using PortalEquador.Data.GroupTypes.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
@@ -10,7 +10,7 @@ namespace PortalEquador.Models.Documents
 
         public string FileExtension { get; set; }
 
-        public GroupItem GroupItem { get; set; }
+        public GroupItemEntity GroupItem { get; set; }
 
         public int GroupItemId { get; set; }
 

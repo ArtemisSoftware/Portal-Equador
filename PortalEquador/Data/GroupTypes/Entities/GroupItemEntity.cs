@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PortalEquador.Data.GroupTypes
+namespace PortalEquador.Data.GroupTypes.Entities
 {
-    public class GroupItem : BaseEntity
+    public class GroupItemEntity : BaseEntity
     {
 
         public string Description { get; set; }
@@ -11,7 +11,7 @@ namespace PortalEquador.Data.GroupTypes
 
 
         [ForeignKey("GroupId")]
-        public Group Group { get; set; }
+        public GroupEntity Group { get; set; }
 
         public int GroupId { get; set; }
     }

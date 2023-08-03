@@ -1,5 +1,5 @@
 ﻿using PortalEquador.Data.CurriculumVitae;
-using PortalEquador.Data.GroupTypes;
+using PortalEquador.Data.GroupTypes.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PortalEquador.Data.DriversLicence.Entities
@@ -16,6 +16,6 @@ namespace PortalEquador.Data.DriversLicence.Entities
         public int GroupItemId { get; set; }
 
         [ForeignKey("GroupItemId")]
-        public GroupItem GroupItem { get; set; }
+        public GroupItemEntity GroupItem { get; set; }
     }
 }

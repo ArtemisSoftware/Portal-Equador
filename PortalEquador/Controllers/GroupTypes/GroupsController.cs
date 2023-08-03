@@ -1,53 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using PortalEquador.Constants;
-using PortalEquador.Contracts;
-using PortalEquador.Data;
-using PortalEquador.Data.GroupTypes;
-using PortalEquador.Models.GroupTypes;
+using PortalEquador.Domain.GroupTypes.Repository;
+using PortalEquador.Domain.GroupTypes.UseCases;
+using PortalEquador.Domain.GroupTypes.ViewModels;
+using PortalEquador.Domain.UseCases;
 
 namespace PortalEquador.Controllers.GroupTypes
 {
     [Authorize(Roles = Roles.Administrator)]
     public class GroupsController : Controller
     {
-        private readonly IGroupRepository groupRepository;
-        private readonly IMapper mapper;
+        private readonly GetAllGroupsUseCase _getAllGroupsUseCase;
+        private readonly SaveGroupUseCase _saveGroupUseCase;
+        private readonly GetGroupUseCase _getGroupUseCase;
 
-        public GroupsController(IGroupRepository groupRepository, IMapper mapper)
+        public GroupsController(
+            GetAllGroupsUseCase getAllGroupsUseCase,
+            SaveGroupUseCase saveGroupUseCase,
+            GetGroupUseCase getGroupUseCase)
         {
-            this.groupRepository = groupRepository;
-            this.mapper = mapper;
+            _getAllGroupsUseCase = getAllGroupsUseCase;
+            _saveGroupUseCase = saveGroupUseCase;
+            _getGroupUseCase = getGroupUseCase;
         }
 
         // GET: Groups
         public async Task<IActionResult> Index()
         {
-            var group = mapper.Map<List<GroupsViewModel>>(await groupRepository.GetAllAsync());
-
-            return View(group);
+            var models = await _getAllGroupsUseCase.Invoke();
+            return View(models);
         }
 
-        // GET: Groups/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-
-            var @group = await groupRepository.GetAsync(id);
-            if (@group == null)
-            {
-                return NotFound();
-            }
-
-            var groupsViewModel = mapper.Map<GroupsViewModel>(@group);
-            return View(groupsViewModel);
-        }
 
         // GET: Groups/Create
         public IActionResult Create()
@@ -60,29 +45,30 @@ namespace PortalEquador.Controllers.GroupTypes
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(GroupsViewModel @groupViewModel)
+        public async Task<IActionResult> Create(GroupViewModel @groupViewModel)
         {
             if (ModelState.IsValid)
             {
-                var group = mapper.Map<Group>(@groupViewModel);
-                await groupRepository.AddAsync(group);
+                await _saveGroupUseCase.Invoke(groupViewModel, OperationType.Create);
                 return RedirectToAction(nameof(Index));
             }
             return View(@groupViewModel);
         }
 
+
         // GET: Groups/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var model = await _getGroupUseCase.Invoke(id);
 
-            var @group = await groupRepository.GetAsync(id);
-            if (@group == null)
+            if (model == null)
             {
                 return NotFound();
             }
-
-            var groupsViewModel = mapper.Map<GroupsViewModel>(@group);
-            return View(groupsViewModel);
+            else
+            {
+                return View(model);
+            }
         }
 
         // POST: Groups/Edit/5
@@ -90,36 +76,45 @@ namespace PortalEquador.Controllers.GroupTypes
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, GroupsViewModel @groupViewModel)
+        public async Task<IActionResult> Edit(GroupViewModel groupViewModel)
         {
-            if (id != @groupViewModel.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var group = mapper.Map<Group>(@groupViewModel);
-
-                    await groupRepository.UpdateAsync(group);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!await groupRepository.Exists(@groupViewModel.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                await _saveGroupUseCase.Invoke(groupViewModel, OperationType.Update);
                 return RedirectToAction(nameof(Index));
             }
             return View(@groupViewModel);
         }
+
+
+        // GET: Groups/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            var model = await _getGroupUseCase.Invoke(id);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ShowGroupItems(int id, GroupViewModel @groupViewModel)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        //--------------------------------
+
+
+
+
+
 
 
 
@@ -128,15 +123,13 @@ namespace PortalEquador.Controllers.GroupTypes
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            /*
             await groupRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
+            */
+            return NotFound();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ShowGroupItems(int id, GroupsViewModel @groupViewModel)
-        {
-            return RedirectToAction(nameof(Index));
-        }
+
     }
 }

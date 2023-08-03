@@ -1,4 +1,4 @@
-﻿namespace PortalEquador.Domain.Models.CurriculumVitae
+﻿namespace PortalEquador.Domain.CurriculumVitae.ViewModels
 {
     public class CurriculumDashboardViewModel
     {

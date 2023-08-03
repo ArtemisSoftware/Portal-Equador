@@ -54,13 +54,15 @@ namespace PortalEquador.Controllers.CurriculumVitae
         // GET: Documents/Create
         public IActionResult Create(int CurriculumId)
         {
-
+            return NotFound();
+            /*
             var model = new DocumentCreateViewModel
             {
                 DocumentTypes = new SelectList(_context.GroupItems.Where(x => x.GroupId == Groups.DOCUMENTS), "Id", "Description")
             };
             ViewData["CurriculumId"] = CurriculumId;
             return View(model);
+            */
         }
 
         // POST: Documents/Create
@@ -70,7 +72,9 @@ namespace PortalEquador.Controllers.CurriculumVitae
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DocumentCreateViewModel documentCreateViewModel)
         {
- 
+
+            return RedirectToAction(nameof(Index));
+            /*
             if (ModelState.IsValid)
             {
                 string fileName = Path.GetFileNameWithoutExtension(documentCreateViewModel.ImageFile.FileName);
@@ -91,7 +95,7 @@ namespace PortalEquador.Controllers.CurriculumVitae
                      await documentCreateViewModel.ImageFile.CopyToAsync(fileStream);
                  }
 
-                var document = mapper.Map<Document>(documentCreateViewModel);
+                var document = mapper.Map<DocumentEntity>(documentCreateViewModel);
                 document.FileExtension = extension;
                 await documentRepository.AddAsync(document);
 
@@ -100,6 +104,7 @@ namespace PortalEquador.Controllers.CurriculumVitae
             ViewData["GroupItemId"] = new SelectList(_context.GroupItems, "Id", "Description", documentCreateViewModel.GroupItemId);
             ViewData["CurriculumId"] = new SelectList(_context.PersonalInformation, "Id", "Id", documentCreateViewModel.CurriculumId);
             return View(documentCreateViewModel);
+            */
         }
 
         

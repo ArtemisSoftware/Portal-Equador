@@ -9,10 +9,14 @@ using PortalEquador.Data.DriversLicence.Repository;
 using PortalEquador.Domain.UseCases.DriversLicence;
 using PortalEquador.Domain.UseCases.Documents;
 using PortalEquador.Domain.UseCases.PersonalInformation;
-using PortalEquador.Domain.UseCases.CurriculumVitae;
 using CurriculumRepository = PortalEquador.Repositories.CurriculumRepository;
-using CurriculumRepository_ = PortalEquador.Domain.Repositories.CurriculumRepository;
+using CurriculumRepository_ = PortalEquador.Domain.CurriculumVitae.Repository.CurriculumRepository;
 using PortalEquador.Data.CurriculumVitae.Repository;
+using PortalEquador.Domain.CurriculumVitae.UseCases;
+using PortalEquador.Data.PersonalInformation.Repository;
+using PortalEquador.Data.GroupTypes.Repositories;
+using PortalEquador.Domain.GroupTypes.Repository;
+using PortalEquador.Domain.GroupTypes.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,11 +33,25 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
 
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddScoped<IGroupRepository, GroupRepository>();
-builder.Services.AddScoped<IGroupItemRepository, GroupItemRepository>();
 
-//-----
-builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepository>();
+builder.Services.AddScoped<IGroupItemRepository, GroupItemRepositoryImpl>();
+
+
+
+
+//Group
+
+builder.Services.AddScoped<GroupRepository, GroupRepositoryImpl>();
+builder.Services.AddScoped<GetAllGroupsUseCase>();
+builder.Services.AddScoped<SaveGroupUseCase>();
+builder.Services.AddScoped < GetGroupUseCase>();
+
+
+
+
+
+//-----*****
+builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepositoryImpl>();
 builder.Services.AddScoped<ICurriculumRepository, CurriculumRepository>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddScoped<DriversLicenceRepository, DriversLicenceRepositoryImpl>();
@@ -53,6 +71,13 @@ builder.Services.AddScoped<GetDriversLicenceUseCase__>();
 builder.Services.AddScoped<SaveDriversLicenceUseCase__>();
 builder.Services.AddScoped<RenewDriversLicenceUseCase>();
 //---
+
+//Group
+
+
+
+
+
 
 //Repositories
 builder.Services.AddScoped<CurriculumRepository_, CurriculumRepositoryImpl>();

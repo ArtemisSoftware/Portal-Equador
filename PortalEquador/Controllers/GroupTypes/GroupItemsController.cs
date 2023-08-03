@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Contracts;
 using PortalEquador.Data;
-using PortalEquador.Data.GroupTypes;
+using PortalEquador.Data.GroupTypes.Entities;
 using PortalEquador.Models.GroupTypes;
 using PortalEquador.Repositories;
 
@@ -43,6 +43,8 @@ namespace PortalEquador.Controllers.GroupTypes
         // GET: GroupItems/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            return NotFound();
+            /*
             if (id == null || _context.GroupItems == null)
             {
                 return NotFound();
@@ -56,6 +58,7 @@ namespace PortalEquador.Controllers.GroupTypes
                 return NotFound();
             }
             return View(groupItem);
+            */
         }
 
         // GET: GroupItems/Create
@@ -77,7 +80,7 @@ namespace PortalEquador.Controllers.GroupTypes
 
             if (ModelState.IsValid)
             {
-                var groupItem = mapper.Map<GroupItem>(groupItemViewModel);
+                var groupItem = mapper.Map<GroupItemEntity>(groupItemViewModel);
                 var itemExists = await groupItemRepository.GroupItemExists(groupItemViewModel.GroupId, groupItemViewModel.Description);
 
                 if (itemExists)
@@ -98,6 +101,8 @@ namespace PortalEquador.Controllers.GroupTypes
         // GET: GroupItems/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            return NotFound();
+            /*
             if (id == null || _context.GroupItems == null)
             {
                 return NotFound();
@@ -110,6 +115,7 @@ namespace PortalEquador.Controllers.GroupTypes
             }
             ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Id", groupItem.GroupId);
             return View(groupItem);
+            */
         }
 
         // POST: GroupItems/Edit/5
@@ -117,7 +123,7 @@ namespace PortalEquador.Controllers.GroupTypes
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Description,Observation,GroupId,Id,DateCreated,DateModified")] GroupItem groupItem)
+        public async Task<IActionResult> Edit(int id, [Bind("Description,Observation,GroupId,Id,DateCreated,DateModified")] GroupItemEntity groupItem)
         {
             if (id != groupItem.Id)
             {
@@ -151,6 +157,8 @@ namespace PortalEquador.Controllers.GroupTypes
         // GET: GroupItems/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            return NotFound();
+            /*
             if (id == null || _context.GroupItems == null)
             {
                 return NotFound();
@@ -165,6 +173,7 @@ namespace PortalEquador.Controllers.GroupTypes
             }
 
             return View(groupItem);
+            */
         }
 
         // POST: GroupItems/Delete/5
@@ -172,6 +181,8 @@ namespace PortalEquador.Controllers.GroupTypes
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            return NotFound();
+            /*
             if (_context.GroupItems == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.GroupItems'  is null.");
@@ -184,11 +195,12 @@ namespace PortalEquador.Controllers.GroupTypes
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+            */
         }
 
         private bool GroupItemExists(int id)
         {
-          return (_context.GroupItems?.Any(e => e.Id == id)).GetValueOrDefault();
+          return /*(_context.GroupItems?.Any(e => e.Id == id)).GetValueOrDefault()*/ true;
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using PortalEquador.Data.GroupTypes;
+﻿using PortalEquador.Data.GroupTypes.Entities;
 
 namespace PortalEquador.Contracts
 {
-    public interface IGroupItemRepository : IGenericRepository<GroupItem>
+    public interface IGroupItemRepository : IGenericRepository<GroupItemEntity>
     {
         Task<bool> GroupItemExists(int groupId, string description);
 
-        Task<List<GroupItem>> GetAllAsync(int groupId);
+        Task<List<GroupItemEntity>> GetAllAsync(int groupId);
     }
 }

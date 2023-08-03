@@ -1,8 +1,8 @@
 ﻿using PortalEquador.Contracts;
 using PortalEquador.Data.CurriculumVitae.Entities;
-using PortalEquador.Domain.Models.CurriculumVitae;
+using PortalEquador.Domain.CurriculumVitae.ViewModels;
 
-namespace PortalEquador.Domain.Repositories
+namespace PortalEquador.Domain.CurriculumVitae.Repository
 {
     public interface CurriculumRepository : IGenericRepository<CurriculumEntity>
     {

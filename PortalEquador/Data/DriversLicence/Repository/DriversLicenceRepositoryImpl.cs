@@ -13,6 +13,7 @@ using PortalEquador.Models.CurriculumVitae;
 using PortalEquador.Models.Documents;
 using PortalEquador.Repositories;
 using PortalEquador.Util;
+using System.Collections.Generic;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace PortalEquador.Data.DriversLicence.Repository
@@ -30,6 +31,8 @@ namespace PortalEquador.Data.DriversLicence.Repository
 
         public async Task<List<DriversLicenceViewModel>> GetAllDriversLicenceAsync()
         {
+            return new List<DriversLicenceViewModel>();
+            /*
             var query = from personal in context.PersonalInformation
                         join driversLicence in context.DriversLicenceEntity
                             on personal.CurriculumId equals driversLicence.CurriculumId into result_table
@@ -48,10 +51,13 @@ namespace PortalEquador.Data.DriversLicence.Repository
                             Status = GetStatus(driversLicence.Id, driversLicence.ExpirationDate, driversLicence.ProvisionalExpirationDate) 
                         };
             return await query.ToListAsync();
+            */
         }
 
         public async Task<DriversLicenceDetailViewModel?> GetDriversLicenceAsync(int curriculumId)
         {
+            return new DriversLicenceDetailViewModel();
+            /*
             var query = from personal in context.PersonalInformation
                         join driversLicence in context.DriversLicenceEntity
                             on personal.CurriculumId equals driversLicence.CurriculumId into result_table
@@ -73,10 +79,13 @@ namespace PortalEquador.Data.DriversLicence.Repository
                             DateModified = driversLicence.DateModified,
                         };
             return await query.FirstOrDefaultAsync();
+            */
         }
 
         public async Task<DriversLicenceViewModel__?> GetDriversLicenceAsync__(int curriculumId)
         {
+            return new DriversLicenceViewModel__();
+            /*
             var query = from personal in context.PersonalInformation
                         join driversLicence in context.DriversLicenceEntity
                             on personal.CurriculumId equals driversLicence.CurriculumId into result_table
@@ -100,6 +109,7 @@ namespace PortalEquador.Data.DriversLicence.Repository
                             DateModified = driversLicence.DateModified,
                         };
             return await query.FirstOrDefaultAsync();
+            */
         }
 
 

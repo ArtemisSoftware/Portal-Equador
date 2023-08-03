@@ -22,8 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Converters\" />
-    <Folder Include="Image\" />
+    <Folder Include="Data\Document\Repository\" />
     <Folder Include="Util\Extensions\" />
   </ItemGroup>
 

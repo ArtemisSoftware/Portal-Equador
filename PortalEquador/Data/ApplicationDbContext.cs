@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Configurations.Entities;
 using PortalEquador.Data.CurriculumVitae;
-using PortalEquador.Data.GroupTypes;
 using PortalEquador.Data.DriversLicence.Entities;
+using PortalEquador.Data.GroupTypes.Entities;
 
 namespace PortalEquador.Data
 {
@@ -24,19 +24,16 @@ namespace PortalEquador.Data
             builder.ApplyConfiguration(new UserRoleConfiguration());
         }
 
-        public DbSet<Group> Groups { get; set; }
+        public DbSet<GroupEntity> Groups { get; set; }
 
-        public DbSet<GroupItem> GroupItems { get; set; }
+        //public DbSet<GroupItemEntity> GroupItems { get; set; }
 
-        public DbSet<Curriculum> Curriculum { get; set; }
-        public DbSet<PersonalInformation> PersonalInformation { get; set; }
-        public DbSet<Document> Documents { get; set; }
+        
 
 
         //public DbSet<CurriculumEntity> CurriculumEntity { get; set; }
         //public DbSet<PersonalInformationEntity> PersonalInformationEntity { get; set; }
-
-
-        public DbSet<DriversLicenceEntity> DriversLicenceEntity { get; set; }
+        //public DbSet<DocumentEntity> DocumentEntity { get; set; }
+        //public DbSet<DriversLicenceEntity> DriversLicenceEntity { get; set; }
     }
 }

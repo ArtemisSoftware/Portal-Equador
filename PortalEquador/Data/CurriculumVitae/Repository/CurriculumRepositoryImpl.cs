@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using PortalEquador.Data.CurriculumVitae.Entities;
-using PortalEquador.Domain.Models.CurriculumVitae;
+using PortalEquador.Domain.CurriculumVitae.ViewModels;
 using PortalEquador.Domain.Models.DriversLicence;
-using PortalEquador.Domain.Repositories;
 using PortalEquador.Repositories;
-using CurriculumRepository = PortalEquador.Domain.Repositories.CurriculumRepository;
+using CurriculumRepository = PortalEquador.Domain.CurriculumVitae.Repository.CurriculumRepository;
 
 namespace PortalEquador.Data.CurriculumVitae.Repository
 {
