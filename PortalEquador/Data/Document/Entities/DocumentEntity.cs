@@ -16,7 +16,7 @@ namespace PortalEquador.Data.Document.Entities
 
         public int GroupItemId { get; set; }
 
-        [ForeignKey("GroupItemId")]
+        //[ForeignKey("GroupItemId")]
         public GroupItemEntity GroupItem { get; set; }
 
     }

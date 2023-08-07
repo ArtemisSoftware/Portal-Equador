@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Document\Repository\" />
+    <Folder Include="Models\GroupTypes\" />
     <Folder Include="Util\Extensions\" />
   </ItemGroup>
 

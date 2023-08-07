@@ -8,7 +8,6 @@ using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.Models.DriversLicence;
 using PortalEquador.Models.CurriculumVitae;
 using PortalEquador.Models.Documents;
-using PortalEquador.Models.GroupTypes;
 using PortalEquador.Models.Users;
 
 namespace PortalEquador.Configurations
@@ -17,8 +16,7 @@ namespace PortalEquador.Configurations
     {
         public MapperConfig()
         {
-            CreateMap<GroupEntity, GroupViewModel>().ReverseMap();
-            CreateMap<GroupItemEntity, GroupItemViewModel>().ReverseMap();
+
 
             CreateMap<User, UserListViewModel>().ReverseMap();
 
@@ -31,6 +29,10 @@ namespace PortalEquador.Configurations
 
             //Group
             CreateMap<GroupEntity, GroupViewModel>().ReverseMap();
+            CreateMap<GroupItemEntity, GroupItemViewModel>()
+                .ForMember(dest => dest.GroupId, opt => opt.MapFrom(src => src.GroupEntityId))
+                .ForMember(dest => dest.Group, opt => opt.MapFrom(src => src.GroupEntity))
+                .ReverseMap();
 
             //GroupItem
 

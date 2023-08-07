@@ -8,7 +8,7 @@ namespace PortalEquador.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly ApplicationDbContext context;
+        protected readonly ApplicationDbContext context;
 
         public GenericRepository(ApplicationDbContext context)
         {

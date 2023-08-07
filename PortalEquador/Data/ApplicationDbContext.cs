@@ -24,11 +24,10 @@ namespace PortalEquador.Data
             builder.ApplyConfiguration(new UserRoleConfiguration());
         }
 
-        public DbSet<GroupEntity> Groups { get; set; }
+        public DbSet<GroupEntity> GroupEntity { get; set; }
+        public DbSet<GroupItemEntity> GroupItemEntity { get; set; }
 
-        //public DbSet<GroupItemEntity> GroupItems { get; set; }
 
-        
 
 
         //public DbSet<CurriculumEntity> CurriculumEntity { get; set; }

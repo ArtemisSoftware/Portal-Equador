@@ -1,40 +1,43 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PortalEquador.Contracts;
-using PortalEquador.Data;
+﻿using PortalEquador.Domain.GroupTypes.Repository;
 using PortalEquador.Data.GroupTypes.Entities;
 using PortalEquador.Repositories;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using PortalEquador.Domain.GroupTypes.ViewModels;
 
 namespace PortalEquador.Data.GroupTypes.Repositories
 {
-    public class GroupItemRepositoryImpl : GenericRepository<GroupItemEntity>, IGroupItemRepository
+    public class GroupItemRepositoryImpl : GenericRepository<GroupItemEntity>, GroupItemRepository
     {
-        private readonly ApplicationDbContext context;
 
-        public GroupItemRepositoryImpl(ApplicationDbContext context) : base(context)
+        private readonly IMapper _mapper;
+
+        public GroupItemRepositoryImpl(ApplicationDbContext context, IMapper mapper) : base(context)
         {
-            this.context = context;
+            _mapper = mapper;
         }
 
-        public async Task<bool> GroupItemExists(int groupId, string description)
+        public async Task<bool> GroupItemExists(GroupItemViewModel model)
         {
-            return true;
-            /*
-            return await context.GroupItems.AnyAsync(
-                item => item.GroupId == groupId
-                && item.Description == description
-                );
-            */
+            return await context.GroupItemEntity.AnyAsync(item => item.GroupEntityId == model.GroupId && item.Description == model.Description);
         }
 
-
-        public async Task<List<GroupItemEntity>> GetAllAsync(int groupId)
+        public async Task<List<GroupItemViewModel>> GetAllAsync(int groupId)
         {
-            return new List<GroupItemEntity>();
-            /*
-            return await context.GroupItems
-                .Include(item => item.Group)
-                .Where(item => item.GroupId == groupId).ToListAsync();
-            */
+             var result = await context.GroupItemEntity
+                .Include(item => item.GroupEntity)
+                .Where(item => item.GroupEntityId == groupId).ToListAsync();
+
+            return _mapper.Map<List<GroupItemViewModel>>(result);
+        }
+
+        public async Task<GroupItemViewModel?> GetGroupItemAsync(int groupItemId)
+        {
+            var result = await context.GroupItemEntity
+               .Include(item => item.GroupEntity)
+               .Where(item => item.Id == groupItemId).FirstOrDefaultAsync();
+
+            return _mapper.Map<GroupItemViewModel>(result);
         }
     }
 

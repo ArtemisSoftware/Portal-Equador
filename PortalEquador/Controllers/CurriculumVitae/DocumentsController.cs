@@ -14,7 +14,6 @@ using PortalEquador.Data;
 using PortalEquador.Data.CurriculumVitae;
 using PortalEquador.Data.GroupTypes;
 using PortalEquador.Models.Documents;
-using PortalEquador.Models.GroupTypes;
 using PortalEquador.Repositories;
 
 namespace PortalEquador.Controllers.CurriculumVitae

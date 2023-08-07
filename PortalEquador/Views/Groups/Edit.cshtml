@@ -12,6 +12,9 @@
     <div class="col-md-6">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="Id" />
+
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
@@ -28,11 +31,10 @@
             <br />
             <br />
             <div class="form-group">
-                <a asp-action="Index" class="btn btn-dark">Back to List</a> &nbsp;
+                <a asp-action="Index" class="btn btn-dark">Regressar ao index</a> &nbsp;
                 <input type="submit" value="Guardar Alterações" class="btn btn-warning" />
             </div>
 
-            <input type="hidden" asp-for="Id" />
 
         </form>
     </div>

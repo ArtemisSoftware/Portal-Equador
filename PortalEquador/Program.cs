@@ -34,19 +34,21 @@ builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfi
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-builder.Services.AddScoped<IGroupItemRepository, GroupItemRepositoryImpl>();
-
-
-
-
 //Group
 
 builder.Services.AddScoped<GroupRepository, GroupRepositoryImpl>();
 builder.Services.AddScoped<GetAllGroupsUseCase>();
+builder.Services.AddScoped<GroupExistsUseCase>();
 builder.Services.AddScoped<SaveGroupUseCase>();
-builder.Services.AddScoped < GetGroupUseCase>();
+builder.Services.AddScoped <GetGroupUseCase>();
 
+//GroupItem
 
+builder.Services.AddScoped<GroupItemRepository, GroupItemRepositoryImpl>();
+builder.Services.AddScoped<GetAllGroupItemsUseCase>();
+builder.Services.AddScoped<GroupItemExistsUseCase>();
+builder.Services.AddScoped<SaveGroupItemUseCase>();
+builder.Services.AddScoped<GetGroupItemUseCase > ();
 
 
 

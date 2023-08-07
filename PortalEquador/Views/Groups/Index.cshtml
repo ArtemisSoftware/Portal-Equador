@@ -4,8 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<h1>Grupos</h1>
 <p>
     <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
 </p>
@@ -34,15 +33,18 @@
             </td>
                
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fas fa-pencil-alt"></i></a>
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"> <i class="fas fa-info-circle"></i></a>
-                <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button"> <i class="far fa-trash-alt"></i></button>
-                    <a asp-controller="GroupItems" asp-action="Index" asp-route-GroupId="@item.Id" class="btn btn-info"> <i class="fas fa-info-circle"></i></a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+
+                    <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" hidden> <i class="far fa-trash-alt"></i></button>
+                    <a asp-controller="GroupItems" asp-action="Index" asp-route-groupId="@item.Id" asp-route-groupName="@item.Description" class="btn btn-success"> <i class="fas fa-info-circle" title="Ver items "></i> Items</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+
 
 <form id="deleteFrom" asp-action="Delete">
     <input type="hidden" id="groupId" name="Id" />

@@ -10,7 +10,6 @@ using PortalEquador.Data.CurriculumVitae;
 using PortalEquador.Data.GroupTypes;
 using PortalEquador.Data.PersonalInformation.Entities;
 using PortalEquador.Models.CurriculumVitae;
-using PortalEquador.Models.GroupTypes;
 using PortalEquador.Repositories;
 
 namespace PortalEquador.Controllers.CurriculumVitae

@@ -7,5 +7,7 @@ namespace PortalEquador.Domain.GroupTypes.Repository
     public interface GroupRepository : IGenericRepository<GroupEntity>
     {
         public Task<List<GroupViewModel>> GetAll();
+
+        public Task<bool> GroupExists(string description);
     }
 }

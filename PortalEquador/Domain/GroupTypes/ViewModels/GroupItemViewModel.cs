@@ -1,10 +1,12 @@
 ﻿using PortalEquador.Constants;
+using PortalEquador.Data.GroupTypes;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Xml.Linq;
 
 namespace PortalEquador.Domain.GroupTypes.ViewModels
 {
-    public class GroupViewModel
+    public class GroupItemViewModel
     {
         public int Id { get; set; }
 
@@ -15,6 +17,11 @@ namespace PortalEquador.Domain.GroupTypes.ViewModels
         [Display(Name = StringConstants.Display.OBSERVATION)]
         [MaxLength(StringConstants.Lenght.LENGHT_140, ErrorMessage = StringConstants.Error.EXCEEDED_MAX_CHARACTERS_LENGHT)]
         public string? Observation { get; set; }
+
+        public int GroupId { get; set; }
+
+        public GroupViewModel? Group { get; set; }
+
 
         [Display(Name = StringConstants.Display.REGISTER_CREATION_DATE)]
         [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY__HH_MM)]

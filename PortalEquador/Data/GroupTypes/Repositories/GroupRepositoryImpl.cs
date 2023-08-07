@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data;
 using PortalEquador.Data.GroupTypes.Entities;
 using PortalEquador.Domain.GroupTypes.Repository;
@@ -10,7 +11,6 @@ namespace PortalEquador.Data.GroupTypes.Repositories
 {
     public class GroupRepositoryImpl : GenericRepository<GroupEntity>, GroupRepository
     {
-        private readonly ApplicationDbContext context;
         private readonly IMapper _mapper;
 
         public GroupRepositoryImpl(ApplicationDbContext context, IMapper mapper) : base(context)
@@ -23,6 +23,11 @@ namespace PortalEquador.Data.GroupTypes.Repositories
             var entity = await GetAllAsync();
             var models = _mapper.Map<List<GroupViewModel>>(entity);
             return models;
+        }
+
+        public async Task<bool> GroupExists(string description)
+        {
+            return await context.GroupEntity.AnyAsync(item=> item.Description == description);
         }
     }
 }

@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Constants;
-using PortalEquador.Domain.GroupTypes.Repository;
 using PortalEquador.Domain.GroupTypes.UseCases;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.UseCases;
@@ -15,15 +13,19 @@ namespace PortalEquador.Controllers.GroupTypes
         private readonly GetAllGroupsUseCase _getAllGroupsUseCase;
         private readonly SaveGroupUseCase _saveGroupUseCase;
         private readonly GetGroupUseCase _getGroupUseCase;
+        private readonly GroupExistsUseCase _groupExistsUseCase;
 
         public GroupsController(
             GetAllGroupsUseCase getAllGroupsUseCase,
             SaveGroupUseCase saveGroupUseCase,
-            GetGroupUseCase getGroupUseCase)
+            GetGroupUseCase getGroupUseCase,
+            GroupExistsUseCase groupExistsUseCase)
         {
             _getAllGroupsUseCase = getAllGroupsUseCase;
             _saveGroupUseCase = saveGroupUseCase;
             _getGroupUseCase = getGroupUseCase;
+            _groupExistsUseCase = groupExistsUseCase;
+            _groupExistsUseCase = groupExistsUseCase;
         }
 
         // GET: Groups
@@ -47,10 +49,17 @@ namespace PortalEquador.Controllers.GroupTypes
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(GroupViewModel @groupViewModel)
         {
-            if (ModelState.IsValid)
+            if (await _groupExistsUseCase.Invoke(groupViewModel.Description))
             {
-                await _saveGroupUseCase.Invoke(groupViewModel, OperationType.Create);
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(nameof(@groupViewModel.Error), StringConstants.Error.EXISTING_GROUP_DESCRIPTION);
+            }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    await _saveGroupUseCase.Invoke(groupViewModel, OperationType.Create);
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(@groupViewModel);
         }
@@ -102,12 +111,7 @@ namespace PortalEquador.Controllers.GroupTypes
             }
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ShowGroupItems(int id, GroupViewModel @groupViewModel)
-        {
-            return RedirectToAction(nameof(Index));
-        }
+
 
         //--------------------------------
 

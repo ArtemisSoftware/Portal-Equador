@@ -10,9 +10,9 @@ namespace PortalEquador.Data.GroupTypes.Entities
         public string? Observation { get; set; }
 
 
-        [ForeignKey("GroupId")]
-        public GroupEntity Group { get; set; }
+        [ForeignKey("GroupEntityId")]
+        public GroupEntity GroupEntity { get; set; }
 
-        public int GroupId { get; set; }
+        public int GroupEntityId { get; set; }
     }
 }

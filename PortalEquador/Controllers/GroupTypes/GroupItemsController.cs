@@ -6,67 +6,59 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PortalEquador.Constants;
 using PortalEquador.Contracts;
 using PortalEquador.Data;
 using PortalEquador.Data.GroupTypes.Entities;
-using PortalEquador.Models.GroupTypes;
+using PortalEquador.Domain.GroupTypes.UseCases;
+using PortalEquador.Domain.GroupTypes.ViewModels;
+using PortalEquador.Domain.UseCases;
 using PortalEquador.Repositories;
 
 namespace PortalEquador.Controllers.GroupTypes
 {
     public class GroupItemsController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IGroupItemRepository groupItemRepository;
-        private readonly IMapper mapper;
+        private readonly GetAllGroupItemsUseCase _getAllGroupItemsUseCase;
+        private readonly SaveGroupItemUseCase _saveGroupItemUseCase;
+        private readonly GetGroupItemUseCase _getGroupItemUseCase;
+        private readonly GroupItemExistsUseCase _groupItemExistsUseCase;
 
-        public GroupItemsController(ApplicationDbContext context, IGroupItemRepository groupItemRepository, IMapper mapper)
+        public GroupItemsController(
+            GetAllGroupItemsUseCase getAllGroupItemsUseCase, 
+            SaveGroupItemUseCase saveGroupItemUseCase,
+            GetGroupItemUseCase getGroupItemUseCase,
+            GroupItemExistsUseCase groupItemExistsUseCase)
         {
-            _context = context;
-            this.groupItemRepository = groupItemRepository;
-            this.mapper = mapper;
+            _getAllGroupItemsUseCase = getAllGroupItemsUseCase;
+            _saveGroupItemUseCase = saveGroupItemUseCase;
+            _getGroupItemUseCase = getGroupItemUseCase;
+            _groupItemExistsUseCase = groupItemExistsUseCase;   
         }
 
         // GET: GroupItems
-        public async Task<IActionResult> Index(int? GroupId)
+        public async Task<IActionResult> Index(int? groupId, string? groupName)
         {
-            if (GroupId == null)
+            ViewData["groupId"] = groupId;
+            ViewData["groupName"] = groupName;
+
+            if (groupId == null)
             {
                 return NotFound();
             }
 
-            var group = mapper.Map<List<GroupItemViewModel>>(await groupItemRepository.GetAllAsync(GroupId.Value));
-            ViewData["GroupId"] = GroupId;
-            return View(group);
+            var model = await _getAllGroupItemsUseCase.Invoke((int)groupId);
+            return View(model);
+           
         }
 
-        // GET: GroupItems/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            return NotFound();
-            /*
-            if (id == null || _context.GroupItems == null)
-            {
-                return NotFound();
-            }
-
-            var groupItem = await _context.GroupItems
-                .Include(g => g.Group)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (groupItem == null)
-            {
-                return NotFound();
-            }
-            return View(groupItem);
-            */
-        }
 
         // GET: GroupItems/Create
-        public IActionResult Create(int? GroupId)
+        public IActionResult Create(int? groupId, string? groupName)
         {
-            if (GroupId == null) return NotFound();
-            ViewData["GroupId"] = GroupId;
-            //ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Id");
+            ViewData["groupId"] = groupId;
+            ViewData["groupName"] = groupName;
+            if (groupId == null) return NotFound();
             return View();
         }
 
@@ -75,47 +67,62 @@ namespace PortalEquador.Controllers.GroupTypes
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int? id, GroupItemViewModel groupItemViewModel)
+        public async Task<IActionResult> Create(int? groupId, string? groupName, GroupItemViewModel viewModel)
         {
 
-            if (ModelState.IsValid)
+            ViewData["groupId"] = groupId;
+            ViewData["groupName"] = groupName;
+            if (await _groupItemExistsUseCase.Invoke(viewModel))
             {
-                var groupItem = mapper.Map<GroupItemEntity>(groupItemViewModel);
-                var itemExists = await groupItemRepository.GroupItemExists(groupItemViewModel.GroupId, groupItemViewModel.Description);
-
-                if (itemExists)
+                ModelState.AddModelError(nameof(viewModel.Error), StringConstants.Error.EXISTING_GROUP_DESCRIPTION);
+            }
+            else
+            {
+                
+                if (ModelState.IsValid)
                 {
-                    ModelState.AddModelError(nameof(groupItemViewModel.Occurred), "A descrição já existe para o grupo especificado");
-                }
-                else
-                {
-                    await groupItemRepository.AddAsync(groupItem);
-                    return RedirectToAction(nameof(Index), new { id = groupItem.GroupId });
+                    await _saveGroupItemUseCase.Invoke(viewModel, OperationType.Create);
+                    return RedirectToAction(nameof(Index), new { groupId = groupId, groupName = groupName });
                 }
             }
-            
-            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Id", groupItemViewModel.GroupId);
-            return View(@groupItemViewModel);
+            return View(viewModel);
         }
 
-        // GET: GroupItems/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            return NotFound();
-            /*
-            if (id == null || _context.GroupItems == null)
-            {
-                return NotFound();
-            }
 
-            var groupItem = await _context.GroupItems.FindAsync(id);
-            if (groupItem == null)
+        // GET: GroupItems/Details/5
+        public async Task<IActionResult> Details(int? id, int? groupId, string? groupName)
+        {
+            ViewData["groupId"] = groupId;
+            ViewData["groupName"] = groupName;
+            var model = await _getGroupItemUseCase.Invoke((int)id);
+
+            if (model == null)
             {
                 return NotFound();
             }
-            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Id", groupItem.GroupId);
-            return View(groupItem);
-            */
+            else
+            {
+                return View(model);
+            }
+        }
+
+
+        // GET: GroupItems/Edit/5
+        public async Task<IActionResult> Edit(int? id, int? groupId, string? groupName)
+        {
+            ViewData["groupId"] = groupId;
+            ViewData["groupName"] = groupName;
+
+            var model = await _getGroupItemUseCase.Invoke((int) id);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(model);
+            }
         }
 
         // POST: GroupItems/Edit/5
@@ -123,36 +130,21 @@ namespace PortalEquador.Controllers.GroupTypes
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Description,Observation,GroupId,Id,DateCreated,DateModified")] GroupItemEntity groupItem)
+        public async Task<IActionResult> Edit(int? groupId, string? groupName, GroupItemViewModel model)
         {
-            if (id != groupItem.Id)
-            {
-                return NotFound();
-            }
+            ViewData["groupId"] = groupId;
+            ViewData["groupName"] = groupName;
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(groupItem);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!GroupItemExists(groupItem.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await _saveGroupItemUseCase.Invoke(model, OperationType.Update);
+                return RedirectToAction(nameof(Index), new { groupId = groupId, groupName = groupName });
             }
-            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Id", groupItem.GroupId);
-            return View(groupItem);
+            return View(model);
         }
+
+
+        //--------------
 
         // GET: GroupItems/Delete/5
         public async Task<IActionResult> Delete(int? id)

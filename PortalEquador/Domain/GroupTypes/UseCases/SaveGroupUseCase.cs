@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using PortalEquador.Data;
 using PortalEquador.Data.GroupTypes.Entities;
 using PortalEquador.Domain.GroupTypes.Repository;
 using PortalEquador.Domain.GroupTypes.ViewModels;
@@ -11,17 +13,19 @@ namespace PortalEquador.Domain.GroupTypes.UseCases
     {
         private readonly GroupRepository _groupRepository;
         private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
 
-        public SaveGroupUseCase(GroupRepository groupRepository, IMapper mapper)
+        public SaveGroupUseCase(GroupRepository groupRepository, IMapper mapper, UserManager<User> userManager)
         {
             _groupRepository = groupRepository;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task Invoke(GroupViewModel model, OperationType operationType)
         {
             GroupEntity entity = _mapper.Map<GroupEntity>(model);
-
+           
             switch (operationType)
             {
                 case OperationType.Create:
@@ -30,6 +34,7 @@ namespace PortalEquador.Domain.GroupTypes.UseCases
                     break;
                  case OperationType.Update:
 
+                    entity.DateModified = DateTime.UtcNow;
                     await _groupRepository.UpdateAsync(entity);
                     break;
             }
