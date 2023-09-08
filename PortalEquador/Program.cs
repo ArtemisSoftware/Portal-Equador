@@ -20,6 +20,8 @@ using PortalEquador.Data.DriversLicence.Repository;
 using PortalEquador.Domain.DriversLicence.UseCases;
 using PortalEquador.Domain.UseCases.DriversLicence;
 using PortalEquador.Domain.Documents.Repository;
+using PortalEquador.Domain.ProfessionalExperience.Repository;
+using PortalEquador.Data.ProfessionalExperience.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,6 +86,10 @@ builder.Services.AddScoped<GetDriversLicenceDetailModelUseCase> ();
 builder.Services.AddScoped <GetAllDriversLicencesUseCase>();
 builder.Services.AddScoped<RenewDriversLicenceUseCase> ();
 builder.Services.AddScoped<RenewProvisionalUseCase> ();
+
+//ProfessionalExperience
+builder.Services.AddScoped<ProfessionalExperienceRepository, ProfessionalExperienceRepositoryImpl>();
+builder.Services.AddScoped<SaveDocumentUseCase>();
 
 //-----*****
 
