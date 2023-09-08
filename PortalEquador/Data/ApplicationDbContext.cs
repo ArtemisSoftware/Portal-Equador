@@ -7,6 +7,8 @@ using PortalEquador.Data.Document.Entities;
 using PortalEquador.Data.DriversLicence.Entities;
 using PortalEquador.Data.GroupTypes.Entities;
 using PortalEquador.Data.PersonalInformation.Entities;
+using PortalEquador.Data.ProfessionalCompetence;
+using PortalEquador.Data.ProfessionalExperience.Entities;
 
 namespace PortalEquador.Data
 {
@@ -28,18 +30,18 @@ namespace PortalEquador.Data
         }
 
         public DbSet<GroupEntity> GroupEntity { get; set; }
+
         public DbSet<GroupItemEntity> GroupItemEntity { get; set; }
 
-        //--public DbSet<CurriculumEntity> CurriculumEntity { get; set; }
-        
         public DbSet<PersonalInformationEntity> PersonalInformationEntity { get; set; }
 
         public DbSet<DocumentEntity> DocumentEntity { get; set; }
 
         public DbSet<DriversLicenceEntity> DriversLicenceEntity { get; set; }
 
-        //
+        public DbSet<ProfessionalExperienceEntity> ProfessionalExperienceEntity { get; set; }
 
-        //
+        public DbSet<ProfessionalCompetenceEntity> ProfessionalCompetenceEntity { get; set; }
+
     }
 }
