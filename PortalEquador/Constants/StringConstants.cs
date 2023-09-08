@@ -37,6 +37,9 @@
             public const string DOCUMENT = "Documento";
             public const string FILE = "Ficheiro";
             public const string DRIVERS_LICENCE = "Carta de condução";
+            public const string PROFESSIONAL_EXPERIENCE = "Experiência profissional";
+            public const string DURATION = "Duração";
+            public const string PROFESSIONAL_COMPETENCE = "Habilitações profissionais";
         }
 
         public static class Error

@@ -2,7 +2,7 @@
 using PortalEquador.Data.PersonalInformation.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PortalEquador.Data.ProfessionalCompetence
+namespace PortalEquador.Data.ProfessionalCompetence.Entities
 {
     public class ProfessionalCompetenceEntity : BaseEntity
     {

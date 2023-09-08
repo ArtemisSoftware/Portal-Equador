@@ -7,7 +7,7 @@ using PortalEquador.Data.Document.Entities;
 using PortalEquador.Data.DriversLicence.Entities;
 using PortalEquador.Data.GroupTypes.Entities;
 using PortalEquador.Data.PersonalInformation.Entities;
-using PortalEquador.Data.ProfessionalCompetence;
+using PortalEquador.Data.ProfessionalCompetence.Entities;
 using PortalEquador.Data.ProfessionalExperience.Entities;
 
 namespace PortalEquador.Data

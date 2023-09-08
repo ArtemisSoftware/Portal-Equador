@@ -22,10 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\ProfessionalExperience\Repository\" />
-    <Folder Include="Domain\ProfessionalExperience\Repository\" />
+    <Folder Include="Data\ProfessionalCompetence\Repository\" />
+    <Folder Include="Domain\ProfessionalCompetence\Repository\" />
+    <Folder Include="Domain\ProfessionalCompetence\UseCases\" />
+    <Folder Include="Domain\ProfessionalCompetence\ViewModels\" />
     <Folder Include="Domain\ProfessionalExperience\UseCases\" />
-    <Folder Include="Domain\ProfessionalExperience\ViewModels\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
