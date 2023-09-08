@@ -19,16 +19,17 @@ namespace PortalEquador.Data.GroupTypes.Repositories
 
         public async Task<bool> GroupItemExists(GroupItemViewModel model)
         {
-            return await context.GroupItemEntity.AnyAsync(item => item.GroupEntityId == model.GroupId && item.Description == model.Description);
+           return await context.GroupItemEntity.AnyAsync(item => item.GroupEntityId == model.GroupId && item.Description == model.Description);
         }
 
         public async Task<List<GroupItemViewModel>> GetAllAsync(int groupId)
         {
-             var result = await context.GroupItemEntity
+            var result = await context.GroupItemEntity
                 .Include(item => item.GroupEntity)
                 .Where(item => item.GroupEntityId == groupId).ToListAsync();
 
             return _mapper.Map<List<GroupItemViewModel>>(result);
+            
         }
 
         public async Task<GroupItemViewModel?> GetGroupItemAsync(int groupItemId)

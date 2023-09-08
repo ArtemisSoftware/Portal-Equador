@@ -3,20 +3,23 @@ using Microsoft.EntityFrameworkCore;
 using PortalEquador.Configurations;
 using PortalEquador.Contracts;
 using PortalEquador.Data;
-using PortalEquador.Domain.Repositories;
 using PortalEquador.Repositories;
-using PortalEquador.Data.DriversLicence.Repository;
-using PortalEquador.Domain.UseCases.DriversLicence;
-using PortalEquador.Domain.UseCases.Documents;
-using PortalEquador.Domain.UseCases.PersonalInformation;
-using CurriculumRepository = PortalEquador.Repositories.CurriculumRepository;
-using CurriculumRepository_ = PortalEquador.Domain.CurriculumVitae.Repository.CurriculumRepository;
 using PortalEquador.Data.CurriculumVitae.Repository;
 using PortalEquador.Domain.CurriculumVitae.UseCases;
 using PortalEquador.Data.PersonalInformation.Repository;
 using PortalEquador.Data.GroupTypes.Repositories;
 using PortalEquador.Domain.GroupTypes.Repository;
 using PortalEquador.Domain.GroupTypes.UseCases;
+using PortalEquador.Domain.PersonalInformation.Repository;
+using PortalEquador.Domain.CurriculumVitae.Repository;
+using PortalEquador.Domain.PersonalInformation.UseCases;
+using PortalEquador.Domain.Documents.UseCases;
+using PortalEquador.Data.Document.Repository;
+using PortalEquador.Domain.Repositories;
+using PortalEquador.Data.DriversLicence.Repository;
+using PortalEquador.Domain.DriversLicence.UseCases;
+using PortalEquador.Domain.UseCases.DriversLicence;
+using PortalEquador.Domain.Documents.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,14 +51,44 @@ builder.Services.AddScoped<GroupItemRepository, GroupItemRepositoryImpl>();
 builder.Services.AddScoped<GetAllGroupItemsUseCase>();
 builder.Services.AddScoped<GroupItemExistsUseCase>();
 builder.Services.AddScoped<SaveGroupItemUseCase>();
-builder.Services.AddScoped<GetGroupItemUseCase > ();
+builder.Services.AddScoped<GetGroupItemUseCase> ();
+builder.Services.AddScoped<UpdateGroupItemStateUseCase > ();
 
+//Curriculum
+builder.Services.AddScoped<CurriculumRepository, CurriculumRepositoryImpl>();
+builder.Services.AddScoped <GetAllCurriculumsUseCase>();
+builder.Services.AddScoped<GetCurriculumDashboardUseCase>();
 
+//Personal Information
+builder.Services.AddScoped<PersonalInformationRepository, PersonalInformationRepositoryImpl>();
+builder.Services.AddScoped<GetPersonalInformationCreationModelUseCase>();
+builder.Services.AddScoped<ValidateIdentityCardNumberUseCase> ();
+builder.Services.AddScoped<SavePersonalInformationUseCase>();
+builder.Services.AddScoped<GetPersonalInformationModelUseCase> ();
+builder.Services.AddScoped<GetPersonalInformationDetailModelUseCase> ();
+
+//Document
+builder.Services.AddScoped<DocumentRepository, DocumentRepositoryImpl>();
+builder.Services.AddScoped<SaveDocumentUseCase>();
+builder.Services.AddScoped<GetDocumentCreationModelUseCase>();
+builder.Services.AddScoped<GetAllDocumentsUseCase>();
+builder.Services.AddScoped<DeleteDocumentUseCase> ();
+builder.Services.AddScoped<DocumentExistsUseCase> ();
+
+//Drivers Licence
+builder.Services.AddScoped<DriversLicenceRepository, DriversLicenceRepositoryImpl>();
+builder.Services.AddScoped<GetDriversLicenceCreationModelUseCase>();
+builder.Services.AddScoped<SaveDriversLicenceUseCase> ();
+builder.Services.AddScoped<GetDriversLicenceUseCase>();
+builder.Services.AddScoped<GetDriversLicenceDetailModelUseCase> ();
+builder.Services.AddScoped <GetAllDriversLicencesUseCase>();
+builder.Services.AddScoped<RenewDriversLicenceUseCase> ();
+builder.Services.AddScoped<RenewProvisionalUseCase> ();
 
 //-----*****
-builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepositoryImpl>();
-builder.Services.AddScoped<ICurriculumRepository, CurriculumRepository>();
-builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+
+/*
+
 builder.Services.AddScoped<DriversLicenceRepository, DriversLicenceRepositoryImpl>();
 
 
@@ -72,6 +105,7 @@ builder.Services.AddScoped<GetDriversLicenceUseCase>();
 builder.Services.AddScoped<GetDriversLicenceUseCase__>();
 builder.Services.AddScoped<SaveDriversLicenceUseCase__>();
 builder.Services.AddScoped<RenewDriversLicenceUseCase>();
+*/
 //---
 
 //Group
@@ -82,10 +116,9 @@ builder.Services.AddScoped<RenewDriversLicenceUseCase>();
 
 
 //Repositories
-builder.Services.AddScoped<CurriculumRepository_, CurriculumRepositoryImpl>();
 
 //Use cases
-builder.Services.AddScoped<GetCurriculumDashboardUseCase>();
+//builder.Services.AddScoped<GetCurriculumDashboardUseCase>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 

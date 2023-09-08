@@ -1,43 +1,44 @@
 ﻿using PortalEquador.Constants;
-using PortalEquador.Contracts;
-using PortalEquador.Data.GroupTypes;
-using PortalEquador.Domain.Models.DriversLicence;
+using PortalEquador.Domain.Documents.Repository;
+using PortalEquador.Domain.Documents.ViewModels;
+using PortalEquador.Domain.DriversLicence;
+using PortalEquador.Domain.DriversLicence.ViewModels;
 using PortalEquador.Domain.Repositories;
 using System;
+using static PortalEquador.Constants.ItemFromGroup;
 
 namespace PortalEquador.Domain.UseCases.DriversLicence
 {
     public class GetDriversLicenceUseCase
     {
         private readonly DriversLicenceRepository _driversLicenceRepository;
-        private readonly IDocumentRepository _documentRepository;
+        private readonly DocumentRepository _documentRepository;
 
-        public GetDriversLicenceUseCase(DriversLicenceRepository driversLicenceRepository, IDocumentRepository documentRepository)
+        public GetDriversLicenceUseCase(DriversLicenceRepository driversLicenceRepository, DocumentRepository documentRepository)
         {
             _driversLicenceRepository = driversLicenceRepository;
             _documentRepository = documentRepository;
         }
 
-        public async Task<DriversLicenceDetailViewModel?> Invoke(int curriculumId)
+        public async Task<DriversLicenceViewModel_Finak> Invoke(int id)
         {
-            List<int> documentTypeIds = new List<int>();
-            documentTypeIds.Add(ItemFromGroup.Documents.DRIVERS_LICENCE);
-            // TODO: adicionar documentTypeIds.Add(ItemFromGroup.Documents.PROVISIONAL_LICENCE);
 
-            var documents = await _documentRepository.GetDocumentsByTypeAsync(curriculumId, documentTypeIds);
-            var model = await _driversLicenceRepository.GetDriversLicenceAsync(curriculumId);
+            var documents = await _documentRepository.GetDocumentsDetails(id, DriverLicenceUtil.DocumentIds());
+            var model = await _driversLicenceRepository.GetDriversLicenceAsync(id);
+            model.Documents = documents;
 
-            var document = documents.Find(item => item.GroupItemId == ItemFromGroup.Documents.DRIVERS_LICENCE);
-
-            if (document != null)
+            var driverLicence = documents.Find(item => item.Document.Id == ItemFromGroup.Documents.DRIVERS_LICENCE);
+            if (driverLicence != null)
             {
-                document.Name = "Carta de condução";
+                model.DriverLicenceDocumentId = driverLicence.Id;
             }
 
-            if (model != null)
+            var provisionalLicence = documents.Find(item => item.Document.Id == ItemFromGroup.Documents.PROVISIONAL_DRIVERS_LICENCE);
+            if (provisionalLicence != null)
             {
-                model.Documents = documents;
+                model.ProvisionalLicenceDocumentId = provisionalLicence.Id;
             }
+
             return model;
         }
     }

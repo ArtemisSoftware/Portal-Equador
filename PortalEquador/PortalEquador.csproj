@@ -22,9 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Document\Repository\" />
-    <Folder Include="Models\GroupTypes\" />
-    <Folder Include="Util\Extensions\" />
+    <Folder Include="Data\ProfessionalExperience\Repository\" />
+    <Folder Include="Domain\ProfessionalExperience\Repository\" />
+    <Folder Include="Domain\ProfessionalExperience\UseCases\" />
+    <Folder Include="Domain\ProfessionalExperience\ViewModels\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

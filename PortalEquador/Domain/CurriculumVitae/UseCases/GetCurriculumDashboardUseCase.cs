@@ -1,7 +1,6 @@
 ﻿using PortalEquador.Contracts;
 using PortalEquador.Domain.CurriculumVitae.Repository;
 using PortalEquador.Domain.CurriculumVitae.ViewModels;
-using PortalEquador.Domain.Models.Document;
 
 namespace PortalEquador.Domain.CurriculumVitae.UseCases
 {

@@ -1,49 +1,80 @@
-﻿@model IEnumerable<PortalEquador.Models.CurriculumVitae.DocumentsViewModel>
+﻿@model IEnumerable<PortalEquador.Domain.Documents.ViewModels.DocumentDetailViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Documentos</h1>
 
+<h4>@ViewBag.username</h4>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a  asp-controller="Documents" asp-action="Create" asp-route-identifier="@ViewBag.identifier" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th></th>
-            <th>
-                @Html.DisplayNameFor(model => model.FullName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-                <td class="align-middle" width="100">
-                    <img src="images/1/10.jpg" class="img-thumbnail rounded-circle" width="80" height="80">
-            </td>
-                <td class ="align-middle">
-                @Html.DisplayFor(modelItem => item.FullName)
-            </td>
+<br />
 
-                <td class ="align-middle">
-                    @if (item.NumberOfDocuments > 0)
-                    {
-                        <a asp-action="Details" asp-route-curriculumId="@item.CurriculumId" class="btn btn-primary">
-                            Documentos <span class="badge badge-light">@Html.DisplayFor(modelItem => item.NumberOfDocuments)</span>
-                         </a>
 
+<div class="row">
+    @{ int itemCount = 0; } 
+    @foreach (var item in Model) 
+    {
+        <div class="col-sm-4">
+            <div class="card">
+                <img id="frame" src="@Url.Content(@item.PicturePath)" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @Html.DisplayFor(modelItem => item.Document.Description)
+                        </h5>
+                    <p class="card-text">
+                         @Html.DisplayFor(modelItem => item.Document.Group.Description)
+                        @Html.DisplayFor(modelItem => item.Observation)
+                    </p>
+                     <a asp-action="Edit" asp-route-id="@item.Id"  class="btn btn-warning"><i class="fas fa-download" title="Editar"></i></a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                    <button data-id="@item.Id" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username" class="btn btn-danger deleteBtn" type="button"><i class="fas fa-trash" title="Remover"></i></button>
+                    <form id="eliminateDoc" asp-action="Delete">
+                        <input type="hidden" id="documentId" name="Id" />
+                        <input type="hidden" id="identifier" name="identifier" />
+                        <input type="hidden" id="username" name="username" />
+                    </form>
+                </div>
+            </div>
+        </div>
+            @if (++itemCount % 3 == 0)
+                {
+                    @:</div>
+                    @:<div class="row">
+                }
+           
+      }
+
+</div>
+@section Scripts{
+    <script>
+        $(function () {
+
+            $('.deleteBtn').click(function (e) {
+                swal({
+                    title: "Elimar documento",
+                    text: "Tem a certeza que pretende eliminar o documento?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var btn = $(this);
+                        var id = btn.data("id");
+                        var identifier = btn.data("identifier");
+                        var username = btn.data("username");
+                        $('#documentId').val(id);
+                        $('#identifier').val(identifier);
+                        $('#username').val(username);
+                        $('#eliminateDoc').submit();
+                       
                     }
-                    else{
-                        <a asp-action="Create" asp-route-CurriculumId="@item.CurriculumId">Create New</a>
-                    }
-            </td>
-        </tr>
+                });
+            });
+
+
+        });
+    </script>
 }
-
-    </tbody>
-            
-</table>

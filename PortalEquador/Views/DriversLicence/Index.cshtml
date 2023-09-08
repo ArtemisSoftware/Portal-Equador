@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PortalEquador.Domain.Models.DriversLicence.DriversLicenceViewModel>
+﻿@model IEnumerable<PortalEquador.Domain.DriversLicence.ViewModels.DriversLicenceDetailViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,15 +6,13 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<br />
 <table class="table">
     <thead>
         <tr>
             <th></th>
             <th>
-                @Html.DisplayNameFor(model => model.FullName)
+                @Html.DisplayNameFor(model => model.PersonalInformation.FullName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Licence)
@@ -30,30 +28,30 @@
         {
             <tr>
                 <td class="align-middle" width="100">
-                    <img src="@Url.Content(item.ProfilePicturePath)" class="img-thumbnail rounded-circle" width="52" height="52">
+                   ---
                 </td>
                 <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.FullName)
+                    @Html.DisplayFor(modelItem => item.PersonalInformation.FullName)
                 </td>
                 <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.Licence)
+                    @Html.DisplayFor(modelItem => item.Licence.Description)
                 </td>
                 <td class="align-middle">
                     @switch (item.Status)
                     {
-                        case PortalEquador.Models.Documents.LicenceStatus.Updated:
+                        case PortalEquador.Domain.DriversLicence.LicenceStatus.Updated:
                             <span class="badge bg-success">@item.StatusDescription</span>
                             break;
-                        case PortalEquador.Models.Documents.LicenceStatus.Expired:
+                        case PortalEquador.Domain.DriversLicence.LicenceStatus.Expired:
                             <span class="badge bg-danger">@item.StatusDescription</span>
                             break;
-                        case PortalEquador.Models.Documents.LicenceStatus.Provisional_Renewal_Updated:
+                        case PortalEquador.Domain.DriversLicence.LicenceStatus.Provisional_Renewal_Updated:
                             <span class="badge bg-primary">@item.StatusDescription</span>
                             break;
-                        case PortalEquador.Models.Documents.LicenceStatus.Provisional_Renewal_Expired:
+                        case PortalEquador.Domain.DriversLicence.LicenceStatus.Provisional_Renewal_Expired:
                             <span class="badge bg-warning">@item.StatusDescription</span>
                             break;
-                        case PortalEquador.Models.Documents.LicenceStatus.No_Expiration_Date:
+                        case PortalEquador.Domain.DriversLicence.LicenceStatus.No_Expiration_Date:
                             <span class="badge bg-danger">@item.StatusDescription</span>
                             break;
                         default:
@@ -61,20 +59,23 @@
                     }
                 </td>
                 <td class="align-middle">
-                    @if (item.Licence == null)
-                    {
-                        <a asp-action="Create" asp-route-CurriculumId="@item.CurriculumId" class="btn btn-primary" title="Criar documento"><i class="fas fa-pencil-square"></i></a>
-                    }
-                    else
-                    {
-                        @if (item.Status != PortalEquador.Models.Documents.LicenceStatus.Updated)
+
+                        @if (item.Status != PortalEquador.Domain.DriversLicence.LicenceStatus.Updated)
                         {
-                            <a asp-action="RenewLicence" asp-route-CurriculumId="@item.CurriculumId" class="btn btn-success"><i class="fas fa-refresh" title="Renovar carta de condução"></i> Carta</a>
-                            <a asp-action="RenewProvisional" asp-route-CurriculumId="@item.CurriculumId" class="btn btn-success"><i class="fas fa-refresh" title="Renovar verbete"></i> Verbete</a>
+                        <a asp-action="RenewLicence" asp-route-identifier="@item.PersonaInformationId" class="btn btn-success"><i class="fas fa-refresh" title="Renovar carta de condução"></i> Carta</a>
+                        <a asp-action="RenewProvisional" asp-route-identifier="@item.PersonaInformationId" class="btn btn-success">
+                                @if (item.ProvisionalExpirationDate == null)
+                                {
+                                    <i class="fas fa-plus" title="Adicionar verbete"></i>
+                                 }
+                                 else {
+                                    <i class="fas fa-refresh" title="Renovar verbete"></i>
+                                 }
+                                Verbete
+                            </a>
                         }
-                        <a asp-action="Details" asp-route-CurriculumId="@item.CurriculumId" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
-                        <a asp-action="Edit" asp-route-CurriculumId="@item.CurriculumId" class="btn btn-warning"><i class="fas fa-pencil-alt"></i></a>
-                    }
+                        <a asp-action="Details" asp-route-identifier="@item.PersonaInformationId" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                    
                 </td>
             </tr>
         }

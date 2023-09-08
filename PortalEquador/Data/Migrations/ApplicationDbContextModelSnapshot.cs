@@ -52,14 +52,14 @@ namespace PortalEquador.Data.Migrations
                         new
                         {
                             Id = "cac43a6e-f7bb-4448-baaf-1add431ccbbf",
-                            ConcurrencyStamp = "dfe3b693-f8bd-4abc-8cd9-22e15a0b3bae",
+                            ConcurrencyStamp = "0429c0c2-0a49-48a7-bcbc-9e7784db186a",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "cac43a7e-f7cb-4148-baaf-1acb431eabbf",
-                            ConcurrencyStamp = "8776d720-fbd1-4433-8102-b8b7100c810d",
+                            ConcurrencyStamp = "e06f26b7-5a1b-4896-87ed-d154b140f42d",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -187,6 +187,82 @@ namespace PortalEquador.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PortalEquador.Data.Document.Entities.DocumentEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DocumentTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Observation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PersonalInformationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocumentTypeId");
+
+                    b.HasIndex("PersonalInformationId");
+
+                    b.ToTable("DocumentEntity");
+                });
+
+            modelBuilder.Entity("PortalEquador.Data.DriversLicence.Entities.DriversLicenceEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("LicenceTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonalInformationId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("ProvisionalExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("ProvisionalRenewalNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LicenceTypeId");
+
+                    b.HasIndex("PersonalInformationId");
+
+                    b.ToTable("DriversLicenceEntity");
+                });
+
             modelBuilder.Entity("PortalEquador.Data.GroupTypes.Entities.GroupEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -222,6 +298,9 @@ namespace PortalEquador.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("DateCreated")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
@@ -233,7 +312,7 @@ namespace PortalEquador.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("GroupId")
+                    b.Property<int>("GroupEntityId")
                         .HasColumnType("int");
 
                     b.Property<string>("Observation")
@@ -241,9 +320,90 @@ namespace PortalEquador.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("GroupEntityId");
 
                     b.ToTable("GroupItemEntity");
+                });
+
+            modelBuilder.Entity("PortalEquador.Data.PersonalInformation.Entities.PersonalInformationEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeneficiaryNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Contacts")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IdentityCard")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("IdentityCardExpirationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MaritalStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MotherTongueId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NationalityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NeighbourhoodId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nif")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ProvinceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaritalStatusId");
+
+                    b.HasIndex("MotherTongueId");
+
+                    b.HasIndex("NationalityId");
+
+                    b.HasIndex("NeighbourhoodId");
+
+                    b.HasIndex("ProvinceId");
+
+                    b.ToTable("PersonalInformationEntity");
                 });
 
             modelBuilder.Entity("PortalEquador.Data.User", b =>
@@ -326,7 +486,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "408aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "22eb40f0-7f66-4481-8b85-297ce9475c3b",
+                            ConcurrencyStamp = "812ac5db-7139-44d9-9e2b-a48ed8c04531",
                             DateJoined = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "admin@localhost.com",
                             EmailConfirmed = true,
@@ -335,9 +495,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGlEapKIPKk5WzbRidJ8hTI/e1g0iexJAxw3snjF0QJBjxbusehvBWujGnuDW88I/A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEM2MyZVuUtA6aOULB/QZlkZ8Urs0Jd0Wwv1lnh+DN/SuS8WP75dgeMNVCrTxh96sfw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2eb9fb97-c9f9-40b6-bcc9-7ff727c10b54",
+                            SecurityStamp = "cdf0ea47-7853-4b42-9d02-a0a40d576838",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         },
@@ -345,7 +505,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "3f4631bd-f907-4409-b416-ba356312e659",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0eb3a1ae-be21-4e1a-a666-af400e5156e5",
+                            ConcurrencyStamp = "0e76151c-3b2d-42cb-85ce-f63a477b43f7",
                             DateJoined = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "user@localhost.com",
                             EmailConfirmed = true,
@@ -354,9 +514,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@LOCALHOST.COM",
                             NormalizedUserName = "USER@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDElwUe3cZdpxyPPTQp/EGU3kki+rwPqOF+jaRhkfopcC9ODK8j8M9XPJ7EnMzw4XA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAELlxFZCNXky5Izf3osMjIUboCbh/K26r78ZhOz1zkygT4mcx8WStljEKyGzQkKauNA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "589f61c3-f512-4dfa-856c-00468103dc87",
+                            SecurityStamp = "8b1c6ac6-d491-4763-a3d5-71017ee53eaf",
                             TwoFactorEnabled = false,
                             UserName = "user@localhost.com"
                         });
@@ -413,15 +573,90 @@ namespace PortalEquador.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PortalEquador.Data.Document.Entities.DocumentEntity", b =>
+                {
+                    b.HasOne("PortalEquador.Data.GroupTypes.Entities.GroupItemEntity", "DocumentTypeGroupItemEntity")
+                        .WithMany()
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PortalEquador.Data.PersonalInformation.Entities.PersonalInformationEntity", "PersonalInformationEntity")
+                        .WithMany()
+                        .HasForeignKey("PersonalInformationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DocumentTypeGroupItemEntity");
+
+                    b.Navigation("PersonalInformationEntity");
+                });
+
+            modelBuilder.Entity("PortalEquador.Data.DriversLicence.Entities.DriversLicenceEntity", b =>
+                {
+                    b.HasOne("PortalEquador.Data.GroupTypes.Entities.GroupItemEntity", "LicenceTypeGroupItemEntity")
+                        .WithMany()
+                        .HasForeignKey("LicenceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PortalEquador.Data.PersonalInformation.Entities.PersonalInformationEntity", "PersonalInformationEntity")
+                        .WithMany()
+                        .HasForeignKey("PersonalInformationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LicenceTypeGroupItemEntity");
+
+                    b.Navigation("PersonalInformationEntity");
+                });
+
             modelBuilder.Entity("PortalEquador.Data.GroupTypes.Entities.GroupItemEntity", b =>
                 {
                     b.HasOne("PortalEquador.Data.GroupTypes.Entities.GroupEntity", "GroupEntity")
                         .WithMany()
-                        .HasForeignKey("GroupId")
+                        .HasForeignKey("GroupEntityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("GroupEntity");
+                });
+
+            modelBuilder.Entity("PortalEquador.Data.PersonalInformation.Entities.PersonalInformationEntity", b =>
+                {
+                    b.HasOne("PortalEquador.Data.GroupTypes.Entities.GroupItemEntity", "MaritalStatusIdGroupItemEntity")
+                        .WithMany()
+                        .HasForeignKey("MaritalStatusId");
+
+                    b.HasOne("PortalEquador.Data.GroupTypes.Entities.GroupItemEntity", "MotherTongueGroupItemEntity")
+                        .WithMany()
+                        .HasForeignKey("MotherTongueId");
+
+                    b.HasOne("PortalEquador.Data.GroupTypes.Entities.GroupItemEntity", "NationalityGroupItemEntity")
+                        .WithMany()
+                        .HasForeignKey("NationalityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PortalEquador.Data.GroupTypes.Entities.GroupItemEntity", "NeighbourhoodGroupItemEntity")
+                        .WithMany()
+                        .HasForeignKey("NeighbourhoodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PortalEquador.Data.GroupTypes.Entities.GroupItemEntity", "ProvinceGroupItemEntity")
+                        .WithMany()
+                        .HasForeignKey("ProvinceId");
+
+                    b.Navigation("MaritalStatusIdGroupItemEntity");
+
+                    b.Navigation("MotherTongueGroupItemEntity");
+
+                    b.Navigation("NationalityGroupItemEntity");
+
+                    b.Navigation("NeighbourhoodGroupItemEntity");
+
+                    b.Navigation("ProvinceGroupItemEntity");
                 });
 #pragma warning restore 612, 618
         }

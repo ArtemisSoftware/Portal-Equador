@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.CurriculumVitae.Entities;
+using PortalEquador.Domain.CurriculumVitae.Repository;
 using PortalEquador.Domain.CurriculumVitae.ViewModels;
-using PortalEquador.Domain.Models.DriversLicence;
 using PortalEquador.Repositories;
-using CurriculumRepository = PortalEquador.Domain.CurriculumVitae.Repository.CurriculumRepository;
 
 namespace PortalEquador.Data.CurriculumVitae.Repository
 {
@@ -11,38 +11,47 @@ namespace PortalEquador.Data.CurriculumVitae.Repository
     {
         public CurriculumRepositoryImpl(ApplicationDbContext context) : base(context){ }
 
-        public async Task<CurriculumDashboardViewModel> GetCurriculumDashboard(int curriculumId)
-        {
-            /*
-            var query = from personal in context.PersonalInformation
-                        join driversLicence in context.DriversLicenceEntity
-                            on personal.CurriculumId equals driversLicence.CurriculumId into result_table
-                        from driversLicence in result_table.DefaultIfEmpty()
-                        join groupItem in context.GroupItems
-                            on driversLicence.GroupItemId equals groupItem.Id into group_result_table
-                        from groupItem in group_result_table.DefaultIfEmpty()
-                        where personal.CurriculumId == curriculumId
 
-                        select new DriversLicenceViewModel__
+        public async Task<CurriculumDashboardViewModel> GetCurriculumDashboard(int id)
+        {
+            //return new CurriculumDashboardViewModel();
+
+            var query = from personal in context.PersonalInformationEntity
+                            /*
+                                        join diverlicences in
+                                           (from diverlicences in context.DriversLicenceEntity
+                                            group diverlicences by diverlicences.PersonalInformationId into grouped
+                                            select new
+                                            {
+                                                PersonalInformationId = grouped.Key,
+                                                HasDriverLicence = true//grouped.Count() > 0
+                                            })
+                                            on personal.Id equals diverlicences.PersonalInformationId into resultDL
+                                            from resultDriversLicence in resultDL.DefaultIfEmpty()
+                            */
+                                        join documents in
+                                            (from documents in context.DocumentEntity
+                                             group documents by documents.PersonalInformationId into grouped
+                                             select new
+                                             {
+                                                 PersonalInformationId = grouped.Key,
+                                                 OrderDetailCount = grouped.Count()
+                                             })
+                                        on personal.Id equals documents.PersonalInformationId into resultDocs
+                                        from resultDocuments in resultDocs.DefaultIfEmpty()
+                        where personal.Id == id
+
+                        select new CurriculumDashboardViewModel
                         {
-                            CurriculumId = curriculumId,
-                            Id = driversLicence.Id,
-                            GroupItemId = groupItem.Id,
-                            Licence = groupItem.Description,
-                            Status = GetStatus(driversLicence.Id, driversLicence.ExpirationDate, driversLicence.ProvisionalExpirationDate),
-                            ExpirationDate = driversLicence.ExpirationDate,
-                            ProvisionalExpirationDate = driversLicence.ProvisionalExpirationDate,
-                            ProvisionalRenewalNumber = driversLicence.ProvisionalRenewalNumber,
-                            DateCreated = driversLicence.DateCreated,
-                            DateModified = driversLicence.DateModified,
+                            Id = id,
+                            FullName = personal.FirstName + " " + personal.LastName,
+                            IsPersonalInformationComplete = (personal.Id != 0),
+                            TotalDocuments = resultDocuments.OrderDetailCount == null ? 0 : resultDocuments.OrderDetailCount,
+                            IsDriversLicenceComplete = true//resultDriversLicence.HasDriverLicence
                         };
+
             return await query.FirstOrDefaultAsync();
-            */
-            var model = new CurriculumDashboardViewModel
-            {
-                IsDriversLicenceComplete = false
-            };
-            return model;
+            
         }
     }
 }

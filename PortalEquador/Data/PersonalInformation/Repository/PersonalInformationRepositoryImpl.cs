@@ -1,57 +1,70 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Constants;
-using PortalEquador.Contracts;
 using PortalEquador.Data;
 using PortalEquador.Data.PersonalInformation.Entities;
 using PortalEquador.Data.PInformation;
-using PortalEquador.Models.CurriculumVitae;
+using PortalEquador.Domain.GroupTypes.ViewModels;
+using PortalEquador.Domain.PersonalInformation.Repository;
+using PortalEquador.Domain.PersonalInformation.ViewModels;
 using PortalEquador.Repositories;
 using PortalEquador.Util;
+using System.Collections.Generic;
 
 namespace PortalEquador.Data.PersonalInformation.Repository
 {
-    public class PersonalInformationRepositoryImpl : GenericRepository<PersonalInformationEntity>, IPersonalInformationRepository
+    public class PersonalInformationRepositoryImpl : GenericRepository<PersonalInformationEntity>, PersonalInformationRepository
     {
-        private readonly ApplicationDbContext context;
         private readonly IMapper _mapper;
 
         public PersonalInformationRepositoryImpl(ApplicationDbContext context, IMapper mapper) : base(context)
         {
-            this.context = context;
             _mapper = mapper;
+        }
+
+        public async Task<PersonalInformationViewModel> GetPersonalInformationAsync(int id)
+        {
+            
+            var result = await context.PersonalInformationEntity
+               .Include(item => item.NationalityGroupItemEntity)
+                .Include(item => item.ProvinceGroupItemEntity)
+               .Include(item => item.NeighbourhoodGroupItemEntity)
+               .FirstOrDefaultAsync(m => m.Id == id);
+
+            return _mapper.Map<PersonalInformationViewModel>(result);
+            
+
+            //return new PersonalInformationViewModel();
         }
 
         public async Task<bool> PersonalInformationExists(string identityCard)
         {
-            return true;
-            //return await context.PersonalInformationEntity.AnyAsync(item => item.IdentityCard == identityCard);
+            return !await context.PersonalInformationEntity.AnyAsync(item => item.IdentityCard == identityCard);
+            //return false;
         }
 
-        public async Task<PersonalInformationViewModel> GetPersonalInformationResume(int curriculumId)
+        public async Task<List<PersonalInformationViewModel>> GetAll()
         {
-            return new PersonalInformationViewModel();
-            /*
-            var result = await GetAsync(curriculumId);
-            return _mapper.Map<PersonalInformationViewModel>(result);
-            */
+            var result = await GetAllAsync();
+            return _mapper.Map<List<PersonalInformationViewModel>>(result);
         }
 
-        public async Task<ProfileInformation> GetProfileInformation(int curriculumId)
+
+        public async Task<PersonalInformationDetailViewModel?> GetPersonalInformationDetailAsync(int id)
         {
-            return new ProfileInformation();
-            /*
-            var query = from personal in context.PersonalInformation
-                        join documents in context.Documents
-                            on personal.CurriculumId equals documents.CurriculumId
-                        where documents.GroupItemId == ItemFromGroup.Documents.PROFILE_PICTURE & personal.CurriculumId == curriculumId
-                        select new ProfileInformation
-                        {
-                            FullName = personal.FirstName + " " + personal.LastName,
-                            ProfilePicturePath = ImagesUtil.GetProfilePicturePath(personal.CurriculumId, documents.FileExtension),
-                        };
-            return await query.FirstAsync();
-            */
+            
+            var result = await context.PersonalInformationEntity
+               .Include(item => item.NationalityGroupItemEntity)
+                .Include(item => item.ProvinceGroupItemEntity)
+               .Include(item => item.NeighbourhoodGroupItemEntity)
+               .FirstOrDefaultAsync(m => m.Id == id);
+
+            return _mapper.Map<PersonalInformationDetailViewModel>(result);
+            
+            //return new PersonalInformationDetailViewModel();
         }
+
+
+
     }
 }

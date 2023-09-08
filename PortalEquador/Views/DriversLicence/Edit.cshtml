@@ -1,4 +1,4 @@
-﻿@model PortalEquador.Domain.Models.DriversLicence.DriversLicenceViewModel__
+﻿@model PortalEquador.Domain.DriversLicence.ViewModels.DriversLicenceViewModel_Finak
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,7 +6,7 @@
 
 <h1>Editar carta de condução</h1>
 
-<h4>Nome da pessoa</h4>
+<h4>Para: @Model.PersonalInformation.FullName</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,12 +14,13 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="CurriculumId" />
+            <input type="hidden" asp-for="PersonaInformationId" />
+            <input type="hidden" asp-for="DriverLicenceDocumentId" />
 
             <div class="form-group">
-                <label asp-for="GroupItemId" class="control-label"></label>
-                <select asp-for="GroupItemId" class="form-control" asp-items="@Model.LicenceTypes"></select>
-                <span asp-validation-for="GroupItemId" class="text-danger"></span>
+                <label asp-for="LicenceId" class="control-label"></label>
+                <select asp-for="LicenceId" class="form-control" asp-items="@Model.LicenceTypes"></select>
+                <span asp-validation-for="LicenceId" class="text-danger"></span>
             </div>
 
             <br />
@@ -46,7 +47,7 @@
             <br />
 
             <div class="form-group">
-                <a asp-action="Index" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <a asp-controller="Curriculums" asp-action="Dashboard" asp-route-identifier="@Model.PersonaInformationId" class="btn btn-dark">Regressar ao index</a> &nbsp;
                 <input type="submit" value="Guardar Alterações" class="btn btn-warning" />
             </div>
         </form>
@@ -56,7 +57,7 @@
 
         @foreach (var item in Model.Documents)
         {
-            <img id="frame" src="@Url.Content(@item.FilePath)" class="img-fluid">
+            <img id="frame" src="@Url.Content(@item.PicturePath)" class="img-fluid">
         }
 
         <!--

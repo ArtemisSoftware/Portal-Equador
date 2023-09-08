@@ -1,32 +1,27 @@
-﻿@model PortalEquador.Domain.Models.DriversLicence.DriversLicenceViewModel__
+﻿@model PortalEquador.Domain.DriversLicence.ViewModels.DriversLicenceViewModel_Finak
 
 @{
     ViewData["Title"] = "RenewLicence";
 }
 
 <h1>Renovar Carta de condução</h1>
-<div class="row">
-    <div class="row align-items-center">
-        <div class="col-md-1">
-
-        </div>
-        <div class="col-md-4">
-
-        </div>
-    </div>
-</div>
-
+<h4>Para: @Model.PersonalInformation.FullName</h4>
 <hr />
 
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
         <form asp-action="RenewLicence" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="CurriculumId" />
-            <input type="hidden" asp-for="GroupItemId" />
+            <input type="hidden" asp-for="PersonaInformationId" />
+            <input type="hidden" asp-for="LicenceId" />
+            <input type="hidden" asp-for="ExpirationDateAvailable" />
+            <input type="hidden" asp-for="DateCreated" />
+            <input type="hidden" asp-for="DriverLicenceDocumentId" />
+            <input type="hidden" asp-for="ProvisionalLicenceDocumentId" />
+
 
 
             <dl class="row">
@@ -34,9 +29,9 @@
                     @Html.DisplayNameFor(model => model.Licence)
                 </dt>
                 <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Licence)
+                    @Html.DisplayFor(model => model.Licence.Description)
                 </dd>
-             </dl>
+            </dl>
 
 
             <dl class="row">
@@ -47,19 +42,19 @@
                     <h5>
                         @switch (@Model.Status)
                         {
-                            case PortalEquador.Models.Documents.LicenceStatus.Updated:
+                            case PortalEquador.Domain.DriversLicence.LicenceStatus.Updated:
                                 <span class="badge bg-success">@Html.DisplayFor(model => model.StatusDescription)</span>
                                 break;
-                            case PortalEquador.Models.Documents.LicenceStatus.Expired:
+                            case PortalEquador.Domain.DriversLicence.LicenceStatus.Expired:
                                 <span class="badge bg-danger">@Html.DisplayFor(model => model.StatusDescription)</span>
                                 break;
-                            case PortalEquador.Models.Documents.LicenceStatus.Provisional_Renewal_Updated:
+                            case PortalEquador.Domain.DriversLicence.LicenceStatus.Provisional_Renewal_Updated:
                                 <span class="badge bg-primary">@Html.DisplayFor(model => model.StatusDescription)</span>
                                 break;
-                            case PortalEquador.Models.Documents.LicenceStatus.Provisional_Renewal_Expired:
+                            case PortalEquador.Domain.DriversLicence.LicenceStatus.Provisional_Renewal_Expired:
                                 <span class="badge bg-warning">@Html.DisplayFor(model => model.StatusDescription)</span>
                                 break;
-                            case PortalEquador.Models.Documents.LicenceStatus.No_Expiration_Date:
+                            case PortalEquador.Domain.DriversLicence.LicenceStatus.No_Expiration_Date:
                                 <span class="badge bg-danger">@Html.DisplayFor(model => model.StatusDescription)</span>
                                 break;
                             default:
@@ -78,6 +73,13 @@
 
             <br />
 
+            <div class="form-group">
+                <div class="alert alert-warning" role="alert">
+                    @PortalEquador.Constants.StringConstants.Alert.DELETE_PROVISIONAL_DRIVERS_LICENCE
+                </div>
+            </div>
+            <br />
+            <br />
 
             <div class="form-group">
                 <a asp-action="Index" class="btn btn-dark">Regressar ao index</a> &nbsp;
@@ -87,11 +89,12 @@
         </form>
     </div>
 
-    <div class="col-md-8">
-        @foreach (var item in Model.Documents)
+    <div class="col-md-7">
+        @if (Model.DriverLicenceDocument != null)
         {
-            <img id="frame" src="@Url.Content(@item.FilePath)" class="img-fluid">
+            <img id="frame" src="@Url.Content(Model.DriverLicenceDocument.PicturePath)" class="img-fluid">
         }
+
     </div>
 
 </div>

@@ -1,12 +1,12 @@
-﻿@model PortalEquador.Models.Documents.DocumentCreateViewModel
+﻿@model PortalEquador.Domain.Documents.ViewModels.DocumentViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Criar Documento</h1>
 
-<h4>Document</h4>
+<h4>Para: @Model.PersonalInformation.FullName</h4>
 <hr />
 
 <div class="row">
@@ -14,24 +14,38 @@
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            <input type="hidden" asp-for="PersonaInformationId" />
+
             <div class="form-group">
-                <label asp-for="GroupItemId" class="control-label"></label>
-                <select asp-for="GroupItemId" class="form-select" asp-items="Model.DocumentTypes"></select>
+                <label asp-for="DocumentTypeId" class="control-label"></label>
+                <select asp-for="DocumentTypeId" class="form-select" asp-items="Model.DocumentTypes"></select>
             </div>
-            <input type="hidden" asp-for="CurriculumId" />
+            <div class="form-group">
+                <span asp-validation-for="Error" class="text-danger"></span>
+            </div>
             <br />
+
+            <div class="mb-3">
+                <label asp-for="Observation" class="control-label"></label>
+                <textarea asp-for="Observation" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Observation" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="ImageFile" class="form-label"></label>
                 <input asp-for="ImageFile" accept="image/*" onchange="preview()" class="form-control" type="file" />
                 <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
 
-
+            <br />
+            <br />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" asp-route-id="@ViewBag.id"  class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <input type="submit" value="Criar registo" class="btn btn-primary" />
             </div>
         </form>
     </div>
+
 
     <div class="col-md-8">
         <label for="Image" class="form-label">Pré-visualização</label>
@@ -40,9 +54,7 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts{
     <script>

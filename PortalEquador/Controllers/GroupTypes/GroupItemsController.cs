@@ -23,17 +23,20 @@ namespace PortalEquador.Controllers.GroupTypes
         private readonly SaveGroupItemUseCase _saveGroupItemUseCase;
         private readonly GetGroupItemUseCase _getGroupItemUseCase;
         private readonly GroupItemExistsUseCase _groupItemExistsUseCase;
+        private readonly UpdateGroupItemStateUseCase _updateGroupItemStateUseCase;
 
         public GroupItemsController(
             GetAllGroupItemsUseCase getAllGroupItemsUseCase, 
             SaveGroupItemUseCase saveGroupItemUseCase,
             GetGroupItemUseCase getGroupItemUseCase,
-            GroupItemExistsUseCase groupItemExistsUseCase)
+            GroupItemExistsUseCase groupItemExistsUseCase,
+            UpdateGroupItemStateUseCase updateGroupItemStateUseCase)
         {
             _getAllGroupItemsUseCase = getAllGroupItemsUseCase;
             _saveGroupItemUseCase = saveGroupItemUseCase;
             _getGroupItemUseCase = getGroupItemUseCase;
-            _groupItemExistsUseCase = groupItemExistsUseCase;   
+            _groupItemExistsUseCase = groupItemExistsUseCase;
+            _updateGroupItemStateUseCase = updateGroupItemStateUseCase;
         }
 
         // GET: GroupItems
@@ -143,6 +146,29 @@ namespace PortalEquador.Controllers.GroupTypes
             return View(model);
         }
 
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int? groupId, string? groupName, int id)
+        {
+            ViewData["groupId"] = groupId;
+            ViewData["groupName"] = groupName;
+
+            await _updateGroupItemStateUseCase.Invoke(id, false);
+            return RedirectToAction(nameof(Index), new { groupId = groupId, groupName = groupName });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AllocateLeave(int? groupId, string? groupName, int id)
+        {
+            ViewData["groupId"] = groupId;
+            ViewData["groupName"] = groupName;
+
+            await _updateGroupItemStateUseCase.Invoke(id, true);
+            return RedirectToAction(nameof(Index), new { groupId = groupId, groupName = groupName });
+        }
+
 
         //--------------
 
@@ -168,27 +194,7 @@ namespace PortalEquador.Controllers.GroupTypes
             */
         }
 
-        // POST: GroupItems/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            return NotFound();
-            /*
-            if (_context.GroupItems == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.GroupItems'  is null.");
-            }
-            var groupItem = await _context.GroupItems.FindAsync(id);
-            if (groupItem != null)
-            {
-                _context.GroupItems.Remove(groupItem);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-            */
-        }
+
 
         private bool GroupItemExists(int id)
         {

@@ -1,0 +1,163 @@
+﻿@model PortalEquador.Domain.PersonalInformation.ViewModels.PersonalInformationViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Editar Dados pessoais</h1>
+
+<h4>@Model.FullName</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IdentityCard" />
+            <input type="hidden" asp-for="DateCreated" />
+
+            <div class="col-md-4">
+
+                <div class="form-group">
+                    <label asp-for="IdentityCard" class="control-label" ></label>
+                    <input asp-for="IdentityCard" class="form-control" disabled />
+                    <span asp-validation-for="IdentityCard" class="text-danger"></span>
+                </div>
+                <br />
+
+                <div class="form-group">
+                    <label asp-for="IdentityCardExpirationDate" class="control-label"></label>
+                    <input asp-for="IdentityCardExpirationDate" class="form-control" />
+                    <span asp-validation-for="IdentityCardExpirationDate" class="text-danger"></span>
+                </div>
+                <br />
+
+                <div class="form-group">
+                    <label asp-for="Nif" class="control-label"></label>
+                    <input asp-for="Nif" class="form-control" />
+                    <span asp-validation-for="Nif" class="text-danger"></span>
+                </div>
+                <br />
+
+                <div class="form-group">
+                    <label asp-for="BeneficiaryNumber" class="control-label"></label>
+                    <input asp-for="BeneficiaryNumber" class="form-control" />
+                    <span asp-validation-for="BeneficiaryNumber" class="text-danger"></span>
+                </div>
+                <br />
+
+            </div>
+
+
+            <dl class="row">
+
+                <dd class="col-sm-6">
+                    <div class="form-group">
+                        <label asp-for="FirstName" class="control-label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                </dd>
+                <dd class="col-sm-6">
+                    <div class="form-group">
+                        <label asp-for="LastName" class="control-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </dd>
+             </dl>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label asp-for="DateOfBirth" class="control-label"></label>
+                    <input asp-for="DateOfBirth" class="form-control" />
+                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                </div>
+                <br />
+            </div>
+
+
+            <dl class="row">
+
+                <dd class="col-sm-6">
+                    <div class="form-group">
+                        <label asp-for="NationalityId" class="control-label"></label>
+                        <select asp-for="NationalityId" class="form-control form-select" asp-items="@Model.Nationalities" onChange="ProvinceSelect()" id="SelectProvince"></select>
+                    </div>
+                </dd>
+                <dd class="col-sm-6">
+                    <div class="form-group" id="Province_2">
+                        <label asp-for="ProvinceId" class="control-label"></label>
+                        <select asp-for="ProvinceId" class="form-control form-select" asp-items="@Model.Provinces"></select>
+                    </div>
+                </dd>
+            </dl>
+
+            <dl class="row">
+                <dd class="col-sm-6">
+                    <div class="form-group">
+                        <label asp-for="Contacts" class="control-label"></label>
+                        <input asp-for="Contacts" class="form-control" />
+                        <span asp-validation-for="Contacts" class="text-danger"></span>
+                    </div>
+                </dd>
+                <dd class="col-sm-6">
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </dd>
+            </dl>
+
+            <br id="Province_1" />
+
+
+            <h5>Morada</h5>
+            <hr />
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="NeighbourhoodId" class="control-label"></label>
+                    <select asp-for="NeighbourhoodId" class="form-control form-select" asp-items="@Model.Neighbourhoods"></select>
+                </div>
+
+                <br />
+
+                <div class="form-group">
+                    <label asp-for="Address" class="control-label"></label>
+                    <input asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />            
+            <br />
+            <div class="form-group">
+                <a asp-controller="Curriculums" asp-action="Dashboard" asp-route-identifier="@ViewBag.identifier" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <input type="submit" value="Guardar Alterações" class="btn btn-warning" />
+            </div>
+           
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        window.onload = function () {
+            ProvinceSelect();
+        };
+        function ProvinceSelect() {
+
+            var response = document.getElementById('SelectProvince').value;
+            var elem = document.getElementById('Province_2');
+
+            if (response == "1") {
+                elem.hidden = false
+            }
+            else {
+                elem.hidden = true
+            }
+        }
+    </script>
+}

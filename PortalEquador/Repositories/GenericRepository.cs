@@ -57,11 +57,8 @@ namespace PortalEquador.Repositories
 
         public SelectList GroupItems(int groupId)
         {
-            return new SelectList(null, "Id", "Description");
-            /*
-            var result =  context.GroupItems.Where(x => x.GroupId == groupId);
+            var result =  context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true);
             return  new SelectList(result, "Id", "Description");
-            */
         }
     }
 }

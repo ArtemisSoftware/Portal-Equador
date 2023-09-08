@@ -1,5 +1,5 @@
 ﻿using PortalEquador.Data.GroupTypes.Entities;
-using System.ComponentModel;
+using PortalEquador.Data.PersonalInformation.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PortalEquador.Data.Document.Entities
@@ -7,17 +7,19 @@ namespace PortalEquador.Data.Document.Entities
     public class DocumentEntity : BaseEntity
     {
 
-        public string FileExtension { get; set; }
+        public int PersonalInformationId { get; set; }
 
-        [NotMapped]
-        public IFormFile ImageFile { get; set; }
+        [ForeignKey("PersonalInformationId")]
+        public PersonalInformationEntity PersonalInformationEntity { get; set; }
 
-        public int CurriculumId { get; set; }
+        public string? Observation { get; set; }
 
-        public int GroupItemId { get; set; }
+        public int DocumentTypeId { get; set; }
 
-        //[ForeignKey("GroupItemId")]
-        public GroupItemEntity GroupItem { get; set; }
+        [ForeignKey("DocumentTypeId")]
+        public GroupItemEntity DocumentTypeGroupItemEntity { get; set; }
+
+        public string Extension { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PortalEquador.Data.GroupTypes.Entities
 {
@@ -9,6 +10,8 @@ namespace PortalEquador.Data.GroupTypes.Entities
 
         public string? Observation { get; set; }
 
+        [DefaultValue(true)]
+        public bool Active { get; set; } = true;
 
         [ForeignKey("GroupEntityId")]
         public GroupEntity GroupEntity { get; set; }

@@ -1,4 +1,7 @@
-﻿using PortalEquador.Data.CurriculumVitae.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PortalEquador.Data.CurriculumVitae.Entities;
+using PortalEquador.Data.GroupTypes.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PortalEquador.Data.PersonalInformation.Entities
@@ -6,12 +9,16 @@ namespace PortalEquador.Data.PersonalInformation.Entities
     public class PersonalInformationEntity : BaseEntity
     {
 
-        public int CurriculumId { get; set; }
-
         /// <summary>
         /// Numero do bilhete de identidade
         /// </summary>
         public string IdentityCard { get; set; }
+
+        public string Nif { get; set; }
+
+        public DateTime IdentityCardExpirationDate { get; set; }
+
+        public string? BeneficiaryNumber { get; set; }
 
         public string FirstName { get; set; }
 
@@ -25,11 +32,30 @@ namespace PortalEquador.Data.PersonalInformation.Entities
 
         public int NationalityId { get; set; }
 
+        [ForeignKey("NationalityId")]
+        public GroupItemEntity NationalityGroupItemEntity { get; set; }
+
+        public int? ProvinceId { get; set; }
+
+        [ForeignKey("ProvinceId")]
+        public GroupItemEntity ProvinceGroupItemEntity { get; set; }
+
         public int NeighbourhoodId { get; set; }
+
+        [ForeignKey("NeighbourhoodId")]
+        public GroupItemEntity NeighbourhoodGroupItemEntity { get; set; }
 
         public string Address { get; set; }
 
-        public int MaritalStatusId { get; set; }
+        public int? MotherTongueId { get; set; }
+
+        [ForeignKey("MotherTongueId")]
+        public GroupItemEntity MotherTongueGroupItemEntity { get; set; }
+
+        public int? MaritalStatusId { get; set; }
+
+        [ForeignKey("MaritalStatusId")]
+        public GroupItemEntity MaritalStatusIdGroupItemEntity { get; set; }
 
     }
 }

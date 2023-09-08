@@ -1,19 +1,20 @@
 ﻿using PortalEquador.Contracts;
 using PortalEquador.Data.DriversLicence.Entities;
-using PortalEquador.Domain.Models.DriversLicence;
-using PortalEquador.Models.CurriculumVitae;
+using PortalEquador.Domain.DriversLicence.ViewModels;
+using PortalEquador.Domain.UseCases;
 
 namespace PortalEquador.Domain.Repositories
 {
     public interface DriversLicenceRepository : IGenericRepository<DriversLicenceEntity>
     {
-        public Task<List<DriversLicenceViewModel>> GetAllDriversLicenceAsync();
 
-        public Task<DriversLicenceDetailViewModel?> GetDriversLicenceAsync(int curriculumId);
+        public Task Save(DriversLicenceViewModel_Finak model, OperationType operationType);
 
-        public Task<DriversLicenceViewModel__?> GetDriversLicenceAsync__(int curriculumId);
+        public Task<DriversLicenceDetailViewModel> GetDriversLicenceDetailAsync(int curriculumId);
 
-        public Task RenewLicence(DriversLicenceViewModel__ model);
+        public Task<DriversLicenceViewModel_Finak> GetDriversLicenceAsync(int curriculumId);
+
+        public Task<List<DriversLicenceDetailViewModel>> GetAllDriversLicenceAsync();
 
     }
 }

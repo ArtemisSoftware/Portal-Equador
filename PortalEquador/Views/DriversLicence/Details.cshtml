@@ -1,16 +1,16 @@
-﻿@model PortalEquador.Domain.Models.DriversLicence.DriversLicenceViewModel__
+﻿@model PortalEquador.Domain.DriversLicence.ViewModels.DriversLicenceDetailViewModel
 
 @{
     ViewData["Title"] = "Details";
 }
 
 <h1>Detalhes</h1>
-<h4>Nome da pessoa</h4>
+<h4>Para: @Model.PersonalInformation.FullName</h4>
 <hr />
 
 <div class="row">
-   
-    <div class="col-md-6">
+
+    <div class="col-md-5">
 
         <dl class="row">
 
@@ -18,7 +18,7 @@
                 @Html.DisplayNameFor(model => model.Licence)
             </dt>
             <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Licence)
+                @Html.DisplayFor(model => model.Licence.Description)
             </dd>
 
             <dt class="col-sm-4">
@@ -36,19 +36,19 @@
                 <h5>
                     @switch (@Model.Status)
                     {
-                        case PortalEquador.Models.Documents.LicenceStatus.Updated:
+                        case PortalEquador.Domain.DriversLicence.LicenceStatus.Updated:
                             <span class="badge bg-success">@Html.DisplayFor(model => model.StatusDescription)</span>
                             break;
-                        case PortalEquador.Models.Documents.LicenceStatus.Expired:
+                        case PortalEquador.Domain.DriversLicence.LicenceStatus.Expired:
                             <span class="badge bg-danger">@Html.DisplayFor(model => model.StatusDescription)</span>
                             break;
-                        case PortalEquador.Models.Documents.LicenceStatus.Provisional_Renewal_Updated:
+                        case PortalEquador.Domain.DriversLicence.LicenceStatus.Provisional_Renewal_Updated:
                             <span class="badge bg-primary">@Html.DisplayFor(model => model.StatusDescription)</span>
                             break;
-                        case PortalEquador.Models.Documents.LicenceStatus.Provisional_Renewal_Expired:
+                        case PortalEquador.Domain.DriversLicence.LicenceStatus.Provisional_Renewal_Expired:
                             <span class="badge bg-warning">@Html.DisplayFor(model => model.StatusDescription)</span>
                             break;
-                        case PortalEquador.Models.Documents.LicenceStatus.No_Expiration_Date:
+                        case PortalEquador.Domain.DriversLicence.LicenceStatus.No_Expiration_Date:
                             <span class="badge bg-danger">@Html.DisplayFor(model => model.StatusDescription)</span>
                             break;
                         default:
@@ -58,7 +58,7 @@
             </dd>
         </dl>
 
-        @if (@Model.Status != PortalEquador.Models.Documents.LicenceStatus.Updated && @Model.ProvisionalExpirationDate != null)
+        @if (@Model.Status != PortalEquador.Domain.DriversLicence.LicenceStatus.Updated && @Model.ProvisionalExpirationDate != null)
         {
             <div class="row">
                 <div class="col-md-8">
@@ -69,14 +69,14 @@
 
 
             <dl class="row">
-                <dt class="col-sm-8">
+                <dt class="col-sm-6">
                     @Html.DisplayNameFor(model => model.ProvisionalExpirationDate)
                 </dt>
                 <dd class="col-sm-4">
                     @Html.DisplayFor(model => model.ProvisionalExpirationDate)
                 </dd>
 
-                <dt class="col-sm-8">
+                <dt class="col-sm-6">
                     @Html.DisplayNameFor(model => model.ProvisionalRenewalNumber)
                 </dt>
                 <dd class="col-sm-4">
@@ -88,21 +88,36 @@
 
 
         <div class="form-group">
-            <a asp-action="Index" class="btn btn-dark">Regressar ao index</a>
+            <a asp-controller="Curriculums" asp-action="Dashboard" asp-route-identifier="@Model.PersonaInformationId" class="btn btn-dark">Regressar ao index</a> &nbsp;
         </div>
 
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-7">
 
-        @foreach (var item in Model.Documents)
-        {
-            <h5>@item.Name</h5>
-            <hr />
-            <img src="@Url.Content(@item.FilePath)" class="img-fluid">
-            <br />
-            <br />
-        }
+        <div class="row">
+
+            @foreach (var item in Model.Documents)
+            {
+
+                <div class="col-sm-6">
+                    <div class="card">
+                        <img id="frame" src="@Url.Content(@item.PicturePath)" class="card-img-top">
+                        <div class="card-body">
+                            <p class="card-text">
+                                @Html.DisplayFor(modelItem => item.Document.Description)
+                            </p>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fas fa-download" title="Editar"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+
+            }
+        </div>
+
+
     </div>
 
-</div>
+</div>		
