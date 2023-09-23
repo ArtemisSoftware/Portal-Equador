@@ -1,0 +1,47 @@
+﻿@model PortalEquador.Data.ProfessionalExperience.Entities.ProfessionalExperienceEntity
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>ProfessionalExperienceEntity</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="PersonalInformationId" class="control-label"></label>
+                <select asp-for="PersonalInformationId" class ="form-control" asp-items="ViewBag.PersonalInformationId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CompanyId" class="control-label"></label>
+                <select asp-for="CompanyId" class ="form-control" asp-items="ViewBag.CompanyId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkstationId" class="control-label"></label>
+                <select asp-for="WorkstationId" class ="form-control" asp-items="ViewBag.WorkstationId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Months" class="control-label"></label>
+                <input asp-for="Months" class="form-control" />
+                <span asp-validation-for="Months" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateModified" class="control-label"></label>
+                <input asp-for="DateModified" class="form-control" />
+                <span asp-validation-for="DateModified" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

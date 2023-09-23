@@ -4,10 +4,12 @@ using PortalEquador.Data.Document.Entities;
 using PortalEquador.Data.DriversLicence.Entities;
 using PortalEquador.Data.GroupTypes.Entities;
 using PortalEquador.Data.PersonalInformation.Entities;
+using PortalEquador.Data.ProfessionalCompetence.Entities;
 using PortalEquador.Domain.Documents.ViewModels;
 using PortalEquador.Domain.DriversLicence.ViewModels;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.PersonalInformation.ViewModels;
+using PortalEquador.Domain.ProfessionalCompetence.ViewModels;
 using PortalEquador.Models.Users;
 
 namespace PortalEquador.Configurations
@@ -72,10 +74,22 @@ namespace PortalEquador.Configurations
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 .ForMember(dest => dest.PersonalInformation, opt => opt.MapFrom(src => src.PersonalInformationEntity))
                 .ReverseMap();
-            //---
 
-  
-            //---
+            //ProfessionalExperience
+
+            //ProfessionalCompetence
+
+            CreateMap<ProfessionalCompetenceEntity, ProfessionalCompetenceViewModel>()
+                .ForMember(dest => dest.CompetenceId, opt => opt.MapFrom(src => src.CompetenceId))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.PersonalInformation, opt => opt.MapFrom(src => src.PersonalInformationEntity))
+                .ReverseMap();
+
+            CreateMap<ProfessionalCompetenceEntity, ProfessionalCompetenceDetailViewModel>()
+                .ForMember(dest => dest.ProfessionalCompetence, opt => opt.MapFrom(src => src.CompetenceGroupItemEntity))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.PersonalInformation, opt => opt.MapFrom(src => src.PersonalInformationEntity))
+                .ReverseMap();
 
         }
     }

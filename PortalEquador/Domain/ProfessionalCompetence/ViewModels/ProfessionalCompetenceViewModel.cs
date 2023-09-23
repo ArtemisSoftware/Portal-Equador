@@ -1,12 +1,12 @@
-﻿using PortalEquador.Constants;
-using PortalEquador.Domain.GroupTypes.ViewModels;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using PortalEquador.Constants;
 using PortalEquador.Domain.PersonalInformation.ViewModels;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
 namespace PortalEquador.Domain.ProfessionalCompetence.ViewModels
 {
-    public class ProfessionalCompetenceDetailViewModel : ViewModel
+    public class ProfessionalCompetenceViewModel : ViewModel
     {
         public int Id { get; set; }
 
@@ -14,7 +14,12 @@ namespace PortalEquador.Domain.ProfessionalCompetence.ViewModels
 
         public PersonalInformationViewModel? PersonalInformation { get; set; }
 
-        [Display(Name = StringConstants.Display.PROFESSIONAL_COMPETENCE)]
-        public GroupItemViewModel ProfessionalCompetence { get; set; }
+
+        [Display(Name = StringConstants.Display.COMPETENCE)]
+        [Required]
+        public int CompetenceId { get; set; }
+
+        public SelectList? Competences { get; set; }
+
     }
 }

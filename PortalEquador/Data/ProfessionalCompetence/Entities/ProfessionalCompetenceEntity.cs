@@ -12,10 +12,10 @@ namespace PortalEquador.Data.ProfessionalCompetence.Entities
         [ForeignKey("PersonalInformationId")]
         public PersonalInformationEntity PersonalInformationEntity { get; set; }
 
-        public int ExperienceId { get; set; }
+        public int CompetenceId { get; set; }
 
-        [ForeignKey("ExperienceId")]
-        public GroupItemEntity ExperienceGroupItemEntity { get; set; }
+        [ForeignKey("CompetenceId")]
+        public GroupItemEntity CompetenceGroupItemEntity { get; set; }
 
     }
 }

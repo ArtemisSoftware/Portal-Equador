@@ -9,6 +9,14 @@ namespace PortalEquador.Domain.ProfessionalExperience.Repository
     public interface ProfessionalExperienceRepository : IGenericRepository<ProfessionalExperienceEntity>
     {
 
-        Task<List<ProfessionalExperienceDetailViewModel>> GetAllProfessionalExperience(int personalInformationId);
+        Task<List<ProfessionalExperienceDetailViewModel>> GetAll(int personalInformationId);
+
+        Task<ProfessionalExperienceDetailViewModel> GetDetail(int id);
+
+        Task<bool> Exists(int personalInformationId, int companyId, int workstationId);
+
+        Task Save(ProfessionalExperienceViewModel model);
+
+        Task<ProfessionalExperienceViewModel> Get(int id);
     }
 }

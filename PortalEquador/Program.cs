@@ -22,6 +22,9 @@ using PortalEquador.Domain.UseCases.DriversLicence;
 using PortalEquador.Domain.Documents.Repository;
 using PortalEquador.Domain.ProfessionalExperience.Repository;
 using PortalEquador.Data.ProfessionalExperience.Repository;
+using PortalEquador.Domain.ProfessionalCompetence.Repository;
+using PortalEquador.Data.ProfessionalCompetence.Repository;
+using PortalEquador.Domain.ProfessionalCompetence.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,7 +92,10 @@ builder.Services.AddScoped<RenewProvisionalUseCase> ();
 
 //ProfessionalExperience
 builder.Services.AddScoped<ProfessionalExperienceRepository, ProfessionalExperienceRepositoryImpl>();
-builder.Services.AddScoped<SaveDocumentUseCase>();
+
+//ProfessionalCompetence
+builder.Services.AddScoped<ProfessionalCompetenceRepository, ProfessionalCompetenceRepositoryImpl>();
+builder.Services.AddScoped<GetProfessionalCompetenceCreationUseCase>();
 
 //-----*****
 

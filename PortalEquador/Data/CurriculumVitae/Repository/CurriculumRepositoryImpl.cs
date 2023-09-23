@@ -39,6 +39,18 @@ namespace PortalEquador.Data.CurriculumVitae.Repository
                                              })
                                         on personal.Id equals documents.PersonalInformationId into resultDocs
                                         from resultDocuments in resultDocs.DefaultIfEmpty()
+
+                                        join competences in
+                                            (from competences in context.ProfessionalCompetenceEntity
+                                             group competences by competences.PersonalInformationId into groupedCompetences
+                                             select new
+                                             {
+                                                 PersonalInformationId = groupedCompetences.Key,
+                                                 CompetencesCount = groupedCompetences.Count()
+                                             })
+                                        on personal.Id equals competences.PersonalInformationId into resultComp
+                                        from resultCompetences in resultComp.DefaultIfEmpty()
+
                         where personal.Id == id
 
                         select new CurriculumDashboardViewModel
@@ -47,6 +59,7 @@ namespace PortalEquador.Data.CurriculumVitae.Repository
                             FullName = personal.FirstName + " " + personal.LastName,
                             IsPersonalInformationComplete = (personal.Id != 0),
                             TotalDocuments = resultDocuments.OrderDetailCount == null ? 0 : resultDocuments.OrderDetailCount,
+                            TotalCompetences = resultCompetences.CompetencesCount == null ? 0 : resultCompetences.CompetencesCount,
                             IsDriversLicenceComplete = true//resultDriversLicence.HasDriverLicence
                         };
 

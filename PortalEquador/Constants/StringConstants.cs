@@ -40,6 +40,9 @@
             public const string PROFESSIONAL_EXPERIENCE = "Experiência profissional";
             public const string DURATION = "Duração";
             public const string PROFESSIONAL_COMPETENCE = "Habilitações profissionais";
+            public const string COMPANY = "Empresa";
+            public const string WORKSTATION = "Posto";
+            public const string COMPETENCE = "Habilitação";
         }
 
         public static class Error
@@ -50,6 +53,7 @@
             public const string EXISTING_IDENTITY_CARD = "O numero do bilhete de identidade já se encontra registado";
             public const string EXISTING_DOCUMENT = "O tipo de documento já se encontra registado";
             public const string MANDATORY_FILE = "A escolha de um ficheiro é obrigatória";
+            public const string EXISTING_REGISTER = "O item já se encontra registado";
         }
 
         public static class Dates

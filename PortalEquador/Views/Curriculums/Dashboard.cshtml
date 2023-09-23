@@ -76,5 +76,25 @@
 
     </div>
 
+    <br />
+    <div class="row">
+
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Habilitações profissionais</h5>
+                    <span class="badge bg-success">@Model.TotalCompetences Registo(s)</span>
+                    <p class="card-text">Formulário para o registo de Habilitações profissionais pessoais.</p>
+                    <a asp-controller="ProfessionalCompetence" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-username="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                    <a asp-controller="ProfessionalCompetence" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-username="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
 </div>
 

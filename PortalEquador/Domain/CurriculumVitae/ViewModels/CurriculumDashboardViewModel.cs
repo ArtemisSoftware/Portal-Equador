@@ -10,6 +10,8 @@
 
         public int TotalDocuments { get; set; }
 
+        public int TotalCompetences { get; set; }
+
         public bool IsDriversLicenceComplete { get; set; }
     }
 }

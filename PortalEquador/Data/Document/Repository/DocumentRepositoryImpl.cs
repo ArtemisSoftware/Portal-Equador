@@ -51,8 +51,7 @@ namespace PortalEquador.Data.Document.Repository
 
         public async Task<bool> DocumentExists(int curriculumId, int documentTypeId)
         {
-            //return await context.DocumentEntity.AnyAsync(item => item.CurriculumId == curriculumId & item.GroupItemId == documentTypeId);
-            return false;
+            return await context.DocumentEntity.AnyAsync(item => item.PersonalInformationId == curriculumId & item.DocumentTypeId == documentTypeId);
         }
 
         public async Task SaveDocument(DocumentViewModel document)
