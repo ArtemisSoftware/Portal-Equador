@@ -1,34 +1,27 @@
-﻿@model IEnumerable<PortalEquador.Data.ProfessionalExperience.Entities.ProfessionalExperienceEntity>
+﻿@model IEnumerable<PortalEquador.Domain.ProfessionalExperience.ViewModels.ProfessionalExperienceDetailViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<h4>Experiência profissional</h4>
+<h5>@ViewData["username"]</h5>
+<br />
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" asp-route-identifier="@ViewBag.personaiInformationid" asp-route-username="@ViewBag.username" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PersonalInformationEntity)
+                @Html.DisplayNameFor(model => model.ProfessionalExperience)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CompanyGroupItemEntity)
+                @Html.DisplayNameFor(model => model.Workstation)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.WorkstationGroupItemEntity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Months)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateModified)
+                @Html.DisplayNameFor(model => model.Duration)
             </th>
             <th></th>
         </tr>
@@ -37,29 +30,59 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.PersonalInformationEntity.Id)
+                    @Html.DisplayFor(modelItem => item.ProfessionalExperience.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CompanyGroupItemEntity.Id)
+                    @Html.DisplayFor(modelItem => item.Workstation.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.WorkstationGroupItemEntity.Id)
+                    @Html.DisplayFor(modelItem => item.Duration)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Months)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateModified)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-identifier="@ViewBag.personaiInformationid" asp-route-username="@ViewBag.username" asp-route-id="@item.Id" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a> 
+                    <button data-id="@item.Id" data-personalid="@ViewBag.personaiInformationid" data-username="@ViewBag.username" class="btn btn-danger deleteBtn" type="button"> <i class="far fa-trash-alt"></i></button>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+
+
+<form id="deleteFrom" asp-action="Delete">
+    <input type="hidden" id="groupId" name="Id" />
+    <input type="hidden" id="personalid" name="Personalid" />
+    <input type="hidden" id="username" name="Username" />
+</form>
+
+@section Scripts{
+    <script>
+        $(function () {
+
+            $('.table').DataTable();
+
+            $('.deleteBtn').click(function (e) {
+                swal({
+                    title: "Remover Experiência profissional",
+                    text: "Tem a certeza que pretende eliminar o registo?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var btn = $(this);
+                        var id = btn.data("id");
+                        var personalid = btn.data("personalid");
+                        var username = btn.data("username");
+                        $('#groupId').val(id);
+                        $('#personalid').val(personalid);
+                        $('#username').val(username);
+                        $('#deleteFrom').submit();
+
+                    }
+                });
+            });
+        });
+    </script>
+}
+

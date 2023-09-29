@@ -10,9 +10,10 @@ namespace PortalEquador.Domain.ProfessionalExperience.UseCases
         private readonly PersonalInformationRepository personalInformationRepository;
         private readonly ProfessionalExperienceRepository professionalExperienceRepository;
 
-        public GetProfessionalExperienceCreationUseCase(ProfessionalExperienceRepository professionalExperienceRepository)
+        public GetProfessionalExperienceCreationUseCase(ProfessionalExperienceRepository professionalExperienceRepository, PersonalInformationRepository personalInformationRepository)
         {
             this.professionalExperienceRepository = professionalExperienceRepository;
+            this.personalInformationRepository = personalInformationRepository;
         }
 
         public async Task<ProfessionalExperienceViewModel> Invoke(int id)

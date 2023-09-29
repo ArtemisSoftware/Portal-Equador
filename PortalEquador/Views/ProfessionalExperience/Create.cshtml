@@ -1,47 +1,60 @@
-﻿@model PortalEquador.Data.ProfessionalExperience.Entities.ProfessionalExperienceEntity
+﻿@model PortalEquador.Domain.ProfessionalExperience.ViewModels.ProfessionalExperienceViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Criar Experiência  profissional</h1>
+<h4>Para: @ViewData["username"]</h4>
 
-<h4>ProfessionalExperienceEntity</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="PersonalInformationId" class="control-label"></label>
-                <select asp-for="PersonalInformationId" class ="form-control" asp-items="ViewBag.PersonalInformationId"></select>
-            </div>
+
+            <input type="hidden" asp-for="PersonaInformationId" />
+
             <div class="form-group">
                 <label asp-for="CompanyId" class="control-label"></label>
-                <select asp-for="CompanyId" class ="form-control" asp-items="ViewBag.CompanyId"></select>
+                <select asp-for="CompanyId" class="form-select" asp-items="Model.Companies"></select>
             </div>
+            <br />
+
             <div class="form-group">
                 <label asp-for="WorkstationId" class="control-label"></label>
-                <select asp-for="WorkstationId" class ="form-control" asp-items="ViewBag.WorkstationId"></select>
+                <select asp-for="WorkstationId" class="form-select" asp-items="Model.Workstations"></select>
             </div>
+            <br />
+
+            <div class="form-group">
+                <label asp-for="Years" class="control-label"></label>
+                <input asp-for="Years" class="form-control" type="number" min="0" value="0" />
+                <span asp-validation-for="Years" class="text-danger"></span>
+            </div>
+            <br />
+
             <div class="form-group">
                 <label asp-for="Months" class="control-label"></label>
-                <input asp-for="Months" class="form-control" />
+                <input asp-for="Months" class="form-control" type="number" min="0" max="11" value="1" />
                 <span asp-validation-for="Months" class="text-danger"></span>
             </div>
+            <br />
+
+
             <div class="form-group">
-                <label asp-for="DateModified" class="control-label"></label>
-                <input asp-for="DateModified" class="form-control" />
-                <span asp-validation-for="DateModified" class="text-danger"></span>
+                <span asp-validation-for="Error" class="text-danger"></span>
             </div>
+
+            <br />
+            <br />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <a asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <input type="submit" value="Criar registo" class="btn btn-primary" />
             </div>
+
+
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 

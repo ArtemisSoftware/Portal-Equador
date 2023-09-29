@@ -23,6 +23,7 @@ namespace PortalEquador.Data.ProfessionalExperience.Repository
         public  async Task<List<ProfessionalExperienceDetailViewModel>> GetAll(int personalInformationId)
         {
             var result = await context.ProfessionalExperienceEntity
+                 .Include(d => d.WorkstationGroupItemEntity)
                 .Include(d => d.CompanyGroupItemEntity)
                 .Include(d => d.PersonalInformationEntity)
                 .Where(item => item.PersonalInformationId == personalInformationId)
@@ -51,6 +52,7 @@ namespace PortalEquador.Data.ProfessionalExperience.Repository
         {
 
             var entity = _mapper.Map<ProfessionalExperienceEntity>(model);
+            entity.Months = model.Years * 12 + model.Months;
 
             var operationType = OperationType.Create;
             if (entity.Id != 0)

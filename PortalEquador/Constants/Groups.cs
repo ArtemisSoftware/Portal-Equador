@@ -10,8 +10,8 @@
         public const int DOCUMENTS = 4;
         public const int DRIVERS_LICENCE = 5;
         public const int COMPETENCES = 6;
-        public const int COMPANIES = 5;
-        public const int WORKSTATIONS = 5;
+        public const int COMPANIES = 7;
+        public const int WORKSTATIONS = 8;
     }
 
     public class ItemFromGroup

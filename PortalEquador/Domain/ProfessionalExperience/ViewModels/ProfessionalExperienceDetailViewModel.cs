@@ -20,6 +20,9 @@ namespace PortalEquador.Domain.ProfessionalExperience.ViewModels
         [Display(Name = StringConstants.Display.PROFESSIONAL_EXPERIENCE)]
         public GroupItemViewModel ProfessionalExperience { get; set; }
 
+        [Display(Name = StringConstants.Display.WORKSTATION)]
+        public GroupItemViewModel Workstation { get; set; }
+
         public int Months { get; set; }
 
         [Display(Name = StringConstants.Display.DURATION)]
@@ -35,16 +38,25 @@ namespace PortalEquador.Domain.ProfessionalExperience.ViewModels
                 {
                     result = $"{years} ano ";
                 }      
-              if( years > 1)
+              else if( years > 1)
                 {
                     result = $"{years} anos ";
                 }
-                
-                if (remainingMonths == 1)
+              else { }
+
+                if (remainingMonths == 1 && years == 0)
+                {
+                    result += $" {remainingMonths} mes";
+                }
+                else if (remainingMonths > 1 && years == 0)
+                {
+                    result += $"{remainingMonths} meses ";
+                }
+                else if(remainingMonths == 1)
                 {
                     result += $" e {remainingMonths} mes";
                 }
-                if (years > 1)
+                else if(remainingMonths > 1)
                 {
                     result += $" e {remainingMonths} meses ";
                 }

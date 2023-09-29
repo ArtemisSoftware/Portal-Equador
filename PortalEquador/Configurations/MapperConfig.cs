@@ -5,11 +5,13 @@ using PortalEquador.Data.DriversLicence.Entities;
 using PortalEquador.Data.GroupTypes.Entities;
 using PortalEquador.Data.PersonalInformation.Entities;
 using PortalEquador.Data.ProfessionalCompetence.Entities;
+using PortalEquador.Data.ProfessionalExperience.Entities;
 using PortalEquador.Domain.Documents.ViewModels;
 using PortalEquador.Domain.DriversLicence.ViewModels;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.PersonalInformation.ViewModels;
 using PortalEquador.Domain.ProfessionalCompetence.ViewModels;
+using PortalEquador.Domain.ProfessionalExperience.ViewModels;
 using PortalEquador.Models.Users;
 
 namespace PortalEquador.Configurations
@@ -76,6 +78,22 @@ namespace PortalEquador.Configurations
                 .ReverseMap();
 
             //ProfessionalExperience
+
+            CreateMap<ProfessionalExperienceEntity, ProfessionalExperienceViewModel>()
+                 .ForMember(dest => dest.WorkstationId, opt => opt.MapFrom(src => src.WorkstationId))
+                 .ForMember(dest => dest.CompanyId, opt => opt.MapFrom(src => src.CompanyId))
+                 .ForMember(dest => dest.Years, opt => opt.MapFrom(src => src.Months / 12))
+                 .ForMember(dest => dest.Months, opt => opt.MapFrom(src => src.Months % 12))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.PersonalInformation, opt => opt.MapFrom(src => src.PersonalInformationEntity))
+                .ReverseMap();
+
+            CreateMap<ProfessionalExperienceEntity, ProfessionalExperienceDetailViewModel>()
+                .ForMember(dest => dest.Workstation, opt => opt.MapFrom(src => src.WorkstationGroupItemEntity))
+                .ForMember(dest => dest.ProfessionalExperience, opt => opt.MapFrom(src => src.CompanyGroupItemEntity))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.PersonalInformation, opt => opt.MapFrom(src => src.PersonalInformationEntity))
+                .ReverseMap();
 
             //ProfessionalCompetence
 

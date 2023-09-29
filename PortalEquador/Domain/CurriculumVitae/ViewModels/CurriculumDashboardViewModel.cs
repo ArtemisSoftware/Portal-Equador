@@ -12,6 +12,8 @@
 
         public int TotalCompetences { get; set; }
 
+        public int TotalExpertises { get; set; }
+
         public bool IsDriversLicenceComplete { get; set; }
     }
 }

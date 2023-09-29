@@ -5,55 +5,43 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PortalEquador.Constants;
 using PortalEquador.Data;
 using PortalEquador.Data.ProfessionalExperience.Entities;
+using PortalEquador.Domain.ProfessionalCompetence.UseCases;
+using PortalEquador.Domain.ProfessionalExperience.Repository;
+using PortalEquador.Domain.ProfessionalExperience.UseCases;
+using PortalEquador.Domain.ProfessionalExperience.ViewModels;
 
 namespace PortalEquador.Controllers.ProfessionalExperience
 {
     public class ProfessionalExperienceController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ProfessionalExperienceRepository _repository;
+        private readonly GetProfessionalExperienceCreationUseCase _getProfessionalExperienceCreationUseCase;
 
-        public ProfessionalExperienceController(ApplicationDbContext context)
+        public ProfessionalExperienceController(ProfessionalExperienceRepository repository, GetProfessionalExperienceCreationUseCase getProfessionalExperienceCreationUseCase)
         {
-            _context = context;
+            _repository = repository;
+            _getProfessionalExperienceCreationUseCase = getProfessionalExperienceCreationUseCase;
         }
 
         // GET: ProfessionalExperience
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int identifier, string username)
         {
-            var applicationDbContext = _context.ProfessionalExperienceEntity.Include(p => p.CompanyGroupItemEntity).Include(p => p.PersonalInformationEntity).Include(p => p.WorkstationGroupItemEntity);
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        // GET: ProfessionalExperience/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.ProfessionalExperienceEntity == null)
-            {
-                return NotFound();
-            }
-
-            var professionalExperienceEntity = await _context.ProfessionalExperienceEntity
-                .Include(p => p.CompanyGroupItemEntity)
-                .Include(p => p.PersonalInformationEntity)
-                .Include(p => p.WorkstationGroupItemEntity)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (professionalExperienceEntity == null)
-            {
-                return NotFound();
-            }
-
-            return View(professionalExperienceEntity);
+            ViewData["username"] = username;
+            ViewData["personaiInformationid"] = identifier;
+            var list = await _repository.GetAll(identifier);
+            return View(list);
         }
 
         // GET: ProfessionalExperience/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int identifier, string username)
         {
-            ViewData["CompanyId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id");
-            ViewData["WorkstationId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
-            return View();
+            ViewData["personaiInformationid"] = identifier;
+            ViewData["username"] = username;
+            var model = await _getProfessionalExperienceCreationUseCase.Invoke(identifier);
+            return View(model);
         }
 
         // POST: ProfessionalExperience/Create
@@ -61,37 +49,39 @@ namespace PortalEquador.Controllers.ProfessionalExperience
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PersonalInformationId,CompanyId,WorkstationId,Months,Id,DateCreated,DateModified")] ProfessionalExperienceEntity professionalExperienceEntity)
+        public async Task<IActionResult> Create(ProfessionalExperienceViewModel model)
         {
-            if (ModelState.IsValid)
+            var recover = await _getProfessionalExperienceCreationUseCase.Invoke(model.PersonaInformationId);
+            ViewData["username"] = recover.PersonalInformation.FullName;
+            ViewData["personaiInformationid"] = recover.PersonalInformation.Id;
+
+            var exists = await _repository.Exists(model.PersonaInformationId, model.CompanyId, model.WorkstationId);
+            if (exists == false)
             {
-                _context.Add(professionalExperienceEntity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                await _repository.Save(model);
+                return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, username = recover.PersonalInformation.FullName });
             }
-            ViewData["CompanyId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", professionalExperienceEntity.CompanyId);
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", professionalExperienceEntity.PersonalInformationId);
-            ViewData["WorkstationId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", professionalExperienceEntity.WorkstationId);
-            return View(professionalExperienceEntity);
+            else
+            {
+                model.Companies = recover.Companies;
+                model.Workstations = recover.Workstations; 
+                ModelState.AddModelError(nameof(model.Error), StringConstants.Error.EXISTING_REGISTER);
+                return View(model);
+            }
         }
 
         // GET: ProfessionalExperience/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int identifier, string username, int id)
         {
-            if (id == null || _context.ProfessionalExperienceEntity == null)
-            {
-                return NotFound();
-            }
 
-            var professionalExperienceEntity = await _context.ProfessionalExperienceEntity.FindAsync(id);
-            if (professionalExperienceEntity == null)
-            {
-                return NotFound();
-            }
-            ViewData["CompanyId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", professionalExperienceEntity.CompanyId);
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", professionalExperienceEntity.PersonalInformationId);
-            ViewData["WorkstationId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", professionalExperienceEntity.WorkstationId);
-            return View(professionalExperienceEntity);
+            ViewData["personaiInformationid"] = identifier;
+            ViewData["username"] = username;
+
+            var recover = await _getProfessionalExperienceCreationUseCase.Invoke(identifier);
+            var model = await _repository.Get(id);
+            model.Companies = recover.Companies;
+            model.Workstations = recover.Workstations;
+            return View(model);
         }
 
         // POST: ProfessionalExperience/Edit/5
@@ -99,82 +89,115 @@ namespace PortalEquador.Controllers.ProfessionalExperience
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PersonalInformationId,CompanyId,WorkstationId,Months,Id,DateCreated,DateModified")] ProfessionalExperienceEntity professionalExperienceEntity)
+        public async Task<IActionResult> Edit(ProfessionalExperienceViewModel model)
         {
-            if (id != professionalExperienceEntity.Id)
-            {
-                return NotFound();
-            }
+            await _repository.Save(model);
+            var recover = await _getProfessionalExperienceCreationUseCase.Invoke(model.PersonaInformationId);
+            return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, username = recover.PersonalInformation.FullName });
+        }
 
-            if (ModelState.IsValid)
-            {
-                try
+        // POST: ProfessionalCompetence/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id, int personalid, string username)
+        {
+            await _repository.DeleteAsync(id);
+            return RedirectToAction(nameof(Index), new { identifier = personalid, username = username });
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
+
+                // GET: ProfessionalExperience/Details/5
+                public async Task<IActionResult> Details(int? id)
                 {
-                    _context.Update(professionalExperienceEntity);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProfessionalExperienceEntityExists(professionalExperienceEntity.Id))
+                    if (id == null || _context.ProfessionalExperienceEntity == null)
                     {
                         return NotFound();
                     }
-                    else
+
+                    var professionalExperienceEntity = await _context.ProfessionalExperienceEntity
+                        .Include(p => p.CompanyGroupItemEntity)
+                        .Include(p => p.PersonalInformationEntity)
+                        .Include(p => p.WorkstationGroupItemEntity)
+                        .FirstOrDefaultAsync(m => m.Id == id);
+                    if (professionalExperienceEntity == null)
                     {
-                        throw;
+                        return NotFound();
                     }
+
+                    return View(professionalExperienceEntity);
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CompanyId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", professionalExperienceEntity.CompanyId);
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", professionalExperienceEntity.PersonalInformationId);
-            ViewData["WorkstationId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", professionalExperienceEntity.WorkstationId);
-            return View(professionalExperienceEntity);
-        }
 
-        // GET: ProfessionalExperience/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.ProfessionalExperienceEntity == null)
-            {
-                return NotFound();
-            }
 
-            var professionalExperienceEntity = await _context.ProfessionalExperienceEntity
-                .Include(p => p.CompanyGroupItemEntity)
-                .Include(p => p.PersonalInformationEntity)
-                .Include(p => p.WorkstationGroupItemEntity)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (professionalExperienceEntity == null)
-            {
-                return NotFound();
-            }
 
-            return View(professionalExperienceEntity);
-        }
 
-        // POST: ProfessionalExperience/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.ProfessionalExperienceEntity == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.ProfessionalExperienceEntity'  is null.");
-            }
-            var professionalExperienceEntity = await _context.ProfessionalExperienceEntity.FindAsync(id);
-            if (professionalExperienceEntity != null)
-            {
-                _context.ProfessionalExperienceEntity.Remove(professionalExperienceEntity);
-            }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+                // GET: ProfessionalExperience/Delete/5
+                public async Task<IActionResult> Delete(int? id)
+                {
+                    if (id == null || _context.ProfessionalExperienceEntity == null)
+                    {
+                        return NotFound();
+                    }
 
-        private bool ProfessionalExperienceEntityExists(int id)
-        {
-            return (_context.ProfessionalExperienceEntity?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+                    var professionalExperienceEntity = await _context.ProfessionalExperienceEntity
+                        .Include(p => p.CompanyGroupItemEntity)
+                        .Include(p => p.PersonalInformationEntity)
+                        .Include(p => p.WorkstationGroupItemEntity)
+                        .FirstOrDefaultAsync(m => m.Id == id);
+                    if (professionalExperienceEntity == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return View(professionalExperienceEntity);
+                }
+
+                // POST: ProfessionalExperience/Delete/5
+                [HttpPost, ActionName("Delete")]
+                [ValidateAntiForgeryToken]
+                public async Task<IActionResult> DeleteConfirmed(int id)
+                {
+                    if (_context.ProfessionalExperienceEntity == null)
+                    {
+                        return Problem("Entity set 'ApplicationDbContext.ProfessionalExperienceEntity'  is null.");
+                    }
+                    var professionalExperienceEntity = await _context.ProfessionalExperienceEntity.FindAsync(id);
+                    if (professionalExperienceEntity != null)
+                    {
+                        _context.ProfessionalExperienceEntity.Remove(professionalExperienceEntity);
+                    }
+
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+
+                private bool ProfessionalExperienceEntityExists(int id)
+                {
+                    return (_context.ProfessionalExperienceEntity?.Any(e => e.Id == id)).GetValueOrDefault();
+                }
+        */
     }
 }
