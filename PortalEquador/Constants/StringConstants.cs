@@ -43,6 +43,8 @@
             public const string COMPANY = "Empresa";
             public const string WORKSTATION = "Posto";
             public const string COMPETENCE = "Habilitação";
+            public const string DEGREE = "Grau";
+            public const string INSTITUTION = "Instituição";
         }
 
         public static class Error

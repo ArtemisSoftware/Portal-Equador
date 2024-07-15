@@ -26,6 +26,10 @@ using PortalEquador.Domain.ProfessionalCompetence.Repository;
 using PortalEquador.Data.ProfessionalCompetence.Repository;
 using PortalEquador.Domain.ProfessionalCompetence.UseCases;
 using PortalEquador.Domain.ProfessionalExperience.UseCases;
+using PortalEquador.Domain.School.Repository;
+using PortalEquador.Data.School.Repository;
+using PortalEquador.Domain.University.Repository;
+using PortalEquador.Data.University.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -99,28 +103,11 @@ builder.Services.AddScoped<GetProfessionalExperienceCreationUseCase> ();
 builder.Services.AddScoped<ProfessionalCompetenceRepository, ProfessionalCompetenceRepositoryImpl>();
 builder.Services.AddScoped<GetProfessionalCompetenceCreationUseCase>();
 
-//-----*****
+//School
+builder.Services.AddScoped<SchoolRepository, SchoolRepositoryImpl>();
 
-/*
-
-builder.Services.AddScoped<DriversLicenceRepository, DriversLicenceRepositoryImpl>();
-
-
-//Use cases
-builder.Services.AddScoped<GetPersonalInformationUseCase>();
-builder.Services.AddScoped < GetDriversLicenceCreationInfoUseCase>();
-
-builder.Services.AddScoped<GetDocumentsByTypeUseCase>();
-
-builder.Services.AddScoped<SaveDriversLicenceUseCase>();
-builder.Services.AddScoped<SaveDocumentUseCase>();
-builder.Services.AddScoped<GetAllDriversLicencesUseCase>();
-builder.Services.AddScoped<GetDriversLicenceUseCase>();
-builder.Services.AddScoped<GetDriversLicenceUseCase__>();
-builder.Services.AddScoped<SaveDriversLicenceUseCase__>();
-builder.Services.AddScoped<RenewDriversLicenceUseCase>();
-*/
-//---
+//university
+builder.Services.AddScoped<UniversityRepository,  UniversityRepositoryImpl>();
 
 //Group
 

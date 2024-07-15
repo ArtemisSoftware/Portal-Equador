@@ -11,7 +11,15 @@
         public const int DRIVERS_LICENCE = 5;
         public const int COMPETENCES = 6;
         public const int COMPANIES = 7;
-        public const int WORKSTATIONS = 8;
+        public const int WORKSTATIONS = 8
+            ;
+        public const int SCHOOL = 8;
+        public const int SCHOOL_LEVEL = 8;
+        public const int SCHOOL_COURSE = 8;
+        public const int UNIVERSITY = 8;
+        public const int UNIVERSITY_LEVEL = 8;
+        public const int UNIVERSITY_COURSE = 8;
+        public const int COMPLETNESS = 8;
     }
 
     public class ItemFromGroup

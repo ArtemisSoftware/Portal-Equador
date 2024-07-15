@@ -22,6 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Domain\School\UseCases\" />
+    <Folder Include="Domain\University\UseCases\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
