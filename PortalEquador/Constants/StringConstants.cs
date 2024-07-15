@@ -45,6 +45,7 @@
             public const string COMPETENCE = "Habilitação";
             public const string DEGREE = "Grau";
             public const string INSTITUTION = "Instituição";
+            public const string MECHANIC = "Mecânico";
         }
 
         public static class Error

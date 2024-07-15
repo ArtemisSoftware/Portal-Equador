@@ -9,6 +9,7 @@ using PortalEquador.Data.GroupTypes.Entities;
 using PortalEquador.Data.PersonalInformation.Entities;
 using PortalEquador.Data.ProfessionalCompetence.Entities;
 using PortalEquador.Data.ProfessionalExperience.Entities;
+using PortalEquador.Data.Scheduler.Entities;
 using PortalEquador.Data.School.Entity;
 using PortalEquador.Data.University.Entity;
 
@@ -48,6 +49,8 @@ namespace PortalEquador.Data
         public DbSet<SchoolEntity> SchoolEntity { get; set; }
 
         public DbSet<UniversityEntity> UniversityEntity { get; set; }
+
+        public DbSet<MechanicalWorkshopSchedulerEntity> MechanicalWorkshopSchedulerEntity { get; set; }
 
     }
 }
