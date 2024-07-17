@@ -1,0 +1,92 @@
+﻿@model PortalEquador.Domain.Scheduler.MechanicalWorkshop.ViewModels.LoloVml
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="MainTime" class="control-label"></label>
+                <input id="expirationDate" asp-for="MainTime" class="form-control" />
+                <span asp-validation-for="MainTime" class="text-danger"></span>
+            </div>
+
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Horário</th>
+                        @foreach (var times in Model.Mechanics)
+                    {
+                            <th scope="col">@Html.DisplayFor(modelItem => times.Description )</th>
+                    }
+                    </tr>
+                </thead>
+                <tbody>
+
+
+                    @foreach (var times in Model.RegisteredTime)
+                    {
+                        <tr>
+                            <th scope="row">@Html.DisplayFor(modelItem => times.Value.Description )</th>
+
+                            @foreach (var schedules in Model.RegisteredDictionary[times.Key])
+                            {
+                                <td>
+                                    @if (schedules.Id == -1)
+                                    {
+                                        <div class="card border-primary text-center">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Sem agendamento</h5>
+                                                <p class="card-text">Horário livre</p>
+                                                <a href="#" class="btn btn-primary">Agendar</a>
+                                            </div>
+                                        </div>
+                                    } else {
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">@Html.DisplayFor(modelItem => schedules.LicencePlate  )</h5>
+                                                <p class="card-text">Contracto: @Html.DisplayFor(modelItem => schedules.Contract)</p>
+                                                <a href="#" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                                                <a href="#" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                                                <a href="#" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                                            </div>
+                                        </div>
+                                    }
+
+                                </td>
+                            }
+                        </tr>
+                    }
+                    
+
+                </tbody>
+            </table>
+
+        </form>
+    </div>
+
+    <div class="col-md-8">
+        <label for="Image" class="form-label">Pré-visualização</label>
+        <br />
+        <img id="frame" src="" class="img-fluid" />
+    </div>
+
+</div>
+
+
+
+
+
+
