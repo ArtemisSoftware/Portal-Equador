@@ -1,26 +1,26 @@
-﻿@model PortalEquador.Data.Scheduler.Entities.MechanicalWorkshopSchedulerEntity
+﻿@model PortalEquador.Domain.Scheduler.MechanicalWorkshop.ViewModels.MechanicalWorkshopSchedulerViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detalhe";
 }
 
-<h1>Details</h1>
-
+<h1>Detalhe do Agendamento</h1>
+<h4>@Html.DisplayFor(model => model.ScheduleDate)</h4>
 <div>
-    <h4>MechanicalWorkshopSchedulerEntity</h4>
+
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.InterventionTimeGroupItemEntity)
+            @Html.DisplayNameFor(model => model.InterventionTime)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.InterventionTimeGroupItemEntity.Id)
+            @Html.DisplayFor(model => model.InterventionTime.Description)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MechanicGroupItemEntity)
+            @Html.DisplayNameFor(model => model.Mechanic)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MechanicGroupItemEntity.Id)
+            @Html.DisplayFor(model => model.Mechanic.Description)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.LicencePlate)
@@ -29,26 +29,38 @@
             @Html.DisplayFor(model => model.LicencePlate)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ScheduleDate)
+            @Html.DisplayNameFor(model => model.Model)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ScheduleDate)
+            @Html.DisplayFor(model => model.Model)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateCreated)
+            @Html.DisplayNameFor(model => model.Contract)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateCreated)
+            @Html.DisplayFor(model => model.Contract)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateModified)
+            @Html.DisplayNameFor(model => model.Service)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateModified)
+            @Html.DisplayFor(model => model.Service)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Telephone)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Telephone)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Code)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn btn-dark" asp-route-id="@Model?.Id" asp-route-groupId="@ViewBag.groupId" asp-route-groupName="@ViewBag.groupName">Regressar ao index</a> &nbsp;
+    <a asp-action="Edit" asp-route-id="@Model?.Id" asp-route-groupId="@ViewBag.groupId" asp-route-groupName="@ViewBag.groupName" class="btn btn-warning">Editar registo</a>
 </div>

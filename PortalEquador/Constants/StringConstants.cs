@@ -42,10 +42,37 @@
             public const string PROFESSIONAL_COMPETENCE = "Habilitações profissionais";
             public const string COMPANY = "Empresa";
             public const string WORKSTATION = "Posto";
-            public const string COMPETENCE = "Habilitação";
-            public const string DEGREE = "Grau";
+
+  
             public const string INSTITUTION = "Instituição";
+ 
+
+
+
+            // A
+
+            // C
+            public const string CONTRACT = "Contrato";
+            public const string COMPETENCE = "Habilitação";
+            public const string CODE = "Código";
+
+            // D
+            public const string DEGREE = "Grau";
+            public const string DATE = "Data";
+            // L
+
+            public const string LICENCE_PLATE = "Matricula";
+
+            // M
             public const string MECHANIC = "Mecânico";
+            public const string MODEL = "Modelo";
+
+            // S
+            public const string SERVICE = "Serviço";
+            public const string SCHEDULE = "Horário";
+
+            //  T
+            public const string TELEPHONE = "Telefone";
         }
 
         public static class Error

@@ -1,9 +1,15 @@
-﻿using PortalEquador.Domain.GroupTypes.ViewModels;
+﻿using PortalEquador.Constants;
+using PortalEquador.Domain.GroupTypes.ViewModels;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace PortalEquador.Domain.Scheduler.MechanicalWorkshop.ViewModels
 {
     public class LoloVml : ViewModel
     {
+        [Display(Name = StringConstants.Display.DATE)]
+        [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
+        [DataType(DataType.Date)]
         public DateTime MainTime { get; set; } =   DateTime.Now;
 
         public List<MechanicalWorkshopSchedulerViewModel> registers { get; set; }
@@ -20,13 +26,13 @@ namespace PortalEquador.Domain.Scheduler.MechanicalWorkshop.ViewModels
             //Monday
             var index = 1;
 
-            foreach (var item1 in Schedules)
+            foreach (var schedule in Schedules)
             {
                 var registreisList = new List<MechanicalWorkshopSchedulerViewModel>();
-                foreach (var item2 in Mechanics)
+                foreach (var mechanic in Mechanics)
             {
                 var res = registers
-                     .Where(p => p.Mechanic.Id == item2.Id && p.InterventionTime.Id == item1.Id)
+                     .Where(p => p.Mechanic.Id == mechanic.Id && p.InterventionTime.Id == schedule.Id)
                      .FirstOrDefault();
 
                     if(res != null)
@@ -34,9 +40,11 @@ namespace PortalEquador.Domain.Scheduler.MechanicalWorkshop.ViewModels
                         registreisList.Add(res);
                     } else
                     {
-                        var dd = new MechanicalWorkshopSchedulerViewModel();
-                        dd.Id = -1;
-                        registreisList.Add(dd);
+                        var noAppointement = new MechanicalWorkshopSchedulerViewModel();
+                        noAppointement.Id = -1;
+                        noAppointement.Mechanic = mechanic;
+                        noAppointement.InterventionTime = schedule;
+                        registreisList.Add(noAppointement);
                     }
             }
                 My_dict1.Add(index, registreisList);
