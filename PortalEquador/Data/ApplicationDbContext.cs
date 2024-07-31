@@ -12,6 +12,7 @@ using PortalEquador.Data.ProfessionalExperience.Entities;
 using PortalEquador.Data.Scheduler.Entities;
 using PortalEquador.Data.School.Entity;
 using PortalEquador.Data.University.Entity;
+using PortalEquador.Data.Scheduler.MechanicalWorkshop.Entities;
 
 namespace PortalEquador.Data
 {
@@ -51,6 +52,8 @@ namespace PortalEquador.Data
         public DbSet<UniversityEntity> UniversityEntity { get; set; }
 
         public DbSet<MechanicalWorkshopSchedulerEntity> MechanicalWorkshopSchedulerEntity { get; set; }
+
+        public DbSet<PortalEquador.Data.Scheduler.MechanicalWorkshop.Entities.MechanicalWorkshopVehicleEntity>? MechanicalWorkshopVehicleEntity { get; set; }
 
     }
 }

@@ -84,6 +84,9 @@
             public const string EXISTING_DOCUMENT = "O tipo de documento já se encontra registado";
             public const string MANDATORY_FILE = "A escolha de um ficheiro é obrigatória";
             public const string EXISTING_REGISTER = "O item já se encontra registado";
+
+            public const string EXISTING_LICENCE_PLATE = "A matricula já se encontra registado";
+            public const string INVALID_LICENCE_PLATE = "Matricula inválida";
         }
 
         public static class Dates

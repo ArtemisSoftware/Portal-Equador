@@ -11,6 +11,7 @@ using PortalEquador.Data.Scheduler.Entities;
 using PortalEquador.Domain.GroupTypes.UseCases;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.Scheduler.MechanicalWorkshop.ViewModels;
+using PortalEquador.Domain.Scheduler.MechanicalWorkshop.ViewModels.scheduler;
 using PortalEquador.Preview;
 
 namespace PortalEquador.Controllers.MechanicalWorkshopScheduler
@@ -24,6 +25,13 @@ namespace PortalEquador.Controllers.MechanicalWorkshopScheduler
         public MechanicalWorkshopSchedulerController(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        // GET: MechanicalWorkshopScheduler
+        public async Task<IActionResult> Dashboard()
+        {
+            
+            return View(new MechanicalWorkshopDashboardViewModel());
         }
 
         // GET: MechanicalWorkshopScheduler
