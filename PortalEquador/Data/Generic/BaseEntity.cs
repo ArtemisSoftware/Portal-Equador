@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace PortalEquador.Data
+namespace PortalEquador.Data.Generic
 {
     public partial class BaseEntity
     {
