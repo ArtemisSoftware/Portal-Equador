@@ -14,7 +14,7 @@ namespace PortalEquador.Data.GroupTypes.repository
            // _mapper = mapper;
         }
 
-        public async Task<List<GroupViewModel>> GetAll()
+        public async Task<List<GroupViewModel>> GetAllGroups()
         {
             return new List<GroupViewModel>();
             /*
@@ -28,6 +28,26 @@ namespace PortalEquador.Data.GroupTypes.repository
         {
             //return await context.GroupEntity.AnyAsync(item => item.Description == description);
             return  false;
+        }
+
+        public async Task Save(GroupViewModel model)
+        {
+            /*
+            GroupEntity entity = _mapper.Map<GroupEntity>(model);
+
+            switch (operationType)
+            {
+                case OperationType.Create:
+
+                    await AddAsync(entity);
+                    break;
+                case OperationType.Update:
+
+                    entity.DateModified = DateTime.UtcNow;
+                    await UpdateAsync(entity);
+                    break;
+            }
+            */
         }
     }
 }

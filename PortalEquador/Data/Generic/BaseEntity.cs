@@ -7,9 +7,15 @@ namespace PortalEquador.Data.Generic
     {
         //[Key]
         public int Id { get; set; }
+        /*
+        public int PersonalInformationId { get; set; }
 
+        [ForeignKey("PersonalInformationId")]
+        public UserEntity PersonalInformationEntity { get; set; }
+
+        */
         public int EditorId { get; set; }
-
+        
         //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateCreated { get; set; }
 
