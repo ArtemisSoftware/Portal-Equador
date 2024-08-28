@@ -8,7 +8,8 @@ namespace PortalEquador.Domain.GroupTypes.Repository
     {
         Task Save(GroupItemViewModel model);
         Task<List<GroupItemViewModel>> GetAll(int groupId);
-        Task<GroupViewModel?> GetGroupItem(int id);
-        Task<bool> GetGroupItemExists(int groupId, string description);
+        Task<GroupItemViewModel?> GetGroupItem(int id);
+        Task<bool> GroupItemExists(int groupId, string description);
+        Task UpdateState(int groupItemId, bool active);
     }
 }

@@ -21,7 +21,7 @@ namespace PortalEquador.Domain.GroupTypes.ViewModels
 
         public int GroupId { get; set; }
 
-        public required GroupViewModel Group { get; set; }
+        public  GroupViewModel? Group { get; set; }
 
     }
 }

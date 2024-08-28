@@ -14,7 +14,7 @@ namespace PortalEquador.Domain.Generic
         public DateTime? DateModified { get; set; }
 
         [Display(Name = StringConstants.Display.MODIFIED_BY)]
-        public required string Editor { get; set; }
+        public string Editor { get; set; } = "";
 
         public string? Error { get; set; }
     }

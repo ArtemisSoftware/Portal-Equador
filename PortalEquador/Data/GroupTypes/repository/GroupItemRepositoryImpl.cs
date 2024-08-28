@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.GroupTypes.entities;
-using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.Repository;
 using PortalEquador.Domain.GroupTypes.ViewModels;
+using System.Text.RegularExpressions;
 
 namespace PortalEquador.Data.GroupTypes.repository
 {
@@ -12,8 +13,6 @@ namespace PortalEquador.Data.GroupTypes.repository
 
         public async Task<List<GroupItemViewModel>> GetAll(int groupId)
         {
-            return new List<GroupItemViewModel>();
-            /*
             var result = await context.GroupItemEntity
                 .Include(item => item.GroupEntity)
                 .Include(item => item.ApplicationUserEntity)
@@ -21,26 +20,23 @@ namespace PortalEquador.Data.GroupTypes.repository
                 .ToListAsync();
 
             return mapper.Map<List<GroupItemViewModel>>(result);
-            */
         }
 
-        public async Task<GroupViewModel?> GetGroupItem(int id)
+        public async Task<GroupItemViewModel?> GetGroupItem(int id)
         {
-            return null;
-            /*
             var result = await context.GroupItemEntity
-                           .Include(item => item.GroupEntity)
-                           .Where(item => item.Id == id)
-                           .FirstOrDefaultAsync();
+                .Include(item => item.GroupEntity)
+                .Include(item => item.ApplicationUserEntity)
+                .Where(item => item.Id == id)
+                .FirstOrDefaultAsync();
 
             return mapper.Map<GroupItemViewModel>(result);
-            */
+            
         }
 
-        public async Task<bool> GetGroupItemExists(int groupId, string description)
+        public async Task<bool> GroupItemExists(int groupId, string description)
         {
-            return false;
-            //return await context.GroupItemEntity.AnyAsync(item => item.GroupEntityId == groupId && item.Description == description);
+            return await context.GroupItemEntity.AnyAsync(item => item.GroupEntityId == groupId && item.Description == description);
         }
 
         public async Task Save(GroupItemViewModel model)
@@ -58,5 +54,18 @@ namespace PortalEquador.Data.GroupTypes.repository
                 await UpdateAsync(entity);
             }
         }
+
+        public async Task UpdateState(int groupItemId, bool active)
+        {
+            GroupItemEntity? entity = await GetAsync(groupItemId);
+
+            if(entity != null) { 
+                entity.Active = active;
+                entity.EditorId = GetCurrentUserId();
+                entity.DateModified = DateTime.UtcNow;
+                await UpdateAsync(entity);
+            }
+        }
+
     }
 }

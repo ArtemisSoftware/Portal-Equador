@@ -14,6 +14,8 @@ namespace PortalEquador.Data.Mappers
 
             CreateMap<GroupItemEntity, GroupItemViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.GroupId, opt => opt.MapFrom(src => src.GroupEntityId))
+                .ForMember(dest => dest.Group, opt => opt.MapFrom(src => src.GroupEntity))
                 .ReverseMap();
         }
     }

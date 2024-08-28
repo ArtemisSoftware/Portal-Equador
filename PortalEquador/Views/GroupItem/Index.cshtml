@@ -25,8 +25,9 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
+        @foreach (var item in Model)
+        {
+            <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
@@ -34,14 +35,16 @@
                     @Html.DisplayFor(modelItem => item.Observation)
                 </td>
                 <td class="align-middle">
-                    @if(@item.Active){
-                    <span class="badge bg-success">Ativo</span>
+                    @if (@item.Active)
+                    {
+                        <span class="badge bg-success">Ativo</span>
                     }
-                   else{
-                    <span class="badge bg-danger">Inativo</span>
-                   }
+                    else
+                    {
+                        <span class="badge bg-danger">Inativo</span>
+                    }
                 </td>
-            <td>
+                <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" asp-route-groupId="@ViewBag.groupId" asp-route-groupName="@ViewBag.groupName" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
                     <a asp-action="Details" asp-route-id="@item.Id" asp-route-groupId="@ViewBag.groupId" asp-route-groupName="@ViewBag.groupName" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
                     @if (@item.Active)
@@ -53,13 +56,13 @@
                         <button data-id="@item.Id" class="btn btn-success allocateBtn" type="button">Ativar</button>
                     }
 
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
-<form id="deactivateFrom" asp-action="Delete" asp-route-groupId="@ViewBag.groupId" asp-route-groupName="@ViewBag.groupName">
+<form id="deactivateItem" asp-action="DeactivateItem" asp-route-groupId="@ViewBag.groupId" asp-route-groupName="@ViewBag.groupName">
     <input type="hidden" id="groupDeactiviationItemId" name="Id" />
 </form>
 
@@ -70,7 +73,7 @@
 <br />
 <a asp-controller="Group" asp-action="Index" class="btn btn-dark"> <i class="fas fa-chevron-left" title="Regressar aos grupos "></i> Regressar aos grupos</a>
 
-@section Scripts{
+@section Scripts {
     <script>
         $(function () {
 
@@ -88,7 +91,7 @@
                         var btn = $(this);
                         var id = btn.data("id");
                         $('#groupDeactiviationItemId').val(id);
-                        $('#deactivateFrom').submit();
+                        $('#deactivateItem').submit();
 
                     }
                 });
