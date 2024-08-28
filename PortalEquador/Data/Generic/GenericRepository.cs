@@ -67,9 +67,8 @@ namespace PortalEquador.Data.Generic
 
         public SelectList GroupItems(int groupId)
         {
-            //var result = context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true);
-            //return new SelectList(result, "Id", "Description");
-            return new SelectList(new List<string>(), "Id", "Description");
+            var result = context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true);
+            return new SelectList(result, "Id", "Description");
         }
     }
 }

@@ -97,7 +97,7 @@
 
         public static class Controller
         {
-            public const string Curriculums = "Curriculums";
+            public const string Curriculums = "Curriculum";
             public const string DriversLicence = "DriversLicence";
 
             public static class Action

@@ -1,0 +1,216 @@
+﻿﻿@using PortalEquador.Util.Constants
+@model PortalEquador.Domain.PersonalInformation.ViewModels.PersonalInformationViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Criar Curriculum</h1>
+
+<h4>Dados Pessoais</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+
+
+        <form asp-action="ValidateIdentityCard">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <dl class="row">
+                <dd class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="IdentityCard" class="control-label"></label>
+                        <input asp-for="IdentityCard" class="form-control" disabled="@(Model.ValidatedIdentityCard  ? "disabled" : null)" />
+                        <span asp-validation-for="IdentityCard" class="text-danger"></span>
+                    </div>
+                </dd>
+                <dd class="col-sm-4">
+                    <div class="form-group">
+                        <br />
+                        @if (Model.ValidatedIdentityCard)
+                        {
+                            <input type="submit" value="Limpar formulário" class="btn btn-primary" />
+                        }
+                        else
+                        {
+                            <input type="submit" value="Validar" class="btn btn-success" />
+                        }
+
+                    </div>
+                </dd>
+            </dl>
+
+            <div class="form-group">
+                <span asp-validation-for="Error" class="text-danger"></span>
+            </div>
+        </form>
+
+
+
+
+
+
+
+
+
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="IdentityCard" />
+            <input type="hidden" asp-for="ValidatedIdentityCard" />
+
+            @if(Model.ValidatedIdentityCard){
+
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label asp-for="IdentityCardExpirationDate" class="control-label"></label>
+                            <input asp-for="IdentityCardExpirationDate" class="form-control" />
+                            <span asp-validation-for="IdentityCardExpirationDate" class="text-danger"></span>
+                        </div>
+
+                        <br />
+
+                        <div class="form-group">
+                            <label asp-for="Nif" class="control-label"></label>
+                            <input asp-for="Nif" class="form-control" />
+                            <span asp-validation-for="Nif" class="text-danger"></span>
+                        </div>
+
+                        <br />
+
+                        <div class="form-group">
+                            <label asp-for="BeneficiaryNumber" class="control-label"></label>
+                            <input asp-for="BeneficiaryNumber" class="form-control" />
+                            <span asp-validation-for="BeneficiaryNumber" class="text-danger"></span>
+                        </div>
+
+                        <br />
+                </div>
+
+
+
+                <dl class="row">
+
+                    <dd class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="FirstName" class="control-label"></label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                    </dd>
+                    <dd class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="LastName" class="control-label"></label>
+                            <input asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </dd>
+                </dl>
+
+            <div class="col-md-4">
+
+                <div class="form-group">
+                    <label asp-for="DateOfBirth" class="control-label"></label>
+                    <input asp-for="DateOfBirth" class="form-control" />
+                    <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                </div>
+
+            </div>
+
+                <br />
+
+            <dl class="row">
+
+                <dd class="col-sm-6">
+                        <div class="form-group">
+                        <label asp-for="NationalityId" class="control-label"></label>
+                        <select asp-for="NationalityId" class="form-control form-select" asp-items="@Model.Nationalities" onChange="ProvinceSelect()" id="SelectProvince"></select>
+                    </div>
+                </dd>
+                <dd class="col-sm-6">
+                    <div class="form-group" id="Province_2">
+                        <label asp-for="ProvinceId" class="control-label"></label>
+                        <select asp-for="ProvinceId" class="form-control form-select" asp-items="@Model.Provinces"></select>
+                    </div>
+                </dd>
+            </dl>
+   
+
+
+                <dl class="row">
+                    <dd class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="Contacts" class="control-label"></label>
+                            <input asp-for="Contacts" class="form-control" />
+                            <span asp-validation-for="Contacts" class="text-danger"></span>
+                        </div>
+                    </dd>
+                    <dd class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="Email" class="control-label"></label>
+                            <input asp-for="Email" class="form-control" type="email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </dd>
+                </dl>
+
+
+            <br />
+
+            <h5>Morada</h5>
+            <hr />
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="NeighbourhoodId" class="control-label"></label>
+                        <select asp-for="NeighbourhoodId" class="form-control form-select" asp-items="@Model.Neighbourhoods"></select>
+                </div>
+
+                <br />
+
+                <div class="form-group">
+                    <label asp-for="Address" class="control-label"></label>
+                    <input asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
+
+            <br />
+            <div class="form-group">
+                    <a asp-controller="Curriculum" asp-action="Index" class="btn btn-dark"> Regressar ao index</a> &nbsp;
+                    <input type="submit" value="Criar registo" class="btn btn-primary" />
+            </div>
+            }
+        
+        </form>
+        <form asp-action="Delete" id="deactivateFrom">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        </form>
+    </div>
+</div>
+
+        @if(Model.ValidatedIdentityCard == false){
+            <div>
+                <a asp-controller="Curriculum" asp-action="Index" class="btn btn-dark"> Regressar ao index</a>
+            </div>
+        }
+
+@section Scripts{
+    <script>
+
+        function ProvinceSelect() {
+
+            var response = document.getElementById('SelectProvince').value;
+            var province_2 = document.getElementById('Province_2');
+            const angolanNationalityId = '@GroupTypesConstants.ItemFromGroup.Nationality.ANGOLAN';
+
+
+            if (response == angolanNationalityId) {
+                province_2.hidden = false
+            }
+            else{
+                province_2.hidden = true
+            }
+        }
+    </script>
+}

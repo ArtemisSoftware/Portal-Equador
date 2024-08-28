@@ -8,26 +8,29 @@ using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data;
 using PortalEquador.Data.Curriculum.Entities;
 using PortalEquador.Domain.Curriculum.Repository;
+using PortalEquador.Domain.PersonalInformation.Repository;
+using PortalEquador.Domain.PersonalInformation.ViewModels;
 
 namespace PortalEquador.Controllers.Curriculum
 {
-    public class CurriculumController(CurriculumRepository repository) : Controller
+    public class CurriculumController(
+        CurriculumRepository repository,
+        IPersonalInformationRepository personalInformationRepository
+        ) : Controller
     {
 
         // GET: CurriculumsController
         public async Task<IActionResult> Index()
         {
-            //var result = await _getAllCurriculumsUseCase.Invoke();
-            //return View(result);
-            return View();
+            var result = await personalInformationRepository.GetAll();
+            return View(result);
         }
 
         // GET: CurriculumsController/Dashboard
         public async Task<IActionResult> Dashboard(int identifier)
         {
-            //var model = await _getCurriculumDashboardUseCase.Invoke(identifier);
-            //return View(model);
-            return View();
+            var model = await repository.GetCurriculumDashboard(identifier);
+            return View(model);
         }
 
 

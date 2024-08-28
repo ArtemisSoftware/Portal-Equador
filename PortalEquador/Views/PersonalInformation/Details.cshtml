@@ -1,0 +1,146 @@
+﻿@model PortalEquador.Domain.PersonalInformation.ViewModels.PersonalInformationDetailViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Dados pessoais</h1>
+
+<div>
+    <h4>Detalhes</h4>
+    <hr />
+    <dl class="row">
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FullName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IdentityCard)
+        </dt>
+        <dd class="col-sm-2">
+            @Html.DisplayFor(model => model.IdentityCard)
+        </dd>
+
+        <dt class="col-sm-2">
+           Data de expiração
+        </dt>
+        <dd class="col-sm-6">
+            @Html.DisplayFor(model => model.IdentityCardExpirationDate)
+        </dd>
+
+
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Nif)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Nif)
+        </dd>
+
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BeneficiaryNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BeneficiaryNumber)
+        </dd>
+
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateOfBirth)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Nationality)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Nationality.Description)
+        </dd>
+
+        @if (@Model.Province != null)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Province)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Province.Description)
+        </dd>
+        }
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Contacts)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Contacts)
+        </dd>
+
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dl class="row">
+            <dd class="col-sm-8">
+                <br/>
+                <h5>Morada</h5>
+                <hr />
+            </dd>
+        </dl>
+
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Neighbourhood)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Neighbourhood.Description)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        @if (@Model.DateModified != null)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DateModified)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DateModified)
+            </dd>
+        }
+        else
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DateCreated)
+            </dd>
+        }
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Editor)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Editor)
+        </dd>
+    </dl>
+</div>
+
+<div class="form-group">
+    <a asp-controller="Curriculum" asp-action="Dashboard" asp-route-identifier="@Model.Id" class="btn btn-dark">Regressar ao index</a> &nbsp;
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar registo</a>
+</div>
