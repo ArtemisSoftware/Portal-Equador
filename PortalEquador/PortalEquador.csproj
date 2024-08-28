@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Curriculum\Repository\" />
+    <Folder Include="Domain\Curriculum\Repository\" />
   </ItemGroup>
 
 </Project>
