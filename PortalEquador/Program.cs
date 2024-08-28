@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data;
+using PortalEquador.Data.Curriculum.Repository;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.GroupTypes.repository;
+using PortalEquador.Domain.Curriculum.Repository;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.Repository;
 using System.Reflection;
@@ -26,6 +28,7 @@ builder.Services.AddScoped<GroupRepository, GroupRepositoryImpl>();
 builder.Services.AddScoped<GroupItemRepository, GroupItemRepositoryImpl>();
 
 
+builder.Services.AddScoped<CurriculumRepository, CurriculumRepositoryImpl>();
 
 
 
