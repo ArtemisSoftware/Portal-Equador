@@ -1,53 +1,64 @@
-﻿using PortalEquador.Data.Generic;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using PortalEquador.Data.Generic;
 using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Domain.GroupTypes.Repository;
 using PortalEquador.Domain.GroupTypes.ViewModels;
+using System.Security.Claims;
 
 namespace PortalEquador.Data.GroupTypes.repository
 {
-    public class GroupRepositoryImpl : GenericRepository<GroupEntity>, GroupRepository
+    public class GroupRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor) : GenericRepository<GroupEntity>(context, httpContextAccessor), GroupRepository
     {
-        //private readonly IMapper _mapper;
 
-        public GroupRepositoryImpl(ApplicationDbContext context/*, IMapper mapper*/) : base(context)
-        {
-           // _mapper = mapper;
-        }
 
         public async Task<List<GroupViewModel>> GetAllGroups()
         {
-            return new List<GroupViewModel>();
-            /*
-            var entity = await GetAllAsync();
-            var models = _mapper.Map<List<GroupViewModel>>(entity);
+            var result = await context.GroupEntity
+                .Include(d => d.ApplicationUserEntity)
+                .ToListAsync();
+
+            var models = mapper.Map<List<GroupViewModel>>(result);
             return models;
-            */
+        }
+
+        public async Task<GroupViewModel?> GetGroup(int? id)
+        {
+            var entity = await context.GroupEntity
+                .Include(d => d.ApplicationUserEntity)
+                .Where(item => item.Id == id)
+                .FirstAsync();
+
+            if (entity == null)
+            {
+                return null;
+            }
+
+            var model = mapper.Map<GroupViewModel>(entity);
+            return model;
         }
 
         public async Task<bool> GroupExists(string description)
         {
-            //return await context.GroupEntity.AnyAsync(item => item.Description == description);
-            return  false;
+            return await context.GroupEntity.AnyAsync(item => item.Description == description);
         }
 
         public async Task Save(GroupViewModel model)
         {
-            /*
-            GroupEntity entity = _mapper.Map<GroupEntity>(model);
+            GroupEntity entity = mapper.Map<GroupEntity>(model);
+            entity.EditorId = GetCurrentUserId();
 
-            switch (operationType)
+            if (model.Id == 0)
             {
-                case OperationType.Create:
-
-                    await AddAsync(entity);
-                    break;
-                case OperationType.Update:
-
-                    entity.DateModified = DateTime.UtcNow;
-                    await UpdateAsync(entity);
-                    break;
+                await AddAsync(entity);
             }
-            */
+            else
+            {
+                entity.DateModified = DateTime.UtcNow;
+                await UpdateAsync(entity);
+            }
+            
         }
     }
 }
