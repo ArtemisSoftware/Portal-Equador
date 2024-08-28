@@ -5,18 +5,16 @@ namespace PortalEquador.Data.Generic
 {
     public partial class BaseEntity
     {
-        //[Key]
+        [Key]
         public int Id { get; set; }
-        /*
-        public int PersonalInformationId { get; set; }
-
-        [ForeignKey("PersonalInformationId")]
-        public UserEntity PersonalInformationEntity { get; set; }
-
-        */
-        public int EditorId { get; set; }
         
-        //[DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public required string EditorId { get; set; }
+
+        [ForeignKey("EditorId")]
+        public required ApplicationUser ApplicationUserEntity { get; set; }
+
+        
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateCreated { get; set; }
 
         public DateTime? DateModified { get; set; }

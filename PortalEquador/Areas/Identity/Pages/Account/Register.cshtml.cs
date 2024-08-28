@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -17,24 +18,29 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PortalEquador.Data.Generic;
+using PortalEquador.Util;
 
 namespace PortalEquador.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IUserStore<ApplicationUser> _userStore;
+        private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            IUserStore<ApplicationUser> userStore,
+            SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
+            RoleManager<IdentityRole> roleManager,
             IEmailSender emailSender)
         {
             _userManager = userManager;
@@ -43,6 +49,7 @@ namespace PortalEquador.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -50,7 +57,7 @@ namespace PortalEquador.Areas.Identity.Pages.Account
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
         [BindProperty]
-        public InputModel Input { get; set; }
+        public InputModel Input { get; set; } = new InputModel();
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -97,6 +104,19 @@ namespace PortalEquador.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
+            public string RoleName { get; set; }
+            public string[] RoleNames { get; set; }
         }
 
 
@@ -104,6 +124,7 @@ namespace PortalEquador.Areas.Identity.Pages.Account
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            await LoadRoles();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -122,8 +143,21 @@ namespace PortalEquador.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
+                    if (Input.RoleName == Roles.Supervisor)
+                    {
+                        await _userManager.AddToRolesAsync(user, [Roles.Employee, Roles.Supervisor]);
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, Roles.Employee);
+                    }
+
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                    user.FirstName = Input.FirstName;
+                    user.LastName = Input.LastName;
+
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
@@ -151,30 +185,41 @@ namespace PortalEquador.Areas.Identity.Pages.Account
             }
 
             // If we got this far, something failed, redisplay form
+
+            await LoadRoles();
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private async Task LoadRoles()
+        {
+            var roles = await _roleManager.Roles
+              .Select(q => q.Name)
+              .Where(q => q != Roles.Administrator)
+              .ToArrayAsync();
+            Input.RoleNames = roles;
+        }
+
+        private ApplicationUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<ApplicationUser>();
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 
-        private IUserEmailStore<IdentityUser> GetEmailStore()
+        private IUserEmailStore<ApplicationUser> GetEmailStore()
         {
             if (!_userManager.SupportsUserEmail)
             {
                 throw new NotSupportedException("The default UI requires a user store with email support.");
             }
-            return (IUserEmailStore<IdentityUser>)_userStore;
+            return (IUserEmailStore<ApplicationUser>)_userStore;
         }
     }
 }

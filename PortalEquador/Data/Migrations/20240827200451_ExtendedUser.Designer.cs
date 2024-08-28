@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PortalEquador.Data;
 
@@ -11,9 +12,11 @@ using PortalEquador.Data;
 namespace PortalEquador.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240827200451_ExtendedUser")]
+    partial class ExtendedUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,7 +272,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "408aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c9bc9033-20dc-47a3-b3e2-927b70eb2340",
+                            ConcurrencyStamp = "b3afda94-c2c1-4e38-99e4-78f7498a01d3",
                             Email = "adminEquador@teste.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -277,45 +280,12 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGF11z+bEe21QUhzasM2Ng8XPQ1f+NvabwBf882fZ3jyLnis4CXUaLBkoJeNknjj5w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELitZ+VLAuZsgYfLxO04YeCAiXuqzyAyMX5kErPSXwnVHtxFAoJdc1cc9HS03Y/pgA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "eab87cea-e0be-4fd3-9d0c-9ed691088cf5",
+                            SecurityStamp = "b7556f15-4a03-4674-8050-7641ed50fc4c",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         });
-                });
-
-            modelBuilder.Entity("PortalEquador.Data.GroupTypes.entities.GroupEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("EditorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Observation")
-                        .HasColumnType("nvarchar(150)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EditorId");
-
-                    b.ToTable("GroupEntity");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -367,17 +337,6 @@ namespace PortalEquador.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("PortalEquador.Data.GroupTypes.entities.GroupEntity", b =>
-                {
-                    b.HasOne("PortalEquador.Data.Generic.ApplicationUser", "ApplicationUserEntity")
-                        .WithMany()
-                        .HasForeignKey("EditorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUserEntity");
                 });
 #pragma warning restore 612, 618
         }

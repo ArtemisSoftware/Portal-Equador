@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PortalEquador.Data.Generic;
 using PortalEquador.Data.GroupTypes.entities;
 
 namespace PortalEquador.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -15,13 +16,19 @@ namespace PortalEquador.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            /*
+            
             builder.Entity<IdentityRole>().HasData(
                 new IdentityRole
                 {
                     Id = "6d9ed3ff-bebb-42bc-ad07-0255bb0f7edb",
                     Name = "Employee",
                     NormalizedName = "EMPLOYEE"
+                },
+                new IdentityRole
+                {
+                    Id = "7d9ed3ff-bebb-42bc-ad07-0255bb0f7edb",
+                    Name = "Guest",
+                    NormalizedName = "GUEST"
                 },
                 new IdentityRole
                 {
@@ -41,15 +48,14 @@ namespace PortalEquador.Data
             builder.Entity<ApplicationUser>().HasData(new ApplicationUser
             {
                 Id = "408aa945-3d84-4421-8342-7269ec64d949",
-                Email = "admin@localhost.com",
+                Email = "adminEquador@teste.com",
                 NormalizedEmail = "ADMIN@LOCALHOST.COM",
                 NormalizedUserName = "ADMIN@LOCALHOST.COM",
                 UserName = "admin@localhost.com",
-                PasswordHash = hasher.HashPassword(null, "P@ssword1"),
+                PasswordHash = hasher.HashPassword(null, "Admin123"),
                 EmailConfirmed = true,
-                FirstName = "Default",
-                LastName = "Admin",
-                DateOfBirth = new DateOnly(1950, 12, 01)
+                FirstName = "Admin",
+                LastName = "",
             });
 
             builder.Entity<IdentityUserRole<string>>().HasData(
@@ -58,10 +64,9 @@ namespace PortalEquador.Data
                     RoleId = "e9f639de-624f-4a4e-b8bf-2381725462f1",
                     UserId = "408aa945-3d84-4421-8342-7269ec64d949"
                 });
-            */
+            
         }
 
-
-        //public DbSet<PortalEquador.Data.GroupTypes.entities.GroupEntity> GroupEntity { get; set; } = default!;
+        public DbSet<GroupEntity> GroupEntity { get; set; }
     }
 }
