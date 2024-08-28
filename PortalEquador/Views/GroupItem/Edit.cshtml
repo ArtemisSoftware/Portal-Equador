@@ -1,0 +1,39 @@
+﻿@model PortalEquador.Domain.GroupTypes.ViewModels.GroupItemViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Editar</h1>
+
+<h4>Item</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" asp-route-groupName="@ViewBag.groupName">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="GroupId" />
+            <input type="hidden" asp-for="Active" />
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="mb-3">
+                <label asp-for="Observation" class="control-label"></label>
+                <textarea asp-for="Observation" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Observation" class="text-danger"></span>
+            </div>
+
+            <br />
+            <br />
+            <div>
+                <a asp-action="Index" class="btn btn-dark" asp-route-id="@Model?.Id" asp-route-groupId="@ViewBag.groupId" asp-route-groupName="@ViewBag.groupName">Regressar ao index</a> &nbsp;
+                <input type="submit" value="Guardar Alterações" class="btn btn-warning" />
+            </div>
+        </form>
+    </div>
+</div>

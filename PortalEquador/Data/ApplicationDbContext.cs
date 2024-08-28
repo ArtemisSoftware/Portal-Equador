@@ -68,5 +68,6 @@ namespace PortalEquador.Data
         }
 
         public DbSet<GroupEntity> GroupEntity { get; set; }
+        public DbSet<PortalEquador.Data.GroupTypes.entities.GroupItemEntity> GroupItemEntity { get; set; } = default!;
     }
 }

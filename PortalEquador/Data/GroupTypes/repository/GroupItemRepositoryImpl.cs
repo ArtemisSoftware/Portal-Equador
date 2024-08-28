@@ -12,6 +12,8 @@ namespace PortalEquador.Data.GroupTypes.repository
 
         public async Task<List<GroupItemViewModel>> GetAll(int groupId)
         {
+            return new List<GroupItemViewModel>();
+            /*
             var result = await context.GroupItemEntity
                 .Include(item => item.GroupEntity)
                 .Include(item => item.ApplicationUserEntity)
@@ -19,21 +21,26 @@ namespace PortalEquador.Data.GroupTypes.repository
                 .ToListAsync();
 
             return mapper.Map<List<GroupItemViewModel>>(result);
+            */
         }
 
         public async Task<GroupViewModel?> GetGroupItem(int id)
         {
+            return null;
+            /*
             var result = await context.GroupItemEntity
                            .Include(item => item.GroupEntity)
                            .Where(item => item.Id == id)
                            .FirstOrDefaultAsync();
 
             return mapper.Map<GroupItemViewModel>(result);
+            */
         }
 
         public async Task<bool> GetGroupItemExists(int groupId, string description)
         {
-            return await context.GroupItemEntity.AnyAsync(item => item.GroupEntityId == groupId && item.Description == description);
+            return false;
+            //return await context.GroupItemEntity.AnyAsync(item => item.GroupEntityId == groupId && item.Description == description);
         }
 
         public async Task Save(GroupItemViewModel model)

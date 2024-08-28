@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PortalEquador.Domain.GroupTypes.ViewModels.GroupViewModel>
+﻿@model IEnumerable<PortalEquador.Domain.GroupTypes.ViewModels.GroupItemViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -39,7 +39,7 @@
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
 
                     <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" hidden> <i class="far fa-trash-alt"></i></button>
-                    <a asp-controller="GroupItems" asp-action="Index" asp-route-groupId="@item.Id" asp-route-groupName="@item.Description" class="btn btn-success"> <i class="fas fa-info-circle" title="Ver items "></i> Items</a>
+                    <a asp-controller="GroupItem" asp-action="Index" asp-route-groupId="@item.Id" asp-route-groupName="@item.Description" class="btn btn-success"> <i class="fas fa-info-circle" title="Ver items "></i> Items</a>
                 </td>
             </tr>
         }
