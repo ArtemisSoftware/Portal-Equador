@@ -172,13 +172,13 @@ namespace PortalEquador.Controllers.GroupTypes
 
             return View(groupItem);
             */
-        }
+     /*   }
 
 
 
         private bool GroupItemExists(int id)
         {
-            return /*(_context.GroupItems?.Any(e => e.Id == id)).GetValueOrDefault()*/ true;
+            return*/ /*(_context.GroupItems?.Any(e => e.Id == id)).GetValueOrDefault()*/ /*true;
         }
 
         */
