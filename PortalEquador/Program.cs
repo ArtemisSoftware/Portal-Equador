@@ -4,9 +4,11 @@ using PortalEquador.Data;
 using PortalEquador.Data.Curriculum.Repository;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.GroupTypes.repository;
+using PortalEquador.Data.PersonalInformation.Repository;
 using PortalEquador.Domain.Curriculum.Repository;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.Repository;
+using PortalEquador.Domain.PersonalInformation.Repository;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,7 +31,7 @@ builder.Services.AddScoped<GroupItemRepository, GroupItemRepositoryImpl>();
 
 
 builder.Services.AddScoped<CurriculumRepository, CurriculumRepositoryImpl>();
-
+builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepositoryImpl>();
 
 
 

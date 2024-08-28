@@ -2,7 +2,7 @@
 using PortalEquador.Data.GroupTypes.entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PortalEquador.Data.PersonalInformation
+namespace PortalEquador.Data.PersonalInformation.Entity
 {
     public class PersonalInformationEntity : BaseEntity
     {
