@@ -23,6 +23,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 //Group
 
 builder.Services.AddScoped<GroupRepository, GroupRepositoryImpl>();
+builder.Services.AddScoped<GroupItemRepository, GroupItemRepositoryImpl>();
 
 
 

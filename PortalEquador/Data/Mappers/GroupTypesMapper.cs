@@ -11,6 +11,10 @@ namespace PortalEquador.Data.Mappers
             CreateMap<GroupEntity, GroupViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ReverseMap();
+
+            CreateMap<GroupItemEntity, GroupItemViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ReverseMap();
         }
     }
 }
