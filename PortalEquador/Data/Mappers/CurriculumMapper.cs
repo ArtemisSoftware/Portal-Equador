@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using PortalEquador.Data.Document.Entity;
 using PortalEquador.Data.PersonalInformation.Entity;
+using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.PersonalInformation.ViewModels;
 
@@ -18,6 +20,10 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.NationalityGroupItemEntity))
                 .ForMember(dest => dest.Neighbourhood, opt => opt.MapFrom(src => src.NeighbourhoodGroupItemEntity))
                 .ForMember(dest => dest.Province, opt => opt.MapFrom(src => src.ProvinceGroupItemEntity))
+                .ReverseMap();
+
+            CreateMap<DocumentEntity, DocumentViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ReverseMap();
         }
     }

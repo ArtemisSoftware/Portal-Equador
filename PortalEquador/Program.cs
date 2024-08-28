@@ -2,10 +2,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data;
 using PortalEquador.Data.Curriculum.Repository;
+using PortalEquador.Data.Document.Repository;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.GroupTypes.repository;
 using PortalEquador.Data.PersonalInformation.Repository;
 using PortalEquador.Domain.Curriculum.Repository;
+using PortalEquador.Domain.Document.Repository;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.Repository;
 using PortalEquador.Domain.PersonalInformation.Repository;
@@ -32,7 +34,7 @@ builder.Services.AddScoped<GroupItemRepository, GroupItemRepositoryImpl>();
 
 builder.Services.AddScoped<CurriculumRepository, CurriculumRepositoryImpl>();
 builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepositoryImpl>();
-
+builder.Services.AddScoped<IDocumentRepository, DocumentRepositoryImpl>();
 
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
