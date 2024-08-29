@@ -13,6 +13,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th></th>
             <th>
                 @Html.DisplayNameFor(model => model.FullName)
             </th>
@@ -20,17 +21,20 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-
-            <td>
-               @Html.DisplayFor(modelItem => item.FullName)
-            </td>
-            <td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="width:70px;">
+                    <img src="@Url.Content(@item.ProfileImagePath)" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td class="align-middle">
                     <a asp-action="Dashboard" asp-route-identifier="@item.Id" class="btn btn-info"><i class="fas fa-th"></i></a>
-            </td>
-        </tr>
-}
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 @section Scripts{

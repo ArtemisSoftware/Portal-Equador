@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.PersonalInformation.Entity;
+using PortalEquador.Domain.Curriculum.ViewModels;
 using PortalEquador.Domain.PersonalInformation.Repository;
 using PortalEquador.Domain.PersonalInformation.ViewModels;
+using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 using System.Text.RegularExpressions;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Data.PersonalInformation.Repository
 {
-    public class PersonalInformationRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor) : GenericRepository<PersonalInformationEntity>(context, httpContextAccessor), IPersonalInformationRepository
+    public class PersonalInformationRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment hostEnvironment) : GenericRepository<PersonalInformationEntity>(context, httpContextAccessor), IPersonalInformationRepository
     {
 
         public async Task<PersonalInformationViewModel> GetCreateModel(PersonalInformationViewModel? model)
@@ -79,8 +81,24 @@ namespace PortalEquador.Data.PersonalInformation.Repository
         
         public async Task<List<PersonalInformationViewModel>> GetAll()
         {
-            var result = await GetAllAsync();
-            return mapper.Map<List<PersonalInformationViewModel>>(result);
+            var query = from personal in context.PersonalInformationEntity
+
+                        join profileDoc in
+                            (from document in context.DocumentEntity
+                             where document.DocumentTypeId == GroupTypesConstants.ItemFromGroup.Documents.PROFILE_PICTURE
+                             select document)
+                        on personal.Id equals profileDoc.PersonalInformationId into resultProfileDocs
+                        from resultProfileDocument in resultProfileDocs.DefaultIfEmpty()
+
+                        select new PersonalInformationViewModel
+                        {
+                            Id = personal.Id,
+                            FirstName = personal.FirstName,
+                            LastName = personal.LastName,   
+
+                            ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, personal.Id)
+                        };
+            return await query.ToListAsync();
         }
 
 

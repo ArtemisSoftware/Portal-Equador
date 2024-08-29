@@ -1,4 +1,7 @@
-﻿using PortalEquador.Domain.Document.ViewModels;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using NuGet.Packaging.Signing;
+using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Util.Constants;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 
@@ -70,6 +73,7 @@ namespace PortalEquador.Util
         }
 
 
+
         public static string GetFilePath(int curriculumId, int imageName)
         {
             string wwwRootPath = "";//hostEnvironment.WebRootPath;
@@ -128,6 +132,29 @@ namespace PortalEquador.Util
             {
                 File.Delete(path);
             }
+        }
+
+
+        public static string GetProfileImagePath(IWebHostEnvironment hostEnvironment, int personaInformationId)
+        {
+            string folderPath = Path.Combine(hostEnvironment.WebRootPath, FoldersConstants.Folder.CURRICULUM + "/" + personaInformationId);
+            
+            var images = Directory.GetFiles(folderPath, "*.*", SearchOption.TopDirectoryOnly)
+                      .Where(s => ImageConstants.Extensions.IsValidImageExtension(s) && s.Contains(GroupTypesConstants.ItemFromGroup.Documents.PROFILE_PICTURE.ToString()))
+                      .ToList();
+
+            string imagePath = "";
+
+            if (images.Count > 0)
+            {
+                imagePath = "~/" + FoldersConstants.Folder.CURRICULUM + "/" + personaInformationId + "/" + GroupTypesConstants.ItemFromGroup.Documents.PROFILE_PICTURE + "." + images[0].Split(".")[1];
+            }
+            else
+            {
+                imagePath = "~/" + FoldersConstants.Folder.PLACEHOLDER + ImageConstants.Placeholder.AVATAR;
+            }
+
+            return imagePath  +"?v=123456";
         }
 
     }

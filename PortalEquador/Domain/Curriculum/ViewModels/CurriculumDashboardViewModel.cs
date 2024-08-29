@@ -1,4 +1,7 @@
-﻿using PortalEquador.Domain.Generic;
+﻿using NuGet.Packaging.Signing;
+using PortalEquador.Domain.Generic;
+using PortalEquador.Util;
+using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Domain.Curriculum.ViewModels
 {
@@ -17,5 +20,8 @@ namespace PortalEquador.Domain.Curriculum.ViewModels
         public int TotalExpertises { get; set; }
 
         public bool IsDriversLicenceComplete { get; set; }
+
+        public required string ProfileImagePath { get; set; }
+
     }
 }
