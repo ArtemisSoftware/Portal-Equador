@@ -1,24 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Win32;
+﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Data;
-using PortalEquador.Data.Scheduler.Entities;
-using PortalEquador.Domain.GroupTypes.UseCases;
-using PortalEquador.Domain.GroupTypes.ViewModels;
-using PortalEquador.Domain.Scheduler.MechanicalWorkshop.ViewModels;
 using PortalEquador.Domain.Scheduler.MechanicalWorkshop.ViewModels.scheduler;
 using PortalEquador.Preview;
 
-namespace PortalEquador.Controllers.MechanicalWorkshopScheduler
+namespace PortalEquador.Controllers.MechanicalWorkshop
 {
     public class MechanicalWorkshopSchedulerController : Controller
     {
-        private const string  DDD = "";
+        private const string DDD = "";
 
         private readonly ApplicationDbContext _context;
 
@@ -30,18 +19,24 @@ namespace PortalEquador.Controllers.MechanicalWorkshopScheduler
         // GET: MechanicalWorkshopScheduler
         public async Task<IActionResult> Dashboard()
         {
-            
+
             return View(new MechanicalWorkshopDashboardViewModel());
         }
 
         // GET: MechanicalWorkshopScheduler
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? time)
         {
             //var applicationDbContext = _context.MechanicalWorkshopSchedulerEntity.Include(m => m.InterventionTimeGroupItemEntity).Include(m => m.MechanicGroupItemEntity);
             //return View(await applicationDbContext.ToListAsync());
 
-           
-            return View(MechanicalWorkshopSchedulerPreview.GetIndex());
+            if(time == null)
+            {
+                return View(MechanicalWorkshopSchedulerPreview.GetIndex());
+            }
+            else
+            {
+                return View(MechanicalWorkshopSchedulerPreview.GetIndexForContract("Contract 1"));
+            }
         }
 
 
@@ -52,8 +47,9 @@ namespace PortalEquador.Controllers.MechanicalWorkshopScheduler
             ViewData["InterventionTimeId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
             ViewData["MechanicId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
             */
-            if(mechanicId != null && scheduleId != null && date != null) {
-                return View(MechanicalWorkshopSchedulerPreview.GetCreate((string)date, (int)mechanicId, (int)scheduleId));
+            if (mechanicId != null && scheduleId != null && date != null)
+            {
+                return View(MechanicalWorkshopSchedulerPreview.GetCreate(date, (int)mechanicId, (int)scheduleId));
             }
             else
             {

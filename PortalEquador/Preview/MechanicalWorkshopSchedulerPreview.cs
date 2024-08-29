@@ -20,6 +20,20 @@ namespace PortalEquador.Preview
             return main;
         }
 
+        public static LoloVml GetIndexForContract(string contract)
+        {
+            var main = new LoloVml();
+
+            main.registers = GetAppointements();
+            main.Schedules = GetSchedules();
+            main.Mechanics = GetMechanics();
+
+            main.RegisteredDictionary = main.colabForContract(contract);
+            main.RegisteredTime = main.colabTime();
+
+            return main;
+        }
+
         public static MechanicalWorkshopSchedulerViewModel GetCreate(string scheduleDate, int mechanicId, int scheduleId)
         {
             var model = new MechanicalWorkshopSchedulerViewModel{

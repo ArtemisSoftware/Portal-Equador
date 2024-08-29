@@ -1,4 +1,6 @@
-﻿using PortalEquador.Constants;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using PortalEquador.Constants;
+using PortalEquador.Domain.GroupTypes.ViewModels;
 using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
@@ -30,5 +32,15 @@ namespace PortalEquador.Domain.Scheduler.MechanicalWorkshop.ViewModels.vehicle
         }
 
         public bool Active { get; set; }
+
+        [Display(Name = StringConstants.Display.CONTRACT)]
+
+        public GroupItemViewModel Contract { get; set; }
+
+        [Display(Name = StringConstants.Display.CONTRACT_IN_USE)]
+        [Required]
+        public int ContractId { get; set; }
+
+        public SelectList? Contracts { get; set; }
     }
 }

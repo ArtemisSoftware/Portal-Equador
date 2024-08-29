@@ -15,7 +15,10 @@
             <th>
                 @Html.DisplayNameFor(model => model.LicencePlate)
             </th>
-            <th style="width:640px;"></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Contract)
+            </th>
+            <th style="width:600px;"></th>
             <th></th>
         </tr>
     </thead>
@@ -25,7 +28,10 @@
             <td>
                 @Html.DisplayFor(modelItem => item.LicencePlate)
             </td>
-                <td style="width:640px;"></td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Contract.Description)
+                </td>
+                <td style="width:600px;"></td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id"  class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
                     <a asp-action="Details" asp-route-id="@item.Id"  class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>

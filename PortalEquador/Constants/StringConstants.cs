@@ -53,6 +53,7 @@
 
             // C
             public const string CONTRACT = "Contrato";
+            public const string CONTRACT_IN_USE = "Contrato associado";
             public const string COMPETENCE = "Habilitação";
             public const string CODE = "Código";
 

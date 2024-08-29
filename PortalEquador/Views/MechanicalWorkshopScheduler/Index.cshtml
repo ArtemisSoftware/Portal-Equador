@@ -14,13 +14,15 @@
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label asp-for="MainTime" class="control-label"></label>
+            <dl class="row">
+                <dt class="col-sm-2">
                     <input id="expirationDate" asp-for="MainTime" class="form-control" />
-                    <span asp-validation-for="MainTime" class="text-danger"></span>
-                </div>
-            </div>
+                </dt>
+                <dd class="col-sm-10">
+                    <a asp-action="Index" asp-route-Time="@Model.MainTime" class="btn btn-info"><i class="fas fa-search" title="Pesquisar"></i></a>
+                </dd>
+            </dl>
+
             <br />
             <br />
 
@@ -58,7 +60,19 @@
 
                                             </div>
                                         </div>
-                                    } else {
+                                    }
+                                    else if (schedules.Id == -2){
+                                        <div class="card bg-light  text-center shadow-sm">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Indisponível</h5>
+                                                <p class="card-text">Horário bloqueado</p>
+                                                <a href="#" class="btn btn-danger">
+                                                    <i class="fas fa-stop-circle"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    }
+                                    else {
                                         <div class="card">
                                             <div class="card-body">
                                                 <h5 class="card-title">@Html.DisplayFor(modelItem => schedules.LicencePlate  )</h5>

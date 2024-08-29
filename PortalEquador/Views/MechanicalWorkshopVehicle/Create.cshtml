@@ -35,6 +35,14 @@
                 <input asp-for="Model" class="form-control" />
                 <span asp-validation-for="Model" class="text-danger"></span>
             </div>
+            <br />
+
+        <dd class="col-sm-6">
+            <div class="form-group">
+                <label asp-for="ContractId" class="control-label"></label>
+                <select asp-for="ContractId" class="form-control form-select" asp-items="@Model.Contracts" ></select>
+            </div>
+        </dd>
 
 
             <div class="form-group">

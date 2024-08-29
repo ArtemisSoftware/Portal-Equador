@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\MechanicalWorkshopScheduler\" />
     <Folder Include="Domain\School\UseCases\" />
     <Folder Include="Domain\University\UseCases\" />
     <Folder Include="wwwroot\images\" />

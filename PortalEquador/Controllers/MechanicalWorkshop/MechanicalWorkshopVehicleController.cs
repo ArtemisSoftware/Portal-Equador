@@ -13,7 +13,7 @@ using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.Scheduler.MechanicalWorkshop.ViewModels.vehicle;
 using PortalEquador.Domain.UseCases;
 
-namespace PortalEquador.Controllers
+namespace PortalEquador.Controllers.MechanicalWorkshop
 {
     public class MechanicalWorkshopVehicleController : Controller
     {
@@ -34,7 +34,7 @@ namespace PortalEquador.Controllers
         // GET: Groups/Create
         public IActionResult Create()
         {
-            return View();
+            return View(Preview.MechanicalWorkshopVehiclePreview.GetEmpty());
         }
 
         // POST: Groups/Create
@@ -115,7 +115,7 @@ namespace PortalEquador.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-           // ViewData["groupId"] = id;
+            // ViewData["groupId"] = id;
             //ViewData["groupName"] = groupName;
 
             //--await _updateGroupItemStateUseCase.Invoke(id, false);
