@@ -15,6 +15,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <input type="hidden" asp-for="PersonaInformationId" />
+            <input type="hidden" asp-for="FullName" />
 
             <div class="form-group">
                 <label asp-for="DocumentTypeId" class="control-label"></label>
@@ -40,7 +41,7 @@
             <br />
             <br />
             <div class="form-group">
-                <a asp-action="Index" asp-route-id="@ViewBag.id"  class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <a asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-dark">Regressar ao index</a> &nbsp;
                 <input type="submit" value="Criar registo" class="btn btn-primary" />
             </div>
         </form>

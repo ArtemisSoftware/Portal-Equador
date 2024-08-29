@@ -65,7 +65,7 @@
                     <a asp-controller="Document" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
                     @if (Model.TotalDocuments != 0)
                     {
-                        <a asp-controller="Document" asp-action="Index" asp-route-identifier="@Model.Id" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                        <a asp-controller="Document" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
                     }
                 </div>
             </div>

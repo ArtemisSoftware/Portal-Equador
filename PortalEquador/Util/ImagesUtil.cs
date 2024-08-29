@@ -11,54 +11,6 @@ namespace PortalEquador.Util
         {
             return "~/" + FoldersConstants.IMAGES + "/" + curriculumId + "/" + ItemFromGroup.Documents.PROFILE_PICTURE + extension;
         }
-
-        public static string GetFilePath(int curriculumId, int documentTypeId, string extension)
-        {
-            return "~/" + FoldersConstants.IMAGES + "/" + curriculumId + "/" + documentTypeId + extension;
-        }
-
-
-        public static string GetFilePath(int curriculumId, int imageName)
-        {
-            string wwwRootPath = "";//hostEnvironment.WebRootPath;
-            string folderPath = wwwRootPath + "/" + FoldersConstants.IMAGES + "/" + curriculumId + "/";
-
-
-            // Get all image files from the folder
-            string[] imageFiles = Directory.GetFiles(folderPath)
-                .Where(file => IsImageFile(file))
-                .ToArray();
-
-
-            // Search for the image by name
-            string matchingImagePath = imageFiles.FirstOrDefault(
-                imagePath => Path.GetFileNameWithoutExtension(imagePath).Equals(imageName.ToString(), StringComparison.OrdinalIgnoreCase));
-
-            if (matchingImagePath != null)
-            {
-                return matchingImagePath;
-            }
-            else
-            {
-                return "";
-                //Console.WriteLine($"Image '{imageNameToSearch}' not found in the folder.");
-            }
-        }
-
-        static bool IsImageFile(string filePath)
-        {
-            // Check if the file has an image extension (you can customize this check)
-            string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".bmp" };
-            string fileExtension = Path.GetExtension(filePath);
-            return imageExtensions.Contains(fileExtension, StringComparer.OrdinalIgnoreCase);
-        }
-
-
-
-
-
-
-
         */
         private static string GetImagePath(IWebHostEnvironment hostEnvironment, DocumentViewModel document)
         {
@@ -89,6 +41,8 @@ namespace PortalEquador.Util
 
             return path;
         }
+
+
         
         public static async Task<OperationType> SaveImage(IWebHostEnvironment hostEnvironment, DocumentViewModel document)
         {
@@ -110,7 +64,48 @@ namespace PortalEquador.Util
             return operationType;
         }
 
-        /*
+        public static string GetFilePath(int curriculumId, int documentTypeId, string extension)
+        {
+            return "~/" + FoldersConstants.Folder.CURRICULUM + "/" + curriculumId + "/" + documentTypeId + extension;
+        }
+
+
+        public static string GetFilePath(int curriculumId, int imageName)
+        {
+            string wwwRootPath = "";//hostEnvironment.WebRootPath;
+            string folderPath = wwwRootPath + "/" + FoldersConstants.Folder.CURRICULUM + "/" + curriculumId + "/";
+
+
+            // Get all image files from the folder
+            string[] imageFiles = Directory.GetFiles(folderPath)
+                .Where(file => IsImageFile(file))
+                .ToArray();
+
+
+            // Search for the image by name
+            string? matchingImagePath = imageFiles.FirstOrDefault(
+                imagePath => Path.GetFileNameWithoutExtension(imagePath).Equals(imageName.ToString(), StringComparison.OrdinalIgnoreCase));
+
+            if (matchingImagePath != null)
+            {
+                return matchingImagePath;
+            }
+            else
+            {
+                return "";
+                //Console.WriteLine($"Image '{imageNameToSearch}' not found in the folder.");
+            }
+        }
+
+        static bool IsImageFile(string filePath)
+        {
+            // Check if the file has an image extension (you can customize this check)
+            string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".bmp" };
+            string fileExtension = Path.GetExtension(filePath);
+            return imageExtensions.Contains(fileExtension, StringComparer.OrdinalIgnoreCase);
+        }
+
+        
         public static void DeleteImage(IWebHostEnvironment hostEnvironment, DocumentViewModel document)
         {
             string path = GetImagePath(hostEnvironment, document);
@@ -120,6 +115,20 @@ namespace PortalEquador.Util
                 File.Delete(path);
             }
         }
-        */
+
+        public static void DeleteImage(IWebHostEnvironment hostEnvironment, int personaInformationId, int documentTypeId, string extension)
+        {
+            string wwwRootPath = hostEnvironment.WebRootPath;
+
+            string root = wwwRootPath + "/" + FoldersConstants.Folder.CURRICULUM + "/" + personaInformationId + "/";
+            string fileName = documentTypeId + extension;
+            string path = Path.Combine(root, fileName);
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+
     }
 }

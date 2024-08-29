@@ -14,6 +14,17 @@ namespace PortalEquador.Data.Document.Repository
 {
     public class DocumentRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment hostEnvironment) : GenericRepository<DocumentEntity>(context, httpContextAccessor), IDocumentRepository
     {
+        public async Task<List<DocumentDetailViewModel>> GetAllDocuments(int PersonalInformationId)
+        {
+            var result = await context.DocumentEntity
+                .Include(d => d.DocumentTypeGroupItemEntity)
+                .Include(d => d.PersonalInformationEntity)
+                .Where(item => item.PersonalInformationId == PersonalInformationId)
+                .ToListAsync();
+
+            return mapper.Map<List<DocumentDetailViewModel>>(result);
+        }
+
         public async Task<DocumentViewModel> GetCreateModel(int personaInformationId, string fullName)
         {
 
@@ -54,62 +65,22 @@ namespace PortalEquador.Data.Document.Repository
             }
         }
 
-        /*
-        public async Task<List<DocumentDetailViewModel>> GetAllDocumentsAsync(int PersonalInformationId)
-        {
-            var result = await context.DocumentEntity
-                .Include(d => d.DocumentTypeGroupItemEntity)
-                .Include(d => d.PersonalInformationEntity)
-                .Where(item => item.PersonalInformationId == PersonalInformationId)
-                .ToListAsync();
-
-            return _mapper.Map<List<DocumentDetailViewModel>>(result);
-
-            //return new List<DocumentDetailViewModel>();
-        }
-
-        public async Task<DocumentViewModel> GetDocumentAsync(int id)
+        private async Task<DocumentViewModel> GetDocument(int id)
         {
             var result = await context.DocumentEntity
                .Include(d => d.DocumentTypeGroupItemEntity)
-               .Where(item => item.Id == id).FirstAsync();
+               .Where(item => item.Id == id)
+               .FirstAsync();
 
-            return _mapper.Map<DocumentViewModel>(result);
+            return mapper.Map<DocumentViewModel>(result);
 
-            //return new DocumentViewModel();
         }
 
-
-
-
-
-
-
-        public async Task<List<DocumentDetailViewModel>> GetDocumentsDetails(int personalInformationId, int GroupItemId)
+        public async Task DeleteDocument(int personaInformationId, int documentId)
         {
-
-            var result = await context.DocumentEntity
-                .Include(d => d.DocumentTypeGroupItemEntity)
-                .Include(d => d.PersonalInformationEntity)
-                .Where(item => item.PersonalInformationId == personalInformationId && item.DocumentTypeId == GroupItemId)
-                .ToListAsync();
-
-            return _mapper.Map<List<DocumentDetailViewModel>>(result);
-
-            //return new List<DocumentDetailViewModel>();
+            var model = await GetDocument(documentId);
+            ImagesUtil.DeleteImage(hostEnvironment, model);
+            await DeleteAsync(documentId);
         }
-
-        public async Task<List<DocumentDetailViewModel>> GetDocumentsDetails(int personalInformationId, List<int> DocumentsGroupIds)
-        {
-            var result = await context.DocumentEntity
-               .Include(d => d.DocumentTypeGroupItemEntity)
-               .Include(d => d.PersonalInformationEntity)
-               .Where(item => item.PersonalInformationId == personalInformationId && DocumentsGroupIds.Contains(item.DocumentTypeId) == true)
-               .ToListAsync();
-
-            return _mapper.Map<List<DocumentDetailViewModel>>(result);
-        }
-        */
-
     }
 }
