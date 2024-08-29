@@ -13,8 +13,9 @@ namespace PortalEquador.Domain.Document.ViewModels
 
         public int PersonaInformationId { get; set; }
 
-        public PersonalInformationViewModel? PersonalInformation { get; set; }
+        public required string FullName { get; set; }
 
+        [Display(Name = StringConstants.Display.OBSERVATION)]
         public string? Observation { get; set; }
 
         public string? Extension { get; set; }

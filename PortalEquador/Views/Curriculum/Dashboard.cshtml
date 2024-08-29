@@ -45,7 +45,7 @@
                     }
                     <p class="card-text">Formulário para o registo dos dados da carta de condução.</p>
                      @if(Model.IsDriversLicenceComplete){
-                        <a asp-controller="DriversLicence" asp-action="Edit" asp-route-identifier="@Model.Id"  class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                        <a asp-controller="DriversLicence" asp-action="Edit" asp-route-identifier="@Model.Id" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
                         <a asp-controller="DriversLicence" asp-action="Details" asp-route-identifier="@Model.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
                       }
                       else{
@@ -62,10 +62,10 @@
                     <h5 class="card-title">Documentos</h5>
                     <span class="badge bg-success">@Model.TotalDocuments Registo(s)</span>
                     <p class="card-text">Formulário para o registo dos dados da carta de condução.</p>
-                    <a asp-controller="Documents" asp-action="Create" asp-route-identifier="@Model.Id" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+                    <a asp-controller="Document" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
                     @if (Model.TotalDocuments != 0)
                     {
-                        <a asp-controller="Documents" asp-action="Index" asp-route-identifier="@Model.Id" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                        <a asp-controller="Document" asp-action="Index" asp-route-identifier="@Model.Id" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
                     }
                 </div>
             </div>

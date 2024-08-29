@@ -7,7 +7,6 @@ namespace PortalEquador.Data.Document.Entity
 {
     public class DocumentEntity : BaseEntity
     {
-
         public int PersonalInformationId { get; set; }
 
         [ForeignKey("PersonalInformationId")]
@@ -20,7 +19,7 @@ namespace PortalEquador.Data.Document.Entity
         [ForeignKey("DocumentTypeId")]
         public GroupItemEntity DocumentTypeGroupItemEntity { get; set; }
 
-        public required string Extension { get; set; }
+        public string Extension { get; set; }
 
     }
 }

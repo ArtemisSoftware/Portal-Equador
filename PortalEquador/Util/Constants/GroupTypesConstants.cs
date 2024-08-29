@@ -34,9 +34,9 @@
 
             public static class Documents
             {
-                public const int PROFILE_PICTURE = 6;
-                public const int DRIVERS_LICENCE = 7;
-                public const int PROVISIONAL_DRIVERS_LICENCE = 10;
+                public const int PROFILE_PICTURE = 7;
+                //public const int DRIVERS_LICENCE = 7;
+                //public const int PROVISIONAL_DRIVERS_LICENCE = 10;
             }
 
         }

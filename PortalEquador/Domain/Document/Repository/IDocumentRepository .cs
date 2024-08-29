@@ -6,15 +6,19 @@ namespace PortalEquador.Domain.Document.Repository
 {
     public interface IDocumentRepository : IGenericRepository<DocumentEntity>
     {
-        Task<DocumentViewModel> GetCreateModel(int id);
+        Task<DocumentViewModel> GetCreateModel(int personaInformationId, string fullName);
+
+        Task<bool> DocumentExists(int personaInformationId, int documentTypeId);
+        Task Save(DocumentViewModel model);
+
         /*
         Task<List<DocumentDetailViewModel>> GetAllDocumentsAsync(int id);
 
         Task<DocumentViewModel> GetDocument(int id);
 
-        Task<bool> DocumentExists(int curriculumId, int documentTypeId);
 
-        Task Save(DocumentViewModel document);
+
+        
 
         Task<List<DocumentDetailViewModel>> GetDocumentsDetails(int personalInformationId, List<int> DocumentsGroupIds);
 

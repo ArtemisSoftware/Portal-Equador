@@ -5,6 +5,7 @@ using PortalEquador.Data.Curriculum.Entities;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.PersonalInformation.Entity;
+using PortalEquador.Data.Document.Entity;
 
 namespace PortalEquador.Data
 {
@@ -72,6 +73,7 @@ namespace PortalEquador.Data
         public DbSet<GroupEntity> GroupEntity { get; set; }
         public DbSet<GroupItemEntity> GroupItemEntity { get; set; }
         public DbSet<CurriculumEntity> CurriculumEntity { get; set; }
-        public DbSet<PortalEquador.Data.PersonalInformation.Entity.PersonalInformationEntity> PersonalInformationEntity { get; set; } = default!;
+        public DbSet<PersonalInformationEntity> PersonalInformationEntity { get; set; }
+        public DbSet<DocumentEntity> DocumentEntity { get; set; } 
     }
 }
