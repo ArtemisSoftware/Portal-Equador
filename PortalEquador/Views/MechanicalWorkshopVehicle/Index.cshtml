@@ -1,0 +1,106 @@
+﻿@model IEnumerable<PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels.VehicleDetailViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index de viaturas</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LicencePlate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Contract)
+            </th>
+            <th style="width:600px;"></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.LicencePlate)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Contract.Description)
+                </td>
+                <td style="width:600px;"></td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id"  class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                    <a asp-action="Details" asp-route-id="@item.Id"  class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                    @if (@item.Active)
+                    {
+                        <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button">Desativar</button>
+                    }
+                    else
+                    {
+                        <button data-id="@item.Id" class="btn btn-success allocateBtn" type="button">Ativar</button>
+                    }
+
+                </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<form id="deactivateFrom" asp-action="Delete">
+    <input type="hidden" id="groupDeactiviationItemId" name="Id" />
+</form>
+
+<form id="activateForm" asp-action="ActivateVehicle">
+    <input type="hidden" id="groupActiviationItemId" name="Id" />
+</form>
+
+
+@section Scripts{
+    <script>
+        $(function () {
+
+            $('.table').DataTable();
+
+            $('.deleteBtn').click(function (e) {
+                swal({
+                    title: "Desativar item",
+                    text: "Tem a certeza que pretende desativar o registo?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var btn = $(this);
+                        var id = btn.data("id");
+                        $('#groupDeactiviationItemId').val(id);
+                        $('#deactivateFrom').submit();
+
+                    }
+                });
+            });
+
+
+            $('.allocateBtn').click(function (e) {
+                swal({
+                    title: "Ativar item",
+                    text: "Tem a certeza que pretende ativar o registo?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var btn = $(this);
+                        var id = btn.data("id");
+                        $('#groupActiviationItemId').val(id);
+                        $('#activateForm').submit();
+                    }
+                });
+            });
+
+        });
+    </script>
+}

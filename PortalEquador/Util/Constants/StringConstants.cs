@@ -9,33 +9,57 @@
 
         public static class Display
         {
+            // A
             public const string ADRESS = "Endereço";
 
-
-            public const string BENIFICIARY_NUMBER = "Nº de benificiário";
-
+            // C
+            public const string CONTRACT = "Contrato";
+            public const string CONTRACT_IN_USE = "Contrato associado";
+            public const string COMPETENCE = "Habilitação";
+            public const string CODE = "Código";
             public const string COMPANY = "Empresa";
             public const string CONTACTS = "Contactos";
-            public const string COMPETENCE = "Habilitação";
 
-            public const string DESCRIPTION = "Descrição";
+            // D
             public const string DEGREE = "Grau";
+            public const string DATE = "Data";
+            public const string DESCRIPTION = "Descrição";
             public const string DRIVERS_LICENCE_TYPE = "Tipo de carta";
             public const string DRIVERS_LICENCE = "Carta de condução";
             public const string DATE_OF_BIRTH = "Data de nascimento";
             public const string DURATION = "Duração";
             public const string DOCUMENT = "Documento";
 
+            // L
 
+            public const string LICENCE_PLATE = "Matricula";
+
+            // M
+            public const string MECHANIC = "Mecânico";
+            public const string MODEL = "Modelo";
             public const string MODIFIED_BY = "Alterado por";
             public const string MOTHER = "Mãe";
+
+            // S
+            public const string SERVICE = "Serviço";
+            public const string SCHEDULE = "Horário";
+            public const string STATE = "Estado";
+            public const string SURNAME = "Apelido";
+
+            //  T
+            public const string TELEPHONE = "Telefone";
+
+
+
+            public const string BENIFICIARY_NUMBER = "Nº de benificiário";
+
 
             public const string OBSERVATION = "Observação";
             public const string FULL_NAME = "Nome completo";
             public const string NATIONALITY = "Nacionalidade";
             public const string PROVINCE = "Provincia";
             public const string NEIGHBOURHOOD = "Bairro";
-            public const string STATE = "Estado";
+
             public const string EMAIL = "Email";
             public const string EXPIRATION_DATE = "Data de expiração";
             public const string IDENTITY_CARD_EXPIRATION_DATE = "Data de expiração do bilhete de identidade";
@@ -45,7 +69,6 @@
             public const string REGISTER_LAST_UPDATE_DATE = "Última atualização a ";
             public const string IDENTITY_CARD_NUMBER = "Nº Bilhete de identidade";
             public const string NAME = "Nome";
-            public const string SURNAME = "Apelido";
             public const string FATHER = "Pai";
             public const string FINANTIAL_IDENTITY = "Nif";
             public const string FILE = "Ficheiro";
@@ -54,6 +77,8 @@
 
             public const string WORKSTATION = "Posto";
             public const string INSTITUTION = "Instituição";
+
+
 
         }
 
@@ -66,6 +91,8 @@
             public const string EXISTING_DOCUMENT = "O tipo de documento já se encontra registado";
             public const string MANDATORY_FILE = "A escolha de um ficheiro é obrigatória";
             public const string EXISTING_REGISTER = "O item já se encontra registado";
+            public const string EXISTING_LICENCE_PLATE = "A matricula já se encontra registada";
+            public const string INVALID_LICENCE_PLATE = "Matricula inválida";
         }
 
         public static class Dates
