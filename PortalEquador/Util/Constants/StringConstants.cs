@@ -49,7 +49,8 @@
             //  T
             public const string TELEPHONE = "Telefone";
 
-
+            //  V
+            public const string VEHICLE = "Veículo";
 
             public const string BENIFICIARY_NUMBER = "Nº de benificiário";
 

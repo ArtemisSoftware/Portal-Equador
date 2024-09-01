@@ -10,7 +10,10 @@
             public const int NEIGHBOURHOOD = 3;
 
             public const int DOCUMENTS = 4;
+
             public const int MECHANICAL_SHOP_CONTRACTS = 5;
+            public const int MECHANICAL_SHOP_MECHANICS = 6;
+            public const int MECHANICAL_SHOP_SCHEDULES = 7;
 
             //---
             public const int DRIVERS_LICENCE = 5;

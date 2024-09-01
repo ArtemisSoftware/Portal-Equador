@@ -1,4 +1,5 @@
-﻿using PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity;
+﻿using PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity;
+using PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity;
 using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
@@ -16,5 +17,6 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository
         Task<VehicleDetailViewModel> GetVehicleDetail(int id);
 
         Task UpdateState(int vehicleId, bool isActive);
+
     }
 }

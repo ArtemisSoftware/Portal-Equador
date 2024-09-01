@@ -71,9 +71,5 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels
 
         [Display(Name = StringConstants.Display.CONTRACT_IN_USE)]
         public SelectList? Contracts { get; set; }
-
-
-
-
     }
 }

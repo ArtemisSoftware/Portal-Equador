@@ -1,0 +1,146 @@
+﻿@model PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels.SchedulerViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Criar Novo Agendamento</h1>
+<h4>@Html.DisplayFor(model => model.ScheduleDate)</h4>
+
+<hr />
+<br />
+<div class="row">
+    <div class="col-md-5">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="ScheduleDate" />
+            <input type="hidden" asp-for="InterventionTimeId" />
+            <input type="hidden" asp-for="MechanicId" />
+
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.InterventionTime)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.InterventionTime.Description)
+                </dd>
+            </dl>
+
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Mechanic)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Mechanic.Description)
+                </dd>
+            </dl>
+
+            @if(Model.Vehicles.Count() != 0)
+            {
+                <div class="form-group">
+                    <label asp-for="VehicleId" class="control-label"></label>
+                    <select asp-for="VehicleId" class="form-select" asp-items="Model.Vehicles" id="vehicleDropdown"></select>
+                </div>
+                <br />
+
+                <dl class="row">
+                    <dd class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="Model" class="control-label"></label>
+                            <input asp-for="Model" class="form-control" id="vehicleModel" disabled />
+                        </div>
+                    </dd>
+                    <dd class="col-sm-6">
+                        <div class="form-group">
+                            <label asp-for="Contract" class="control-label"></label>
+                            <input asp-for="Contract" class="form-control" id="vehicleContract" disabled />
+                        </div>
+                    </dd>
+                </dl>
+
+                <div class="form-group">
+                    <label asp-for="Service" class="control-label"></label>
+                    <input asp-for="Service" class="form-control" />
+                    <span asp-validation-for="Service" class="text-danger"></span>
+                </div>
+                <br />
+
+                <div class="form-group">
+                    <label asp-for="Telephone" class="control-label"></label>
+                    <input asp-for="Telephone" class="form-control" />
+                    <span asp-validation-for="Telephone" class="text-danger"></span>
+                </div>
+                <br />
+
+                <div class="form-group">
+                    <label asp-for="Code" class="control-label"></label>
+                    <input asp-for="Code" class="form-control" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                </div>
+                <br />
+
+                <div class="form-group">
+                    <span asp-validation-for="Error" class="text-danger"></span>
+                </div>
+
+
+                <br />
+                <br />
+                <div class="form-group">
+                    <a asp-action="Index" class="btn btn-dark" asp-route-groupId="@ViewBag.groupId" asp-route-groupName="@ViewBag.groupName">Regressar ao index</a> &nbsp;
+                    <input type="submit" value="Criar registo" class="btn btn-primary" />
+                </div>
+            } else
+            {
+                <div class="alert alert-warning" role="alert">
+                    Não existem viaturas disponíves
+                </div>
+
+                <br />
+                <br />
+                <div class="form-group">
+                    <a asp-action="Index" class="btn btn-dark" asp-route-groupId="@ViewBag.groupId" asp-route-groupName="@ViewBag.groupName">Regressar ao index</a> &nbsp;
+                </div>
+            }
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        
+        function handleVehicle(vehicleId) {
+                if (vehicleId) {
+                    fetch(`/MechanicalWorkshopScheduler/GetVehicleDetails?vehicleId=${vehicleId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById("vehicleModel").value = data.model;
+                            document.getElementById("vehicleContract").value = data.contract;
+                        })
+                        .catch(error => console.error('Error fetching vehicle details:', error));
+                } else {
+                    document.getElementById("vehicleModel").value = '';
+                    document.getElementById("vehicleContract").value = '';
+                }
+        }
+
+        function handleVehicleChange() {
+            var vehicleDropdown = document.getElementById("vehicleDropdown");
+            vehicleDropdown.addEventListener("change", function () {
+                var vehicleId = this.value;
+                handleVehicle(vehicleId)
+            });
+        }
+
+        // Call the method on page load
+        window.onload = function () {
+
+            handleVehicleChange();
+            var vehicleDropdown = document.getElementById("vehicleDropdown");
+            var vehicleId = vehicleDropdown.value;
+            handleVehicle(vehicleId);
+        };  
+    </script>
+}

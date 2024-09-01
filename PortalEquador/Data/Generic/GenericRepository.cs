@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Domain.Generic;
+using PortalEquador.Domain.GroupTypes.ViewModels;
 using System.Security.Claims;
 
 namespace PortalEquador.Data.Generic
@@ -69,6 +71,18 @@ namespace PortalEquador.Data.Generic
         {
             var result = context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true);
             return new SelectList(result, "Id", "Description");
+        }
+
+        public async Task<List<GroupItemEntity>> GroupItemsList(int groupId)
+        {
+            var result = await context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true).ToListAsync();
+            return result;
+        }
+
+        public async Task<GroupItemEntity> GroupItem(int itemId)
+        {
+            var result = await context.GroupItemEntity.Where(x => x.Id == itemId).FirstAsync();
+            return result;
         }
     }
 }

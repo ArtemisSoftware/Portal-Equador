@@ -5,12 +5,14 @@ using PortalEquador.Data.Curriculum.Repository;
 using PortalEquador.Data.Document.Repository;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.GroupTypes.repository;
+using PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Repository;
 using PortalEquador.Data.PersonalInformation.Repository;
 using PortalEquador.Domain.Curriculum.Repository;
 using PortalEquador.Domain.Document.Repository;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.Repository;
+using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
 using PortalEquador.Domain.PersonalInformation.Repository;
 using System.Reflection;
@@ -40,6 +42,7 @@ builder.Services.AddScoped<IDocumentRepository, DocumentRepositoryImpl>();
 
 //MechanicalWorkshop
 builder.Services.AddScoped<IMechanicalWorkshopVehicleRepository, MechanicalWorkshopVehicleRepositoryImpl>();
+builder.Services.AddScoped<IMechanicalWorkshopSchedulerRepository, MechanicalWorkshopSchedulerRepositoryImpl>();
 
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());

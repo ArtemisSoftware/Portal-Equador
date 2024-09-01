@@ -1,0 +1,111 @@
+﻿@model PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels.SchedulerViewModel
+
+@{
+    ViewData["Title"] = "Detalhe";
+}
+
+<h1>Detalhe do Agendamento</h1>
+<h4>Data: @Html.DisplayFor(model => model.ScheduleDate)</h4>
+<div>
+
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.InterventionTime)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.InterventionTime.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Mechanic)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Mechanic.Description)
+        </dd>
+    </dl>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h5>Veículo</h5>
+            <hr />
+        </div>
+    </div>
+
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Vehicle.LicencePlate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Vehicle.LicencePlate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Model)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Vehicle.Model)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Contract)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Contract)
+        </dd>
+    </dl>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h5>Informação</h5>
+            <hr />
+        </div>
+    </div>
+
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Service)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Service)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Telephone)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Telephone)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Code)
+        </dd>
+
+        @if (@Model.DateModified != null)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DateModified)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DateModified)
+            </dd>
+        }
+        else
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DateCreated)
+            </dd>
+        }
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Editor)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Editor)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-dark" asp-route-id="@Model?.Id">Regressar ao index</a>
+</div>

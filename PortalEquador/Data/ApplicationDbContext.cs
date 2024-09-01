@@ -7,6 +7,7 @@ using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.PersonalInformation.Entity;
 using PortalEquador.Data.Document.Entity;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity;
+using PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity;
 
 namespace PortalEquador.Data
 {
@@ -77,5 +78,6 @@ namespace PortalEquador.Data
         public DbSet<PersonalInformationEntity> PersonalInformationEntity { get; set; }
         public DbSet<DocumentEntity> DocumentEntity { get; set; } 
         public DbSet<MechanicalWorkshopVehicleEntity> MechanicalWorkshopVehicleEntity { get; set; }
+        public DbSet<MechanicalWorkshopSchedulerEntity> MechanicalWorkshopSchedulerEntity { get; set; } = default!;
     }
 }
