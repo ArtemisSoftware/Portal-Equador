@@ -1,9 +1,17 @@
-﻿﻿@using PortalEquador.Util
+﻿@using Microsoft.AspNetCore.Identity
+@using PortalEquador.Data.Generic
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using PortalEquador.Util
+
 @{
     ViewData["Title"] = "Home Page";
 }
-<div class="text-center">
 
+ @if (SignInManager.IsSignedIn(User)){
+
+
+<div class="text-center">
     <h1 class="display-4">Portal</h1>
     <br />
     <br />
@@ -34,17 +42,6 @@
             </div>
         </div>
 
-        <!--
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Documentos</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a asp-controller="Documents" asp-action="Index" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-        </div>
-        -->
     </div>
 
     <br />
@@ -80,5 +77,10 @@
             </div>
         </div>
     }
+
 </div>
+    } else {
+
+    <partial name="_AuthPartial" />
+}
 
