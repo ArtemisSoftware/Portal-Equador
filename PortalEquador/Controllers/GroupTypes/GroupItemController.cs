@@ -136,9 +136,9 @@ namespace PortalEquador.Controllers.GroupTypes
         }
 
 
-        [HttpPost]
+        [HttpPost, ActionName("ActivateItem")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AllocateLeave(int? groupId, string? groupName, int id)
+        public async Task<IActionResult> ActivateItem(int? groupId, string? groupName, int id)
         {
             ViewData["groupId"] = groupId;
             ViewData["groupName"] = groupName;

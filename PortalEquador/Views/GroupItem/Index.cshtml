@@ -28,10 +28,10 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
+                <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
-                <td style="width:640px;">
+                <td class="align-middle" style="width:740px;">
                     @Html.DisplayFor(modelItem => item.Observation)
                 </td>
                 <td class="align-middle">
@@ -66,7 +66,7 @@
     <input type="hidden" id="groupDeactiviationItemId" name="Id" />
 </form>
 
-<form id="activateForm" asp-action="AllocateLeave" asp-route-groupId="@ViewBag.groupId" asp-route-groupName="@ViewBag.groupName">
+<form id="activateItem" asp-action="ActivateItem" asp-route-groupId="@ViewBag.groupId" asp-route-groupName="@ViewBag.groupName">
     <input type="hidden" id="groupActiviationItemId" name="Id" />
 </form>
 
@@ -97,7 +97,6 @@
                 });
             });
 
-
             $('.allocateBtn').click(function (e) {
                 swal({
                     title: "Ativar item",
@@ -110,7 +109,7 @@
                         var btn = $(this);
                         var id = btn.data("id");
                         $('#groupActiviationItemId').val(id);
-                        $('#activateForm').submit();
+                        $('#activateItem').submit();
                     }
                 });
             });

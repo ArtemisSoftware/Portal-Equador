@@ -6,7 +6,7 @@
 
 <h1>Documentos</h1>
 
-<h4>@ViewBag.username</h4>
+<h3>@ViewBag.username</h3>
 <p>
     <a  asp-controller="Document" asp-action="Create" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
 </p>
@@ -35,7 +35,7 @@
                     <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
                     -->
                     <button data-id="@item.Id" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username" class="btn btn-danger deleteBtn" type="button"><i class="fas fa-trash" title="Remover"></i></button>
-                    <form id="eliminateDoc" asp-action="Delete">
+                    <form id="deleteDocument" asp-action="DeleteDocument">
                         <input type="hidden" id="documentId" name="Id" />
                         <input type="hidden" id="identifier" name="identifier" />
                         <input type="hidden" id="username" name="username" />
@@ -72,7 +72,7 @@
                         $('#documentId').val(id);
                         $('#identifier').val(identifier);
                         $('#username').val(username);
-                        $('#eliminateDoc').submit();
+                        $('#deleteDocument').submit();
                        
                     }
                 });

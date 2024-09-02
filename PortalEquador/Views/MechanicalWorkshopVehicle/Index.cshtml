@@ -9,6 +9,7 @@
 <p>
     <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
 </p>
+<br />
 <table class="table">
     <thead>
         <tr>
@@ -25,37 +26,46 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.LicencePlate)
-            </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Contract.Description)
+                    <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.LicencePlate)
                 </td>
-                <td style="width:600px;"></td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id"  class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
-                    <a asp-action="Details" asp-route-id="@item.Id"  class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                    <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Contract.Description)
+                    </td>
+                    <td class="align-middle">
                     @if (@item.Active)
                     {
-                        <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button">Desativar</button>
+                                <span class="badge bg-success">Ativo</span>
                     }
                     else
                     {
-                        <button data-id="@item.Id" class="btn btn-success allocateBtn" type="button">Ativar</button>
+                                <span class="badge bg-danger">Inativo</span>
+                    }
+                    </td>
+                    <td class="align-middle">
+                        <a asp-action="Edit" asp-route-id="@item.Id"  class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                        <a asp-action="Details" asp-route-id="@item.Id"  class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                    @if (@item.Active)
+                    {
+                                <button data-id="@item.Id" class="btn btn-danger deactivateBtn" type="button">Desativar</button>
+                    }
+                    else
+                    {
+                                <button data-id="@item.Id" class="btn btn-success activateBtn" type="button">Ativar</button>
                     }
 
-                </td>
+                    </td>
         </tr>
 }
     </tbody>
 </table>
 
-<form id="deactivateFrom" asp-action="Delete">
-    <input type="hidden" id="groupDeactiviationItemId" name="Id" />
+<form id="activate" asp-action="Activate">
+    <input type="hidden" id="groupActiviationItemId" name="Id" />
 </form>
 
-<form id="activateForm" asp-action="ActivateVehicle">
-    <input type="hidden" id="groupActiviationItemId" name="Id" />
+<form id="deactivate" asp-action="Deactivate">
+    <input type="hidden" id="groupDeactiviationItemId" name="Id" />
 </form>
 
 
@@ -65,7 +75,7 @@
 
             $('.table').DataTable();
 
-            $('.deleteBtn').click(function (e) {
+            $('.deactivateBtn').click(function (e) {
                 swal({
                     title: "Desativar item",
                     text: "Tem a certeza que pretende desativar o registo?",
@@ -76,15 +86,16 @@
                     if (confirm) {
                         var btn = $(this);
                         var id = btn.data("id");
-                        $('#groupDeactiviationItemId').val(id);
-                        $('#deactivateFrom').submit();
+                        alert("id: " + id)
+                       $('#groupDeactiviationItemId').val(id);
+                        $('#deactivate').submit();
 
                     }
                 });
             });
 
 
-            $('.allocateBtn').click(function (e) {
+                $('.activateBtn').click(function (e) {
                 swal({
                     title: "Ativar item",
                     text: "Tem a certeza que pretende ativar o registo?",
@@ -96,7 +107,7 @@
                         var btn = $(this);
                         var id = btn.data("id");
                         $('#groupActiviationItemId').val(id);
-                        $('#activateForm').submit();
+                            $('#activate').submit();
                     }
                 });
             });

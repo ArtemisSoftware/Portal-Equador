@@ -61,9 +61,9 @@ namespace PortalEquador.Controllers.Document
 
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteDocument")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id, int identifier, string username)
+        public async Task<IActionResult> DeleteDocument(int id, int identifier, string username)
         {
             await documentRepository.DeleteDocument(identifier, id);
             return RedirectToAction(nameof(Index), new { identifier = identifier, fullName = username });

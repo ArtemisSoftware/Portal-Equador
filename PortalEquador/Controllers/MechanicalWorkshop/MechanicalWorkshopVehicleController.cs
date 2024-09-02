@@ -116,17 +116,17 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
         }
 
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Deactivate")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Deactivate(int id)
         {
             await repository.UpdateState(id, false);
             return RedirectToAction(nameof(Index));
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("Activate")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ActivateVehicle(int id)
+        public async Task<IActionResult> Activate(int id)
         {
             await repository.UpdateState(id, true);
             return RedirectToAction(nameof(Index));
