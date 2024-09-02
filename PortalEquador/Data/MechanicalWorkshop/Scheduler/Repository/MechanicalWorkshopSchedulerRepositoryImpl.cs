@@ -27,16 +27,16 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
 
         private Dictionary<int, GroupItemViewModel> colabTime(List<GroupItemViewModel> schedules)
         {
-            Dictionary<int, GroupItemViewModel> My_dict1 = new Dictionary<int, GroupItemViewModel>();
+            Dictionary<int, GroupItemViewModel> colaborationTimes = new Dictionary<int, GroupItemViewModel>();
 
             var index = 1;
 
             foreach(var schedule in schedules)
             {
-                My_dict1.Add(index, schedule);
+                colaborationTimes.Add(index, schedule);
                 ++index;
             }
-            return My_dict1;
+            return colaborationTimes;
         }
 
 
