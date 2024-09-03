@@ -47,7 +47,7 @@
     <br />
     <br />
 
-    @if (User.IsInRole(Roles.Administrator))
+        @if (User.IsInRole(Roles.Administrator) || User.IsInRole(Roles.Supervisor))
     {
 
         <h1 class="display-4">Gestão</h1>

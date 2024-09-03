@@ -18,7 +18,7 @@ using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.GroupTypes
 {
-    [Authorize(Roles = Roles.Administrator)]
+    [Authorize(Roles = Roles.Administrator + "," + Roles.Supervisor)]
     public class GroupController(GroupRepository groupRepository) : Controller
     {
         
