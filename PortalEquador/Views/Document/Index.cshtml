@@ -4,28 +4,34 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Documentos</h1>
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>@ViewBag.username</h1>
+        <h3>Documentos</h3>
+        <p>
+            <a asp-controller="Document" asp-action="Create" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
+        </p>
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="Curriculum" asp-action="Dashboard" asp-route-identifier="@ViewBag.identifier" class="btn btn-success"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
+</div>
+<hr />
 
-<h3>@ViewBag.username</h3>
-<p>
-    <a  asp-controller="Document" asp-action="Create" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
-</p>
-<br />
 
-
-<div class="row">
-    @{ int itemCount = 0; } 
-    @foreach (var item in Model) 
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var item in Model)
     {
-        <div class="col-sm-4">
-            <div class="card">
-                <img id="frame" src="@Url.Content(@item.PicturePath)" class="card-img-top">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        @Html.DisplayFor(modelItem => item.Document.Description)
-                        </h5>
-                    <p class="card-text">
-                         @Html.DisplayFor(modelItem => item.Document.Group.Description)
+
+      <div class="col">
+        <div class="card">
+            <div class="img-container">
+              <img id="frame" src="@Url.Content(@item.PicturePath)" class="card-img-top">
+            </div>
+          <div class="card-body">
+            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Document.Description)</h5>
+            <p class="card-text">
+                        @Html.DisplayFor(modelItem => item.Document.Group.Description)
                         @Html.DisplayFor(modelItem => item.Observation)
                     </p>
                     <button class="btn btn-info" onclick="window.open('@Url.Content(@item.PicturePath)', '_blank')"><i class="fas fa-eye" title="Detalhe"></i></button>
@@ -40,18 +46,12 @@
                         <input type="hidden" id="identifier" name="identifier" />
                         <input type="hidden" id="username" name="username" />
                     </form>
-                </div>
-            </div>
+          </div>
         </div>
-            @if (++itemCount % 3 == 0)
-                {
-                    @:</div>
-                    @:<div class="row">
-                }
-           
-      }
-
+      </div>        
+    }
 </div>
+
 @section Scripts{
     <script>
         $(function () {

@@ -50,7 +50,8 @@ namespace PortalEquador.Controllers.PersonalInformation
             else if (ModelState.IsValid && valid)
             {
                 await repository.Save(model);
-                return RedirectToAction(StringConstants.Controller.Action.Dashboard, StringConstants.Controller.Curriculums, new { identifier = model.Id });
+                var savedModel = await repository.GetPersonalInformationFromBI(model.IdentityCard);
+                return RedirectToAction(StringConstants.Controller.Action.Dashboard, StringConstants.Controller.Curriculums, new { identifier = savedModel.Id });
             }
 
             model = await RecoverPersonalInformationtModel(model);

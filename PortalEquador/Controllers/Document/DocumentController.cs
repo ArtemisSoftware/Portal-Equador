@@ -51,11 +51,11 @@ namespace PortalEquador.Controllers.Document
                 if (ModelState.IsValid)
                 {
                     await documentRepository.Save(model);
-                    return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId });
+                    return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
                 }
             }
 
-            //ViewData["id"] = model.Id;
+            ViewData["id"] = model.Id;
             model = await RecoverModel(model);
             return View(model);
 
@@ -72,7 +72,7 @@ namespace PortalEquador.Controllers.Document
 
         private async Task<DocumentViewModel> RecoverModel(DocumentViewModel model)
         {
-            return await documentRepository.GetCreateModel(model.Id, model.FullName);
+            return await documentRepository.GetCreateModel(model);
         }
     }
 }

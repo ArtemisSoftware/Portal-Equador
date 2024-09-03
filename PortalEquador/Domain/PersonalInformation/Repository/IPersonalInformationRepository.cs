@@ -10,6 +10,7 @@ namespace PortalEquador.Domain.PersonalInformation.Repository
         Task<bool> ValidateIdentityCardNumber(string identityCardNumber);
         Task Save(PersonalInformationViewModel model);
         Task<PersonalInformationViewModel> GetPersonalInformation(int id);
+        Task<PersonalInformationViewModel> GetPersonalInformationFromBI(string IdentityCard);
         Task<PersonalInformationDetailViewModel> GetPersonalInformationDetail(int id);
         Task<List<PersonalInformationViewModel>> GetAll();
 

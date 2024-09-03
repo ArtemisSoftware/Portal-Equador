@@ -78,7 +78,19 @@ namespace PortalEquador.Data.PersonalInformation.Repository
 
             return mapper.Map<PersonalInformationViewModel>(result);
         }
-        
+
+        public async Task<PersonalInformationViewModel> GetPersonalInformationFromBI(string IdentityCard)
+        {
+            var result = await context.PersonalInformationEntity
+               .Include(item => item.NationalityGroupItemEntity)
+                .Include(item => item.ProvinceGroupItemEntity)
+               .Include(item => item.NeighbourhoodGroupItemEntity)
+               .FirstOrDefaultAsync(m => m.IdentityCard == IdentityCard);
+
+            return mapper.Map<PersonalInformationViewModel>(result);
+        }
+
+
         public async Task<List<PersonalInformationViewModel>> GetAll()
         {
             var query = from personal in context.PersonalInformationEntity

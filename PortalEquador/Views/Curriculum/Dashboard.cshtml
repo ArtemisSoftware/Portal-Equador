@@ -8,16 +8,23 @@
 
 <div>
     <br />
+
     <div class="row align-items-center">
-        <div class="col-auto">
-            <img src="@Url.Content(@Model.ProfileImagePath)" alt="" style="width: 90px; height: 90px" class="rounded-circle" />
+        <div class="col-md-10">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <img src="@Url.Content(@Model.ProfileImagePath)" alt="" style="width: 90px; height: 90px" class="rounded-circle" />
+                </div>
+                <div class="col-auto">
+                    <h4>@Model.FullName</h4>
+                </div>
+            </div>
         </div>
-        <div class="col-auto">
-            <h4>@Model.FullName</h4>
+        <div class="col-md-2 text-right">
+            <a asp-controller="Curriculum" asp-action="Index" class="btn btn-dark"> Regressar aos CVs</a>
         </div>
     </div>
     <hr />
-
 
     <div class="row">
 

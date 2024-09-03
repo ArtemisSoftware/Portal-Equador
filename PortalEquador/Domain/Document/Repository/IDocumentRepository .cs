@@ -8,6 +8,7 @@ namespace PortalEquador.Domain.Document.Repository
     {
         Task<List<DocumentDetailViewModel>> GetAllDocuments(int personalInformationId);
         Task<DocumentViewModel> GetCreateModel(int personaInformationId, string fullName);
+        Task<DocumentViewModel> GetCreateModel(DocumentViewModel model);
         Task<bool> DocumentExists(int personaInformationId, int documentTypeId);
         Task Save(DocumentViewModel model);
 

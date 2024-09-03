@@ -25,16 +25,22 @@ namespace PortalEquador.Data.Document.Repository
             return mapper.Map<List<DocumentDetailViewModel>>(result);
         }
 
+        public async Task<DocumentViewModel> GetCreateModel(DocumentViewModel model)
+        {
+            var documentsTypes = GroupItems(Groups.DOCUMENTS);
+            model.DocumentTypes = documentsTypes;
+            return model;
+        }
+
         public async Task<DocumentViewModel> GetCreateModel(int personaInformationId, string fullName)
         {
-
             var documentsTypes = GroupItems(Groups.DOCUMENTS);
             
             var model = new DocumentViewModel
             {
                 DocumentTypes = documentsTypes,
                 PersonaInformationId = personaInformationId,
-                FullName = fullName
+                FullName = fullName,
             };
 
             return model;

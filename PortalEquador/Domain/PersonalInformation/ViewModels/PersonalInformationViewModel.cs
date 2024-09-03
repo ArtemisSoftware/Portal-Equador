@@ -79,7 +79,7 @@ namespace PortalEquador.Domain.PersonalInformation.ViewModels
         public bool ValidatedIdentityCard { get; set; } = false;
 
         [NotMapped]
-        public string ProfileImagePath { get; set; }
+        public string? ProfileImagePath { get; set; }
 
         [NotMapped]
         [Display(Name = StringConstants.Display.FULL_NAME)]
