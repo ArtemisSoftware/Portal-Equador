@@ -1,7 +1,34 @@
-﻿namespace PortalEquador.Util.Constants
+﻿using PortalEquador.Domain.MechanicalWorkshop.Scheduler;
+using System;
+using System.Diagnostics;
+
+namespace PortalEquador.Util.Constants
 {
     public static class GroupTypesConstants
     {
+        private class Item
+        {
+
+            public int Debug { get; set; }
+            public int Production { get; set; }
+
+            public int Value
+            {
+                get
+                {
+                    if (AppConstants.ENVIRONMENT == AppConstants.DEBUG)
+                    {
+                        return Debug;
+                    }
+                    else {
+                        return Production;
+                    }
+                }
+            }
+
+        }
+
+
         public static class Groups
         {
 
@@ -35,12 +62,12 @@
 
             public static class Nationality
             {
-                public const int ANGOLAN = 3;
+                public static readonly int ANGOLAN = (new Item{ Debug = 3, Production = 1 }).Value;
             }
 
             public static class Documents
             {
-                public const int PROFILE_PICTURE = 7;
+                public static readonly int PROFILE_PICTURE = (new Item { Debug = 7, Production = 2 }).Value;
                 //public const int DRIVERS_LICENCE = 7;
                 //public const int PROVISIONAL_DRIVERS_LICENCE = 10;
             }
