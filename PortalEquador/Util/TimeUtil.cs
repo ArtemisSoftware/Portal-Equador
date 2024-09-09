@@ -24,5 +24,10 @@ namespace PortalEquador.Util
         {
             return DateOnly.FromDateTime(date);
         }
+
+        public static DateOnly DateOnlyCurrent()
+        {
+            return DateOnly.FromDateTime(DateTime.Now);
+        }
     }
 }

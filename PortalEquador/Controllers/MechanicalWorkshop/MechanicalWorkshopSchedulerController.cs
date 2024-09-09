@@ -70,6 +70,15 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             return View(model);
         }
 
+
+        // GET: MechanicalWorkshopScheduler/Delete/5
+        public async Task<IActionResult> Delete(int id)
+        {
+            await repository.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+
         private async Task<SchedulerViewModel> RecoverModel(SchedulerViewModel model)
         {
             return await repository.GetCreateModel(model);

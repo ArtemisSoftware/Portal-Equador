@@ -2,6 +2,7 @@
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
+using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 using System.ComponentModel.DataAnnotations;
 
@@ -14,7 +15,31 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
         [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
         public DateOnly ScheduleDate { get; set; }
 
-        public SchedulerType ScheduleType { get; set; } = SchedulerType.InSchedule;
+
+        private SchedulerType _scheduleType = SchedulerType.InSchedule;
+        public SchedulerType ScheduleType
+        {
+            get
+            {
+                if (ScheduleDate < TimeUtil.DateOnlyCurrent() && _scheduleType == SchedulerType.Free)
+                {
+                    return SchedulerType.BlockedFree;
+                }
+                else if (ScheduleDate < TimeUtil.DateOnlyCurrent() && _scheduleType == SchedulerType.InSchedule)
+                {
+                    return SchedulerType.BlockedDateInThePast;
+                }
+                else
+                {
+                    return _scheduleType;
+                }
+
+            }
+            set
+            {
+                _scheduleType  = value;
+            }
+        }
 
         [Required]
         public int MechanicId { get; set; }
@@ -36,12 +61,6 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
         public VehicleViewModel? Vehicle { get; set; }
 
         public SelectList? Vehicles { get; set; }
-
-
-
-
-
-
 
 
         [Display(Name = StringConstants.Display.CONTRACT)]

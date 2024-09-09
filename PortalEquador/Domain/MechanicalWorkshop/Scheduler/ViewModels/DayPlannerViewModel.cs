@@ -1,5 +1,6 @@
 ﻿using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.ViewModels;
+using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 using System.ComponentModel.DataAnnotations;
 
@@ -52,6 +53,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
             return new SchedulerViewModel
             {
                 Id = -1,
+                ScheduleDate = TimeUtil.ToDateOnly(MainTime),
                 ScheduleType = SchedulerType.Free,
                 Mechanic = mechanic,
                 InterventionTime = schedule

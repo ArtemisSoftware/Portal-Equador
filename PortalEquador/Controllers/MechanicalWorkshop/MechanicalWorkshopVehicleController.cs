@@ -115,7 +115,6 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             }
         }
 
-
         [HttpPost, ActionName("Deactivate")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Deactivate(int id)

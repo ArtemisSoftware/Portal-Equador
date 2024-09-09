@@ -22,10 +22,20 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels
         [NotMapped]
         public string LicencePlatePosition2 { get; set; }
 
+        [NotMapped]
+        public string LicencePlatePosition3 { get; set; }
+
 
         public bool IsLicencePlateValid()
         {
-            if (LicencePlatePosition0.IsNullOrEmpty() || LicencePlatePosition1.IsNullOrEmpty() || LicencePlatePosition2.IsNullOrEmpty())
+            if (LicencePlatePosition0.IsNullOrEmpty() 
+                || 
+                LicencePlatePosition1.IsNullOrEmpty() 
+                || 
+                LicencePlatePosition2.IsNullOrEmpty()
+               ||
+                LicencePlatePosition3.IsNullOrEmpty()
+                )
             {
                 return false;
             }
@@ -41,7 +51,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels
             get
             {
                 if (IsLicencePlateValid()){
-                    return LicencePlatePosition0.ToUpper() + "-" + LicencePlatePosition1.ToUpper() + "-" + LicencePlatePosition2.ToUpper();
+                    return LicencePlatePosition0.ToUpper() + "-" + LicencePlatePosition1.ToUpper() + "-" + LicencePlatePosition2.ToUpper() + "-" + LicencePlatePosition3.ToUpper();
                 } else
                 {
                     return _licencePlate;
@@ -54,6 +64,11 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels
                 LicencePlatePosition0 = _licencePlate.Split("-")[0];
                 LicencePlatePosition1 = _licencePlate.Split("-")[1];
                 LicencePlatePosition2 = _licencePlate.Split("-")[2];
+                try
+                {
+                    LicencePlatePosition2 = _licencePlate.Split("-")[3];
+                } catch(IndexOutOfRangeException ex)  {  }
+                
             }
         }
 
