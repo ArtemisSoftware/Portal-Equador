@@ -12,6 +12,7 @@ using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
+using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.MechanicalWorkshop
@@ -56,7 +57,7 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             if (ModelState.IsValid)
             {
                 await repository.Save(viewModel);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { time = TimeUtil.ToDateTime(viewModel.ScheduleDate).ToString() });
             }
 
             viewModel = await RecoverModel(viewModel);
@@ -72,10 +73,10 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
 
 
         // GET: MechanicalWorkshopScheduler/Delete/5
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int id, string time)
         {
             await repository.DeleteAsync(id);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { time = time});
         }
 
 
