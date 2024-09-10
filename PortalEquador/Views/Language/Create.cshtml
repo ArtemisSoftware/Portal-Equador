@@ -1,0 +1,74 @@
+﻿@model PortalEquador.Domain.Languages.ViewModels.LanguageViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+<br />
+<h1>Criar Novo Registo</h1>
+<hr />
+<br />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="PersonaInformationId" />
+            <input type="hidden" asp-for="FullName" />
+
+            <div class="form-group">
+                <label asp-for="LanguageId" class="control-label"></label>
+                <select asp-for="LanguageId" class="form-select" asp-items="Model.Languages"></select>
+            </div>
+            <br />
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsMaternalLanguage" onChange="MaternalSelect()" id="Maternal" /> @Html.DisplayNameFor(model => model.IsMaternalLanguage)
+                </label>
+            </div>
+            <br />
+
+            <div class="form-group" id="Oral">
+                <label asp-for="OralLevelId" class="control-label"></label>
+                <select asp-for="OralLevelId" class="form-select" asp-items="Model.OralLevels"></select>
+            </div>
+            <br />
+
+            <div class="form-group" id="Written">
+                <label asp-for="WrittenLevelId" class="control-label"></label>
+                <select asp-for="WrittenLevelId" class="form-select" asp-items="Model.WrittenLevels"></select>
+            </div>
+            <br />
+
+            @if (Model.Error != null)
+                    {
+            <div class="form-group">
+                <div class="alert alert-danger" role="alert">
+                    <span asp-validation-for="Error"></span>
+                </div>
+            </div>
+                    }
+            <br />
+            <br />
+            <div class="form-group">
+                <a asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <input type="submit" value="Criar registo" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        function MaternalSelect() {
+
+            var response = document.getElementById('Maternal').checked;
+            var oral = document.getElementById('Oral');
+            var written = document.getElementById('Written');
+            oral.hidden = response;
+            written.hidden = response;
+        }
+    </script>
+}
+

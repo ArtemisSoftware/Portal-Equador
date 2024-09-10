@@ -31,6 +31,19 @@ namespace PortalEquador.Data.Curriculum.Repository
                         on personal.Id equals docCount.PersonalInformationId into resultDocs
                         from resultDocuments in resultDocs.DefaultIfEmpty()
 
+                        join languageCount in
+                            (from language in context.LanguageEntity
+                             where language.PersonalInformationId == id
+                             select language).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                LanguageCount = grouped.Count()
+                            })
+                        on personal.Id equals languageCount.PersonalInformationId into resultLanguage
+                        from resultLanguages in resultLanguage.DefaultIfEmpty()
+
+
                         where personal.Id == id
 
                         select new CurriculumDashboardViewModel
@@ -38,7 +51,7 @@ namespace PortalEquador.Data.Curriculum.Repository
                             Id = id,
                             FullName = personal.FirstName + " " + personal.LastName,
                             IsPersonalInformationComplete = (personal.Id != 0),
-
+                            TotalLanguages = resultLanguages.LanguageCount == null ? 0 : resultLanguages.LanguageCount,
                             TotalDocuments = resultDocuments.OrderDetailCount == null ? 0 : resultDocuments.OrderDetailCount,
                             ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, id)
                         };

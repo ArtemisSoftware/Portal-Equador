@@ -42,6 +42,10 @@ namespace PortalEquador.Util.Constants
             public const int MECHANICAL_SHOP_MECHANICS = 6;
             public const int MECHANICAL_SHOP_SCHEDULES = 7;
 
+
+            public const int LANGUAGES = 8;
+            public const int LANGUAGE_LEVEL = 9;
+
             //---
             public const int DRIVERS_LICENCE = 5;
             public const int COMPETENCES = 6;

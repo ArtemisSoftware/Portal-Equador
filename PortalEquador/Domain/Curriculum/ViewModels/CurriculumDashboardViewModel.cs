@@ -14,6 +14,7 @@ namespace PortalEquador.Domain.Curriculum.ViewModels
         public bool IsPersonalInformationComplete { get; set; }
 
         public int TotalDocuments { get; set; }
+        public int TotalLanguages { get; set; }
 
         public int TotalCompetences { get; set; }
 

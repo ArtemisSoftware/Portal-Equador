@@ -1,0 +1,112 @@
+﻿@model IEnumerable<PortalEquador.Domain.Languages.ViewModels.LanguageDetailViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>@ViewBag.username</h1>
+        <h3>Linguas</h3>
+        <p>
+            <a asp-controller="Language" asp-action="Create" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
+        </p>
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="Curriculum" asp-action="Dashboard" asp-route-identifier="@ViewBag.identifier" class="btn btn-success"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
+</div>
+<hr />
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Language)
+            </th>
+            <th>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OralLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WrittenLevel)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Language.Description)
+            </td>
+                <td class="align-middle">
+                    @if (@item.IsMaternalLanguage)
+                    {
+                        <span class="badge bg-success">
+                            @Html.DisplayNameFor(model => model.IsMaternalLanguage)
+                        </span>
+                    }
+            </td>
+                <td class="align-middle">
+                    @if (@item.IsMaternalLanguage == false)
+                    {
+                    @Html.DisplayFor(modelItem => item.OralLevel.Description)
+                    }
+            </td>
+                <td class="align-middle">
+                    @if (@item.IsMaternalLanguage == false)
+                    {
+                    @Html.DisplayFor(modelItem => item.WrittenLevel.Description)
+                    }
+            </td>
+            <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                    <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username"><i class="fas fa-trash-alt" title="Editar"></i></button>
+
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<form id="deleteLanguage" asp-action="DeleteLanguage" >
+    <input type="hidden" id="languageId" name="Id" />
+    <input type="hidden" id="identifier" name="identifier" />
+    <input type="hidden" id="username" name="username" />
+</form>
+
+
+@section Scripts {
+    <script>
+        $(function () {
+
+            $('.table').DataTable();
+
+            $('.deleteBtn').click(function (e) {
+                swal({
+                    title: "Eliminar lingua",
+                    text: "Tem a certeza que pretende eliminar o lingua?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var btn = $(this);
+                        var id = btn.data("id");
+                        var identifier = btn.data("identifier");
+                        var username = btn.data("username");
+                        $('#languageId').val(id);
+                        $('#identifier').val(identifier);
+                        $('#username').val(username);
+                        $('#deleteLanguage').submit();
+
+                    }
+                });
+            });
+        });
+
+    </script>
+}

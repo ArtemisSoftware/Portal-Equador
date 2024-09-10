@@ -88,10 +88,25 @@
         -->
     </div>
 
-    <!--
+
     <br />
     <div class="row">
 
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Línguas</h5>
+                    <span class="badge bg-success">@Model.TotalLanguages Registo(s)</span>
+                    <p class="card-text">Formulário para o registo de línguas.</p>
+                    @if (Model.TotalLanguages != 0)
+                    {
+                        <a asp-controller="Language" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                    }
+                    <a asp-controller="Language" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+                </div>
+            </div>
+        </div>
+        <!--
         <div class="col-sm-4">
             <div class="card">
                 <div class="card-body">
@@ -115,9 +130,9 @@
                 </div>
             </div>
         </div>
-
+            -->
     </div>
-    -->
+
 
 
 </div>

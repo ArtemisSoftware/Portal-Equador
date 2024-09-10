@@ -31,14 +31,19 @@
             public const string DOCUMENT = "Documento";
 
             // L
-
+            public const string LANGUANGE = "Língua";
             public const string LICENCE_PLATE = "Matricula";
 
             // M
+            public const string MATERNAL_LANGUANGE = "Língua materna";
             public const string MECHANIC = "Mecânico";
             public const string MODEL = "Modelo";
             public const string MODIFIED_BY = "Alterado por";
             public const string MOTHER = "Mãe";
+
+            // O
+            public const string ORAL_LEVEL = "Nível oral";
+
 
             // S
             public const string SERVICE = "Serviço";
@@ -51,6 +56,9 @@
 
             //  V
             public const string VEHICLE = "Veículo";
+
+            //  W
+            public const string WRITTEN_LEVEL = "Nível escrito";
 
             public const string BENIFICIARY_NUMBER = "Nº de benificiário";
 
@@ -94,6 +102,7 @@
             public const string EXISTING_REGISTER = "O item já se encontra registado";
             public const string EXISTING_LICENCE_PLATE = "A matricula já se encontra registada";
             public const string INVALID_LICENCE_PLATE = "Matricula inválida";
+            public const string EXISTING_LANGUAGE = "A lingua já se encontra registada";
         }
 
         public static class Dates

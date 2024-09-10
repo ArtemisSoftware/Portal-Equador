@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using PortalEquador.Data.Document.Entity;
+using PortalEquador.Data.Languages.entity;
 using PortalEquador.Data.PersonalInformation.Entity;
 using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Domain.GroupTypes.ViewModels;
+using PortalEquador.Domain.Languages.ViewModels;
 using PortalEquador.Domain.PersonalInformation.ViewModels;
 
 namespace PortalEquador.Data.Mappers
@@ -31,6 +33,19 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                  .ForMember(dest => dest.Document, opt => opt.MapFrom(src => src.DocumentTypeGroupItemEntity))
+                .ReverseMap();
+
+            CreateMap<LanguageEntity, LanguageDetailViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                 .ForMember(dest => dest.OralLevel, opt => opt.MapFrom(src => src.OralLevelGroupItemEntity))
+                 .ForMember(dest => dest.WrittenLevel, opt => opt.MapFrom(src => src.WrittenLevelGroupItemEntity))
+                 .ForMember(dest => dest.Language, opt => opt.MapFrom(src => src.LanguageGroupItemEntity))
+                .ReverseMap();
+
+            CreateMap<LanguageEntity, LanguageViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                 .ForMember(dest => dest.Language, opt => opt.MapFrom(src => src.LanguageGroupItemEntity))
                 .ReverseMap();
         }
     }
