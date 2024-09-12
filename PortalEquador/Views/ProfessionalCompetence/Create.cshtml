@@ -1,0 +1,41 @@
+﻿@model PortalEquador.Domain.Profession.Competence.ViewModels.ProfessionalCompetenceViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Criar Habilitação profissional</h1>
+<h4>Para: @ViewData["username"]</h4>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="PersonaInformationId" />
+
+            <div class="form-group">
+                <label asp-for="CompetenceId" class="control-label"></label>
+                <select asp-for="CompetenceId" class="form-select" asp-items="Model.Competences"></select>
+            </div>
+            <br />
+
+            @if (Model.Error != null)
+            {
+                <div class="form-group">
+                    <div class="alert alert-danger" role="alert">
+                        <span asp-validation-for="Error"></span>
+                    </div>
+                </div>
+            }
+
+            <br />
+            <br />
+            <div class="form-group">
+                <a asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <input type="submit" value="Criar registo" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

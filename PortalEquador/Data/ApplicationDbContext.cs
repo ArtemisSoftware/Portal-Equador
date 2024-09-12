@@ -9,6 +9,8 @@ using PortalEquador.Data.Document.Entity;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity;
 using PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity;
 using PortalEquador.Data.Languages.entity;
+using PortalEquador.Data.Profession.Competence.Entity;
+using PortalEquador.Data.Profession.Experience.Entity;
 
 namespace PortalEquador.Data
 {
@@ -167,5 +169,7 @@ namespace PortalEquador.Data
         public DbSet<MechanicalWorkshopVehicleEntity> MechanicalWorkshopVehicleEntity { get; set; }
         public DbSet<MechanicalWorkshopSchedulerEntity> MechanicalWorkshopSchedulerEntity { get; set; } = default!;
         public DbSet<PortalEquador.Data.Languages.entity.LanguageEntity> LanguageEntity { get; set; } = default!;
+        public DbSet<PortalEquador.Data.Profession.Competence.Entity.ProfessionalCompetenceEntity> ProfessionalCompetenceEntity { get; set; } = default!;
+        public DbSet<PortalEquador.Data.Profession.Experience.Entity.ProfessionalExperienceEntity> ProfessionalExperienceEntity { get; set; } = default!;
     }
 }

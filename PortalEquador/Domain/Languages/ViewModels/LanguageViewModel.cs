@@ -20,6 +20,8 @@ namespace PortalEquador.Domain.Languages.ViewModels
         [Display(Name = StringConstants.Display.LANGUANGE)]
         [Required]
         public int LanguageId { get; set; }
+
+        [Display(Name = StringConstants.Display.LANGUANGE)]
         public GroupItemViewModel? Language { get; set; }
 
         public SelectList? Languages { get; set; }

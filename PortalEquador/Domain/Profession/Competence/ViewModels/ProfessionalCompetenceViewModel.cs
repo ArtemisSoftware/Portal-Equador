@@ -10,6 +10,10 @@ namespace PortalEquador.Domain.Profession.Competence.ViewModels
     {
         public int Id { get; set; }
 
+        public int PersonaInformationId { get; set; }
+
+        public required string FullName { get; set; }
+
         [Display(Name = StringConstants.Display.COMPETENCE)]
         [Required]
         public int CompetenceId { get; set; }

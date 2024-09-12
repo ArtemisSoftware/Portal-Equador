@@ -1,0 +1,49 @@
+﻿@model PortalEquador.Domain.Profession.Experience.ViewModels.ProfessionalExperienceViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Editar Experiência profissional</h1>
+<h3>@Html.DisplayNameFor(model => model.Workstation):  @Html.DisplayFor(model => model.Workstation.Description)</h3>
+<hr />
+<br />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="PersonaInformationId" />
+            <input type="hidden" asp-for="FullName" />
+            <input type="hidden" asp-for="ProfessionalExperienceId" />
+
+
+            <div class="form-group" id="Written">
+                <label asp-for="CompanyId" class="control-label"></label>
+                <select asp-for="CompanyId" class="form-select" asp-items="Model.Companies"></select>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <label asp-for="Years" class="control-label"></label>
+                <input asp-for="Years" class="form-control" type="number" min="0" />
+                <span asp-validation-for="Years" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group">
+                <label asp-for="Months" class="control-label"></label>
+                <input asp-for="Months" class="form-control" type="number" min="0" max="11" />
+                <span asp-validation-for="Months" class="text-danger"></span>
+            </div>
+            <br />
+            <br />
+            <div>
+                <a asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <input type="submit" value="Guardar Alterações" class="btn btn-warning" />
+            </div>
+        </form>
+    </div>
+</div>
+

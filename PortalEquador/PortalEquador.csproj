@@ -18,11 +18,4 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\Profession\Experience\Repository\" />
-    <Folder Include="Data\Profession\Competence\Repository\" />
-    <Folder Include="Domain\Profession\Experience\Repository\" />
-    <Folder Include="Domain\Profession\Competence\Repository\" />
-  </ItemGroup>
-
 </Project>

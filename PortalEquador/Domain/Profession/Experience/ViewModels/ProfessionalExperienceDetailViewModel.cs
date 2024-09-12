@@ -9,11 +9,11 @@ namespace PortalEquador.Domain.Profession.Experience.ViewModels
     {
         public int Id { get; set; }
 
-        [Display(Name = StringConstants.Display.PROFESSIONAL_EXPERIENCE)]
-        public GroupItemViewModel ProfessionalExperience { get; set; }
-
         [Display(Name = StringConstants.Display.WORKSTATION)]
         public GroupItemViewModel Workstation { get; set; }
+
+        [Display(Name = StringConstants.Display.COMPANY)]
+        public GroupItemViewModel Company { get; set; }
 
         public int Months { get; set; }
 

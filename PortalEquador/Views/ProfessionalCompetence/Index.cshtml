@@ -1,0 +1,83 @@
+﻿@model IEnumerable<PortalEquador.Domain.Profession.Competence.ViewModels.ProfessionalCompetenceDetailViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>@ViewBag.username</h1>
+        <h3>Habilitações Profissionais</h3>
+        <p>
+            <a asp-controller="ProfessionalCompetence" asp-action="Create" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
+        </p>
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="Curriculum" asp-action="Dashboard" asp-route-identifier="@ViewBag.identifier" class="btn btn-success"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
+</div>
+<hr />
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Competence)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Competence.Description)
+            </td>
+            <td>
+                <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username"><i class="fas fa-trash-alt" title="Editar"></i></button>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<form id="deleteCompetence" asp-action="DeleteCompetence">
+    <input type="hidden" id="competenceId" name="Id" />
+    <input type="hidden" id="identifier" name="identifier" />
+    <input type="hidden" id="username" name="username" />
+</form>
+
+
+@section Scripts {
+    <script>
+        $(function () {
+
+            $('.table').DataTable();
+
+            $('.deleteBtn').click(function (e) {
+                swal({
+                    title: "Eliminar habilitação profissional",
+                    text: "Tem a certeza que pretende eliminar a habilitação profissional?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var btn = $(this);
+                        var id = btn.data("id");
+                        var identifier = btn.data("identifier");
+                        var username = btn.data("username");
+                        $('#competenceId').val(id);
+                        $('#identifier').val(identifier);
+                        $('#username').val(username);
+                        $('#deleteCompetence').submit();
+
+                    }
+                });
+            });
+        });
+
+    </script>
+}
+

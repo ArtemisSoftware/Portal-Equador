@@ -9,6 +9,8 @@ using PortalEquador.Data.Languages.Repository;
 using PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Repository;
 using PortalEquador.Data.PersonalInformation.Repository;
+using PortalEquador.Data.Profession.Competence.Repository;
+using PortalEquador.Data.Profession.Experience.Repository;
 using PortalEquador.Domain.Curriculum.Repository;
 using PortalEquador.Domain.Document.Repository;
 using PortalEquador.Domain.Generic;
@@ -17,6 +19,8 @@ using PortalEquador.Domain.Languages.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
 using PortalEquador.Domain.PersonalInformation.Repository;
+using PortalEquador.Domain.Profession.Competence.Repository;
+using PortalEquador.Domain.Profession.Experience.Repository;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +46,8 @@ builder.Services.AddScoped<CurriculumRepository, CurriculumRepositoryImpl>();
 builder.Services.AddScoped<IPersonalInformationRepository, PersonalInformationRepositoryImpl>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepositoryImpl>();
 builder.Services.AddScoped<ILanguageRepository, LanguageRepositoryImpl>();
+builder.Services.AddScoped<IProfessionalCompetenceRepository, ProfessionalCompetenceRepositoryImpl>();
+builder.Services.AddScoped<IProfessionalExperienceRepository, ProfessionalExperienceRepositoryImpl>();
 
 //MechanicalWorkshop
 builder.Services.AddScoped<IMechanicalWorkshopVehicleRepository, MechanicalWorkshopVehicleRepositoryImpl>();
