@@ -1,43 +1,80 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.Profession.Competence.Entity;
+using PortalEquador.Data.Profession.Experience.Entity;
 using PortalEquador.Domain.Languages.Repository;
 using PortalEquador.Domain.Languages.ViewModels;
 using PortalEquador.Domain.Profession.Competence.Repository;
 using PortalEquador.Domain.Profession.Competence.ViewModels;
+using PortalEquador.Domain.Profession.Experience.ViewModels;
+using System.ComponentModel.Design;
+using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Data.Profession.Competence.Repository
 {
     public class ProfessionalCompetenceRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor) : GenericRepository<ProfessionalCompetenceEntity>(context, httpContextAccessor), IProfessionalCompetenceRepository
     {
-        Task<List<ProfessionalCompetenceDetailViewModel>> IProfessionalCompetenceRepository.GetAll(int personalInformationId)
+        public async Task<List<ProfessionalCompetenceDetailViewModel>> GetAll(int personalInformationId)
         {
-            throw new NotImplementedException();
+            var result = await context.ProfessionalCompetenceEntity
+                .Include(d => d.CompetenceGroupItemEntity)
+                .Where(item => item.PersonalInformationId == personalInformationId)
+                .ToListAsync();
+
+            return mapper.Map<List<ProfessionalCompetenceDetailViewModel>>(result);
         }
 
-        Task<ProfessionalCompetenceViewModel> IProfessionalCompetenceRepository.GetCreateModel(int personalInformationId, string fullName)
+        public async Task<ProfessionalCompetenceViewModel> GetCreateModel(int personalInformationId, string fullName)
         {
-            throw new NotImplementedException();
+            var competences = GroupItems(Groups.COMPETENCES);
+
+            var model = new ProfessionalCompetenceViewModel
+            {
+                PersonaInformationId = personalInformationId,
+                FullName = fullName,
+                Competences = competences,
+            };
+
+            return model;
         }
 
-        Task<ProfessionalCompetenceViewModel> IProfessionalCompetenceRepository.GetCreateModel(LanguageViewModel model)
+        public async Task<ProfessionalCompetenceViewModel> GetCreateModel(ProfessionalCompetenceViewModel model)
         {
-            throw new NotImplementedException();
+            var competences = GroupItems(Groups.COMPETENCES);
+            model.Competences = competences;
+            return model;
         }
 
-        Task<ProfessionalCompetenceViewModel> IProfessionalCompetenceRepository.GetProfessionalCompetence(int id)
+        public async Task<ProfessionalCompetenceViewModel> GetProfessionalCompetence(int id)
         {
-            throw new NotImplementedException();
+            var result = await context.ProfessionalCompetenceEntity
+                .Include(d => d.CompetenceGroupItemEntity)
+                .Where(item => item.Id == id)
+                .FirstOrDefaultAsync();
+
+            return mapper.Map<ProfessionalCompetenceViewModel>(result);
         }
 
-        Task<bool> IProfessionalCompetenceRepository.ProfessionalCompetenceExists(int personalInformationId, int professionalCompetenceId)
+        public async Task<bool> ProfessionalCompetenceExists(int personalInformationId, int professionalCompetenceId)
         {
-            throw new NotImplementedException();
+            return await context.ProfessionalCompetenceEntity.AnyAsync(item => item.PersonalInformationId == personalInformationId & item.CompetenceId == professionalCompetenceId);
         }
 
-        Task IProfessionalCompetenceRepository.Save(ProfessionalCompetenceViewModel model)
+        public async Task Save(ProfessionalCompetenceViewModel model)
         {
-            throw new NotImplementedException();
+            var entity = mapper.Map<ProfessionalCompetenceEntity>(model);
+            entity.EditorId = GetCurrentUserId();
+
+            if (model.Id == 0)
+            {
+                await AddAsync(entity);
+            }
+            else
+            {
+                entity.DateModified = DateTime.UtcNow;
+                await UpdateAsync(entity);
+            }
         }
     }
 }

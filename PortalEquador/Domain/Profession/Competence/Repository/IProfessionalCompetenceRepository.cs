@@ -11,7 +11,7 @@ namespace PortalEquador.Domain.Profession.Competence.Repository
     {
         Task<List<ProfessionalCompetenceDetailViewModel>> GetAll(int personalInformationId);
         Task<ProfessionalCompetenceViewModel> GetCreateModel(int personalInformationId, string fullName);
-        Task<ProfessionalCompetenceViewModel> GetCreateModel(LanguageViewModel model);
+        Task<ProfessionalCompetenceViewModel> GetCreateModel(ProfessionalCompetenceViewModel model);
         Task Save(ProfessionalCompetenceViewModel model);
         Task<bool> ProfessionalCompetenceExists(int personalInformationId, int professionalCompetenceId);
         Task<ProfessionalCompetenceViewModel> GetProfessionalCompetence(int id);

@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using PortalEquador.Data;
-using PortalEquador.Data.Profession.Competence.Entity;
-using PortalEquador.Domain.Languages.Repository;
+﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.Profession.Competence.Repository;
+using PortalEquador.Domain.Profession.Competence.ViewModels;
+using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.Profession
 {
@@ -16,40 +9,20 @@ namespace PortalEquador.Controllers.Profession
     {
 
         // GET: ProfessionalCompetence
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int identifier, string fullName)
         {
-            var applicationDbContext = _context.ProfessionalCompetenceEntity.Include(p => p.ApplicationUserEntity).Include(p => p.CompetenceGroupItemEntity).Include(p => p.PersonalInformationEntity);
-            return View(await applicationDbContext.ToListAsync());
-        }
+            ViewData["identifier"] = identifier;
+            ViewData["username"] = fullName;
 
-        // GET: ProfessionalCompetence/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var professionalCompetenceEntity = await _context.ProfessionalCompetenceEntity
-                .Include(p => p.ApplicationUserEntity)
-                .Include(p => p.CompetenceGroupItemEntity)
-                .Include(p => p.PersonalInformationEntity)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (professionalCompetenceEntity == null)
-            {
-                return NotFound();
-            }
-
-            return View(professionalCompetenceEntity);
+            var models = await repository.GetAll(identifier);
+            return View(models);
         }
 
         // GET: ProfessionalCompetence/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int identifier, string fullName)
         {
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["CompetenceId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id");
-            return View();
+            var model = await repository.GetCreateModel(identifier, fullName);
+            return View(model);
         }
 
         // POST: ProfessionalCompetence/Create
@@ -57,116 +30,38 @@ namespace PortalEquador.Controllers.Profession
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PersonalInformationId,CompetenceId,Id,EditorId,DateCreated,DateModified")] ProfessionalCompetenceEntity professionalCompetenceEntity)
+        public async Task<IActionResult> Create(ProfessionalCompetenceViewModel model)
         {
-            if (ModelState.IsValid)
+            var exists = await repository.ProfessionalCompetenceExists(model.PersonaInformationId, model.CompetenceId);
+            if (exists)
             {
-                _context.Add(professionalCompetenceEntity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(nameof(model.Error), StringConstants.Error.EXISTING_PROFESSIONAL_COMPETENCE);
+                model.Error = StringConstants.Error.EXISTING_PROFESSIONAL_COMPETENCE;
             }
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", professionalCompetenceEntity.EditorId);
-            ViewData["CompetenceId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", professionalCompetenceEntity.CompetenceId);
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", professionalCompetenceEntity.PersonalInformationId);
-            return View(professionalCompetenceEntity);
-        }
-
-        // GET: ProfessionalCompetence/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
+            else
             {
-                return NotFound();
-            }
-
-            var professionalCompetenceEntity = await _context.ProfessionalCompetenceEntity.FindAsync(id);
-            if (professionalCompetenceEntity == null)
-            {
-                return NotFound();
-            }
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", professionalCompetenceEntity.EditorId);
-            ViewData["CompetenceId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", professionalCompetenceEntity.CompetenceId);
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", professionalCompetenceEntity.PersonalInformationId);
-            return View(professionalCompetenceEntity);
-        }
-
-        // POST: ProfessionalCompetence/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PersonalInformationId,CompetenceId,Id,EditorId,DateCreated,DateModified")] ProfessionalCompetenceEntity professionalCompetenceEntity)
-        {
-            if (id != professionalCompetenceEntity.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(professionalCompetenceEntity);
-                    await _context.SaveChangesAsync();
+                    await repository.Save(model);
+                    return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ProfessionalCompetenceEntityExists(professionalCompetenceEntity.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", professionalCompetenceEntity.EditorId);
-            ViewData["CompetenceId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", professionalCompetenceEntity.CompetenceId);
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", professionalCompetenceEntity.PersonalInformationId);
-            return View(professionalCompetenceEntity);
+            ViewData["id"] = model.Id;
+            model = await RecoverModel(model);
+            return View(model);
         }
 
-        // GET: ProfessionalCompetence/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        private async Task<ProfessionalCompetenceViewModel> RecoverModel(ProfessionalCompetenceViewModel model)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var professionalCompetenceEntity = await _context.ProfessionalCompetenceEntity
-                .Include(p => p.ApplicationUserEntity)
-                .Include(p => p.CompetenceGroupItemEntity)
-                .Include(p => p.PersonalInformationEntity)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (professionalCompetenceEntity == null)
-            {
-                return NotFound();
-            }
-
-            return View(professionalCompetenceEntity);
+            return await repository.GetCreateModel(model);
         }
 
-        // POST: ProfessionalCompetence/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteCompetence")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteCompetence(int id, int identifier, string username)
         {
-            var professionalCompetenceEntity = await _context.ProfessionalCompetenceEntity.FindAsync(id);
-            if (professionalCompetenceEntity != null)
-            {
-                _context.ProfessionalCompetenceEntity.Remove(professionalCompetenceEntity);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool ProfessionalCompetenceEntityExists(int id)
-        {
-            return _context.ProfessionalCompetenceEntity.Any(e => e.Id == id);
+            await repository.DeleteAsync(id);
+            return RedirectToAction(nameof(Index), new { identifier = identifier, fullName = username });
         }
     }
 }

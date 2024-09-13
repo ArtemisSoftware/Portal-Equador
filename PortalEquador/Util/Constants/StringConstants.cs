@@ -39,6 +39,7 @@
             public const string MECHANIC = "Mecânico";
             public const string MODEL = "Modelo";
             public const string MODIFIED_BY = "Alterado por";
+            public const string MONTHS = "Meses";
             public const string MOTHER = "Mãe";
 
             // O
@@ -59,6 +60,11 @@
 
             //  W
             public const string WRITTEN_LEVEL = "Nível escrito";
+            public const string WORKSTATION = "Posto";
+
+            //  Y
+            public const string YEARS = "Anos";
+
 
             public const string BENIFICIARY_NUMBER = "Nº de benificiário";
 
@@ -84,7 +90,6 @@
             public const string PROFESSIONAL_EXPERIENCE = "Experiência profissional";
             public const string PROFESSIONAL_COMPETENCE = "Habilitações profissionais";
 
-            public const string WORKSTATION = "Posto";
             public const string INSTITUTION = "Instituição";
 
 
@@ -103,6 +108,9 @@
             public const string EXISTING_LICENCE_PLATE = "A matricula já se encontra registada";
             public const string INVALID_LICENCE_PLATE = "Matricula inválida";
             public const string EXISTING_LANGUAGE = "A lingua já se encontra registada";
+            public const string INVALID_DURATION = "Duração inválida";
+            public const string EXISTING_PROFESSIONAL_EXPERIENCE = "A experiência profissional já se encontra registada";
+            public const string EXISTING_PROFESSIONAL_COMPETENCE = "A habilitação profissional já se encontra registada";
         }
 
         public static class Dates

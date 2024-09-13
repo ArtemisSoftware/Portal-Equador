@@ -15,8 +15,10 @@ namespace PortalEquador.Domain.Profession.Experience.ViewModels
 
         public required string FullName { get; set; }
 
+        [Display(Name = StringConstants.Display.YEARS)]
         public int Years { get; set; }
 
+        [Display(Name = StringConstants.Display.MONTHS)]
         public int Months { get; set; }
 
         [Display(Name = StringConstants.Display.COMPANY)]
@@ -24,12 +26,6 @@ namespace PortalEquador.Domain.Profession.Experience.ViewModels
         public int CompanyId { get; set; }
 
         public SelectList? Companies { get; set; }
-
-        [Display(Name = StringConstants.Display.PROFESSIONAL_EXPERIENCE)]
-        [Required]
-        public int ProfessionalExperienceId { get; set; }
-
-        public SelectList? ProfessionalExperiences { get; set; }
 
         [Display(Name = StringConstants.Display.WORKSTATION)]
         [Required]
@@ -44,6 +40,16 @@ namespace PortalEquador.Domain.Profession.Experience.ViewModels
         [Display(Name = StringConstants.Display.WORKSTATION)]
         public GroupItemViewModel? Workstation { get; set; }
 
+        public bool IsValidDuration()
+        {
+            if(Years <= 0 && Months <= 0)
+            {
+                return false;
+            } else
+            {
+                return true;
+            }
+        }
 
     }
 }
