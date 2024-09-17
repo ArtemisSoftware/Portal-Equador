@@ -36,13 +36,13 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+                <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.Workstation.Description)
             </td>
-            <td>
+                <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.Company.Description)
             </td>
-            <td>
+                <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.Duration)
             </td>
                 <td>

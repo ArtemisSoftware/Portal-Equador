@@ -42,14 +42,29 @@ namespace PortalEquador.Domain.Profession.Experience.ViewModels
 
         public bool IsValidDuration()
         {
-            if(Years <= 0 && Months <= 0)
+            if (Years <= 0 && Months <= 0)
             {
                 return false;
-            } else
+            }
+            else
             {
                 return true;
             }
         }
 
+        public int NumberOfMonths()
+        {
+            return Years * 12 + Months;
+        }
+
+        public int WorkYears()
+        {
+            return Months / 12;
+        }
+
+        public int WorkMonths()
+        {
+            return Months % 12;
+        }
     }
 }

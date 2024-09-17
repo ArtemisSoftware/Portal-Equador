@@ -65,7 +65,7 @@ namespace PortalEquador.Data.Mappers
             CreateMap<ProfessionalExperienceEntity, ProfessionalExperienceViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
-                 .ForMember(dest => dest.Companies, opt => opt.MapFrom(src => src.CompanyGroupItemEntity))
+                 .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.CompanyGroupItemEntity))
                  .ForMember(dest => dest.Workstation, opt => opt.MapFrom(src => src.WorkstationGroupItemEntity))
                 .ReverseMap();
 

@@ -45,6 +45,10 @@ namespace PortalEquador.Controllers.Profession
                     await repository.Save(model);
                     return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
                 }
+                else
+                {
+                    model.Error = StringConstants.Error.UNDECLARED_ERROR;
+                }
             }
             ViewData["id"] = model.Id;
             model = await RecoverModel(model);

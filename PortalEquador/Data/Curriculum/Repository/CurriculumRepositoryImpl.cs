@@ -43,6 +43,29 @@ namespace PortalEquador.Data.Curriculum.Repository
                         on personal.Id equals languageCount.PersonalInformationId into resultLanguage
                         from resultLanguages in resultLanguage.DefaultIfEmpty()
 
+                        join professionalCompetenceCount in
+                            (from professionalCompetence in context.ProfessionalCompetenceEntity
+                             where professionalCompetence.PersonalInformationId == id
+                             select professionalCompetence).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                ProfessionalCompetenceCount = grouped.Count()
+                            })
+                        on personal.Id equals professionalCompetenceCount.PersonalInformationId into resultProfessionalCompetence
+                        from resultProfessionalCompetences in resultProfessionalCompetence.DefaultIfEmpty()
+
+                        join professionalExperienceCount in
+                            (from professionalExperience in context.ProfessionalExperienceEntity
+                             where professionalExperience.PersonalInformationId == id
+                             select professionalExperience).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                Count = grouped.Count()
+                            })
+                        on personal.Id equals professionalExperienceCount.PersonalInformationId into resultProfessionalExperience
+                        from resultProfessionalExperiences in resultProfessionalExperience.DefaultIfEmpty()
 
                         where personal.Id == id
 
@@ -53,6 +76,8 @@ namespace PortalEquador.Data.Curriculum.Repository
                             IsPersonalInformationComplete = (personal.Id != 0),
                             TotalLanguages = resultLanguages.LanguageCount == null ? 0 : resultLanguages.LanguageCount,
                             TotalDocuments = resultDocuments.OrderDetailCount == null ? 0 : resultDocuments.OrderDetailCount,
+                            TotalProfessionalCompetences = resultProfessionalCompetences.ProfessionalCompetenceCount == null ? 0 : resultProfessionalCompetences.ProfessionalCompetenceCount,
+                            TotalProfessionalExperiences = resultProfessionalExperiences.Count == null ? 0 : resultProfessionalExperiences.Count,
                             ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, id)
                         };
             return await query.FirstOrDefaultAsync();

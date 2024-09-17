@@ -51,6 +51,10 @@ namespace PortalEquador.Controllers.Profession
                     await repository.Save(model);
                     return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
                 }
+                else
+                {
+                    model.Error = StringConstants.Error.UNDECLARED_ERROR;
+                }
             }
 
             ViewData["id"] = model.Id;
@@ -82,9 +86,9 @@ namespace PortalEquador.Controllers.Profession
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int identifier, string fullName, ProfessionalExperienceViewModel model)
+        public async Task<IActionResult> Edit(int id, string fullName, ProfessionalExperienceViewModel model)
         {
-            ViewData["identifier"] = identifier;
+            ViewData["identifier"] = id;
             ViewData["username"] = fullName;
 
             if (model.IsValidDuration() == false)
@@ -97,12 +101,23 @@ namespace PortalEquador.Controllers.Profession
                 await repository.Save(model);
                 return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
             }
+            model = await RecoverModelEdit(model);
             return View(model);
         }
 
         private async Task<ProfessionalExperienceViewModel> RecoverModel(ProfessionalExperienceViewModel model)
         {
             return await repository.GetCreateModel(model);
+        }
+
+        private async Task<ProfessionalExperienceViewModel> RecoverModelEdit(ProfessionalExperienceViewModel model)
+        {
+            var item = await repository.GetProfessionalExperience(model.Id);
+            var modelRecover = await RecoverModel(item);
+            modelRecover.Years = model.Years;
+            modelRecover.Months = model.Months;
+            modelRecover.Error = model.Error;
+            return modelRecover;
         }
 
         [HttpPost, ActionName("DeleteExperience")]

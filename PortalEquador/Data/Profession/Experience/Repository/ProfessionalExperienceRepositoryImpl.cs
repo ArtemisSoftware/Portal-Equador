@@ -59,7 +59,11 @@ namespace PortalEquador.Data.Profession.Experience.Repository
                 .Where(item => item.Id == id)
                 .FirstOrDefaultAsync();
 
-            return mapper.Map<ProfessionalExperienceViewModel>(result);
+            var model = mapper.Map<ProfessionalExperienceViewModel>(result);
+            model.Years = model.Months / 12;
+            model.Months = model.Months % 12;
+
+            return model;
         }
 
         public async  Task<bool> ProfessionalExperienceExists(int personalInformationId, int companyId, int workstationId)
@@ -71,6 +75,7 @@ namespace PortalEquador.Data.Profession.Experience.Repository
         {
             var entity = mapper.Map<ProfessionalExperienceEntity>(model);
             entity.EditorId = GetCurrentUserId();
+            entity.Months = model.NumberOfMonths();
 
             if (model.Id == 0)
             {

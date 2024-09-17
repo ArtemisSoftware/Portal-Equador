@@ -111,6 +111,7 @@
             public const string INVALID_DURATION = "Duração inválida";
             public const string EXISTING_PROFESSIONAL_EXPERIENCE = "A experiência profissional já se encontra registada";
             public const string EXISTING_PROFESSIONAL_COMPETENCE = "A habilitação profissional já se encontra registada";
+            public const string UNDECLARED_ERROR = "Ocorreu um erro ao preencher o formulário.";
         }
 
         public static class Dates

@@ -17,13 +17,16 @@
             <input type="hidden" asp-for="PersonaInformationId" />
             <input type="hidden" asp-for="FullName" />
             <input type="hidden" asp-for="WorkstationId" />
+            <input type="hidden" asp-for="CompanyId" />
 
-
-            <div class="form-group" id="Written">
-                <label asp-for="CompanyId" class="control-label"></label>
-                <select asp-for="CompanyId" class="form-select" asp-items="Model.Companies"></select>
-            </div>
-            <br />
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Company)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Company.Description)
+                </dd>
+            </dl>
 
             <div class="col-md-3">
                 <div class="form-group">

@@ -15,10 +15,8 @@ namespace PortalEquador.Domain.Curriculum.ViewModels
 
         public int TotalDocuments { get; set; }
         public int TotalLanguages { get; set; }
-
-        public int TotalCompetences { get; set; }
-
-        public int TotalExpertises { get; set; }
+        public int TotalProfessionalExperiences{ get; set; }
+        public int TotalProfessionalCompetences { get; set; }
 
         public bool IsDriversLicenceComplete { get; set; }
 
