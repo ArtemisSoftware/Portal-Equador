@@ -18,4 +18,16 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\DriversLicence\Repository\" />
+    <Folder Include="Data\Education\School\Repository\" />
+    <Folder Include="Data\Education\University\Repository\" />
+    <Folder Include="Domain\DriversLicence\Repository\" />
+    <Folder Include="Domain\DriversLicence\ViewModels\" />
+    <Folder Include="Domain\Education\School\Repository\" />
+    <Folder Include="Domain\Education\School\ViewModels\" />
+    <Folder Include="Domain\Education\University\Repository\" />
+    <Folder Include="Domain\Education\University\ViewModels\" />
+  </ItemGroup>
+
 </Project>
