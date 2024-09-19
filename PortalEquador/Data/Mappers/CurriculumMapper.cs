@@ -1,10 +1,16 @@
 ﻿using AutoMapper;
 using PortalEquador.Data.Document.Entity;
+using PortalEquador.Data.DriversLicence.Entity;
+using PortalEquador.Data.Education.School.Entity;
+using PortalEquador.Data.Education.University.Entity;
 using PortalEquador.Data.Languages.entity;
 using PortalEquador.Data.PersonalInformation.Entity;
 using PortalEquador.Data.Profession.Competence.Entity;
 using PortalEquador.Data.Profession.Experience.Entity;
 using PortalEquador.Domain.Document.ViewModels;
+using PortalEquador.Domain.DriversLicence.ViewModels;
+using PortalEquador.Domain.Education.School.ViewModels;
+using PortalEquador.Domain.Education.University.ViewModels;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.Languages.ViewModels;
 using PortalEquador.Domain.PersonalInformation.ViewModels;
@@ -73,6 +79,41 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                  .ForMember(dest => dest.Workstation, opt => opt.MapFrom(src => src.WorkstationGroupItemEntity))
                  .ForMember(dest => dest.Company, opt => opt.MapFrom(src => src.CompanyGroupItemEntity))
+                .ReverseMap();
+
+            CreateMap<DriversLicenceEntity, DriversLicenceViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                //
+                .ReverseMap();
+
+            CreateMap<DriversLicenceEntity, DriversLicenceDetailViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                 .ForMember(dest => dest.Licence, opt => opt.MapFrom(src => src.LicenceTypeGroupItemEntity))
+                .ReverseMap();
+
+            CreateMap<UniversityEntity, UniversityViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                //
+                .ReverseMap();
+
+            CreateMap<UniversityEntity, UniversityDetailViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                 .ForMember(dest => dest.Degree, opt => opt.MapFrom(src => src.DegreeGroupItemEntity))
+                 .ForMember(dest => dest.Institution, opt => opt.MapFrom(src => src.InstitutionGroupItemEntity))
+                .ReverseMap();
+
+            CreateMap<SchoolEntity, SchoolViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                // 
+                .ReverseMap();
+
+            CreateMap<SchoolEntity, SchoolDetailViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                 .ForMember(dest => dest.Degree, opt => opt.MapFrom(src => src.DegreeGroupItemEntity))
+                 .ForMember(dest => dest.Institution, opt => opt.MapFrom(src => src.InstitutionGroupItemEntity))
                 .ReverseMap();
         }
     }
