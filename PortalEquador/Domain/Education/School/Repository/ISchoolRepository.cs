@@ -12,7 +12,7 @@ namespace PortalEquador.Domain.Education.School.Repository
         Task<SchoolViewModel> GetCreateModel(int personalInformationId, string fullName);
         Task<SchoolViewModel> GetCreateModel(SchoolViewModel model);
         Task Save(SchoolViewModel model);
-        Task<bool> SchoolExists(int personalInformationId, int universityId);
+        Task<bool> SchoolExists(int personalInformationId, int schoolId, int courseId);
         Task<SchoolViewModel> GetSchool(int id);
     }
 }

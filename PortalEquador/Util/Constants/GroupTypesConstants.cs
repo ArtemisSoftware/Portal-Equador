@@ -49,11 +49,14 @@ namespace PortalEquador.Util.Constants
             public const int WORKSTATIONS = 11;
             public const int COMPETENCES = 12;
 
+            public const int SCHOOLS = 13;
+            public const int SCHOOL_COURSES = 14;
+            public const int SCHOOL_DEGREES = 15;
+
             //---
             public const int DRIVERS_LICENCE = 5;
             
-            public const int SCHOOL = 8;
-            public const int SCHOOL_LEVEL = 8;
+
             public const int SCHOOL_COURSE = 8;
             public const int UNIVERSITY = 8;
             public const int UNIVERSITY_LEVEL = 8;

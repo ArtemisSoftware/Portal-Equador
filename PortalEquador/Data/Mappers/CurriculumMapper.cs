@@ -114,6 +114,7 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                  .ForMember(dest => dest.Degree, opt => opt.MapFrom(src => src.DegreeGroupItemEntity))
                  .ForMember(dest => dest.Institution, opt => opt.MapFrom(src => src.InstitutionGroupItemEntity))
+                 .ForMember(dest => dest.Major, opt => opt.MapFrom(src => src.MajorGroupItemEntity))
                 .ReverseMap();
         }
     }

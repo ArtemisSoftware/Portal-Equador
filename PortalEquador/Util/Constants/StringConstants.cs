@@ -19,6 +19,7 @@
             public const string CODE = "Código";
             public const string COMPANY = "Empresa";
             public const string CONTACTS = "Contactos";
+            public const string COURSE = "Curso";
 
             // D
             public const string DEGREE = "Grau";
@@ -29,6 +30,9 @@
             public const string DATE_OF_BIRTH = "Data de nascimento";
             public const string DURATION = "Duração";
             public const string DOCUMENT = "Documento";
+
+            // I
+            public const string INSTITUTION = "Instituição";
 
             // L
             public const string LANGUANGE = "Língua";
@@ -45,6 +49,9 @@
             // O
             public const string ORAL_LEVEL = "Nível oral";
 
+            // P
+            public const string PROFESSIONAL_EXPERIENCE = "Experiência profissional";
+            public const string PROFESSIONAL_COMPETENCE = "Habilitações profissionais";
 
             // S
             public const string SERVICE = "Serviço";
@@ -87,10 +94,9 @@
             public const string FATHER = "Pai";
             public const string FINANTIAL_IDENTITY = "Nif";
             public const string FILE = "Ficheiro";
-            public const string PROFESSIONAL_EXPERIENCE = "Experiência profissional";
-            public const string PROFESSIONAL_COMPETENCE = "Habilitações profissionais";
 
-            public const string INSTITUTION = "Instituição";
+
+
 
 
 
@@ -111,6 +117,7 @@
             public const string INVALID_DURATION = "Duração inválida";
             public const string EXISTING_PROFESSIONAL_EXPERIENCE = "A experiência profissional já se encontra registada";
             public const string EXISTING_PROFESSIONAL_COMPETENCE = "A habilitação profissional já se encontra registada";
+            public const string EXISTING_EDUCATION = "A educação já se encontra registada";
             public const string UNDECLARED_ERROR = "Ocorreu um erro ao preencher o formulário.";
         }
 

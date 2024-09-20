@@ -1,43 +1,98 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Education.School.Entity;
 using PortalEquador.Data.Education.University.Entity;
 using PortalEquador.Data.Generic;
 using PortalEquador.Domain.Education.School.Repository;
 using PortalEquador.Domain.Education.School.ViewModels;
 using PortalEquador.Domain.Education.University.Repository;
+using PortalEquador.Domain.Languages.ViewModels;
+using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Data.Education.School.Repository
 {
     public class SchoolRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor) : GenericRepository<SchoolEntity>(context, httpContextAccessor), ISchoolRepository
     {
-        Task<List<SchoolDetailViewModel>> ISchoolRepository.GetAll(int personalInformationId)
+        public async Task<List<SchoolDetailViewModel>> GetAll(int personalInformationId)
         {
-            throw new NotImplementedException();
+            var result = await context.SchoolEntity
+                .Include(d => d.InstitutionGroupItemEntity)
+                .Include(d => d.MajorGroupItemEntity)
+                .Include(d => d.DegreeGroupItemEntity)
+                .Include(d => d.PersonalInformationEntity)
+                .Where(item => item.PersonalInformationId == personalInformationId)
+                .ToListAsync();
+
+            return mapper.Map<List<SchoolDetailViewModel>>(result);
         }
 
-        Task<SchoolViewModel> ISchoolRepository.GetCreateModel(int personalInformationId, string fullName)
+        public async Task<SchoolViewModel> GetCreateModel(int personalInformationId, string fullName)
         {
-            throw new NotImplementedException();
+            var institutions = GroupItems(Groups.SCHOOLS);
+            var courses = GroupItems(Groups.SCHOOL_COURSES);
+            var degrees = GroupItems(Groups.SCHOOL_DEGREES);
+
+            var model = new SchoolViewModel
+            {
+                PersonaInformationId = personalInformationId,
+                FullName = fullName,
+                Institutions = institutions,
+                Majors = courses,
+                Degrees = degrees,
+            };
+
+            return model;
         }
 
-        Task<SchoolViewModel> ISchoolRepository.GetCreateModel(SchoolViewModel model)
+        public async Task<SchoolViewModel> GetCreateModel(SchoolViewModel model)
         {
-            throw new NotImplementedException();
+            var institutions = GroupItems(Groups.SCHOOLS);
+            var courses = GroupItems(Groups.SCHOOL_COURSES);
+            var degrees = GroupItems(Groups.SCHOOL_DEGREES);
+
+            model.Institutions = institutions;
+            model.Majors = courses;
+            model.Degrees = degrees;
+
+            return model;
         }
 
-        Task<SchoolViewModel> ISchoolRepository.GetSchool(int id)
+        public async Task<SchoolViewModel> GetSchool(int id)
         {
-            throw new NotImplementedException();
+            var result = await context.SchoolEntity
+                            .Include(d => d.InstitutionGroupItemEntity)
+                            .Include(d => d.MajorGroupItemEntity)
+                            .Include(d => d.DegreeGroupItemEntity)
+                            .Include(d => d.PersonalInformationEntity)
+                            .Where(item => item.Id == id)
+                            .FirstOrDefaultAsync();
+
+            return mapper.Map<SchoolViewModel>(result);
         }
 
-        Task ISchoolRepository.Save(SchoolViewModel model)
+        public async Task Save(SchoolViewModel model)
         {
-            throw new NotImplementedException();
+            var entity = mapper.Map<SchoolEntity>(model);
+            entity.EditorId = GetCurrentUserId();
+
+            if (model.Id == 0)
+            {
+                await AddAsync(entity);
+            }
+            else
+            {
+                entity.DateModified = DateTime.UtcNow;
+                await UpdateAsync(entity);
+            }
         }
 
-        Task<bool> ISchoolRepository.SchoolExists(int personalInformationId, int universityId)
+        public async Task<bool> SchoolExists(int personalInformationId, int institutionId, int courseId)
         {
-            throw new NotImplementedException();
+            return await context.SchoolEntity.AnyAsync(
+                item => item.PersonalInformationId == personalInformationId 
+                & item.InstitutionId == institutionId
+                 & item.MajorId == courseId
+                );
         }
     }
 }

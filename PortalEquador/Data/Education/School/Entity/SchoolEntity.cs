@@ -17,11 +17,16 @@ namespace PortalEquador.Data.Education.School.Entity
         [ForeignKey("InstitutionId")]
         public GroupItemEntity InstitutionGroupItemEntity { get; set; }
 
+        public int MajorId { get; set; }
+
+        [ForeignKey("MajorId")]
+        public GroupItemEntity MajorGroupItemEntity { get; set; }
+
+
         public int DegreeId { get; set; }
 
         [ForeignKey("DegreeId")]
         public GroupItemEntity DegreeGroupItemEntity { get; set; }
 
-        public string? Major { get; set; }
     }
 }
