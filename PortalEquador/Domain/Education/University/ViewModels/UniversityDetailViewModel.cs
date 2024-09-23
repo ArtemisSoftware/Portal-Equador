@@ -15,5 +15,8 @@ namespace PortalEquador.Domain.Education.University.ViewModels
 
         [Display(Name = StringConstants.Display.DEGREE)]
         public GroupItemViewModel Degree { get; set; }
+
+        [Display(Name = StringConstants.Display.COURSE)]
+        public GroupItemViewModel Major { get; set; }
     }
 }

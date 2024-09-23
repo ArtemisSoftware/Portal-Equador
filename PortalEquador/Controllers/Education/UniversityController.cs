@@ -1,101 +1,73 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using PortalEquador.Data;
-using PortalEquador.Data.Education.University.Entity;
+﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.Education.University.Repository;
+using PortalEquador.Domain.Education.University.ViewModels;
 using PortalEquador.Domain.Languages.Repository;
+using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.Education
 {
     public class UniversityController(IUniversityRepository repository) : Controller
     {
-        /*
+
         // GET: University
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int identifier, string fullName)
         {
-            var applicationDbContext = _context.UniversityEntity.Include(u => u.ApplicationUserEntity).Include(u => u.DegreeGroupItemEntity).Include(u => u.InstitutionGroupItemEntity).Include(u => u.MajorGroupItemEntity).Include(u => u.PersonalInformationEntity);
-            return View(await applicationDbContext.ToListAsync());
+            ViewData["identifier"] = identifier;
+            ViewData["username"] = fullName;
+
+            var models = await repository.GetAll(identifier);
+            return View(models);
         }
 
         // GET: University/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Create(int identifier, string fullName)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var universityEntity = await _context.UniversityEntity
-                .Include(u => u.ApplicationUserEntity)
-                .Include(u => u.DegreeGroupItemEntity)
-                .Include(u => u.InstitutionGroupItemEntity)
-                .Include(u => u.MajorGroupItemEntity)
-                .Include(u => u.PersonalInformationEntity)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (universityEntity == null)
-            {
-                return NotFound();
-            }
-
-            return View(universityEntity);
+            var model = await repository.GetCreateModel(identifier, fullName);
+            return View(model);
         }
 
         // GET: University/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(UniversityViewModel model)
         {
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["DegreeId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
-            ViewData["InstitutionId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
-            ViewData["MajorId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id");
-            return View();
+            var exists = await repository.UniversityExists(model.PersonaInformationId, model.InstitutionId, model.MajorId);
+            if (exists)
+            {
+                ModelState.AddModelError(nameof(model.Error), StringConstants.Error.EXISTING_EDUCATION);
+                model.Error = StringConstants.Error.EXISTING_EDUCATION;
+            }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    await repository.Save(model);
+                    return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+                }
+            }
+
+            ViewData["id"] = model.Id;
+            model = await RecoverModel(model);
+            return View(model);
+
         }
 
-        // POST: University/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PersonalInformationId,InstitutionId,DegreeId,MajorId,Id,EditorId,DateCreated,DateModified")] UniversityEntity universityEntity)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(universityEntity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", universityEntity.EditorId);
-            ViewData["DegreeId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", universityEntity.DegreeId);
-            ViewData["InstitutionId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", universityEntity.InstitutionId);
-            ViewData["MajorId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", universityEntity.MajorId);
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", universityEntity.PersonalInformationId);
-            return View(universityEntity);
-        }
 
         // GET: University/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id, int identifier, string fullName)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            ViewData["identifier"] = identifier;
+            ViewData["username"] = fullName;
 
-            var universityEntity = await _context.UniversityEntity.FindAsync(id);
-            if (universityEntity == null)
+            var model = await repository.GetUniversity((int)id);
+            model = await RecoverModel(model);
+
+            if (model == null)
             {
                 return NotFound();
             }
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", universityEntity.EditorId);
-            ViewData["DegreeId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", universityEntity.DegreeId);
-            ViewData["InstitutionId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", universityEntity.InstitutionId);
-            ViewData["MajorId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", universityEntity.MajorId);
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", universityEntity.PersonalInformationId);
-            return View(universityEntity);
+            else
+            {
+                return View(model);
+            }
         }
 
         // POST: University/Edit/5
@@ -103,83 +75,33 @@ namespace PortalEquador.Controllers.Education
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PersonalInformationId,InstitutionId,DegreeId,MajorId,Id,EditorId,DateCreated,DateModified")] UniversityEntity universityEntity)
+        public async Task<IActionResult> Edit(int identifier, string fullName, UniversityViewModel model)
         {
-            if (id != universityEntity.Id)
-            {
-                return NotFound();
-            }
+            ViewData["identifier"] = identifier;
+            ViewData["username"] = fullName;
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(universityEntity);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!UniversityEntityExists(universityEntity.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                await repository.Save(model);
+                return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
             }
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", universityEntity.EditorId);
-            ViewData["DegreeId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", universityEntity.DegreeId);
-            ViewData["InstitutionId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", universityEntity.InstitutionId);
-            ViewData["MajorId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", universityEntity.MajorId);
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", universityEntity.PersonalInformationId);
-            return View(universityEntity);
+            return View(model);
         }
 
-        // GET: University/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var universityEntity = await _context.UniversityEntity
-                .Include(u => u.ApplicationUserEntity)
-                .Include(u => u.DegreeGroupItemEntity)
-                .Include(u => u.InstitutionGroupItemEntity)
-                .Include(u => u.MajorGroupItemEntity)
-                .Include(u => u.PersonalInformationEntity)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (universityEntity == null)
-            {
-                return NotFound();
-            }
-
-            return View(universityEntity);
-        }
-
-        // POST: University/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteEducation")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteEducation(int id, int identifier, string username)
         {
-            var universityEntity = await _context.UniversityEntity.FindAsync(id);
-            if (universityEntity != null)
-            {
-                _context.UniversityEntity.Remove(universityEntity);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            await repository.DeleteAsync(id);
+            return RedirectToAction(nameof(Index), new { identifier = identifier, fullName = username });
         }
 
-        private bool UniversityEntityExists(int id)
+
+        private async Task<UniversityViewModel> RecoverModel(UniversityViewModel model)
         {
-            return _context.UniversityEntity.Any(e => e.Id == id);
+            return await repository.GetCreateModel(model);
         }
-        */
+
     }
 }

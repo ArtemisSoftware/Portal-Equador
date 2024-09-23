@@ -11,7 +11,7 @@ namespace PortalEquador.Domain.Education.University.Repository
         Task<UniversityViewModel> GetCreateModel(int personalInformationId, string fullName);
         Task<UniversityViewModel> GetCreateModel(UniversityViewModel model);
         Task Save(UniversityViewModel model);
-        Task<bool> UniversityExists(int personalInformationId, int universityId);
+        Task<bool> UniversityExists(int personalInformationId, int institutionId, int majorId);
         Task<UniversityViewModel> GetUniversity(int id);
     }
 }
