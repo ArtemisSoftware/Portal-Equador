@@ -11,8 +11,8 @@ namespace PortalEquador.Controllers.Education
         // GET: School
         public async Task<IActionResult> Index(int identifier, string fullName)
         {
-            ViewData["identifier"] = identifier;
-            ViewData["username"] = fullName;
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
 
             var models = await repository.GetAll(identifier);
             return View(models);
@@ -32,7 +32,7 @@ namespace PortalEquador.Controllers.Education
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SchoolViewModel model)
         {
-            var exists = await repository.SchoolExists(model.PersonaInformationId, model.InstitutionId, model.MajorId);
+            var exists = await repository.SchoolExists(model.PersonaInformationId, model.InstitutionId, model.MajorId, model.DegreeId);
             if (exists)
             {
                 ModelState.AddModelError(nameof(model.Error), StringConstants.Error.EXISTING_EDUCATION);
@@ -57,10 +57,10 @@ namespace PortalEquador.Controllers.Education
         // GET: School/Edit/5
         public async Task<IActionResult> Edit(int id, int identifier, string fullName)
         {
-            ViewData["identifier"] = identifier;
-            ViewData["username"] = fullName;
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
 
-            var model = await repository.GetSchool((int)id);
+            var model = await repository.GetSchool(id);
             model = await RecoverModel(model);
 
             if (model == null)
@@ -80,14 +80,28 @@ namespace PortalEquador.Controllers.Education
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int identifier, string fullName, SchoolViewModel model)
         {
-            ViewData["identifier"] = identifier;
-            ViewData["username"] = fullName;
+            ViewData[ViewBagConstants.PERSONAL_ID] = model.PersonaInformationId;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
 
-            if (ModelState.IsValid)
+            var exists = await repository.SchoolExists(model.PersonaInformationId, model.InstitutionId, model.MajorId, model.DegreeId);
+            if (exists)
             {
-                await repository.Save(model);
-                return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+               model = await RecoverModelForEdit(model, fullName);
+                ModelState.AddModelError(nameof(model.Error), StringConstants.Error.EXISTING_EDUCATION);
+                model.Error = StringConstants.Error.EXISTING_EDUCATION;
+                return View(model);
             }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    await repository.Save(model);
+                    return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+                }
+            }
+
+            ViewData["id"] = model.Id;
+            model = await RecoverModel(model);
             return View(model);
         }
 
@@ -104,6 +118,14 @@ namespace PortalEquador.Controllers.Education
         private async Task<SchoolViewModel> RecoverModel(SchoolViewModel model)
         {
             return await repository.GetCreateModel(model);
+        }
+
+        private async Task<SchoolViewModel> RecoverModelForEdit(SchoolViewModel model, string fullName)
+        {
+            model = await repository.GetSchool(model.Id);
+            model = await RecoverModel(model);
+            model.FullName = fullName;
+            return model;
         }
 
 

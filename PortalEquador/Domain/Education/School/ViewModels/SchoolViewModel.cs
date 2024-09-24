@@ -36,9 +36,12 @@ namespace PortalEquador.Domain.Education.School.ViewModels
 
         [Display(Name = StringConstants.Display.COURSE)]
         [Required]
-        public int MajorId { get; set; }
+        public int? MajorId { get; set; }
 
         public SelectList? Majors { get; set; }
+
+        [Display(Name = StringConstants.Display.MAJOR_UNVAILABLE)]
+        public bool MajorNotDeclared { get; set; } = false;
 
 
         [Display(Name = StringConstants.Display.DEGREE)]

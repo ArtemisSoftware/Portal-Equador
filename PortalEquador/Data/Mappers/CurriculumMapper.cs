@@ -107,7 +107,8 @@ namespace PortalEquador.Data.Mappers
             CreateMap<SchoolEntity, SchoolViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
-                // 
+                 .ForMember(dest => dest.Major, opt => opt.MapFrom(src => src.MajorGroupItemEntity))
+                 .ForMember(dest => dest.Institution, opt => opt.MapFrom(src => src.InstitutionGroupItemEntity))
                 .ReverseMap();
 
             CreateMap<SchoolEntity, SchoolDetailViewModel>()

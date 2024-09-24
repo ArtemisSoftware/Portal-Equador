@@ -6,6 +6,7 @@
 
 <br />
 <h1>Criar Novo Registo</h1>
+<h4>Educação escolar</h4>
 <hr />
 <br />
 <div class="row">
@@ -22,9 +23,16 @@
             </div>
             <br />
 
-            <div class="form-group">
+            <div class="form-group" id="Major">
                 <label asp-for="MajorId" class="control-label"></label>
                 <select asp-for="MajorId" class="form-select" asp-items="Model.Majors"></select>
+            </div>
+            <br />
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="MajorNotDeclared" onChange="MajorSelect()" id="MajorNotDeclaredId" /> @Html.DisplayNameFor(model => model.MajorNotDeclared)
+                </label>
             </div>
             <br />
 
@@ -51,4 +59,16 @@
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+
+        function MajorSelect() {
+
+            var response = document.getElementById('MajorNotDeclaredId').checked;
+            var major = document.getElementById('Major');
+            major.hidden = response;
+        }
+    </script>
+}
 

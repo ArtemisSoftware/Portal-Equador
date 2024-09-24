@@ -7,7 +7,7 @@
 <div class="row align-items-center">
     <div class="col-md-10">
         <h1>@ViewBag.username</h1>
-        <h3>Linguas</h3>
+        <h3>Educação escolar</h3>
         <p>
             <a asp-controller="School" asp-action="Create" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
         </p>
@@ -47,7 +47,7 @@
             </td>
             <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
-                    <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username"><i class="fas fa-trash-alt" title="Editar"></i></button>
+                    <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username"><i class="fas fa-trash-alt" title="Eliminar"></i></button>
 
             </td>
         </tr>
@@ -85,7 +85,7 @@
                         $('#id').val(id);
                         $('#identifier').val(identifier);
                         $('#username').val(username);
-                        $('#deleteLanguage').submit();
+                        $('#deleteEducation').submit();
 
                     }
                 });

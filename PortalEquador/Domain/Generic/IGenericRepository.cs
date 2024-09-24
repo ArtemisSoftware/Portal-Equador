@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using PortalEquador.Data.Generic;
 
 namespace PortalEquador.Domain.Generic
 {
@@ -10,6 +11,6 @@ namespace PortalEquador.Domain.Generic
         Task<bool> Exists(int id);
         Task DeleteAsync(int id);
         Task UpdateAsync(T entity);
-        SelectList GroupItems(int groupId);
+        SelectList GroupItems(int groupId, OrderType orderType);
     }
 }

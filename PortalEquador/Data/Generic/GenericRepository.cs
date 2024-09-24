@@ -67,9 +67,23 @@ namespace PortalEquador.Data.Generic
             await context.SaveChangesAsync();
         }
 
-        public SelectList GroupItems(int groupId)
+        public SelectList GroupItems(int groupId, OrderType orderType = OrderType.No_order)
         {
             var result = context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true);
+
+            switch (orderType)
+            {
+                case OrderType.No_order:
+                    break;
+
+                case OrderType.Alphabetic:
+                    result = result.OrderBy(x => x.Description);
+                    break;
+
+                default:
+                break;
+            }
+
             return new SelectList(result, "Id", "Description");
         }
 

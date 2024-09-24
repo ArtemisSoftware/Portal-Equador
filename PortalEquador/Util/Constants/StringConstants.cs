@@ -39,6 +39,7 @@
             public const string LICENCE_PLATE = "Matricula";
 
             // M
+            public const string MAJOR_UNVAILABLE = "Curso não disponível";
             public const string MATERNAL_LANGUANGE = "Língua materna";
             public const string MECHANIC = "Mecânico";
             public const string MODEL = "Modelo";

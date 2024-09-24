@@ -67,6 +67,18 @@ namespace PortalEquador.Data.Curriculum.Repository
                         on personal.Id equals professionalExperienceCount.PersonalInformationId into resultProfessionalExperience
                         from resultProfessionalExperiences in resultProfessionalExperience.DefaultIfEmpty()
 
+                        join schoolCount in
+                            (from school in context.SchoolEntity
+                             where school.PersonalInformationId == id
+                             select school).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                Count = grouped.Count()
+                            })
+                        on personal.Id equals schoolCount.PersonalInformationId into resultSchool
+                        from resultSchools in resultSchool.DefaultIfEmpty()
+
                         where personal.Id == id
 
                         select new CurriculumDashboardViewModel
@@ -78,6 +90,7 @@ namespace PortalEquador.Data.Curriculum.Repository
                             TotalDocuments = resultDocuments.OrderDetailCount == null ? 0 : resultDocuments.OrderDetailCount,
                             TotalProfessionalCompetences = resultProfessionalCompetences.ProfessionalCompetenceCount == null ? 0 : resultProfessionalCompetences.ProfessionalCompetenceCount,
                             TotalProfessionalExperiences = resultProfessionalExperiences.Count == null ? 0 : resultProfessionalExperiences.Count,
+                            TotalSchoolEducation = resultSchools.Count == null ? 0 : resultSchools.Count,
                             ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, id)
                         };
             return await query.FirstOrDefaultAsync();

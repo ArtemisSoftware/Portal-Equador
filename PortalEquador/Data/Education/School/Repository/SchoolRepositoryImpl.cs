@@ -28,8 +28,8 @@ namespace PortalEquador.Data.Education.School.Repository
 
         public async Task<SchoolViewModel> GetCreateModel(int personalInformationId, string fullName)
         {
-            var institutions = GroupItems(Groups.SCHOOLS);
-            var courses = GroupItems(Groups.SCHOOL_COURSES);
+            var institutions = GroupItems(Groups.SCHOOLS, OrderType.Alphabetic);
+            var courses = GroupItems(Groups.SCHOOL_COURSES, OrderType.Alphabetic);
             var degrees = GroupItems(Groups.SCHOOL_DEGREES);
 
             var model = new SchoolViewModel
@@ -46,8 +46,8 @@ namespace PortalEquador.Data.Education.School.Repository
 
         public async Task<SchoolViewModel> GetCreateModel(SchoolViewModel model)
         {
-            var institutions = GroupItems(Groups.SCHOOLS);
-            var courses = GroupItems(Groups.SCHOOL_COURSES);
+            var institutions = GroupItems(Groups.SCHOOLS, OrderType.Alphabetic);
+            var courses = GroupItems(Groups.SCHOOL_COURSES, OrderType.Alphabetic);
             var degrees = GroupItems(Groups.SCHOOL_DEGREES);
 
             model.Institutions = institutions;
@@ -67,13 +67,26 @@ namespace PortalEquador.Data.Education.School.Repository
                             .Where(item => item.Id == id)
                             .FirstOrDefaultAsync();
 
-            return mapper.Map<SchoolViewModel>(result);
+            var resultMapped = mapper.Map<SchoolViewModel>(result);
+
+            if(result.MajorId == null)
+            {
+                resultMapped.MajorNotDeclared = true;
+            }
+
+            return resultMapped;
         }
 
         public async Task Save(SchoolViewModel model)
         {
             var entity = mapper.Map<SchoolEntity>(model);
             entity.EditorId = GetCurrentUserId();
+
+            if(model.MajorNotDeclared)
+            {
+                entity.MajorId = null;
+                entity.MajorGroupItemEntity = null;
+            }
 
             if (model.Id == 0)
             {
@@ -86,12 +99,13 @@ namespace PortalEquador.Data.Education.School.Repository
             }
         }
 
-        public async Task<bool> SchoolExists(int personalInformationId, int institutionId, int courseId)
+        public async Task<bool> SchoolExists(int personalInformationId, int institutionId, int? majorId, int degreeId)
         {
             return await context.SchoolEntity.AnyAsync(
                 item => item.PersonalInformationId == personalInformationId 
                 & item.InstitutionId == institutionId
-                 & item.MajorId == courseId
+                & item.MajorId == majorId
+                 & item.DegreeId == degreeId
                 );
         }
     }
