@@ -1,37 +1,86 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.DriversLicence.Entity;
+using PortalEquador.Data.Education.School.Entity;
 using PortalEquador.Data.Generic;
 using PortalEquador.Domain.DriversLicence.Repository;
 using PortalEquador.Domain.DriversLicence.ViewModels;
 using PortalEquador.Domain.Languages.Repository;
+using static PortalEquador.Util.Constants.GroupTypesConstants;
+using static PortalEquador.Util.Constants.GroupTypesConstants.ItemFromGroup;
 
 namespace PortalEquador.Data.DriversLicence.Repository
 {
     public class DriversLicenceRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor) : GenericRepository<DriversLicenceEntity>(context, httpContextAccessor), IDriversLicenceRepository
     {
-        Task<List<DriversLicenceDetailViewModel>> IDriversLicenceRepository.GetAll(int personalInformationId)
+        public async Task<List<DriversLicenceDetailViewModel>> GetAll(int personalInformationId)
         {
-            throw new NotImplementedException();
+            var result = await context.DriversLicenceEntity
+                           .Include(item => item.LicenceTypeGroupItemEntity)
+                           .Include(item => item.PersonalInformationEntity)
+                            .Where(item => item.PersonalInformationId == personalInformationId)
+                            .ToListAsync();
+
+            return mapper.Map< List<DriversLicenceDetailViewModel>>(result);
         }
 
-        Task<DriversLicenceViewModel> IDriversLicenceRepository.GetCreateModel(int personalInformationId, string fullName)
+        public async Task<DriversLicenceViewModel> GetCreateModel(int personalInformationId, string fullName)
         {
-            throw new NotImplementedException();
+            List<int> documentsId = Documents.GetDriversLicenceDocuments(); 
+
+            var licenceTypes = GroupItems(Groups.DRIVERS_LICENCE);
+
+            return new DriversLicenceViewModel
+            {
+                LicenceTypes = licenceTypes,
+                PersonaInformationId = personalInformationId,
+                FullName = fullName,
+                //Documents = documents,
+                //DriverLicenceDocumentId = driverLicenceDocumentId
+            };
         }
 
-        Task<DriversLicenceViewModel> IDriversLicenceRepository.GetCreateModel(DriversLicenceViewModel model)
+        public async Task<DriversLicenceViewModel> GetCreateModel(DriversLicenceViewModel model)
         {
-            throw new NotImplementedException();
+            var licenceTypes = GroupItems(Groups.DRIVERS_LICENCE);
+
+            model.LicenceTypes = licenceTypes;
+            return model;
         }
 
-        Task<DriversLicenceDetailViewModel> IDriversLicenceRepository.GetDriversLicence(int id)
+        public async Task<DriversLicenceDetailViewModel> GetDriversLicence(int id)
         {
-            throw new NotImplementedException();
+            var result = await context.DriversLicenceEntity
+                          .Include(item => item.LicenceTypeGroupItemEntity)
+                          .Include(item => item.PersonalInformationEntity)
+                            .Where(item => item.Id == id)
+                            .FirstOrDefaultAsync();
+
+            return mapper.Map<DriversLicenceDetailViewModel>(result);
         }
 
-        Task IDriversLicenceRepository.Save(DriversLicenceViewModel model)
+        public async Task<bool> LicenceExists(int personalInformationId, int licenceTypeId)
         {
-            throw new NotImplementedException();
+            return await context.DriversLicenceEntity.AnyAsync(
+                item => item.PersonalInformationId == personalInformationId
+                & item.LicenceTypeId == licenceTypeId
+                );
+        }
+
+        public async Task Save(DriversLicenceViewModel model)
+        {
+            var entity = mapper.Map<DriversLicenceEntity>(model);
+            entity.EditorId = GetCurrentUserId();
+
+            if (model.Id == 0)
+            {
+                await AddAsync(entity);
+            }
+            else
+            {
+                entity.DateModified = DateTime.UtcNow;
+                await UpdateAsync(entity);
+            }
         }
     }
 }

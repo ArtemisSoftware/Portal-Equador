@@ -119,6 +119,7 @@
             public const string EXISTING_PROFESSIONAL_COMPETENCE = "A habilitação profissional já se encontra registada";
             public const string EXISTING_EDUCATION = "A educação já se encontra registada";
             public const string UNDECLARED_ERROR = "Ocorreu um erro ao preencher o formulário.";
+            public const string EXISTING_DRIVERS_LICENCE = "A carta de condução já se encontra registada";
         }
 
         public static class Dates

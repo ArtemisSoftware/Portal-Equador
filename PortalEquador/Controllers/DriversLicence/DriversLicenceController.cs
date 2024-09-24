@@ -1,93 +1,94 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using PortalEquador.Data;
-using PortalEquador.Data.DriversLicence.Entity;
+﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.DriversLicence.Repository;
-using PortalEquador.Domain.Languages.Repository;
+using PortalEquador.Domain.DriversLicence.UseCases;
+using PortalEquador.Domain.DriversLicence.ViewModels;
+using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.DriversLicence
 {
-    public class DriversLicenceController(IDriversLicenceRepository repository) : Controller
+    public class DriversLicenceController(
+        IDriversLicenceRepository repository,
+        SaveDriversLicenceUseCase saveDriversLicenceUseCase,
+        RenewProvisionalUseCase renewProvisionalUseCase,
+        RenewDriversLicenceUseCase renewDriversLicenceUseCase,
+        GetDriversLicenceDetailUseCase getDriversLicenceDetailUseCase
+     ) : Controller
     {
-        /*
+
         // GET: DriversLicence
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int identifier, string fullName)
         {
-            var applicationDbContext = _context.DriversLicenceEntity.Include(d => d.ApplicationUserEntity).Include(d => d.LicenceTypeGroupItemEntity).Include(d => d.PersonalInformationEntity);
-            return View(await applicationDbContext.ToListAsync());
+            ViewData["identifier"] = identifier;
+            ViewData["username"] = fullName;
+
+            var models = await repository.GetAll(identifier);
+            return View(models);
         }
 
-        // GET: DriversLicence/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var driversLicenceEntity = await _context.DriversLicenceEntity
-                .Include(d => d.ApplicationUserEntity)
-                .Include(d => d.LicenceTypeGroupItemEntity)
-                .Include(d => d.PersonalInformationEntity)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (driversLicenceEntity == null)
-            {
-                return NotFound();
-            }
-
-            return View(driversLicenceEntity);
-        }
 
         // GET: DriversLicence/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int identifier, string fullName)
         {
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["LicenceTypeId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id");
-            return View();
+            var model = await repository.GetCreateModel(identifier, fullName);
+            return View(model);
         }
-
+        
         // POST: DriversLicence/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PersonalInformationId,LicenceTypeId,ExpirationDate,ProvisionalRenewalNumber,ProvisionalExpirationDate,Id,EditorId,DateCreated,DateModified")] DriversLicenceEntity driversLicenceEntity)
+        public async Task<IActionResult> Create(DriversLicenceViewModel model)
         {
-            if (ModelState.IsValid)
+            var exists = await repository.LicenceExists(model.PersonaInformationId, model.LicenceId);
+            if (exists)
             {
-                _context.Add(driversLicenceEntity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(nameof(model.Error), StringConstants.Error.EXISTING_DRIVERS_LICENCE);
+                model.Error = StringConstants.Error.EXISTING_DRIVERS_LICENCE;
             }
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", driversLicenceEntity.EditorId);
-            ViewData["LicenceTypeId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", driversLicenceEntity.LicenceTypeId);
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", driversLicenceEntity.PersonalInformationId);
-            return View(driversLicenceEntity);
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    await saveDriversLicenceUseCase.Invoke(model);
+                    return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+                }
+            }
+
+            ViewData["id"] = model.Id;
+            model = await RecoverModel(model);
+            return View(model);
+        }
+
+
+/*
+
+        // GET: DriversLicence/Details/5
+        public async Task<IActionResult> Details(int identifier)
+        {
+            var model = await _getDriversLicenceDetailModelUseCase.Invoke(identifier);
+            return View(model);
+        }
+
+
+
+
+
+
+        // GET: DriversLicence/Details/5
+        public async Task<IActionResult> Details(int identifier)
+        {
+            var model = await _getDriversLicenceDetailModelUseCase.Invoke(identifier);
+            return View(model);
         }
 
         // GET: DriversLicence/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int identifier)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var driversLicenceEntity = await _context.DriversLicenceEntity.FindAsync(id);
-            if (driversLicenceEntity == null)
-            {
-                return NotFound();
-            }
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", driversLicenceEntity.EditorId);
-            ViewData["LicenceTypeId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", driversLicenceEntity.LicenceTypeId);
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", driversLicenceEntity.PersonalInformationId);
-            return View(driversLicenceEntity);
+            var model = await _getDriversLicenceUseCase.Invoke(identifier);
+            model = await RecoverModel(model);
+            return View(model);
         }
 
         // POST: DriversLicence/Edit/5
@@ -95,79 +96,84 @@ namespace PortalEquador.Controllers.DriversLicence
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PersonalInformationId,LicenceTypeId,ExpirationDate,ProvisionalRenewalNumber,ProvisionalExpirationDate,Id,EditorId,DateCreated,DateModified")] DriversLicenceEntity driversLicenceEntity)
+        public async Task<IActionResult> Edit(DriversLicenceViewModel_Finak model)
         {
-            if (id != driversLicenceEntity.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(driversLicenceEntity);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DriversLicenceEntityExists(driversLicenceEntity.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", driversLicenceEntity.EditorId);
-            ViewData["LicenceTypeId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", driversLicenceEntity.LicenceTypeId);
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", driversLicenceEntity.PersonalInformationId);
-            return View(driversLicenceEntity);
+            //model = await RecoverModel(model);
+            await _saveDriversLicenceUseCase.Invoke(model, OperationType.Update);
+            return RedirectToAction(StringConstants.Controller.Action.Dashboard, StringConstants.Controller.Curriculums, new { identifier = model.PersonaInformationId });
         }
 
-        // GET: DriversLicence/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: DriversLicence
+        public async Task<IActionResult> Index()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var driversLicenceEntity = await _context.DriversLicenceEntity
-                .Include(d => d.ApplicationUserEntity)
-                .Include(d => d.LicenceTypeGroupItemEntity)
-                .Include(d => d.PersonalInformationEntity)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (driversLicenceEntity == null)
-            {
-                return NotFound();
-            }
-
-            return View(driversLicenceEntity);
+            var result = await _getAllDriversLicencesUseCase.Invoke();
+            return View(result);
         }
 
-        // POST: DriversLicence/Delete/5
-        [HttpPost, ActionName("Delete")]
+        // GET: DriversLicence/RenewLicence
+        public async Task<IActionResult> RenewLicence(int identifier)
+        {
+
+            var model = await _getDriversLicenceUseCase.Invoke(identifier);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+            return View(model);
+        }
+
+        // POST: DriversLicence/RenewLicence/5
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> RenewLicence(DriversLicenceViewModel_Finak model)
         {
-            var driversLicenceEntity = await _context.DriversLicenceEntity.FindAsync(id);
-            if (driversLicenceEntity != null)
-            {
-                _context.DriversLicenceEntity.Remove(driversLicenceEntity);
-            }
-
-            await _context.SaveChangesAsync();
+            await _renewDriversLicenceUseCase.Invoke(model);
+            await _deleteDocumentUseCase.Invoke((int)model.ProvisionalLicenceDocumentId);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DriversLicenceEntityExists(int id)
+
+
+        // GET: DriversLicence/RenewLicence
+        public async Task<IActionResult> RenewProvisional(int identifier)
         {
-            return _context.DriversLicenceEntity.Any(e => e.Id == id);
+
+            var model = await _getDriversLicenceUseCase.Invoke(identifier);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+            return View(model);
         }
-        */
+
+        // POST: DriversLicence/RenewLicence/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RenewProvisional(DriversLicenceViewModel_Finak model)
+        {
+            await _renewProvisionalUseCase.Invoke(model);
+            return RedirectToAction(nameof(Index));
+        }
+
+
+        private async Task<DriversLicenceViewModel_Finak> RecoverModel(DriversLicenceViewModel_Finak model)
+        {
+            var recover = await _getDriversLicenceCreationModelUseCase.Invoke(model.PersonaInformationId);
+            model.LicenceTypes = recover.LicenceTypes;
+            model.PersonalInformation = recover.PersonalInformation;
+            model.Documents = recover.Documents;
+            return model;
+        }
+
+
+*/
+
+        private async Task<DriversLicenceViewModel> RecoverModel(DriversLicenceViewModel model)
+        {
+            return await repository.GetCreateModel(model);
+        }
+
     }
 }

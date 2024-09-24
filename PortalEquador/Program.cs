@@ -17,6 +17,7 @@ using PortalEquador.Data.Profession.Experience.Repository;
 using PortalEquador.Domain.Curriculum.Repository;
 using PortalEquador.Domain.Document.Repository;
 using PortalEquador.Domain.DriversLicence.Repository;
+using PortalEquador.Domain.DriversLicence.UseCases;
 using PortalEquador.Domain.Education.School.Repository;
 using PortalEquador.Domain.Education.University.Repository;
 using PortalEquador.Domain.Generic;
@@ -57,6 +58,13 @@ builder.Services.AddScoped<IProfessionalExperienceRepository, ProfessionalExperi
 builder.Services.AddScoped<IDriversLicenceRepository, DriversLicenceRepositoryImpl>();
 builder.Services.AddScoped<IUniversityRepository, UniversityRepositoryImpl>();
 builder.Services.AddScoped<ISchoolRepository, SchoolRepositoryImpl>();
+
+//Drivers Licence
+builder.Services.AddScoped<IDriversLicenceRepository, DriversLicenceRepositoryImpl>();
+builder.Services.AddScoped<SaveDriversLicenceUseCase>();
+builder.Services.AddScoped<RenewDriversLicenceUseCase>();
+builder.Services.AddScoped<RenewProvisionalUseCase>();
+builder.Services.AddScoped<GetDriversLicenceDetailUseCase> ();
 
 //MechanicalWorkshop
 builder.Services.AddScoped<IMechanicalWorkshopVehicleRepository, MechanicalWorkshopVehicleRepositoryImpl>();

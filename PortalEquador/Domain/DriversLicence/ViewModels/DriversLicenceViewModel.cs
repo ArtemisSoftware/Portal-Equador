@@ -7,6 +7,7 @@ using PortalEquador.Util.Constants;
 using static PortalEquador.Util.Constants.StringConstants;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using PortalEquador.Util;
 
 namespace PortalEquador.Domain.DriversLicence.ViewModels
 {
@@ -29,19 +30,13 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
 
         public SelectList? LicenceTypes { get; set; }
 
+        public bool ExpirationDateAvailable { get { return DriverLicenceUtil.ExpirationDateAvailable(ExpirationDate); } }
+
 
         [Display(Name = StringConstants.Display.FILE)]
         [Required(ErrorMessage = StringConstants.Error.MANDATORY_FILE)]
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
-
-
-
-
-        /*
-        public PersonalInformationViewModel? PersonalInformation { get; set; }
-
-
 
 
 
@@ -52,6 +47,17 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
 
         [Display(Name = StringConstants.Display.PROVISIONAL_UPDATE_NUMBER)]
         public int? ProvisionalRenewalNumber { get; set; }
+
+
+
+        /*
+        public PersonalInformationViewModel? PersonalInformation { get; set; }
+
+
+
+
+
+
 
         public string? StatusDescription
         {
@@ -77,7 +83,7 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
             }
         }
 
-        public bool ExpirationDateAvailable { get { return DriverLicenceUtil.ExpirationDateAvailable(ExpirationDate); } }
+
 
 
         public List<DocumentDetailViewModel>? Documents { get; set; }

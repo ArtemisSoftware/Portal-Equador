@@ -82,11 +82,41 @@ namespace PortalEquador.Data.Document.Repository
 
         }
 
+        private async Task<DocumentViewModel?> GetDocumentByType(int personaInformationId, int documentTypeId)
+        {
+            var result = await context.DocumentEntity
+               .Include(d => d.DocumentTypeGroupItemEntity)
+               .Where(item => item.PersonalInformationId == personaInformationId & item.DocumentTypeId == documentTypeId)
+               .FirstAsync();
+
+            if(result == null)
+            {
+                return null;
+            }
+
+            return mapper.Map<DocumentViewModel>(result);
+
+        }
+
         public async Task DeleteDocument(int personaInformationId, int documentId)
         {
             var model = await GetDocument(documentId);
             ImagesUtil.DeleteImage(hostEnvironment, model);
             await DeleteAsync(documentId);
+        }
+
+        public async Task DeleteDocumentByType(int personaInformationId, int documentTypeId)
+        {
+            var model = await GetDocumentByType(personaInformationId, documentTypeId);
+            if(model == null)
+            {
+                return;
+            } else
+            {
+                ImagesUtil.DeleteImage(hostEnvironment, model);
+                await DeleteAsync(model.Id);
+            }
+          
         }
     }
 }

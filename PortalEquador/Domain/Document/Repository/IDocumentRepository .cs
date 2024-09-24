@@ -14,13 +14,8 @@ namespace PortalEquador.Domain.Document.Repository
 
         Task DeleteDocument(int personaInformationId, int documentTypeId);
         /*
-        
-
+       
         Task<DocumentViewModel> GetDocument(int id);
-
-
-
-        
 
         Task<List<DocumentDetailViewModel>> GetDocumentsDetails(int personalInformationId, List<int> DocumentsGroupIds);
 

@@ -77,8 +77,23 @@ namespace PortalEquador.Util.Constants
             public static class Documents
             {
                 public static readonly int PROFILE_PICTURE = (new Item { Debug = 7, Production = 2 }).Value;
-                //public const int DRIVERS_LICENCE = 7;
-                //public const int PROVISIONAL_DRIVERS_LICENCE = 10;
+                public static readonly int DRIVERS_LICENCE = (new Item { Debug = 7, Production = 2 }).Value;
+                public static readonly int DRIVERS_LICENCE_PROVISIONAL = (new Item { Debug = 7, Production = 2 }).Value;
+             
+
+
+             private static List<int> driversLicenceDocuments = new List<int>();
+
+                static Documents()
+                {
+                    driversLicenceDocuments.Add(DRIVERS_LICENCE);
+                    driversLicenceDocuments.Add(DRIVERS_LICENCE_PROVISIONAL);
+                }
+
+                public static List<int> GetDriversLicenceDocuments()
+                {
+                    return driversLicenceDocuments;
+                }
             }
 
         }

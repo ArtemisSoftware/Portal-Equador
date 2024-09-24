@@ -4,6 +4,8 @@ using PortalEquador.Util.Constants;
 using static PortalEquador.Util.Constants.StringConstants;
 using System.ComponentModel.DataAnnotations;
 using PortalEquador.Domain.GroupTypes.ViewModels;
+using PortalEquador.Util;
+using PortalEquador.Util.Extensions;
 
 namespace PortalEquador.Domain.DriversLicence.ViewModels
 {
@@ -18,9 +20,6 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
         [Display(Name = StringConstants.Display.DRIVERS_LICENCE_TYPE)]
         public required GroupItemViewModel Licence { get; set; }
 
-        /*
-        public int CurriculumId { get; set; }
-
 
 
         [Display(Name = StringConstants.Display.PROVISIONAL_UPDATE_NUMBER)]
@@ -30,12 +29,12 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime? ProvisionalExpirationDate { get; set; }
 
-        public DateTime? DateCreated { get; set; }
+        public List<DocumentViewModel> Documents { get; set; } = new List<DocumentViewModel>();
 
-        public DateTime? DateModified { get; set; }
+
 
         [Display(Name = StringConstants.Display.STATE)]
-        public LicenceStatus? Status { get; set; }
+        public LicenceStatusType? Status { get; set; }
 
         public string? StatusDescription
         {
@@ -52,7 +51,6 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
             }
         }
 
-        public List<DocumentViewModel> Documents { get; set; } = new List<DocumentViewModel>();
-        */
+      
     }
 }
