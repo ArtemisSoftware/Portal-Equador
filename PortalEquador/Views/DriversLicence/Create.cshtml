@@ -44,9 +44,20 @@
             </div>
 
             <br />
+            @if (Model.Error != null)
+            {
+                <div class="form-group">
+                    <div class="alert alert-danger" role="alert">
+                        <span asp-validation-for="Error"></span>
+                    </div>
+                </div>
+                <br />
+            }
+
+            <br />
             <br />
             <div class="form-group">
-                <a asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <a asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-dark">Regressar ao index</a> &nbsp;
                 <input type="submit" value="Criar registo" class="btn btn-primary" />
             </div>
         </form>

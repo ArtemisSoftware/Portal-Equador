@@ -8,11 +8,13 @@ using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Domain.GroupTypes.Repository;
 using PortalEquador.Domain.PersonalInformation.Repository;
 using PortalEquador.Util;
+using PortalEquador.Util.EnumTypes;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Data.Document.Repository
 {
-    public class DocumentRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment hostEnvironment) : GenericRepository<DocumentEntity>(context, httpContextAccessor), IDocumentRepository
+    public class DocumentRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment hostEnvironment)
+        : GenericRepository<DocumentEntity>(context, httpContextAccessor), IDocumentRepository
     {
         public async Task<List<DocumentDetailViewModel>> GetAllDocuments(int PersonalInformationId)
         {
@@ -23,6 +25,18 @@ namespace PortalEquador.Data.Document.Repository
                 .ToListAsync();
 
             return mapper.Map<List<DocumentDetailViewModel>>(result);
+        }
+
+        public async Task<List<DocumentViewModel>> GetDocumentByParentId(int id, List<int> documentTypeIds)
+        {
+            var result = await context.DocumentEntity
+               .Include(d => d.DocumentTypeGroupItemEntity)
+               .Include(d => d.SubTypeGroupItemEntity)
+               .Where(item => item.ParentId == id &&  documentTypeIds.Contains(item.DocumentTypeId))
+               .ToListAsync();
+
+            return mapper.Map< List<DocumentViewModel>>(result);
+
         }
 
         public async Task<DocumentViewModel> GetCreateModel(DocumentViewModel model)
@@ -55,6 +69,26 @@ namespace PortalEquador.Data.Document.Repository
         {
             var extension = Path.GetExtension(model.ImageFile.FileName);
             var operationType = await ImagesUtil.SaveImage(hostEnvironment, model);
+
+            var entity = mapper.Map<DocumentEntity>(model);
+            entity.Extension = extension;
+            entity.EditorId = GetCurrentUserId();
+
+            if (model.Id == 0)
+            {
+                await AddAsync(entity);
+            }
+            else
+            {
+                entity.DateModified = DateTime.UtcNow;
+                await UpdateAsync(entity);
+            }
+        }
+
+        public async Task Save(DocumentViewModel model, FolderType folder)
+        {
+            var extension = Path.GetExtension(model.ImageFile.FileName);
+            await ImagesUtil.SaveImage(hostEnvironment, model, folder);
 
             var entity = mapper.Map<DocumentEntity>(model);
             entity.Extension = extension;
@@ -118,5 +152,7 @@ namespace PortalEquador.Data.Document.Repository
             }
           
         }
+
+
     }
 }

@@ -65,6 +65,7 @@ builder.Services.AddScoped<SaveDriversLicenceUseCase>();
 builder.Services.AddScoped<RenewDriversLicenceUseCase>();
 builder.Services.AddScoped<RenewProvisionalUseCase>();
 builder.Services.AddScoped<GetDriversLicenceDetailUseCase> ();
+builder.Services.AddScoped<GetDriversLicenceUseCase> ();
 
 //MechanicalWorkshop
 builder.Services.AddScoped<IMechanicalWorkshopVehicleRepository, MechanicalWorkshopVehicleRepositoryImpl>();

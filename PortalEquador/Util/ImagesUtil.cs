@@ -1,14 +1,114 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Packaging.Signing;
+using PortalEquador.Data.Generic;
 using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Util.Constants;
+using PortalEquador.Util.EnumTypes;
+using static PortalEquador.Util.Constants.FoldersConstants;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Util
 {
     public static class ImagesUtil
     {
+
+        public static async Task SaveImage(IWebHostEnvironment hostEnvironment, DocumentViewModel document, FolderType folder)
+        {
+            string path = GetImagePath(hostEnvironment, document, folder);
+
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                await document.ImageFile.CopyToAsync(fileStream);
+            }
+        }
+
+        private static string GetImagePath(IWebHostEnvironment hostEnvironment, DocumentViewModel document, FolderType folder)
+        {
+            string fileName = "";
+            string extension = "";
+
+            if (document.ImageFile == null)
+            {
+                fileName = document.DocumentTypeId.ToString();
+                extension = document.Extension;
+            }
+            else
+            {
+                fileName = Path.GetFileNameWithoutExtension(document.ImageFile.FileName);
+                extension = Path.GetExtension(document.ImageFile.FileName);
+            }
+
+            string root = GetRootDirectory(hostEnvironment, document, folder);
+            fileName = GetFileName(document, extension, folder);
+            string path = Path.Combine(root, fileName);
+
+            if (!Directory.Exists(root))
+            {
+                Directory.CreateDirectory(root);
+            }
+
+            return path;
+        }
+
+
+        private static string GetRootDirectory(IWebHostEnvironment hostEnvironment, DocumentViewModel document, FolderType folder)
+        {
+            string wwwRootPath = hostEnvironment.WebRootPath;
+            string root = wwwRootPath +  folder.GetFullPath() + "/" + document.PersonaInformationId + "/";
+            return root;
+        }
+
+        private static string GetFileName(DocumentViewModel document, string extension, FolderType folder)
+        {
+            switch (folder)
+            {
+                case FolderType.Curriculum:
+                    return document.DocumentTypeId + extension; 
+
+                case FolderType.DriversLicence:
+                    return document.SubTypeId + extension; ;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public static string GetFilePath(FolderType folder, int personalInformationId, int imageId, string extension)
+        {
+            return "~" + folder.GetFullPath() + "/" + personalInformationId + "/" + imageId + extension + "?v=123456";
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         /*
         public static string GetProfilePicturePath(int curriculumId, string extension)
         {

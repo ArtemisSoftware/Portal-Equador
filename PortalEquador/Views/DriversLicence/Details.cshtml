@@ -57,7 +57,7 @@
             </dd>
         </dl>
 
-        @if (@Model.Status != PortalEquador.Util.LicenceStatusType.Updated && @Model.ProvisionalExpirationDate != null)
+        @if (@Model.IsProvisional())
         {
             <div class="row">
                 <div class="col-md-8">
@@ -97,21 +97,20 @@
            
             @foreach (var item in Model.Documents)
             {
-            <!--
+
                 <div class="col-sm-6">
                     <div class="card">
-                        <img id="frame" src="Url.Content(item.PicturePath)" class="card-img-top">
+                        <img id="frame" src="@Url.Content(@item.PicturePath)" class="card-img-top">
                         <div class="card-body">
                             <p class="card-text">
-                                Html.DisplayFor(modelItem => item.Document.Description)
+                                @Html.DisplayFor(modelItem => item. DocumentType.Description)
                             </p>
-                            <a asp-action="Edit" asp-route-id="item.Id" class="btn btn-warning"><i class="fas fa-download" title="Editar"></i></a>
-                            <a asp-action="Details" asp-route-id="item.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                           
                         </div>
                     </div>
 
                 </div>
-            -->
+
             }
 
         </div>

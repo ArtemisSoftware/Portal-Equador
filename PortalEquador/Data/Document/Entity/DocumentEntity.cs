@@ -14,12 +14,20 @@ namespace PortalEquador.Data.Document.Entity
 
         public string? Observation { get; set; }
 
+        public string Extension { get; set; }
+
         public int DocumentTypeId { get; set; }
 
         [ForeignKey("DocumentTypeId")]
         public GroupItemEntity DocumentTypeGroupItemEntity { get; set; }
 
-        public string Extension { get; set; }
+
+        public int? SubTypeId { get; set; }
+
+        [ForeignKey("SubTypeId")]
+        public GroupItemEntity? SubTypeGroupItemEntity { get; set; }
+
+        public int? ParentId { get; set; }
 
     }
 }

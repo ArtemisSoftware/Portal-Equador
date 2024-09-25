@@ -8,6 +8,8 @@ using static PortalEquador.Util.Constants.StringConstants;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using PortalEquador.Util;
+using PortalEquador.Util.Extensions;
+using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Domain.DriversLicence.ViewModels
 {
@@ -30,6 +32,9 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
 
         public SelectList? LicenceTypes { get; set; }
 
+        [Display(Name = StringConstants.Display.DRIVERS_LICENCE)]
+        public GroupItemViewModel? Licence { get; set; }
+
         public bool ExpirationDateAvailable { get { return DriverLicenceUtil.ExpirationDateAvailable(ExpirationDate); } }
 
 
@@ -49,6 +54,33 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
         public int? ProvisionalRenewalNumber { get; set; }
 
 
+        public List<DocumentViewModel> Documents { get; set; } = new List<DocumentViewModel>();
+
+        public DocumentViewModel? LicenceDocument => Documents.Find(doc => doc.DocumentTypeId == ItemFromGroup.Documents.DRIVERS_LICENCE && doc.ParentId == Id && doc.SubTypeId == LicenceId);
+
+        [Display(Name = StringConstants.Display.STATE)]
+        public LicenceStatusType? Status
+        {
+            get
+            {
+                return DriverLicenceUtil.GetLicenceStatus(false, ExpirationDate, ProvisionalExpirationDate);
+            }
+        }
+
+        public string? StatusDescription
+        {
+            get
+            {
+                if (Status == null)
+                {
+                    return null;
+                }
+                else
+                {
+                    return Status.ToName();
+                }
+            }
+        }
 
         /*
         public PersonalInformationViewModel? PersonalInformation { get; set; }
@@ -86,7 +118,7 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
 
 
 
-        public List<DocumentDetailViewModel>? Documents { get; set; }
+
 
         public int? DriverLicenceDocumentId { get; set; }
 
@@ -105,8 +137,7 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
 
         public int? ProvisionalLicenceDocumentId { get; set; }
 
-        [Display(Name = StringConstants.Display.DRIVERS_LICENCE)]
-        public GroupItemViewModel? Licence { get; set; }
+
 
 
         */

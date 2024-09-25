@@ -57,9 +57,11 @@ namespace PortalEquador.Util.Constants
             public const int UNIVERSITY_COURSES = 17;
             public const int UNIVERSITY_DEGREES = 18;
 
+            public const int DRIVERS_LICENCE = 19;
+
             //---
-            public const int DRIVERS_LICENCE = 5;
-            
+
+
 
             public const int SCHOOL_COURSE = 8;
 
@@ -77,7 +79,7 @@ namespace PortalEquador.Util.Constants
             public static class Documents
             {
                 public static readonly int PROFILE_PICTURE = (new Item { Debug = 7, Production = 2 }).Value;
-                public static readonly int DRIVERS_LICENCE = (new Item { Debug = 7, Production = 2 }).Value;
+                public static readonly int DRIVERS_LICENCE = (new Item { Debug = 43, Production = 2 }).Value;
                 public static readonly int DRIVERS_LICENCE_PROVISIONAL = (new Item { Debug = 7, Production = 2 }).Value;
              
 

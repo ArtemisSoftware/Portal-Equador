@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Util;
 using PortalEquador.Util.Extensions;
+using NuGet.Packaging.Signing;
 
 namespace PortalEquador.Domain.DriversLicence.ViewModels
 {
@@ -34,7 +35,13 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
 
 
         [Display(Name = StringConstants.Display.STATE)]
-        public LicenceStatusType? Status { get; set; }
+        public LicenceStatusType? Status
+        {
+            get
+            {
+                return DriverLicenceUtil.GetLicenceStatus(false, ExpirationDate, ProvisionalExpirationDate);
+            }
+        }
 
         public string? StatusDescription
         {
@@ -51,6 +58,14 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
             }
         }
 
-      
+        public bool IsProvisional()
+        {
+            return Status != LicenceStatusType.Updated && ProvisionalExpirationDate != null;
+        }
+
+        public bool NeedsRenewal()
+        {
+            return (Status != LicenceStatusType.Updated);
+        }
     }
 }

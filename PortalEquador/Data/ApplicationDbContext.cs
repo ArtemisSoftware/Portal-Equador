@@ -175,7 +175,7 @@ namespace PortalEquador.Data
         public DbSet<PortalEquador.Data.Profession.Competence.Entity.ProfessionalCompetenceEntity> ProfessionalCompetenceEntity { get; set; } = default!;
         public DbSet<PortalEquador.Data.Profession.Experience.Entity.ProfessionalExperienceEntity> ProfessionalExperienceEntity { get; set; } = default!;
         public DbSet<PortalEquador.Data.Education.School.Entity.SchoolEntity> SchoolEntity { get; set; } = default!;
-        public DbSet<PortalEquador.Data.Education.University.Entity.UniversityEntity> UniversityEntity { get; set; } = default!;
-        public DbSet<PortalEquador.Data.DriversLicence.Entity.DriversLicenceEntity> DriversLicenceEntity { get; set; } = default!;
+        public DbSet<UniversityEntity> UniversityEntity { get; set; } = default!;
+        public DbSet<DriversLicenceEntity> DriversLicenceEntity { get; set; } = default!;
     }
 }

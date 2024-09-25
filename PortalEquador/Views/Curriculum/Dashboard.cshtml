@@ -73,36 +73,32 @@
                     {
                         <span class="badge bg-warning">Incompleto</span>
                     }
-                    <p class="card-text">Formulário para o registo dos dados da carta de condução.</p>
-                     @if(Model.IsDriversLicenceComplete){
-                        <a asp-controller="DriversLicence" asp-action="Edit" asp-route-identifier="@Model.Id" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
-                        <a asp-controller="DriversLicence" asp-action="Details" asp-route-identifier="@Model.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
-                      }
-                      else{
-                        <a asp-controller="DriversLicence" asp-action="Create" asp-route-identifier="@Model.Id" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+                    <p class="card-text">Formulário para o registo de cartas de conduçãos.</p>
+                    @if (Model.IsDriversLicenceComplete)
+                    {
+                        <a asp-controller="DriversLicence" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
                     }
-
+                    <a asp-controller="DriversLicence" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                    <a asp-controller="DriversLicence" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+                    
                 </div>
             </div>
         </div>
         
     </div>
 
-
     <br />
+
     <div class="row">
 
         <div class="col-sm-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Línguas</h5>
-                    <span class="badge bg-success">@Model.TotalLanguages Registo(s)</span>
-                    <p class="card-text">Formulário para o registo de línguas.</p>
-                    @if (Model.TotalLanguages != 0)
-                    {
-                        <a asp-controller="Language" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
-                    }
-                    <a asp-controller="Language" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+                    <h5 class="card-title">Experiências profissionais</h5>
+                    <span class="badge bg-success">@Model.TotalProfessionalExperiences Registo(s)</span>
+                    <p class="card-text">Formulário para o registo de Experiências profissionais.</p>
+                    <a asp-controller="ProfessionalExperience" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                    <a asp-controller="ProfessionalExperience" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
                 </div>
             </div>
         </div>
@@ -119,25 +115,9 @@
             </div>
         </div>
 
-        <div class="col-sm-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Experiências profissionais</h5>
-                    <span class="badge bg-success">@Model.TotalProfessionalExperiences Registo(s)</span>
-                    <p class="card-text">Formulário para o registo de Experiências profissionais.</p>
-                    <a asp-controller="ProfessionalExperience" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
-                    <a asp-controller="ProfessionalExperience" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <br />
-    <div class="col-sm-6">
-        <h5>Educação</h5>
-        <hr />
-    </div>
 
     <div class="row">
 
@@ -159,10 +139,31 @@
         <div class="col-sm-4">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Habilitações académicas universitárias</h5>
+                    <h5 class="card-title">Educação universitárias</h5>
                     <span class="badge bg-success">@Model.TotalUniversityEducation Registo(s)</span>
-                    <p class="card-text">Formulário para o registo de línguas.</p>
+                    <p class="card-text">Formulário para o registo de educação universitária.</p>
                     @if (Model.TotalUniversityEducation != 0)
+                    {
+                        <a asp-controller="University" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                    }
+                    <a asp-controller="University" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+                </div>
+            </div>
+        </div>
+
+     </div>
+
+    <br />
+
+    <div class="row">
+
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Línguas</h5>
+                    <span class="badge bg-success">@Model.TotalLanguages Registo(s)</span>
+                    <p class="card-text">Formulário para o registo de línguas.</p>
+                    @if (Model.TotalLanguages != 0)
                     {
                         <a asp-controller="Language" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
                     }
@@ -170,9 +171,6 @@
                 </div>
             </div>
         </div>
-
-     </div>
-
-
+    </div>
 
 </div>

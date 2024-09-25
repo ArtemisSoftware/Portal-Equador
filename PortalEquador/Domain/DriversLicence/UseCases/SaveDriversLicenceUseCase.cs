@@ -12,11 +12,11 @@ namespace PortalEquador.Domain.DriversLicence.UseCases
 
         public async Task Invoke(DriversLicenceViewModel model)
         {
-            await driversLicenceRepository.Save(model);
-            await SaveDocument(model);
+           var driversLicenceId = await driversLicenceRepository.Save(model);
+            await SaveDocument(model, driversLicenceId);
         }
 
-        private async Task SaveDocument(DriversLicenceViewModel model)
+        private async Task SaveDocument(DriversLicenceViewModel model, int driversLicenceId)
         {
             if (model.ImageFile != null)
             {
@@ -25,10 +25,12 @@ namespace PortalEquador.Domain.DriversLicence.UseCases
                     PersonaInformationId = model.PersonaInformationId,
                     FullName = model.FullName,
                     ImageFile = model.ImageFile,
-                    DocumentTypeId = ItemFromGroup.Documents.DRIVERS_LICENCE
+                    DocumentTypeId = ItemFromGroup.Documents.DRIVERS_LICENCE,
+                    SubTypeId = model.LicenceId,
+                    ParentId = driversLicenceId
                 };
 
-                await documentRepository.Save(document);
+                await documentRepository.Save(document, Util.EnumTypes.FolderType.DriversLicence);
             }
         }
 

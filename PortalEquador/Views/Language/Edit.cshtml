@@ -38,7 +38,7 @@
             <br />
             <br />
             <div>
-                <a asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <a asp-action="Index" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-dark">Regressar ao index</a> &nbsp;
                 <input type="submit" value="Guardar Alterações" class="btn btn-warning" />
             </div>
         </form>

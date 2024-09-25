@@ -29,8 +29,8 @@ namespace PortalEquador.Data.Education.University.Repository
 
         public async Task<UniversityViewModel> GetCreateModel(int personalInformationId, string fullName)
         {
-            var institutions = GroupItems(Groups.UNIVERSITY);
-            var courses = GroupItems(Groups.UNIVERSITY_COURSES);
+            var institutions = GroupItems(Groups.UNIVERSITY, OrderType.Alphabetic);
+            var courses = GroupItems(Groups.UNIVERSITY_COURSES, OrderType.Alphabetic);
             var degrees = GroupItems(Groups.UNIVERSITY_DEGREES);
 
             var model = new UniversityViewModel
@@ -47,8 +47,8 @@ namespace PortalEquador.Data.Education.University.Repository
 
         public async Task<UniversityViewModel> GetCreateModel(UniversityViewModel model)
         {
-            var institutions = GroupItems(Groups.UNIVERSITY);
-            var courses = GroupItems(Groups.UNIVERSITY_COURSES);
+            var institutions = GroupItems(Groups.UNIVERSITY, OrderType.Alphabetic);
+            var courses = GroupItems(Groups.UNIVERSITY_COURSES, OrderType.Alphabetic);
             var degrees = GroupItems(Groups.UNIVERSITY_DEGREES);
 
             model.Institutions = institutions;
@@ -87,12 +87,13 @@ namespace PortalEquador.Data.Education.University.Repository
             }
         }
 
-        public async Task<bool> UniversityExists(int personalInformationId, int institutionId, int majorId)
+        public async Task<bool> UniversityExists(int personalInformationId, int institutionId, int majorId, int degreeId)
         {
             return await context.UniversityEntity.AnyAsync(
                 item => item.PersonalInformationId == personalInformationId
                 & item.InstitutionId == institutionId
                  & item.MajorId == majorId
+                 & item.DegreeId == degreeId
                 );
         }
     }

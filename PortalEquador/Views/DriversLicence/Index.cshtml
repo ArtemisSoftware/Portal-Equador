@@ -1,77 +1,110 @@
-﻿@model IEnumerable<PortalEquador.Data.DriversLicence.Entity.DriversLicenceEntity>
+﻿@model IEnumerable<PortalEquador.Domain.DriversLicence.ViewModels.DriversLicenceDetailViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>@ViewBag.username</h1>
+        <h3>Cartas de condução</h3>
+        <p>
+            <a asp-controller="DriversLicence" asp-action="Create" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
+        </p>
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="Curriculum" asp-action="Dashboard" asp-route-identifier="@ViewBag.identifier" class="btn btn-success"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
+</div>
+<hr />
+<br />
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PersonalInformationEntity)
+                @Html.DisplayNameFor(model => model.Licence)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LicenceTypeGroupItemEntity)
+                @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ExpirationDate)
+                
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProvisionalRenewalNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProvisionalExpirationDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ApplicationUserEntity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateModified)
+
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PersonalInformationEntity.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LicenceTypeGroupItemEntity.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExpirationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProvisionalRenewalNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProvisionalExpirationDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ApplicationUserEntity.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateModified)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Licence.Description)
+                </td>
+                <td class="align-middle">
+                    @switch (item.Status)
+                    {
+                        case PortalEquador.Util.LicenceStatusType.Updated:
+                            <span class="badge bg-success">@item.StatusDescription</span>
+                            break;
+                        case PortalEquador.Util.LicenceStatusType.Expired:
+                            <span class="badge bg-danger">@item.StatusDescription</span>
+                            break;
+                        case PortalEquador.Util.LicenceStatusType.Provisional_Renewal_Updated:
+                            <span class="badge bg-primary">@item.StatusDescription</span>
+                            break;
+                        case PortalEquador.Util.LicenceStatusType.Provisional_Renewal_Expired:
+                            <span class="badge bg-warning">@item.StatusDescription</span>
+                            break;
+                        case PortalEquador.Util.LicenceStatusType.No_Expiration_Date:
+                            <span class="badge bg-danger">@item.StatusDescription</span>
+                            break;
+                        default:
+                            break;
+                    }
+                </td>
+                <td class="align-middle">
+                   
+                </td>
+                <td class="align-middle">
+                    
+                </td>
+                <td>
+                    @if (item.NeedsRenewal())
+                    {
+                        <a asp-action="RenewLicence" asp-route-id="@item.Id"  asp-route-identifier="@ViewBag.identifier" class="btn btn-success"><i class="fas fa-refresh" title="Renovar carta de condução"></i> Carta</a>
+                        <a asp-action="RenewProvisional" asp-route-identifier="@ViewBag.identifier" class="btn btn-success">
+                            @if (item.ProvisionalExpirationDate == null)
+                            {
+                                <i class="fas fa-plus" title="Adicionar verbete"></i>
+                            }
+                            else
+                            {
+                                <i class="fas fa-refresh" title="Renovar verbete"></i>
+                            }
+                            Verbete
+                        </a>
+                    }
+                    <a asp-action="Edit" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+
+
+@section Scripts {
+    <script>
+        $(function () {
+
+            $('.table').DataTable();
+
+        });
+
+    </script>
+}

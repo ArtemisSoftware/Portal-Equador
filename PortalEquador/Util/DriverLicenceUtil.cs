@@ -17,8 +17,8 @@
 
         public static LicenceStatusType GetLicenceStatus(bool expirationDateAvailable, DateTime? expirationDate, DateTime? provisionalExpirationDate)
         {
-
-            if (expirationDateAvailable == false)
+            if (expirationDate  == null)
+            //if (expirationDateAvailable == false)
             {
                 return LicenceStatusType.No_Expiration_Date;
             }

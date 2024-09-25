@@ -37,6 +37,9 @@ namespace PortalEquador.Data.Mappers
             CreateMap<DocumentEntity, DocumentViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.SubType, opt => opt.MapFrom(src => src.SubTypeGroupItemEntity))
+                .ForMember(dest => dest.SubTypeId, opt => opt.MapFrom(src => src.SubTypeId))
+                 .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.DocumentTypeGroupItemEntity))
                 .ReverseMap();
 
             CreateMap<DocumentEntity, DocumentDetailViewModel>()
@@ -84,6 +87,8 @@ namespace PortalEquador.Data.Mappers
             CreateMap<DriversLicenceEntity, DriversLicenceViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.Licence, opt => opt.MapFrom(src => src.LicenceTypeGroupItemEntity))
+                .ForMember(dest => dest.LicenceId, opt => opt.MapFrom(src => src.LicenceTypeId))
                 //
                 .ReverseMap();
 
@@ -95,12 +100,15 @@ namespace PortalEquador.Data.Mappers
             CreateMap<UniversityEntity, UniversityViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
-                //
+                 .ForMember(dest => dest.Major, opt => opt.MapFrom(src => src.MajorGroupItemEntity))
+                 .ForMember(dest => dest.Degree, opt => opt.MapFrom(src => src.DegreeGroupItemEntity))
+                 .ForMember(dest => dest.Institution, opt => opt.MapFrom(src => src.InstitutionGroupItemEntity))
                 .ReverseMap();
 
             CreateMap<UniversityEntity, UniversityDetailViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                  .ForMember(dest => dest.Degree, opt => opt.MapFrom(src => src.DegreeGroupItemEntity))
+                 .ForMember(dest => dest.Major, opt => opt.MapFrom(src => src.MajorGroupItemEntity))
                  .ForMember(dest => dest.Institution, opt => opt.MapFrom(src => src.InstitutionGroupItemEntity))
                 .ReverseMap();
 

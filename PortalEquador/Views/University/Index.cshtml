@@ -7,7 +7,7 @@
 <div class="row align-items-center">
     <div class="col-md-10">
         <h1>@ViewBag.username</h1>
-        <h3>Linguas</h3>
+        <h3>Educação universitária</h3>
         <p>
             <a asp-controller="University" asp-action="Create" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
         </p>
@@ -56,6 +56,12 @@
     </tbody>
 </table>
 
+<form id="deleteEducation" asp-action="DeleteEducation">
+    <input type="hidden" id="id" name="Id" />
+    <input type="hidden" id="identifier" name="identifier" />
+    <input type="hidden" id="username" name="username" />
+</form>
+
 @section Scripts {
     <script>
         $(function () {
@@ -78,7 +84,7 @@
                         $('#id').val(id);
                         $('#identifier').val(identifier);
                         $('#username').val(username);
-                        $('#deleteLanguage').submit();
+                        $('#deleteEducation').submit();
 
                     }
                 });
