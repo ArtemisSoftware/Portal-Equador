@@ -78,9 +78,9 @@ namespace PortalEquador.Util.Constants
 
             public static class Documents
             {
-                public static readonly int PROFILE_PICTURE = (new Item { Debug = 7, Production = 2 }).Value;
-                public static readonly int DRIVERS_LICENCE = (new Item { Debug = 43, Production = 2 }).Value;
-                public static readonly int DRIVERS_LICENCE_PROVISIONAL = (new Item { Debug = 7, Production = 2 }).Value;
+                public static readonly int PROFILE_PICTURE = (new Item { Debug = 7, Production = -1 }).Value;
+                public static readonly int DRIVERS_LICENCE = (new Item { Debug = 43, Production = -1 }).Value;
+                public static readonly int DRIVERS_LICENCE_PROVISIONAL = (new Item { Debug = 44, Production = -1 }).Value;
              
 
 

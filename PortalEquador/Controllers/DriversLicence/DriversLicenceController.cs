@@ -9,10 +9,11 @@ namespace PortalEquador.Controllers.DriversLicence
     public class DriversLicenceController(
         IDriversLicenceRepository repository,
         SaveDriversLicenceUseCase saveDriversLicenceUseCase,
-        RenewProvisionalUseCase renewProvisionalUseCase,
+        SaveProvisionalUseCase saveProvisionalUseCase,
         RenewDriversLicenceUseCase renewDriversLicenceUseCase,
         GetDriversLicenceDetailUseCase getDriversLicenceDetailUseCase,
-        GetDriversLicenceUseCase getDriversLicenceUseCase
+        GetDriversLicenceUseCase getDriversLicenceUseCase,
+        GetDriversLicenceProvisionalUseCase getDriversLicenceProvisionalUseCase
      ) : Controller
     {
 
@@ -79,10 +80,14 @@ namespace PortalEquador.Controllers.DriversLicence
         }
 
         // GET: DriversLicence/RenewLicence
-        public async Task<IActionResult> RenewLicence(int id)
+        public async Task<IActionResult> RenewLicence(int id, int identifier, string fullName)
         {
 
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
+
             var model = await getDriversLicenceUseCase.Invoke(id);
+            model.FullName = fullName;
 
             if (model == null)
             {
@@ -90,17 +95,91 @@ namespace PortalEquador.Controllers.DriversLicence
             }
             return View(model);
         }
-        /*
+        /*        
+                // POST: DriversLicence/RenewLicence/5
+                [HttpPost]
+                [ValidateAntiForgeryToken]
+                public async Task<IActionResult> RenewLicence(DriversLicenceViewModel model)
+                {
+                    await renewDriversLicenceUseCase.Invoke(model);
+                    await _deleteDocumentUseCase.Invoke((int)model.ProvisionalLicenceDocumentId);
+                    return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+                }
+        */
+
+        // GET: DriversLicence/CreateProvisional
+        public async Task<IActionResult> CreateProvisional(int id, int identifier, string fullName)
+        {
+
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
+
+            var model = await getDriversLicenceProvisionalUseCase.Invoke(id);
+            model.FullName = fullName;
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+            return View(model);
+        }
+
         // POST: DriversLicence/RenewLicence/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RenewLicence(DriversLicenceViewModel_Finak model)
+        public async Task<IActionResult> CreateProvisional(DriversLicenceProvisionalViewModel model)
         {
-            await _renewDriversLicenceUseCase.Invoke(model);
-            await _deleteDocumentUseCase.Invoke((int)model.ProvisionalLicenceDocumentId);
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                await saveProvisionalUseCase.Invoke(model);
+                return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+            }
+            else
+            {
+                ModelState.AddModelError(nameof(model.Error), StringConstants.Error.UNDECLARED_ERROR);
+                model.Error = StringConstants.Error.UNDECLARED_ERROR;
+                model.ProvisionalExpirationDate = null;
+                return View(model);
+            }
         }
-        */
+
+
+        // GET: DriversLicence/RenewLicence
+        public async Task<IActionResult> RenewProvisional(int id, int identifier, string fullName)
+        {
+
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
+
+            var model = await getDriversLicenceProvisionalUseCase.Invoke(id);
+            model.FullName = fullName;
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+            return View(model);
+        }
+
+        // POST: DriversLicence/RenewLicence/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RenewProvisional(DriversLicenceProvisionalViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await saveProvisionalUseCase.Invoke(model);
+                return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+            }
+            else
+            {
+                ModelState.AddModelError(nameof(model.Error), StringConstants.Error.UNDECLARED_ERROR);
+                model.Error = StringConstants.Error.UNDECLARED_ERROR;
+                model.ProvisionalExpirationDate = null;
+                return View(model);
+            }
+        }
+
 
         /*
 
@@ -144,27 +223,7 @@ namespace PortalEquador.Controllers.DriversLicence
 
 
 
-                // GET: DriversLicence/RenewLicence
-                public async Task<IActionResult> RenewProvisional(int identifier)
-                {
 
-                    var model = await _getDriversLicenceUseCase.Invoke(identifier);
-
-                    if (model == null)
-                    {
-                        return NotFound();
-                    }
-                    return View(model);
-                }
-
-                // POST: DriversLicence/RenewLicence/5
-                [HttpPost]
-                [ValidateAntiForgeryToken]
-                public async Task<IActionResult> RenewProvisional(DriversLicenceViewModel_Finak model)
-                {
-                    await _renewProvisionalUseCase.Invoke(model);
-                    return RedirectToAction(nameof(Index));
-                }
 
 
                 private async Task<DriversLicenceViewModel_Finak> RecoverModel(DriversLicenceViewModel_Finak model)

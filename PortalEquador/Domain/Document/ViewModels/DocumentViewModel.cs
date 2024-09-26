@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using PortalEquador.Domain.Generic;
-using PortalEquador.Domain.PersonalInformation.ViewModels;
 using PortalEquador.Util.Constants;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Util;
-using static PortalEquador.Util.Constants.GroupTypesConstants;
-using PortalEquador.Util.EnumTypes;
 
 namespace PortalEquador.Domain.Document.ViewModels
 {
@@ -41,17 +38,8 @@ namespace PortalEquador.Domain.Document.ViewModels
         public GroupItemViewModel? SubType { get; set; }
         public int? ParentId { get; set; }
 
-        public string PicturePath
-        {
-            get
-            {
-                if(DocumentTypeId == ItemFromGroup.Documents.DRIVERS_LICENCE)
-                {
-                    return ImagesUtil.GetFilePath(FolderType.DriversLicence, PersonaInformationId, (int)SubTypeId, Extension);
-                }
+        public string PicturePath => ImagesUtil.GetFilePath(this);
 
-                return ImagesUtil.GetFilePath(PersonaInformationId, Id, Extension + "?v=123456");
-            }
-        }
+        public string FileName => ImagesUtil.GetImageId(this);
     }
 }

@@ -69,7 +69,18 @@ namespace PortalEquador.Data.DriversLicence.Repository
 
             return mapper.Map<DriversLicenceViewModel>(result);
         }
-        
+
+        public async Task<DriversLicenceProvisionalViewModel> GetDriversLicenceProvisional(int id)
+        {
+            var result = await context.DriversLicenceEntity
+                    .Include(item => item.LicenceTypeGroupItemEntity)
+                    .Include(item => item.PersonalInformationEntity)
+                    .Where(item => item.Id == id)
+                    .FirstOrDefaultAsync();
+
+            return mapper.Map<DriversLicenceProvisionalViewModel>(result);
+        }
+
         public async Task<bool> LicenceExists(int personalInformationId, int licenceTypeId)
         {
             return await context.DriversLicenceEntity.AnyAsync(
@@ -82,15 +93,40 @@ namespace PortalEquador.Data.DriversLicence.Repository
         {
             var entity = mapper.Map<DriversLicenceEntity>(model);
             entity.EditorId = GetCurrentUserId();
-            var id = entity.Id;
+            var id = await Save(model.Id, entity);
 
-            if (model.Id == 0)
+            return id;
+        }
+
+        public async Task<int> Save(DriversLicenceProvisionalViewModel model)
+        {
+            if (model.ProvisionalRenewalNumber != null)
+            {
+                model.ProvisionalRenewalNumber = (int)model.ProvisionalRenewalNumber + 1;
+            }
+            else
+            {
+                model.ProvisionalRenewalNumber = 1;
+            }
+
+            var entity = mapper.Map<DriversLicenceEntity>(model);
+
+            var id = await Save(model.Id, entity);
+            return id;
+        }
+
+        private async Task<int> Save(int id, DriversLicenceEntity entity)
+        {
+            entity.EditorId = GetCurrentUserId();
+           
+            if (id == 0)
             {
                 var result = await AddAsync(entity);
                 id = result.Id;
             }
             else
             {
+                id = entity.Id;
                 entity.DateModified = DateTime.UtcNow;
                 await UpdateAsync(entity);
             }

@@ -24,5 +24,10 @@
         {
             public const string AVATAR = "/avatar.png";
         }
+
+        public static class NameSuffix
+        {
+            public const string DRIVERS_LICENCE_PROVISIONAL = "-provisional";
+        }
     }
 }

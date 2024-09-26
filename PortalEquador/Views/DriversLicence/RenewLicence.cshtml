@@ -78,7 +78,7 @@
             <br />
 
             <div class="form-group">
-                <a asp-action="Index" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <a asp-action="Index" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-dark">Regressar ao index</a> &nbsp;
                 <input type="submit" value="Guardar Alterações" class="btn btn-warning" />
             </div>
 

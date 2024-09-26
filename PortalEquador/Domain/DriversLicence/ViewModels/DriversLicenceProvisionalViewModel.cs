@@ -2,18 +2,16 @@
 using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.ViewModels;
-using PortalEquador.Domain.PersonalInformation.ViewModels;
 using PortalEquador.Util.Constants;
-using static PortalEquador.Util.Constants.StringConstants;
+using PortalEquador.Util;
+using static PortalEquador.Util.Constants.GroupTypesConstants;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using PortalEquador.Util;
 using PortalEquador.Util.Extensions;
-using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Domain.DriversLicence.ViewModels
 {
-    public class DriversLicenceViewModel : DriversLicenceBaseViewModel
+    public class DriversLicenceProvisionalViewModel : DriversLicenceBaseViewModel
     {
 
         public int PersonaInformationId { get; set; }
@@ -22,18 +20,14 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
 
 
 
-        public SelectList? LicenceTypes { get; set; }
-
         [Display(Name = StringConstants.Display.DRIVERS_LICENCE)]
         public GroupItemViewModel? Licence { get; set; }
 
         [Display(Name = StringConstants.Display.EXPIRATION_DATE)]
         [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
+        [Required(ErrorMessage = StringConstants.Error.MANDATORY_FIELD)]
         [DataType(DataType.Date)]
         public DateTime? ProvisionalExpirationDate { get; set; }
-
-
-        public bool ExpirationDateAvailable { get { return DriverLicenceUtil.ExpirationDateAvailable(ExpirationDate); } }
 
 
         [Display(Name = StringConstants.Display.FILE)]
@@ -49,6 +43,5 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
         {
             return ProvisionalExpirationDate;
         }
-
     }
 }

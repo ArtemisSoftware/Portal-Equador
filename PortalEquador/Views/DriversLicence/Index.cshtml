@@ -75,18 +75,23 @@
                 <td>
                     @if (item.NeedsRenewal())
                     {
-                        <a asp-action="RenewLicence" asp-route-id="@item.Id"  asp-route-identifier="@ViewBag.identifier" class="btn btn-success"><i class="fas fa-refresh" title="Renovar carta de condução"></i> Carta</a>
-                        <a asp-action="RenewProvisional" asp-route-identifier="@ViewBag.identifier" class="btn btn-success">
-                            @if (item.ProvisionalExpirationDate == null)
-                            {
+                        <a asp-action="RenewLicence" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success"><i class="fas fa-refresh" title="Renovar carta de condução"></i> Carta</a>
+
+                        @if (item.ProvisionalExpirationDate == null)
+                        {
+                            <a asp-action="CreateProvisional" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success">
                                 <i class="fas fa-plus" title="Adicionar verbete"></i>
-                            }
-                            else
-                            {
-                                <i class="fas fa-refresh" title="Renovar verbete"></i>
-                            }
-                            Verbete
-                        </a>
+                                Verbete
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-action="RenewProvisional" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success">
+                            <i class="fas fa-refresh" title="Renovar verbete"></i>
+                                Verbete
+                            </a>
+                        }
+                        
                     }
                     <a asp-action="Edit" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
                     <a asp-action="Details" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>

@@ -7,6 +7,7 @@ using PortalEquador.Util.Constants;
 using PortalEquador.Util.EnumTypes;
 using static PortalEquador.Util.Constants.FoldersConstants;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
+using static PortalEquador.Util.Constants.GroupTypesConstants.ItemFromGroup;
 
 namespace PortalEquador.Util
 {
@@ -69,10 +70,10 @@ namespace PortalEquador.Util
             switch (folder)
             {
                 case FolderType.Curriculum:
-                    return document.DocumentTypeId + extension; 
+                    return document.FileName + extension; 
 
                 case FolderType.DriversLicence:
-                    return document.SubTypeId + extension; ;
+                    return document.FileName + extension; ;
 
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -83,6 +84,41 @@ namespace PortalEquador.Util
         {
             return "~" + folder.GetFullPath() + "/" + personalInformationId + "/" + imageId + extension + "?v=123456";
         }
+
+        public static string GetFilePath(DocumentViewModel model)
+        {
+            return "~" + GetFolder(model).GetFullPath() + "/" + model.PersonaInformationId + "/" + GetImageId(model) + model.Extension + "?v=123456";
+        }
+
+        private static FolderType GetFolder(DocumentViewModel model)
+        {
+            if (Documents.GetDriversLicenceDocuments().Contains(model.DocumentTypeId))
+            {
+                return FolderType.DriversLicence;
+            }
+            else
+            {
+                return FolderType.Curriculum;
+            }
+        }
+
+        public static string GetImageId(DocumentViewModel model)
+        {
+            if (model.DocumentTypeId == ItemFromGroup.Documents.DRIVERS_LICENCE)
+            {
+                return ((int)model.SubTypeId).ToString();
+            }
+            else if (model.DocumentTypeId == ItemFromGroup.Documents.DRIVERS_LICENCE_PROVISIONAL)
+            {
+                return model.SubTypeId.ToString() + ImageConstants.NameSuffix.DRIVERS_LICENCE_PROVISIONAL;
+            }
+            else
+            {
+                return model.DocumentTypeId.ToString();
+            }
+        }
+
+
 
 
 

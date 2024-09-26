@@ -18,6 +18,8 @@ namespace PortalEquador.Domain.Document.Repository
         Task Save(DocumentViewModel model, FolderType folder);
 
         Task DeleteDocument(int personaInformationId, int documentTypeId);
+
+        //Task DeleteDocumentByParentId(int id, int documentTypeId);
         /*
        
         Task<DocumentViewModel> GetDocument(int id);
