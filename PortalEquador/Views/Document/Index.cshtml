@@ -1,4 +1,5 @@
-﻿@model IEnumerable<PortalEquador.Domain.Document.ViewModels.DocumentDetailViewModel>
+﻿﻿@using PortalEquador.Util.Constants
+@model IEnumerable<PortalEquador.Domain.Document.ViewModels.DocumentViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -23,32 +24,43 @@
     @foreach (var item in Model)
     {
 
-      <div class="col">
-        <div class="card">
-            <div class="img-container">
-              <img id="frame" src="@Url.Content(@item.PicturePath)" class="card-img-top">
-            </div>
-          <div class="card-body">
-            <h5 class="card-title">@Html.DisplayFor(modelItem => item.Document.Description)</h5>
-            <p class="card-text">
-                        @Html.DisplayFor(modelItem => item.Document.Group.Description)
+        <div class="col">
+            <div class="card">
+                <div class="img-container">
+                    <img id="frame" src="@Url.Content(@item.PicturePath)" class="card-img-top">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => item.DocumentType.Description)</h5>
+                    <p class="card-text">
+                        @Html.DisplayFor(modelItem => item.DocumentType.Group.Description)
                         @Html.DisplayFor(modelItem => item.Observation)
+                        @if (item.DocumentTypeId == GroupTypesConstants.ItemFromGroup.Documents.DRIVERS_LICENCE
+                       ||
+                       item.DocumentTypeId == GroupTypesConstants.ItemFromGroup.Documents.DRIVERS_LICENCE_PROVISIONAL
+                       )
+                        {
+                        @Html.DisplayFor(modelItem => item.SubType.Description)
+                        }
                     </p>
-                    <button class="btn btn-info" onclick="window.open('@Url.Content(@item.PicturePath)', '_blank')"><i class="fas fa-eye" title="Detalhe"></i></button>
-          
-                    <!--
-                     <a asp-action="Edit" asp-route-id="@item.Id"  class="btn btn-warning"><i class="fas fa-download" title="Editar"></i></a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
-                    -->
-                    <button data-id="@item.Id" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username" class="btn btn-danger deleteBtn" type="button"><i class="fas fa-trash" title="Remover"></i></button>
+                    <button class="btn btn-info" onclick="window.open('@Url.Content(@item.PicturePath)', '_blank')"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></button>
+                   
+
+                    @if (item.DocumentTypeId != GroupTypesConstants.ItemFromGroup.Documents.DRIVERS_LICENCE 
+                    &&
+                   item.DocumentTypeId != GroupTypesConstants.ItemFromGroup.Documents.DRIVERS_LICENCE_PROVISIONAL
+                    )
+                    {
+                        <button data-id="@item.Id" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username" class="btn btn-danger deleteBtn" type="button"><i class="fas fa-trash" title="Remover"></i></button>
+                    }
+
                     <form id="deleteDocument" asp-action="DeleteDocument">
                         <input type="hidden" id="documentId" name="Id" />
                         <input type="hidden" id="identifier" name="identifier" />
                         <input type="hidden" id="username" name="username" />
                     </form>
-          </div>
+                </div>
+            </div>
         </div>
-      </div>        
     }
 </div>
 

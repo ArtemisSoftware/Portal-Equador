@@ -11,7 +11,9 @@ using static PortalEquador.Util.Constants.GroupTypesConstants.ItemFromGroup;
 
 namespace PortalEquador.Data.DriversLicence.Repository
 {
-    public class DriversLicenceRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor) : GenericRepository<DriversLicenceEntity>(context, httpContextAccessor), IDriversLicenceRepository
+    public class DriversLicenceRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        : GenericRepository<DriversLicenceEntity>(context, httpContextAccessor), 
+        IDriversLicenceRepository
     {
         public async Task<List<DriversLicenceDetailViewModel>> GetAll(int personalInformationId)
         {
@@ -59,7 +61,7 @@ namespace PortalEquador.Data.DriversLicence.Repository
             return mapper.Map<DriversLicenceDetailViewModel>(result);
         }
         
-        public async Task<DriversLicenceViewModel> GetDriversLicence(int id)
+        public async Task<DriversLicenceRenewViewModel> GetDriversLicence(int id)
         {
             var result = await context.DriversLicenceEntity
                           .Include(item => item.LicenceTypeGroupItemEntity)
@@ -67,7 +69,7 @@ namespace PortalEquador.Data.DriversLicence.Repository
                             .Where(item => item.Id == id)
                             .FirstOrDefaultAsync();
 
-            return mapper.Map<DriversLicenceViewModel>(result);
+            return mapper.Map<DriversLicenceRenewViewModel>(result);
         }
 
         public async Task<DriversLicenceProvisionalViewModel> GetDriversLicenceProvisional(int id)
@@ -81,6 +83,17 @@ namespace PortalEquador.Data.DriversLicence.Repository
             return mapper.Map<DriversLicenceProvisionalViewModel>(result);
         }
 
+        public async Task<DriversLicenceProvisionalRenewViewModel> GetDriversLicenceProvisionalRenew(int id)
+        {
+            var result = await context.DriversLicenceEntity
+                    .Include(item => item.LicenceTypeGroupItemEntity)
+                    .Include(item => item.PersonalInformationEntity)
+                    .Where(item => item.Id == id)
+                    .FirstOrDefaultAsync();
+
+            return mapper.Map<DriversLicenceProvisionalRenewViewModel>(result);
+        }
+
         public async Task<bool> LicenceExists(int personalInformationId, int licenceTypeId)
         {
             return await context.DriversLicenceEntity.AnyAsync(
@@ -90,6 +103,15 @@ namespace PortalEquador.Data.DriversLicence.Repository
         }
 
         public async Task<int> Save(DriversLicenceViewModel model)
+        {
+            var entity = mapper.Map<DriversLicenceEntity>(model);
+            entity.EditorId = GetCurrentUserId();
+            var id = await Save(model.Id, entity);
+
+            return id;
+        }
+
+        public async Task<int> Save(DriversLicenceRenewViewModel model)
         {
             var entity = mapper.Map<DriversLicenceEntity>(model);
             entity.EditorId = GetCurrentUserId();
@@ -110,7 +132,22 @@ namespace PortalEquador.Data.DriversLicence.Repository
             }
 
             var entity = mapper.Map<DriversLicenceEntity>(model);
+            var id = await Save(model.Id, entity);
+            return id;
+        }
 
+        public async Task<int> Save(DriversLicenceProvisionalRenewViewModel model)
+        {
+            if (model.ProvisionalRenewalNumber != null)
+            {
+                model.ProvisionalRenewalNumber = (int)model.ProvisionalRenewalNumber + 1;
+            }
+            else
+            {
+                model.ProvisionalRenewalNumber = 1;
+            }
+
+            var entity = mapper.Map<DriversLicenceEntity>(model);
             var id = await Save(model.Id, entity);
             return id;
         }

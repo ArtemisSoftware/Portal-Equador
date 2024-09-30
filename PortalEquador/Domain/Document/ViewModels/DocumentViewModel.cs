@@ -40,6 +40,5 @@ namespace PortalEquador.Domain.Document.ViewModels
 
         public string PicturePath => ImagesUtil.GetFilePath(this);
 
-        public string FileName => ImagesUtil.GetImageId(this);
     }
 }

@@ -13,7 +13,8 @@ namespace PortalEquador.Controllers.DriversLicence
         RenewDriversLicenceUseCase renewDriversLicenceUseCase,
         GetDriversLicenceDetailUseCase getDriversLicenceDetailUseCase,
         GetDriversLicenceUseCase getDriversLicenceUseCase,
-        GetDriversLicenceProvisionalUseCase getDriversLicenceProvisionalUseCase
+        GetDriversLicenceProvisionalUseCase getDriversLicenceProvisionalUseCase,
+        GetDriversLicenceProvisionalRenewUseCase getDriversLicenceProvisionalRenewUseCase
      ) : Controller
     {
 
@@ -95,17 +96,15 @@ namespace PortalEquador.Controllers.DriversLicence
             }
             return View(model);
         }
-        /*        
-                // POST: DriversLicence/RenewLicence/5
-                [HttpPost]
-                [ValidateAntiForgeryToken]
-                public async Task<IActionResult> RenewLicence(DriversLicenceViewModel model)
-                {
-                    await renewDriversLicenceUseCase.Invoke(model);
-                    await _deleteDocumentUseCase.Invoke((int)model.ProvisionalLicenceDocumentId);
-                    return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
-                }
-        */
+ 
+        // POST: DriversLicence/RenewLicence/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RenewLicence(DriversLicenceRenewViewModel model)
+        {
+            await renewDriversLicenceUseCase.Invoke(model);
+            return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+        }
 
         // GET: DriversLicence/CreateProvisional
         public async Task<IActionResult> CreateProvisional(int id, int identifier, string fullName)
@@ -138,86 +137,18 @@ namespace PortalEquador.Controllers.DriversLicence
             {
                 ModelState.AddModelError(nameof(model.Error), StringConstants.Error.UNDECLARED_ERROR);
                 model.Error = StringConstants.Error.UNDECLARED_ERROR;
-                model.ProvisionalExpirationDate = null;
                 return View(model);
             }
         }
-
-
-        // GET: DriversLicence/RenewLicence
-        public async Task<IActionResult> RenewProvisional(int id, int identifier, string fullName)
-        {
-
-            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
-            ViewData[ViewBagConstants.FULL_NAME] = fullName;
-
-            var model = await getDriversLicenceProvisionalUseCase.Invoke(id);
-            model.FullName = fullName;
-
-            if (model == null)
-            {
-                return NotFound();
-            }
-            return View(model);
-        }
-
-        // POST: DriversLicence/RenewLicence/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RenewProvisional(DriversLicenceProvisionalViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                await saveProvisionalUseCase.Invoke(model);
-                return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
-            }
-            else
-            {
-                ModelState.AddModelError(nameof(model.Error), StringConstants.Error.UNDECLARED_ERROR);
-                model.Error = StringConstants.Error.UNDECLARED_ERROR;
-                model.ProvisionalExpirationDate = null;
-                return View(model);
-            }
-        }
-
 
         /*
-
-
-
-                // GET: DriversLicence/Details/5
-                public async Task<IActionResult> Details(int identifier)
-                {
-                    var model = await _getDriversLicenceDetailModelUseCase.Invoke(identifier);
-                    return View(model);
-                }
-
-                // GET: DriversLicence/Edit/5
-                public async Task<IActionResult> Edit(int identifier)
-                {
-                    var model = await _getDriversLicenceUseCase.Invoke(identifier);
-                    model = await RecoverModel(model);
-                    return View(model);
-                }
-
-                // POST: DriversLicence/Edit/5
-                // To protect from overposting attacks, enable the specific properties you want to bind to.
-                // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-                [HttpPost]
-                [ValidateAntiForgeryToken]
-                public async Task<IActionResult> Edit(DriversLicenceViewModel_Finak model)
-                {
-                    //model = await RecoverModel(model);
-                    await _saveDriversLicenceUseCase.Invoke(model, OperationType.Update);
-                    return RedirectToAction(StringConstants.Controller.Action.Dashboard, StringConstants.Controller.Curriculums, new { identifier = model.PersonaInformationId });
-                }
-
-                // GET: DriversLicence
-                public async Task<IActionResult> Index()
-                {
-                    var result = await _getAllDriversLicencesUseCase.Invoke();
-                    return View(result);
-                }
+// GET: DriversLicence/Edit/5
+public async Task<IActionResult> Edit(int identifier)
+{
+    var model = await _getDriversLicenceUseCase.Invoke(identifier);
+    model = await RecoverModel(model);
+    return View(model);
+}
 
 
 
@@ -226,17 +157,44 @@ namespace PortalEquador.Controllers.DriversLicence
 
 
 
-                private async Task<DriversLicenceViewModel_Finak> RecoverModel(DriversLicenceViewModel_Finak model)
-                {
-                    var recover = await _getDriversLicenceCreationModelUseCase.Invoke(model.PersonaInformationId);
-                    model.LicenceTypes = recover.LicenceTypes;
-                    model.PersonalInformation = recover.PersonalInformation;
-                    model.Documents = recover.Documents;
-                    return model;
-                }
+
+        // POST: DriversLicence/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(DriversLicenceViewModel_Finak model)
+        {
+            //model = await RecoverModel(model);
+            await _saveDriversLicenceUseCase.Invoke(model, OperationType.Update);
+            return RedirectToAction(StringConstants.Controller.Action.Dashboard, StringConstants.Controller.Curriculums, new { identifier = model.PersonaInformationId });
+        }
+
+        // GET: DriversLicence
+        public async Task<IActionResult> Index()
+        {
+            var result = await _getAllDriversLicencesUseCase.Invoke();
+            return View(result);
+        }
 
 
-        */
+
+
+
+
+
+
+        private async Task<DriversLicenceViewModel_Finak> RecoverModel(DriversLicenceViewModel_Finak model)
+        {
+            var recover = await _getDriversLicenceCreationModelUseCase.Invoke(model.PersonaInformationId);
+            model.LicenceTypes = recover.LicenceTypes;
+            model.PersonalInformation = recover.PersonalInformation;
+            model.Documents = recover.Documents;
+            return model;
+        }
+
+
+*/
 
         private async Task<DriversLicenceViewModel> RecoverModel(DriversLicenceViewModel model)
         {

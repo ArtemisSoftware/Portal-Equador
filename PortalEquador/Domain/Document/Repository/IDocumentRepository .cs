@@ -8,8 +8,10 @@ namespace PortalEquador.Domain.Document.Repository
 {
     public interface IDocumentRepository : IGenericRepository<DocumentEntity>
     {
-        Task<List<DocumentDetailViewModel>> GetAllDocuments(int personalInformationId);
+        Task<List<DocumentViewModel>> GetAllDocuments(int personalInformationId);
         Task<List<DocumentViewModel>> GetDocumentByParentId(int id, List<int> documentTypeIds);
+
+        Task<DocumentViewModel?> GetDocumentByParentId(int id, int documentTypeId);
         Task<DocumentViewModel> GetCreateModel(int personaInformationId, string fullName);
         Task<DocumentViewModel> GetCreateModel(DocumentViewModel model);
         Task<bool> DocumentExists(int personaInformationId, int documentTypeId);
@@ -18,15 +20,6 @@ namespace PortalEquador.Domain.Document.Repository
         Task Save(DocumentViewModel model, FolderType folder);
 
         Task DeleteDocument(int personaInformationId, int documentTypeId);
-
-        //Task DeleteDocumentByParentId(int id, int documentTypeId);
-        /*
-       
-        Task<DocumentViewModel> GetDocument(int id);
-
-        Task<List<DocumentDetailViewModel>> GetDocumentsDetails(int personalInformationId, List<int> DocumentsGroupIds);
-
-        Task<List<DocumentDetailViewModel>> GetDocumentsDetails(int personalInformationId, int GroupItemId);
-        */
+        Task DeleteDocument(int personaInformationId, DocumentViewModel model);
     }
 }

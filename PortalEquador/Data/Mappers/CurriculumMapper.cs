@@ -101,6 +101,22 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.ProvisionalRenewalNumber, opt => opt.MapFrom(src => src.ProvisionalRenewalNumber))
                 .ReverseMap();
 
+            CreateMap<DriversLicenceEntity, DriversLicenceProvisionalRenewViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.Licence, opt => opt.MapFrom(src => src.LicenceTypeGroupItemEntity))
+                .ForMember(dest => dest.LicenceId, opt => opt.MapFrom(src => src.LicenceTypeId))
+                .ForMember(dest => dest.ProvisionalRenewalNumber, opt => opt.MapFrom(src => src.ProvisionalRenewalNumber))
+                .ReverseMap();
+
+            CreateMap<DriversLicenceEntity, DriversLicenceRenewViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.Licence, opt => opt.MapFrom(src => src.LicenceTypeGroupItemEntity))
+                .ForMember(dest => dest.LicenceId, opt => opt.MapFrom(src => src.LicenceTypeId))
+                .ForMember(dest => dest.ProvisionalRenewalNumber, opt => opt.MapFrom(src => src.ProvisionalRenewalNumber))
+                .ReverseMap();
+
             CreateMap<DriversLicenceEntity, DriversLicenceDetailViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                  .ForMember(dest => dest.Licence, opt => opt.MapFrom(src => src.LicenceTypeGroupItemEntity))

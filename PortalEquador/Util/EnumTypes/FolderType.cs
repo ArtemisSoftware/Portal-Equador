@@ -16,7 +16,7 @@ namespace PortalEquador.Util.EnumTypes
             switch (folderType)
             {
                 case FolderType.Curriculum:
-                    return  " / curriculum";
+                    return  "/curriculum";
 
                 case FolderType.DriversLicence:
                     return "/driverslicence";

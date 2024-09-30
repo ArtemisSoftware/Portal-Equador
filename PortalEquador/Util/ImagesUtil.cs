@@ -5,6 +5,7 @@ using PortalEquador.Data.Generic;
 using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Util.Constants;
 using PortalEquador.Util.EnumTypes;
+using System.Xml.XPath;
 using static PortalEquador.Util.Constants.FoldersConstants;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 using static PortalEquador.Util.Constants.GroupTypesConstants.ItemFromGroup;
@@ -16,7 +17,23 @@ namespace PortalEquador.Util
 
         public static async Task SaveImage(IWebHostEnvironment hostEnvironment, DocumentViewModel document, FolderType folder)
         {
+            FolderType _folder = GetFolder(document);
+            string filenaName = GetFileName(document, _folder);
+            var lolo = GetFileToDelete(hostEnvironment, _folder, document.PersonaInformationId, filenaName);
+
+            foreach(string filePath in lolo)
+            {
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
+            }
+
+            //------
+
+
             string path = GetImagePath(hostEnvironment, document, folder);
+
 
             if (File.Exists(path))
             {
@@ -27,6 +44,34 @@ namespace PortalEquador.Util
             {
                 await document.ImageFile.CopyToAsync(fileStream);
             }
+        }
+
+        private static List<string> GetFileToDelete(IWebHostEnvironment hostEnvironment, FolderType folder, int personalInformationId, string imageName)
+        {
+            string wwwRootPath = hostEnvironment.WebRootPath;
+            string folderPath = wwwRootPath + folder.GetFullPath() + "/" + personalInformationId + "/";
+            List<string> matchingImagePath = new List<string>();
+
+            try
+            {
+                // Get all image files from the folder
+                string[] imageFiles = Directory.GetFiles(folderPath)
+                    .Where(file => IsImageFile(file))
+                    .ToArray();
+
+
+                // Search for the image by name
+                matchingImagePath = imageFiles
+                    .Where(imagePath => Path.GetFileNameWithoutExtension(imagePath).Equals(imageName.ToString(), StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                
+            } catch(DirectoryNotFoundException ex)
+            {
+
+            }
+
+            return matchingImagePath;
         }
 
         private static string GetImagePath(IWebHostEnvironment hostEnvironment, DocumentViewModel document, FolderType folder)
@@ -46,7 +91,7 @@ namespace PortalEquador.Util
             }
 
             string root = GetRootDirectory(hostEnvironment, document, folder);
-            fileName = GetFileName(document, extension, folder);
+            fileName = GetFileName(document,folder);
             string path = Path.Combine(root, fileName);
 
             if (!Directory.Exists(root))
@@ -65,15 +110,15 @@ namespace PortalEquador.Util
             return root;
         }
 
-        private static string GetFileName(DocumentViewModel document, string extension, FolderType folder)
+        private static string GetFileName(DocumentViewModel document, FolderType folder)
         {
             switch (folder)
             {
                 case FolderType.Curriculum:
-                    return document.FileName + extension; 
+                    return GetImageId(document) + document.Extension; 
 
                 case FolderType.DriversLicence:
-                    return document.FileName + extension; ;
+                    return GetImageId(document) + document.Extension; ;
 
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -102,7 +147,7 @@ namespace PortalEquador.Util
             }
         }
 
-        public static string GetImageId(DocumentViewModel model)
+        private static string GetImageId(DocumentViewModel model)
         {
             if (model.DocumentTypeId == ItemFromGroup.Documents.DRIVERS_LICENCE)
             {
@@ -118,7 +163,16 @@ namespace PortalEquador.Util
             }
         }
 
+        public static void DeleteImage_(IWebHostEnvironment hostEnvironment, DocumentViewModel document)
+        {
+            FolderType folder = GetFolder(document);
+            string path = GetImagePath(hostEnvironment, document, folder);
 
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
 
 
 

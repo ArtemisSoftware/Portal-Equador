@@ -23,12 +23,12 @@ namespace PortalEquador.Domain.Document.ViewModels
         [Display(Name = StringConstants.Display.DOCUMENT)]
         public GroupItemViewModel Document { get; set; }
 
-        public string PicturePath
-        {
-            get
-            {
-                return ImagesUtil.GetFilePath(PersonaInformationId, Document.Id, Extension + "?v=123456");
-            }
-        }
+        public int? SubTypeId { get; set; }
+        public GroupItemViewModel? SubType { get; set; }
+        public int? ParentId { get; set; }
+
+        //public string PicturePath => ImagesUtil.GetFilePath(this);
+        public string PicturePath => ImagesUtil.GetFilePath(PersonaInformationId, Document.Id, Extension + "?v=123456");
+
     }
 }

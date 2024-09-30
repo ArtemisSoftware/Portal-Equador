@@ -15,9 +15,12 @@ namespace PortalEquador.Domain.DriversLicence.Repository
         Task<DriversLicenceViewModel> GetCreateModel(DriversLicenceViewModel model);
         Task<DriversLicenceDetailViewModel> GetDriversLicenceDetail(int id);
         Task<DriversLicenceProvisionalViewModel> GetDriversLicenceProvisional(int id);
-        Task<DriversLicenceViewModel> GetDriversLicence(int id);
+        Task<DriversLicenceProvisionalRenewViewModel> GetDriversLicenceProvisionalRenew(int id);
+        Task<DriversLicenceRenewViewModel> GetDriversLicence(int id);
         Task<int> Save(DriversLicenceViewModel model);
+        Task<int> Save(DriversLicenceRenewViewModel model);
         Task<int> Save(DriversLicenceProvisionalViewModel model);
+        Task<int> Save(DriversLicenceProvisionalRenewViewModel model);
         Task<bool> LicenceExists(int personalInformationId, int licenceTypeId);
 
     }

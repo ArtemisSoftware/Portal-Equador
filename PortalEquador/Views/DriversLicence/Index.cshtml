@@ -91,10 +91,13 @@
                                 Verbete
                             </a>
                         }
-                        
+
                     }
-                    <a asp-action="Edit" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
-                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                    else
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                    }
+                   <a asp-action="Details" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
                 </td>
             </tr>
         }

@@ -1,5 +1,4 @@
 ﻿using PortalEquador.Domain.Document.Repository;
-using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Domain.DriversLicence.Repository;
 using PortalEquador.Domain.DriversLicence.ViewModels;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
@@ -9,15 +8,15 @@ namespace PortalEquador.Domain.DriversLicence.UseCases
     public class RenewDriversLicenceUseCase(IDriversLicenceRepository driversLicenceRepository, IDocumentRepository documentRepository)
     {
 
-        public async Task Invoke(DriversLicenceViewModel model)
+        public async Task Invoke(DriversLicenceRenewViewModel model)
         {
-            model.ProvisionalExpirationDate = null;
-            model.ProvisionalRenewalNumber = null;
+            var driversLicenceId = await driversLicenceRepository.Save(model);
+            var provisionalDocument = await documentRepository.GetDocumentByParentId(driversLicenceId, ItemFromGroup.Documents.DRIVERS_LICENCE_PROVISIONAL);
 
-            await driversLicenceRepository.Save(model);
-            //await documentRepository.
+            if (provisionalDocument != null)
+            {
+                await documentRepository.DeleteDocument(model.PersonaInformationId, provisionalDocument);
+            }
         }
-
-
     }
 }

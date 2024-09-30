@@ -16,15 +16,16 @@ namespace PortalEquador.Data.Document.Repository
     public class DocumentRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment hostEnvironment)
         : GenericRepository<DocumentEntity>(context, httpContextAccessor), IDocumentRepository
     {
-        public async Task<List<DocumentDetailViewModel>> GetAllDocuments(int PersonalInformationId)
+        public async Task<List<DocumentViewModel>> GetAllDocuments(int PersonalInformationId)
         {
             var result = await context.DocumentEntity
                 .Include(d => d.DocumentTypeGroupItemEntity)
                 .Include(d => d.PersonalInformationEntity)
+               .Include(d => d.SubTypeGroupItemEntity)
                 .Where(item => item.PersonalInformationId == PersonalInformationId)
                 .ToListAsync();
 
-            return mapper.Map<List<DocumentDetailViewModel>>(result);
+            return mapper.Map<List<DocumentViewModel>>(result);
         }
 
         public async Task<List<DocumentViewModel>> GetDocumentByParentId(int id, List<int> documentTypeIds)
@@ -37,6 +38,23 @@ namespace PortalEquador.Data.Document.Repository
 
             return mapper.Map< List<DocumentViewModel>>(result);
 
+        }
+
+        public async Task<DocumentViewModel?> GetDocumentByParentId(int id, int documentTypeId)
+        {
+            var result = await context.DocumentEntity
+               .Include(d => d.DocumentTypeGroupItemEntity)
+               .Include(d => d.SubTypeGroupItemEntity)
+               .Where(item => item.ParentId == id && item.DocumentTypeId == documentTypeId)
+               .FirstOrDefaultAsync();
+
+            if(result == null)
+            {
+                return null;
+            } else
+            {
+                return mapper.Map<DocumentViewModel>(result);
+            }
         }
 
         public async Task<DocumentViewModel> GetCreateModel(DocumentViewModel model)
@@ -130,6 +148,12 @@ namespace PortalEquador.Data.Document.Repository
 
             return mapper.Map<DocumentViewModel>(result);
 
+        }
+
+        public async Task DeleteDocument(int personaInformationId, DocumentViewModel model)
+        {
+            ImagesUtil.DeleteImage_(hostEnvironment, model);
+            await DeleteAsync(model.Id);
         }
 
         public async Task DeleteDocument(int personaInformationId, int documentId)
