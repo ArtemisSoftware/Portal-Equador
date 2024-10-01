@@ -12,9 +12,10 @@ namespace PortalEquador.Controllers.DriversLicence
         SaveProvisionalUseCase saveProvisionalUseCase,
         RenewDriversLicenceUseCase renewDriversLicenceUseCase,
         GetDriversLicenceDetailUseCase getDriversLicenceDetailUseCase,
-        GetDriversLicenceUseCase getDriversLicenceUseCase,
+        GetDriversLicenceRenewUseCase getDriversLicenceRenewUseCase,
         GetDriversLicenceProvisionalUseCase getDriversLicenceProvisionalUseCase,
-        GetDriversLicenceProvisionalRenewUseCase getDriversLicenceProvisionalRenewUseCase
+        GetDriversLicenceProvisionalRenewUseCase getDriversLicenceProvisionalRenewUseCase,
+        GetDriversLicenceUseCase getDriversLicenceUseCase
      ) : Controller
     {
 
@@ -87,7 +88,7 @@ namespace PortalEquador.Controllers.DriversLicence
             ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
             ViewData[ViewBagConstants.FULL_NAME] = fullName;
 
-            var model = await getDriversLicenceUseCase.Invoke(id);
+            var model = await getDriversLicenceRenewUseCase.Invoke(id);
             model.FullName = fullName;
 
             if (model == null)
@@ -141,14 +142,20 @@ namespace PortalEquador.Controllers.DriversLicence
             }
         }
 
+        // GET: DriversLicence/Edit/5
+        public async Task<IActionResult> Edit(int id, int identifier, string fullName)
+        {
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
+
+            var model = await getDriversLicenceUseCase.Invoke(id);
+            model = await RecoverModel(model);
+            return View(model);
+        }
+
+
         /*
-// GET: DriversLicence/Edit/5
-public async Task<IActionResult> Edit(int identifier)
-{
-    var model = await _getDriversLicenceUseCase.Invoke(identifier);
-    model = await RecoverModel(model);
-    return View(model);
-}
+
 
 
 

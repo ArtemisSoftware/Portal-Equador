@@ -16,7 +16,8 @@ namespace PortalEquador.Domain.DriversLicence.Repository
         Task<DriversLicenceDetailViewModel> GetDriversLicenceDetail(int id);
         Task<DriversLicenceProvisionalViewModel> GetDriversLicenceProvisional(int id);
         Task<DriversLicenceProvisionalRenewViewModel> GetDriversLicenceProvisionalRenew(int id);
-        Task<DriversLicenceRenewViewModel> GetDriversLicence(int id);
+        Task<DriversLicenceRenewViewModel> GetDriversLicenceRenew(int id);
+        Task<DriversLicenceViewModel> GetDriversLicence(int id);
         Task<int> Save(DriversLicenceViewModel model);
         Task<int> Save(DriversLicenceRenewViewModel model);
         Task<int> Save(DriversLicenceProvisionalViewModel model);

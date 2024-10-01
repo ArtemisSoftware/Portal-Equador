@@ -61,7 +61,7 @@ namespace PortalEquador.Data.DriversLicence.Repository
             return mapper.Map<DriversLicenceDetailViewModel>(result);
         }
         
-        public async Task<DriversLicenceRenewViewModel> GetDriversLicence(int id)
+        public async Task<DriversLicenceRenewViewModel> GetDriversLicenceRenew(int id)
         {
             var result = await context.DriversLicenceEntity
                           .Include(item => item.LicenceTypeGroupItemEntity)
@@ -92,6 +92,17 @@ namespace PortalEquador.Data.DriversLicence.Repository
                     .FirstOrDefaultAsync();
 
             return mapper.Map<DriversLicenceProvisionalRenewViewModel>(result);
+        }
+
+        public async Task<DriversLicenceViewModel> GetDriversLicence(int id)
+        {
+            var result = await context.DriversLicenceEntity
+                    .Include(item => item.LicenceTypeGroupItemEntity)
+                    .Include(item => item.PersonalInformationEntity)
+                    .Where(item => item.Id == id)
+                    .FirstOrDefaultAsync();
+
+            return mapper.Map<DriversLicenceViewModel>(result);
         }
 
         public async Task<bool> LicenceExists(int personalInformationId, int licenceTypeId)
@@ -170,5 +181,7 @@ namespace PortalEquador.Data.DriversLicence.Repository
 
             return id;
         }
+
+
     }
 }
