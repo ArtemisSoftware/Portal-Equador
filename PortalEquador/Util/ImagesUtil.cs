@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using NuGet.Packaging.Signing;
 using PortalEquador.Data.Generic;
 using PortalEquador.Domain.Document.ViewModels;
@@ -18,8 +19,8 @@ namespace PortalEquador.Util
         public static async Task SaveImage(IWebHostEnvironment hostEnvironment, DocumentViewModel document, FolderType folder)
         {
             FolderType _folder = GetFolder(document);
-            string filenaName = GetFileName(document, _folder);
-            var lolo = GetFileToDelete(hostEnvironment, _folder, document.PersonaInformationId, filenaName);
+            string fileName = GetFileName(document, _folder);
+            var lolo = GetFileToDelete(hostEnvironment, _folder, document.PersonaInformationId, fileName);
 
             foreach(string filePath in lolo)
             {
@@ -56,7 +57,7 @@ namespace PortalEquador.Util
             {
                 // Get all image files from the folder
                 string[] imageFiles = Directory.GetFiles(folderPath)
-                    .Where(file => IsImageFile(file))
+                    .Where(file => IsImageAllFile(file))
                     .ToArray();
 
 
@@ -89,7 +90,7 @@ namespace PortalEquador.Util
                 fileName = Path.GetFileNameWithoutExtension(document.ImageFile.FileName);
                 extension = Path.GetExtension(document.ImageFile.FileName);
             }
-
+            document.Extension = extension;
             string root = GetRootDirectory(hostEnvironment, document, folder);
             fileName = GetFileName(document,folder);
             string path = Path.Combine(root, fileName);
@@ -102,6 +103,10 @@ namespace PortalEquador.Util
             return path;
         }
 
+        public static string GetImageExtension(IFormFile imageFile)
+        {
+            return Path.GetExtension(imageFile.FileName);
+        }
 
         private static string GetRootDirectory(IWebHostEnvironment hostEnvironment, DocumentViewModel document, FolderType folder)
         {
@@ -132,7 +137,30 @@ namespace PortalEquador.Util
 
         public static string GetFilePath(DocumentViewModel model)
         {
-            return "~" + GetFolder(model).GetFullPath() + "/" + model.PersonaInformationId + "/" + GetImageId(model) + model.Extension + "?v=123456";
+            var path = "~" + GetFolder(model).GetFullPath() + "/" + model.PersonaInformationId + "/" + GetImageId(model) + model.Extension;
+            var validatedPath = ValidateImagePath(GetFolder(model), GetImageId(model), path);
+
+            return validatedPath + "?v=123456";
+        }
+
+        private static string ValidateImagePath(FolderType folder, string imageId, string imagePath)
+        {
+
+            string wwwRootPath = hostEnvironment.WebRootPath;
+            string folderPath = wwwRootPath + folder.GetFullPath() + "/" + personalInformationId + "/";
+
+            if (File.Exists(imagePath))
+            {
+                return imagePath;
+            }
+            else if(folder == FolderType.Curriculum && imageId == ItemFromGroup.Documents.PROFILE_PICTURE.ToString())
+            {
+                return "~" + FolderType.Placeholder.GetFullPath() + ImageConstants.Placeholder.AVATAR;
+            }
+            else
+            {
+                return "~" + FolderType.Placeholder.GetFullPath() + ImageConstants.Placeholder.AVATAR;
+            }
         }
 
         private static FolderType GetFolder(DocumentViewModel model)
@@ -299,7 +327,15 @@ namespace PortalEquador.Util
             return imageExtensions.Contains(fileExtension, StringComparer.OrdinalIgnoreCase);
         }
 
-        
+        static bool IsImageAllFile(string filePath)
+        {
+            // Check if the file has an image extension (you can customize this check)
+            string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".bmp", "" };
+            string fileExtension = Path.GetExtension(filePath);
+            return imageExtensions.Contains(fileExtension, StringComparer.OrdinalIgnoreCase);
+        }
+
+
         public static void DeleteImage(IWebHostEnvironment hostEnvironment, DocumentViewModel document)
         {
             string path = GetImagePath(hostEnvironment, document);

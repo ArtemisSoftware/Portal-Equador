@@ -27,7 +27,8 @@ namespace PortalEquador.Domain.DriversLicence.UseCases
                     ImageFile = model.ImageFile,
                     DocumentTypeId = ItemFromGroup.Documents.DRIVERS_LICENCE,
                     SubTypeId = model.LicenceId,
-                    ParentId = driversLicenceId
+                    ParentId = driversLicenceId,
+                    Extension = ImagesUtil.GetImageExtension(model.ImageFile)
                 };
 
                 await documentRepository.Save(document, Util.EnumTypes.FolderType.DriversLicence);

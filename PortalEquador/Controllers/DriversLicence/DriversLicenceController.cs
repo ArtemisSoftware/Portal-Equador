@@ -2,6 +2,7 @@
 using PortalEquador.Domain.DriversLicence.Repository;
 using PortalEquador.Domain.DriversLicence.UseCases;
 using PortalEquador.Domain.DriversLicence.ViewModels;
+using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.DriversLicence
@@ -70,8 +71,6 @@ namespace PortalEquador.Controllers.DriversLicence
             ViewData["id"] = model.Id;
             return View(model);
         }
-
-
 
 
         // GET: DriversLicence/Details/5
@@ -153,6 +152,18 @@ namespace PortalEquador.Controllers.DriversLicence
             return View(model);
         }
 
+        // POST: DriversLicence/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(DriversLicenceViewModel model)
+        {
+            await saveDriversLicenceUseCase.Invoke(model);
+            return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+        }
+
+
 
         /*
 
@@ -165,24 +176,7 @@ namespace PortalEquador.Controllers.DriversLicence
 
 
 
-        // POST: DriversLicence/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(DriversLicenceViewModel_Finak model)
-        {
-            //model = await RecoverModel(model);
-            await _saveDriversLicenceUseCase.Invoke(model, OperationType.Update);
-            return RedirectToAction(StringConstants.Controller.Action.Dashboard, StringConstants.Controller.Curriculums, new { identifier = model.PersonaInformationId });
-        }
 
-        // GET: DriversLicence
-        public async Task<IActionResult> Index()
-        {
-            var result = await _getAllDriversLicencesUseCase.Invoke();
-            return View(result);
-        }
 
 
 

@@ -11,11 +11,13 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <input type="hidden" asp-for="PersonaInformationId" />
             <input type="hidden" asp-for="FullName" />
+            <input type="hidden" asp-for="LicenceId" />
+            <input type="hidden" asp-for="DateCreated" />
 
 
             <div class="form-group">
@@ -54,9 +56,19 @@
     </div>
 
 <div class="col-md-8">
-    <label for="Image" class="form-label">Pré-visualização</label>
-    <br />
-    <img id="frame" src="" class="img-fluid" />
+        <div class="row">
+            <div class="col-sm-6">
+                <label for="Image" class="form-label">Documento atual</label>
+                <br />
+                <img id="frame2" src="@Url.Content(Model.LicenceDocument.PicturePath)" class="card-img-top">
+            </div>
+
+            <div class="col-sm-6">
+                <label for="Image" class="form-label">Documento para substituir </label>
+                <br />
+                <img id="frame" src="" class="img-fluid" />
+            </div>
+        </div>
 </div>
 
 </div>
