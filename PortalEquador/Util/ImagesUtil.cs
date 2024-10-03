@@ -135,32 +135,38 @@ namespace PortalEquador.Util
             return "~" + folder.GetFullPath() + "/" + personalInformationId + "/" + imageId + extension + "?v=123456";
         }
 
-        public static string GetFilePath(DocumentViewModel model)
+        private static string GetFilePath(DocumentViewModel model)
+        {
+            return GetFolder(model).GetFullPath() + "/" + model.PersonaInformationId + "/" + GetImageId(model) + model.Extension;
+        }
+        
+        public static string GetFileFullPath(DocumentViewModel model)
         {
             var path = "~" + GetFolder(model).GetFullPath() + "/" + model.PersonaInformationId + "/" + GetImageId(model) + model.Extension;
-            var validatedPath = ValidateImagePath(GetFolder(model), GetImageId(model), path);
-
-            return validatedPath + "?v=123456";
+            return path + "?v=123456";
         }
 
-        private static string ValidateImagePath(FolderType folder, string imageId, string imagePath)
+        public static DocumentViewModel ValidateDocument(IWebHostEnvironment hostEnvironment, DocumentViewModel model)
         {
-
-            string wwwRootPath = hostEnvironment.WebRootPath;
-            string folderPath = wwwRootPath + folder.GetFullPath() + "/" + personalInformationId + "/";
+            var folder = GetFolder(model);
+            var imageId = GetImageId(model);
+            //string imagePath = Path.Combine(hostEnvironment.WebRootPath, GetFilePath(model));
+            string imagePath = hostEnvironment.WebRootPath + "/" + GetFilePath(model);
 
             if (File.Exists(imagePath))
             {
-                return imagePath;
+                model.PicturePath = GetFileFullPath(model);
             }
-            else if(folder == FolderType.Curriculum && imageId == ItemFromGroup.Documents.PROFILE_PICTURE.ToString())
+            else if (folder == FolderType.Curriculum && imageId == ItemFromGroup.Documents.PROFILE_PICTURE.ToString())
             {
-                return "~" + FolderType.Placeholder.GetFullPath() + ImageConstants.Placeholder.AVATAR;
+                model.PicturePath = "~" + FolderType.Placeholder.GetFullPath() + ImageConstants.Placeholder.AVATAR;
             }
             else
             {
-                return "~" + FolderType.Placeholder.GetFullPath() + ImageConstants.Placeholder.AVATAR;
+                model.PicturePath = "~" + FolderType.Placeholder.GetFullPath() + ImageConstants.Placeholder.AVATAR;
             }
+
+            return model;
         }
 
         private static FolderType GetFolder(DocumentViewModel model)
@@ -201,6 +207,14 @@ namespace PortalEquador.Util
                 File.Delete(path);
             }
         }
+
+
+
+
+
+
+
+
 
 
 

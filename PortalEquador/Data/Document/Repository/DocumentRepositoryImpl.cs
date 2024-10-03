@@ -25,8 +25,43 @@ namespace PortalEquador.Data.Document.Repository
                 .Where(item => item.PersonalInformationId == PersonalInformationId)
                 .ToListAsync();
 
-            return mapper.Map<List<DocumentViewModel>>(result);
+            var models = new List<DocumentViewModel>();
+            mapper.Map<List<DocumentViewModel>>(result).ForEach(document => models.Add(ImagesUtil.ValidateDocument(hostEnvironment, document)));
+            return models;
         }
+
+
+        private async Task<DocumentViewModel> GetDocument(int id)
+        {
+            var result = await context.DocumentEntity
+               .Include(d => d.DocumentTypeGroupItemEntity)
+               .Where(item => item.Id == id)
+               .FirstAsync();
+
+            var model = mapper.Map<DocumentViewModel>(result);
+            model = ImagesUtil.ValidateDocument(hostEnvironment, model);    
+            return model;
+        }
+
+        private async Task<DocumentViewModel?> GetDocumentByType(int personaInformationId, int documentTypeId)
+        {
+            var result = await context.DocumentEntity
+               .Include(d => d.DocumentTypeGroupItemEntity)
+               .Where(item => item.PersonalInformationId == personaInformationId & item.DocumentTypeId == documentTypeId)
+               .FirstAsync();
+
+            if (result == null)
+            {
+                return null;
+            }
+
+
+
+            var model = mapper.Map<DocumentViewModel>(result);
+            model = ImagesUtil.ValidateDocument(hostEnvironment, model);
+            return model;
+        }
+
 
         public async Task<List<DocumentViewModel>> GetDocumentByParentId(int id, List<int> documentTypeIds)
         {
@@ -36,8 +71,9 @@ namespace PortalEquador.Data.Document.Repository
                .Where(item => item.ParentId == id &&  documentTypeIds.Contains(item.DocumentTypeId))
                .ToListAsync();
 
-            return mapper.Map< List<DocumentViewModel>>(result);
-
+            var models = new List<DocumentViewModel>();
+            mapper.Map<List<DocumentViewModel>>(result).ForEach(document => models.Add(ImagesUtil.ValidateDocument(hostEnvironment, document)));
+            return models;
         }
 
         public async Task<DocumentViewModel?> GetDocumentByParentId(int id, int documentTypeId)
@@ -53,7 +89,9 @@ namespace PortalEquador.Data.Document.Repository
                 return null;
             } else
             {
-                return mapper.Map<DocumentViewModel>(result);
+                var model = mapper.Map<DocumentViewModel>(result);
+                model = ImagesUtil.ValidateDocument(hostEnvironment, model);
+                return model;
             }
         }
 
@@ -105,12 +143,24 @@ namespace PortalEquador.Data.Document.Repository
 
         public async Task Save(DocumentViewModel model, FolderType folder)
         {
+
             var extension = Path.GetExtension(model.ImageFile.FileName);
             await ImagesUtil.SaveImage(hostEnvironment, model, folder);
 
             var entity = mapper.Map<DocumentEntity>(model);
             entity.Extension = extension;
             entity.EditorId = GetCurrentUserId();
+
+            // set Modified flag in your entry
+            var local = context.Set<DocumentEntity>().Local.FirstOrDefault(entry => entry.Id.Equals(model.Id));
+
+            // check if local is not null 
+            if (local != null)
+            {
+                // detach
+                context.Entry(local).State = EntityState.Detached;
+            }
+            context.Entry(entity).State = EntityState.Modified;
 
             if (model.Id == 0)
             {
@@ -121,33 +171,6 @@ namespace PortalEquador.Data.Document.Repository
                 entity.DateModified = DateTime.UtcNow;
                 await UpdateAsync(entity);
             }
-        }
-
-        private async Task<DocumentViewModel> GetDocument(int id)
-        {
-            var result = await context.DocumentEntity
-               .Include(d => d.DocumentTypeGroupItemEntity)
-               .Where(item => item.Id == id)
-               .FirstAsync();
-
-            return mapper.Map<DocumentViewModel>(result);
-
-        }
-
-        private async Task<DocumentViewModel?> GetDocumentByType(int personaInformationId, int documentTypeId)
-        {
-            var result = await context.DocumentEntity
-               .Include(d => d.DocumentTypeGroupItemEntity)
-               .Where(item => item.PersonalInformationId == personaInformationId & item.DocumentTypeId == documentTypeId)
-               .FirstAsync();
-
-            if(result == null)
-            {
-                return null;
-            }
-
-            return mapper.Map<DocumentViewModel>(result);
-
         }
 
         public async Task DeleteDocument(int personaInformationId, DocumentViewModel model)

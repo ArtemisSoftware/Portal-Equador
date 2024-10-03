@@ -38,7 +38,7 @@ namespace PortalEquador.Domain.Document.ViewModels
         public GroupItemViewModel? SubType { get; set; }
         public int? ParentId { get; set; }
 
-        public string PicturePath => ImagesUtil.GetFilePath(this);
-
+        //public string PicturePath => ImagesUtil.GetFileFullPath(this);
+        public string? PicturePath { get; set; }
     }
 }
