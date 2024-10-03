@@ -3,22 +3,43 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<style>
+    img {
+        opacity: 0.5;
+    }
 
-<h1>Editar lingua</h1>
-<h3>@Html.DisplayNameFor(model => model.Licence):  @Html.DisplayFor(model => model.Licence.Description)</h3>
+        img:hover {
+            opacity: 1.0;
+        }
+</style>
+
+
+<h1>Editar @Html.DisplayNameFor(model => model.Licence)</h1>
+<h3>@ViewBag.username</h3>
 <hr />
 <br />
-<hr />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="PersonaInformationId" />
             <input type="hidden" asp-for="FullName" />
             <input type="hidden" asp-for="LicenceId" />
             <input type="hidden" asp-for="DateCreated" />
 
+
+            <dl class="row">
+
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Licence)
+                </dt>
+                <dd class="col-sm-4">
+                    @Html.DisplayFor(model => model.Licence.Description)
+                </dd>
+            </dl>
 
             <div class="form-group">
                 <label asp-for="ExpirationDate" class="control-label"></label>
@@ -49,7 +70,7 @@
             <br />
             <br />
             <div class="form-group">
-                <a asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <a asp-action="Index" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-dark">Regressar ao index</a> &nbsp;
                 <input type="submit" value="Criar registo" class="btn btn-primary" />
             </div>
         </form>

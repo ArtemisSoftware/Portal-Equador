@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\images\curriculum\" />
     <Folder Include="wwwroot\images\driverslicence\" />
   </ItemGroup>
 

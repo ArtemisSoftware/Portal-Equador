@@ -23,6 +23,7 @@
         public static class Placeholder
         {
             public const string AVATAR = "/avatar.png";
+            public const string NO_IMAGE = "/noimage.jpg";
         }
 
         public static class NameSuffix

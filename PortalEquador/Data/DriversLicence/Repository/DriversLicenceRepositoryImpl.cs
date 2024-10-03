@@ -117,6 +117,10 @@ namespace PortalEquador.Data.DriversLicence.Repository
         {
             var entity = mapper.Map<DriversLicenceEntity>(model);
             entity.EditorId = GetCurrentUserId();
+            if(model.ExpirationDateAvailable == false)
+            {
+                entity.ExpirationDate = null;
+            }
             var id = await Save(model.Id, entity);
 
             return id;

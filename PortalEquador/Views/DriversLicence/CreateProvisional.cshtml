@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "AddProvisional";
+    var imageExtensions = string.Join(", ", PortalEquador.Util.Constants.ImageConstants.Extensions.IMAGE_EXTENSIONS);
 }
 
 
@@ -48,6 +49,13 @@
 
             <br />
 
+            <div class="form-group">
+                <div class="alert alert-warning" role="alert">
+                    @PortalEquador.Util.Constants.StringConstants.Alert.IMAGE_FILES_EXTENSIONS_ACCEPTED @imageExtensions
+                </div>
+            </div>
+            <br />
+
             @if (Model.Error != null)
             {
                 <div class="form-group">
@@ -58,7 +66,7 @@
             }
 
             <div class="form-group">
-                <a asp-action="Index" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <a asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-dark">Regressar ao index</a> &nbsp;
                 <input type="submit" value="Guardar Alterações" class="btn btn-warning" />
             </div>
 

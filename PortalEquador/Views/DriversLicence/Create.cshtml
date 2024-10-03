@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Create";
+    var imageExtensions = string.Join(", ", PortalEquador.Util.Constants.ImageConstants.Extensions.IMAGE_EXTENSIONS);
 }
 
 <br />
@@ -44,6 +45,14 @@
             </div>
 
             <br />
+
+            <div class="form-group">
+                <div class="alert alert-warning" role="alert">
+                    @PortalEquador.Util.Constants.StringConstants.Alert.IMAGE_FILES_EXTENSIONS_ACCEPTED @imageExtensions
+                </div>
+            </div>
+            <br />
+
             @if (Model.Error != null)
             {
                 <div class="form-group">

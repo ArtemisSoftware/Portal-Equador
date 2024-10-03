@@ -4,15 +4,9 @@
     ViewData["Title"] = "RenewProvisional";
 }
 
-@if (@Model.HasProvisionalLicence)
-{
-    <h1>Renovar Verbete</h1>
-}
-else
-{
-    <h1>Adicionar Verbete</h1>
-}
-<h4>Para: @Model.FullName</h4>
+
+ <h1>Renovar Verbete</h1>
+<h3>@ViewBag.username</h3>
 <hr />
 
 
@@ -81,12 +75,7 @@ else
 
             <br />
 
-            <div class="form-group">
-                <input asp-for="ImageFile" accept="image/*" onchange="preview()" class="form-control" type="file" />
-                <span asp-validation-for="ImageFile" class="text-danger"></span>
-            </div>
 
-            <br />
 
             @if (@Model.ProvisionalRenewalNumber != null)
             {

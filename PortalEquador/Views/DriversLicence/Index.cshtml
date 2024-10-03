@@ -73,22 +73,25 @@
                     
                 </td>
                 <td>
-                    @if (item.NeedsRenewal())
+                    @if (item.ShowRenewalOptions())
                     {
-                        <a asp-action="RenewLicence" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success"><i class="fas fa-refresh" title="Renovar carta de condução"></i> Carta</a>
+                        <a asp-action="RenewLicence" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success">
+                            <i class="fas fa-refresh" title="Renovar carta de condução"></i> 
+                            Renovar Carta
+                        </a>
 
                         @if (item.ProvisionalExpirationDate == null)
                         {
                             <a asp-action="CreateProvisional" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success">
                                 <i class="fas fa-plus" title="Adicionar verbete"></i>
-                                Verbete
+                                Adicionar Verbete
                             </a>
                         }
                         else
                         {
                             <a asp-action="RenewProvisional" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success">
                             <i class="fas fa-refresh" title="Renovar verbete"></i>
-                                Verbete
+                             Atualizar  Verbete
                             </a>
                         }
 

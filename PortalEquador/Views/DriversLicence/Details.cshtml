@@ -5,7 +5,8 @@
 }
 
 <h1>Detalhes</h1>
-<h4>Para: @Model.Licence.Description</h4>
+<h4>Para: @ViewBag.username</h4>
+
 <hr />
 
 <div class="row">
@@ -21,12 +22,15 @@
                 @Html.DisplayFor(model => model.Licence.Description)
             </dd>
 
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.ExpirationDate)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.ExpirationDate)
-            </dd>
+            @if (@Model.Status != PortalEquador.Util.LicenceStatusType.No_Expiration_Date)
+            {
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.ExpirationDate)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.ExpirationDate)
+                </dd>
+            }
 
             <dt class="col-sm-4">
                 @Html.DisplayNameFor(model => model.Status)

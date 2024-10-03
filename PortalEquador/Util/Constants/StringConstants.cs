@@ -121,6 +121,7 @@
             public const string EXISTING_EDUCATION = "A educação já se encontra registada";
             public const string UNDECLARED_ERROR = "Ocorreu um erro ao preencher o formulário.";
             public const string EXISTING_DRIVERS_LICENCE = "A carta de condução já se encontra registada";
+            public const string INVALID_IMAGE_EXTENSION = "A imagem possui uma extensão inválida";
         }
 
         public static class Dates
@@ -139,6 +140,7 @@
         public static class Alert
         {
             public const string DELETE_PROVISIONAL_DRIVERS_LICENCE = "Ao renovar a carta de condução irá eliminar o verbete caso exista.";
+            public const string IMAGE_FILES_EXTENSIONS_ACCEPTED = "Extenções aceites: ";
         }
 
         public static class LicenceStatus

@@ -26,9 +26,20 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
             return Status != LicenceStatusType.Updated && ProvisionalExpirationDate != null;
         }
 
-        public bool NeedsRenewal()
+        public bool ShowRenewalOptions()
         {
-            return (Status != LicenceStatusType.Updated);
+            if (Status == LicenceStatusType.No_Expiration_Date)
+            {
+                return false;
+            }
+            else if (Status != LicenceStatusType.Updated)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public override DateTime? GetProvisionalExpirationDate()

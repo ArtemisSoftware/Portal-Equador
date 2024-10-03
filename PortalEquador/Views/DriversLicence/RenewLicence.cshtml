@@ -5,6 +5,7 @@
 }
 
 <h1>Renovar Carta de condução</h1>
+<h3>@ViewBag.username</h3>
 <hr />
 
 
@@ -16,8 +17,9 @@
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="PersonaInformationId" />
             <input type="hidden" asp-for="LicenceId" />
-
-
+            <input type="hidden" asp-for="DateCreated" />
+            <input type="hidden" asp-for="FullName" />
+            <input type="hidden" asp-for="ExpirationDate" />
 
             <dl class="row">
                 <dt class="col-sm-4">
