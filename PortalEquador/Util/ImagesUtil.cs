@@ -208,6 +208,35 @@ namespace PortalEquador.Util
             }
         }
 
+        public static string GetProfileImagePath___(IWebHostEnvironment hostEnvironment, int personaInformationId)
+        {
+            string folderPath = Path.Combine(hostEnvironment.WebRootPath, FolderType.Curriculum.GetPath() + "/" + personaInformationId);
+            string imagePath = "";
+
+            try
+            {
+                var images = Directory.GetFiles(folderPath, "*.*", SearchOption.TopDirectoryOnly)
+                      .Where(s => ImageConstants.Extensions.IsValidImageExtension(s) && s.Contains(GroupTypesConstants.ItemFromGroup.Documents.PROFILE_PICTURE.ToString()))
+                      .ToList();
+
+                if (images.Count > 0)
+                {
+                    imagePath = "~/" + FoldersConstants.Folder.CURRICULUM + "/" + personaInformationId + "/" + GroupTypesConstants.ItemFromGroup.Documents.PROFILE_PICTURE + "." + images[0].Split(".")[1];
+                }
+                else
+                {
+                    imagePath = "~/" + FoldersConstants.Folder.PLACEHOLDER + ImageConstants.Placeholder.AVATAR;
+                }
+            }
+            catch (System.IO.DirectoryNotFoundException ex)
+            {
+                imagePath = "~/" + FoldersConstants.Folder.PLACEHOLDER + ImageConstants.Placeholder.AVATAR;
+            }
+
+            return imagePath + "?v=123456";
+        }
+
+
         public static string GetProfileImagePath(IWebHostEnvironment hostEnvironment, int personaInformationId)
         {
             string folderPath = Path.Combine(hostEnvironment.WebRootPath, FoldersConstants.Folder.CURRICULUM + "/" + personaInformationId);
