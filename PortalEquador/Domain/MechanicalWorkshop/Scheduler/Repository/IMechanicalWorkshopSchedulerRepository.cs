@@ -1,9 +1,6 @@
 ﻿using PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity;
-using PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity;
-using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
-using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
 
 namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository
 {

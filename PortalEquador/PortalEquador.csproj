@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\MechanicalWorkshop\CarWash\Repository\" />
     <Folder Include="wwwroot\images\curriculum\" />
     <Folder Include="wwwroot\images\driverslicence\" />
   </ItemGroup>

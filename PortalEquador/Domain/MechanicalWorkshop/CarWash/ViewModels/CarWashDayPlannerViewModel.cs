@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
 {
-    public class WashDayPlannerViewModel : ViewModel
+    public class CarWashDayPlannerViewModel : ViewModel
     {
         [Display(Name = StringConstants.Display.DATE)]
         [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
