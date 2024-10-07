@@ -14,13 +14,19 @@ using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Data.MechanicalWorkshop.Vehicle.Repository
 {
-    public class MechanicalWorkshopVehicleRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment hostEnvironment) : GenericRepository<MechanicalWorkshopVehicleEntity>(context, httpContextAccessor), IMechanicalWorkshopVehicleRepository
+    public class MechanicalWorkshopVehicleRepositoryImpl(
+        ApplicationDbContext context, 
+        IMapper mapper, 
+        IHttpContextAccessor httpContextAccessor, 
+        IWebHostEnvironment hostEnvironment
+        ) : GenericRepository<MechanicalWorkshopVehicleEntity>(context, httpContextAccessor), IMechanicalWorkshopVehicleRepository
     {
 
         public async Task<List<VehicleDetailViewModel>> GetVehicles()
         {
             var result = await context.MechanicalWorkshopVehicleEntity
             .Include(item => item.ContractGroupItemEntity)
+            .OrderBy(x => x.LicencePlate)
             .ToListAsync();
 
             return mapper.Map<List<VehicleDetailViewModel>>(result);

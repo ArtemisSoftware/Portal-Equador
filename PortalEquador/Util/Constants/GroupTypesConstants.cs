@@ -36,7 +36,7 @@ namespace PortalEquador.Util.Constants
             public const int PROVINCE = 2;
             public const int NEIGHBOURHOOD = 3;
 
-            public const int DOCUMENTS = 4;
+            public static readonly int DOCUMENTS = (new Item { Debug = 4, Production = 4 }).Value;
 
             public const int MECHANICAL_SHOP_CONTRACTS = 5;
             public const int MECHANICAL_SHOP_MECHANICS = 6;
@@ -45,27 +45,19 @@ namespace PortalEquador.Util.Constants
             public const int LANGUAGES = 8;
             public const int LANGUAGE_LEVEL = 9;
 
-            public const int COMPANIES = 10;
-            public const int WORKSTATIONS = 11;
-            public const int COMPETENCES = 12;
+            public static readonly int COMPANIES = (new Item { Debug = 10, Production = 14 }).Value;
+            public static readonly int WORKSTATIONS = (new Item { Debug = 11, Production = 19 }).Value;
+            public static readonly int COMPETENCES = (new Item { Debug = 12, Production = 11 }).Value;
 
-            public const int SCHOOLS = 13;
-            public const int SCHOOL_COURSES = 14;
-            public const int SCHOOL_DEGREES = 15;
+            public static readonly int SCHOOLS = (new Item { Debug = 13, Production = 15 }).Value;
+            public static readonly int SCHOOL_COURSES = (new Item { Debug = 14, Production = 12 }).Value;
+            public static readonly int SCHOOL_DEGREES = (new Item { Debug = 15, Production = 16 }).Value;
 
-            public const int UNIVERSITY = 16;
-            public const int UNIVERSITY_COURSES = 17;
-            public const int UNIVERSITY_DEGREES = 18;
+            public static readonly int UNIVERSITY = (new Item { Debug = 16, Production = 19 }).Value;
+            public static readonly int UNIVERSITY_COURSES = (new Item { Debug = 17, Production = 13 }).Value;
+            public static readonly int UNIVERSITY_DEGREES = (new Item { Debug = 18, Production = 17 }).Value;
 
-            public const int DRIVERS_LICENCE = 19;
-
-            //---
-
-
-
-            public const int SCHOOL_COURSE = 8;
-
-            public const int COMPLETNESS = 8;
+            public static readonly int DRIVERS_LICENCE = (new Item { Debug = 19, Production = 10 }).Value;
         }
 
         public static class ItemFromGroup
@@ -78,9 +70,9 @@ namespace PortalEquador.Util.Constants
 
             public static class Documents
             {
-                public static readonly int PROFILE_PICTURE = (new Item { Debug = 7, Production = -1 }).Value;
-                public static readonly int DRIVERS_LICENCE = (new Item { Debug = 43, Production = -1 }).Value;
-                public static readonly int DRIVERS_LICENCE_PROVISIONAL = (new Item { Debug = 44, Production = -1 }).Value;
+                public static readonly int PROFILE_PICTURE = (new Item { Debug = 7, Production = 2 }).Value;
+                public static readonly int DRIVERS_LICENCE = (new Item { Debug = 43, Production = 39 }).Value;
+                public static readonly int DRIVERS_LICENCE_PROVISIONAL = (new Item { Debug = 44, Production = 69 }).Value;
              
 
 

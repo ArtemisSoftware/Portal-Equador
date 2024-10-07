@@ -11,8 +11,8 @@ namespace PortalEquador.Controllers.Language
         // GET: Language
         public async Task<IActionResult> Index(int identifier, string fullName)
         {
-            ViewData["identifier"] = identifier;
-            ViewData["username"] = fullName;
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
 
             var models = await repository.GetAll(identifier);
             return View(models);
@@ -57,8 +57,8 @@ namespace PortalEquador.Controllers.Language
         // GET: GroupItems/Edit/5
         public async Task<IActionResult> Edit(int id, int identifier, string fullName)
         {
-            ViewData["identifier"] = identifier;
-            ViewData["username"] = fullName;
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
 
             var model = await repository.GetLanguage((int)id);
             model = await RecoverModel(model);
@@ -80,8 +80,8 @@ namespace PortalEquador.Controllers.Language
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int identifier, string fullName, LanguageViewModel model)
         {
-            ViewData["identifier"] = identifier;
-            ViewData["username"] = fullName;
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
 
             if (ModelState.IsValid)
             {

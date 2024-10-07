@@ -51,11 +51,11 @@
                     <h5 class="card-title">Documentos</h5>
                     <span class="badge bg-success">@Model.TotalDocuments Registo(s)</span>
                     <p class="card-text">Formulário para o registo de documentos.</p>
-                    <a asp-controller="Document" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
                     @if (Model.TotalDocuments != 0)
                     {
                         <a asp-controller="Document" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
                     }
+                    <a asp-controller="Document" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
                 </div>
             </div>
         </div>
@@ -65,21 +65,14 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Carta de condução</h5>
-                    @if (Model.IsDriversLicenceComplete)
-                    {
-                        <span class="badge bg-success">Completo</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-warning">Incompleto</span>
-                    }
+                    <span class="badge bg-success">@Model.TotalDriversLicence Registo(s)</span>
                     <p class="card-text">Formulário para o registo de cartas de conduçãos.</p>
-                    @if (Model.IsDriversLicenceComplete)
+                    @if (Model.TotalDriversLicence != 0)
                     {
                         <a asp-controller="DriversLicence" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+
                     }
-                    <a asp-controller="DriversLicence" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
-                    <a asp-controller="DriversLicence" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+                     <a asp-controller="DriversLicence" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
                     
                 </div>
             </div>

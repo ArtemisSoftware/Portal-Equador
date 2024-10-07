@@ -146,6 +146,18 @@ namespace PortalEquador.Util
             return path + "?v=123456";
         }
 
+        private static string GetFileFullPath(FolderType folder, int directory, string fileName, string extension)
+        {
+            var path = "~" + folder.GetFullPath() + "/" + directory + "/" + fileName + extension;
+            return path + "?v=123456";
+        }
+
+        private static string GetFileFullPath(FolderType folder, string fileName)
+        {
+            var path = "~" + folder.GetFullPath()  + "/" + fileName;
+            return path + "?v=123456";
+        }
+
         public static DocumentViewModel ValidateDocument(IWebHostEnvironment hostEnvironment, DocumentViewModel model)
         {
             var folder = GetFolder(model);
@@ -208,61 +220,39 @@ namespace PortalEquador.Util
             }
         }
 
-        public static string GetProfileImagePath___(IWebHostEnvironment hostEnvironment, int personaInformationId)
-        {
-            string folderPath = Path.Combine(hostEnvironment.WebRootPath, FolderType.Curriculum.GetPath() + "/" + personaInformationId);
-            string imagePath = "";
-
-            try
-            {
-                var images = Directory.GetFiles(folderPath, "*.*", SearchOption.TopDirectoryOnly)
-                      .Where(s => ImageConstants.Extensions.IsValidImageExtension(s) && s.Contains(GroupTypesConstants.ItemFromGroup.Documents.PROFILE_PICTURE.ToString()))
-                      .ToList();
-
-                if (images.Count > 0)
-                {
-                    imagePath = "~/" + FoldersConstants.Folder.CURRICULUM + "/" + personaInformationId + "/" + GroupTypesConstants.ItemFromGroup.Documents.PROFILE_PICTURE + "." + images[0].Split(".")[1];
-                }
-                else
-                {
-                    imagePath = "~/" + FoldersConstants.Folder.PLACEHOLDER + ImageConstants.Placeholder.AVATAR;
-                }
-            }
-            catch (System.IO.DirectoryNotFoundException ex)
-            {
-                imagePath = "~/" + FoldersConstants.Folder.PLACEHOLDER + ImageConstants.Placeholder.AVATAR;
-            }
-
-            return imagePath + "?v=123456";
-        }
-
-
         public static string GetProfileImagePath(IWebHostEnvironment hostEnvironment, int personaInformationId)
         {
-            string folderPath = Path.Combine(hostEnvironment.WebRootPath, FoldersConstants.Folder.CURRICULUM + "/" + personaInformationId);
-            string imagePath = "";
+            string imageErrorPath = GetFileFullPath(FolderType.Placeholder, ImageConstants.Placeholder.AVATAR.ToString());
+
+            string root = hostEnvironment.WebRootPath+ FolderType.Curriculum.GetFullPath() + "/" + personaInformationId;
+            //fileName = document.DocumentTypeId + extension;
+            string folderPath = Path.Combine(root);
+
+
+
+            //string folderPath = Path.Combine(hostEnvironment.WebRootPath, FolderType.Curriculum.GetPath() + "/" + personaInformationId);
+
 
             try
             {
                 var images = Directory.GetFiles(folderPath, "*.*", SearchOption.TopDirectoryOnly)
-                      .Where(s => ImageConstants.Extensions.IsValidImageExtension(s) && s.Contains(GroupTypesConstants.ItemFromGroup.Documents.PROFILE_PICTURE.ToString()))
+                      .Where(s =>  s.Contains(GroupTypesConstants.ItemFromGroup.Documents.PROFILE_PICTURE.ToString()))
                       .ToList();
 
                 if (images.Count > 0)
                 {
-                    imagePath = "~/" + FoldersConstants.Folder.CURRICULUM + "/" + personaInformationId + "/" + GroupTypesConstants.ItemFromGroup.Documents.PROFILE_PICTURE + "." + images[0].Split(".")[1];
+                    var extension = images[0].Split(".")[1];
+                   return GetFileFullPath(FolderType.Curriculum, personaInformationId, Documents.PROFILE_PICTURE.ToString(), "." + extension);
                 }
                 else
                 {
-                    imagePath = "~/" + FoldersConstants.Folder.PLACEHOLDER + ImageConstants.Placeholder.AVATAR;
+                    return imageErrorPath;
                 }
             }
-            catch (System.IO.DirectoryNotFoundException ex)
+            catch (DirectoryNotFoundException ex)
             {
-                imagePath = "~/" + FoldersConstants.Folder.PLACEHOLDER + ImageConstants.Placeholder.AVATAR;
+                return imageErrorPath;
             }
-
-            return imagePath + "?v=123456";
         }
 
         public static bool isValidImageExtension(IFormFile image)
@@ -306,12 +296,7 @@ namespace PortalEquador.Util
 
 
 
-        /*
-        public static string GetProfilePicturePath(int curriculumId, string extension)
-        {
-            return "~/" + FoldersConstants.IMAGES + "/" + curriculumId + "/" + ItemFromGroup.Documents.PROFILE_PICTURE + extension;
-        }
-        */
+  
         private static string GetImagePath(IWebHostEnvironment hostEnvironment, DocumentViewModel document)
         {
             string wwwRootPath = hostEnvironment.WebRootPath;

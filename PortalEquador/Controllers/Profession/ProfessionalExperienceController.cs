@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.Profession.Experience.Repository;
 using PortalEquador.Domain.Profession.Experience.ViewModels;
+using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.Profession
@@ -11,8 +12,8 @@ namespace PortalEquador.Controllers.Profession
         // GET: ProfessionalExperience
         public async Task<IActionResult> Index(int identifier, string fullName)
         {
-            ViewData["identifier"] = identifier;
-            ViewData["username"] = fullName;
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
 
             var models = await repository.GetAll(identifier);
             return View(models);
@@ -65,8 +66,8 @@ namespace PortalEquador.Controllers.Profession
         // GET: ProfessionalExperience/Edit/5
         public async Task<IActionResult> Edit(int id, int identifier, string fullName)
         {
-            ViewData["identifier"] = identifier;
-            ViewData["username"] = fullName;
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
 
             var model = await repository.GetProfessionalExperience((int)id);
             model = await RecoverModel(model);
@@ -88,8 +89,8 @@ namespace PortalEquador.Controllers.Profession
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, string fullName, ProfessionalExperienceViewModel model)
         {
-            ViewData["identifier"] = id;
-            ViewData["username"] = fullName;
+            ViewData[ViewBagConstants.PERSONAL_ID] = id;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
 
             if (model.IsValidDuration() == false)
             {

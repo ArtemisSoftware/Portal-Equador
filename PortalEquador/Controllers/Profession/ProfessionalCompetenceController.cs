@@ -11,8 +11,8 @@ namespace PortalEquador.Controllers.Profession
         // GET: ProfessionalCompetence
         public async Task<IActionResult> Index(int identifier, string fullName)
         {
-            ViewData["identifier"] = identifier;
-            ViewData["username"] = fullName;
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
 
             var models = await repository.GetAll(identifier);
             return View(models);

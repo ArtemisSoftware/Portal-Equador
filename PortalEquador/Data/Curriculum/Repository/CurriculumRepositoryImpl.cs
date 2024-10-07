@@ -31,6 +31,18 @@ namespace PortalEquador.Data.Curriculum.Repository
                         on personal.Id equals docCount.PersonalInformationId into resultDocs
                         from resultDocuments in resultDocs.DefaultIfEmpty()
 
+                        join driversLicenceCount in
+                            (from driversLicence in context.DriversLicenceEntity
+                             where driversLicence.PersonalInformationId == id
+                             select driversLicence).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                DriversLicenceCount = grouped.Count()
+                            })
+                        on personal.Id equals driversLicenceCount.PersonalInformationId into resultDriversLicence
+                        from resultDriversLicences in resultDriversLicence.DefaultIfEmpty()
+
                         join languageCount in
                             (from language in context.LanguageEntity
                              where language.PersonalInformationId == id
@@ -104,9 +116,12 @@ namespace PortalEquador.Data.Curriculum.Repository
                             TotalProfessionalExperiences = resultProfessionalExperiences.Count == null ? 0 : resultProfessionalExperiences.Count,
                             TotalSchoolEducation = resultSchools.Count == null ? 0 : resultSchools.Count,
                             TotalUniversityEducation = resultUniversities.Count == null ? 0 : resultUniversities.Count,
+                            TotalDriversLicence = resultDriversLicences.DriversLicenceCount == null ? 0 : resultDriversLicences.DriversLicenceCount,
                             ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, id)
                         };
-            return await query.FirstOrDefaultAsync();
+
+            var result = await query.FirstOrDefaultAsync();
+            return result;
         }
     }
 }
