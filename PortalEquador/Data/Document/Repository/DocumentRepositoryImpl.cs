@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using PortalEquador.Data.Document.Entity;
@@ -10,6 +11,7 @@ using PortalEquador.Domain.PersonalInformation.Repository;
 using PortalEquador.Util;
 using PortalEquador.Util.EnumTypes;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
+using static PortalEquador.Util.Constants.GroupTypesConstants.ItemFromGroup;
 
 namespace PortalEquador.Data.Document.Repository
 {
@@ -55,8 +57,6 @@ namespace PortalEquador.Data.Document.Repository
                 return null;
             }
 
-
-
             var model = mapper.Map<DocumentViewModel>(result);
             model = ImagesUtil.ValidateDocument(hostEnvironment, model);
             return model;
@@ -97,14 +97,14 @@ namespace PortalEquador.Data.Document.Repository
 
         public async Task<DocumentViewModel> GetCreateModel(DocumentViewModel model)
         {
-            var documentsTypes = GroupItems(Groups.DOCUMENTS);
+            var documentsTypes = GroupItemsForDocuments(OrderType.Alphabetic);
             model.DocumentTypes = documentsTypes;
             return model;
         }
 
         public async Task<DocumentViewModel> GetCreateModel(int personaInformationId, string fullName)
         {
-            var documentsTypes = GroupItems(Groups.DOCUMENTS);
+            var documentsTypes = GroupItemsForDocuments(OrderType.Alphabetic);
             
             var model = new DocumentViewModel
             {
@@ -115,6 +115,29 @@ namespace PortalEquador.Data.Document.Repository
 
             return model;
         }
+
+
+        private SelectList GroupItemsForDocuments(OrderType orderType = OrderType.No_order)
+        {
+            var result = context.GroupItemEntity
+                .Where(x => x.GroupEntityId == Groups.DOCUMENTS & x.Active == true & Documents.GetDriversLicenceDocuments().Contains(x.Id) == false);
+
+            switch (orderType)
+            {
+                case OrderType.No_order:
+                    break;
+
+                case OrderType.Alphabetic:
+                    result = result.OrderBy(x => x.Description);
+                    break;
+
+                default:
+                    break;
+            }
+
+            return new SelectList(result, "Id", "Description");
+        }
+
 
         public async Task<bool> DocumentExists(int personaInformationId, int documentTypeId)
         {
