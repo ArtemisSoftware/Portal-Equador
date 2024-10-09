@@ -58,6 +58,8 @@ namespace PortalEquador.Util.Constants
             public static readonly int UNIVERSITY_DEGREES = (new Item { Debug = 18, Production = 17 }).Value;
 
             public static readonly int DRIVERS_LICENCE = (new Item { Debug = 19, Production = 10 }).Value;
+
+            public static readonly int CAR_WASH_SCHEDULES = (new Item { Debug = 19, Production = 10 }).Value;
         }
 
         public static class ItemFromGroup
