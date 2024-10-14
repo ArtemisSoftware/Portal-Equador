@@ -8,6 +8,7 @@ using PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
 using PortalEquador.Util.Constants;
 using PortalEquador.Util;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
 {
@@ -18,60 +19,119 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
         IWebHostEnvironment hostEnvironment
         ) : GenericRepository<CarWashSchedulerEntity>(context, httpContextAccessor), ICarWashSchedulerRepository
     {
-        Task<CarWashViewModel> ICarWashSchedulerRepository.GetCreateModel(string scheduleDate, int mechanicId, int interventionTimeId)
+        public async Task<CarWashViewModel> GetCreateModel(string scheduleDate, int interventionTimeId)
         {
-            throw new NotImplementedException();
+            var schedule = await GroupItem(interventionTimeId);
+            var selectedSchedule = mapper.Map<GroupItemViewModel>(schedule);
+            var dateOnly = TimeUtil.ToDateOnly(scheduleDate);
+
+            var model = new CarWashViewModel
+            {
+                ScheduleDate = dateOnly,
+                InterventionTimeId = interventionTimeId,
+                InterventionTime = selectedSchedule,
+                Vehicles = Vehicles(interventionTimeId, dateOnly)
+            };
+            return model;
         }
 
-        Task<CarWashViewModel> ICarWashSchedulerRepository.GetCreateModel(CarWashViewModel model)
+        public async Task<CarWashViewModel> GetCreateModel(CarWashViewModel model)
         {
-            throw new NotImplementedException();
+            var schedule = await GroupItem(model.InterventionTimeId);
+            var selectedSchedule = mapper.Map<GroupItemViewModel>(schedule);
+
+            model.InterventionTime = selectedSchedule;
+            model.Vehicles = Vehicles(model.InterventionTimeId, model.ScheduleDate);
+            return model;
         }
 
         public async Task<CarWashDayPlannerViewModel> GetDayPlan(DateOnly date)
         {
-            var schedules = await GroupItemsList(GroupTypesConstants.Groups.MECHANICAL_SHOP_SCHEDULES);
+            var schedules = await GroupItemsList(GroupTypesConstants.Groups.CAR_WASH_SCHEDULES);
 
             var schedulesList = mapper.Map<List<GroupItemViewModel>>(schedules);
 
+            /*
             var results = await context.MechanicalWorkshopSchedulerEntity
                             .Include(item => item.VehicleEntity)
                             .Include(item => item.ContractGroupItemEntity)
                            .Where(item => item.ScheduleDate == date)
                            .ToListAsync();
+            */
+
+            var results = new List<CarWashSchedulerEntity>();
 
             var model = new CarWashDayPlannerViewModel
             {
                 Schedules = schedulesList,
                 MainTime = TimeUtil.ToDateTime(date),
 
-                //Mechanics = mapper.Map<List<GroupItemViewModel>>(mechanics),
                 //InterventionTimes = colabTime(schedulesList),
-                //Interventions = new List<SchedulerViewModel>(),
+                Interventions = new List<CarWashViewModel>(),
             };
 
             if (results.Count == 0)
             {
-                //model.OrderAppointements();
+                model.OrderAppointements();
                 return model;
             }
             else
             {
                 var interventions = mapper.Map<List<SchedulerViewModel>>(results);
                 //model.Interventions = interventions;
-                //model.OrderAppointements();
+                model.OrderAppointements();
                 return model;
             }
         }
 
-        Task<CarWashViewModel> ICarWashSchedulerRepository.GetSchedule(int id)
+        public async Task<CarWashViewModel> GetSchedule(int id)
         {
-            throw new NotImplementedException();
+            /*
+            var result = await context.MechanicalWorkshopSchedulerEntity
+                            .Include(item => item.VehicleEntity)
+                            .Include(item => item.InterventionTimeGroupItemEntity)
+                            .Include(item => item.MechanicGroupItemEntity)
+                            .Include(item => item.ContractGroupItemEntity)
+                            .Include(item => item.ApplicationUserEntity)
+                           .Where(item => item.Id == id)
+                           .FirstOrDefaultAsync();
+
+            var model =  mapper.Map<CarWashSchedulerEntity>(result);
+            */
+            var model = new CarWashViewModel();
+            return model;
         }
 
-        Task ICarWashSchedulerRepository.Save(CarWashViewModel model)
+        public async Task Save(CarWashViewModel model)
         {
-            throw new NotImplementedException();
+            /*
+            var vehicle = await context.MechanicalWorkshopVehicleEntity.Where(x => x.Id == model.VehicleId).FirstAsync();
+            CarWashSchedulerEntity entity = mapper.Map<CarWashSchedulerEntity>(model);
+
+            entity.EditorId = GetCurrentUserId();
+            entity.ContractId = vehicle.ContractId;
+            entity.ContractGroupItemEntity = null;
+            if (model.Id == 0)
+            {
+                await AddAsync(entity);
+            }
+            else
+            {
+                entity.DateModified = DateTime.UtcNow;
+                await UpdateAsync(entity);
+            }
+            */
+        }
+
+        public SelectList Vehicles(int interventionTimeId, DateOnly scheduleDate)
+        {
+            var result = from vehicle in context.MechanicalWorkshopVehicleEntity
+                         where vehicle.Active &&
+                               !context.CarWashSchedulerEntity
+                                  .Any(scheduler => scheduler.VehicleId == vehicle.Id && scheduler.InterventionTimeId == interventionTimeId && scheduler.ScheduleDate == scheduleDate)
+                         select vehicle;
+
+            return new SelectList(result, "Id", "LicencePlate");
         }
     }
 }

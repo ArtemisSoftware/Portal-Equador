@@ -9,6 +9,8 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Entity
     {
         public DateOnly ScheduleDate { get; set; }
 
+        public int VehicleId { get; set; }
+
         [ForeignKey("VehicleId")]
         public MechanicalWorkshopVehicleEntity VehicleEntity { get; set; }
 

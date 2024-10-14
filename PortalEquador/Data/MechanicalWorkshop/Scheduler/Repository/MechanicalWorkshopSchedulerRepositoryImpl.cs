@@ -2,23 +2,12 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
-using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity;
-using PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity;
-using PortalEquador.Domain.Document.ViewModels;
-using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
-using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
-using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
-using PortalEquador.Domain.PersonalInformation.ViewModels;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
-using System;
-using System.Text.RegularExpressions;
-using static PortalEquador.Util.Constants.GroupTypesConstants;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
 {

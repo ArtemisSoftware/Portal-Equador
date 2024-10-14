@@ -14,6 +14,7 @@ using PortalEquador.Data.Profession.Experience.Entity;
 using PortalEquador.Data.Education.School.Entity;
 using PortalEquador.Data.Education.University.Entity;
 using PortalEquador.Data.DriversLicence.Entity;
+using PortalEquador.Data.MechanicalWorkshop.CarWash.Entity;
 
 namespace PortalEquador.Data
 {
@@ -171,11 +172,12 @@ namespace PortalEquador.Data
         public DbSet<DocumentEntity> DocumentEntity { get; set; } 
         public DbSet<MechanicalWorkshopVehicleEntity> MechanicalWorkshopVehicleEntity { get; set; }
         public DbSet<MechanicalWorkshopSchedulerEntity> MechanicalWorkshopSchedulerEntity { get; set; } = default!;
-        public DbSet<PortalEquador.Data.Languages.entity.LanguageEntity> LanguageEntity { get; set; } = default!;
-        public DbSet<PortalEquador.Data.Profession.Competence.Entity.ProfessionalCompetenceEntity> ProfessionalCompetenceEntity { get; set; } = default!;
-        public DbSet<PortalEquador.Data.Profession.Experience.Entity.ProfessionalExperienceEntity> ProfessionalExperienceEntity { get; set; } = default!;
-        public DbSet<PortalEquador.Data.Education.School.Entity.SchoolEntity> SchoolEntity { get; set; } = default!;
+        public DbSet<LanguageEntity> LanguageEntity { get; set; } = default!;
+        public DbSet<ProfessionalCompetenceEntity> ProfessionalCompetenceEntity { get; set; } = default!;
+        public DbSet<ProfessionalExperienceEntity> ProfessionalExperienceEntity { get; set; } = default!;
+        public DbSet<SchoolEntity> SchoolEntity { get; set; } = default!;
         public DbSet<UniversityEntity> UniversityEntity { get; set; } = default!;
         public DbSet<DriversLicenceEntity> DriversLicenceEntity { get; set; } = default!;
+        public DbSet<CarWashSchedulerEntity> CarWashSchedulerEntity { get; set; }
     }
 }

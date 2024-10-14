@@ -54,5 +54,25 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
             }
         }
 
+
+
+        [Display(Name = StringConstants.Display.CONTRACT)]
+        public string? Contract { get; set; }
+
+
+        [Display(Name = StringConstants.Display.MODEL)]
+        public string? Model { get; set; }
+
+        [Display(Name = StringConstants.Display.SERVICE)]
+        [Required(ErrorMessage = StringConstants.Error.MANDATORY_FIELD)]
+        public string Service { get; set; }
+
+
+        [Display(Name = StringConstants.Display.TELEPHONE)]
+        [Required(ErrorMessage = StringConstants.Error.MANDATORY_FIELD)]
+        public string Telephone { get; set; }
+
+        [Display(Name = StringConstants.Display.CODE)]
+        public string? Code { get; set; }
     }
 }
