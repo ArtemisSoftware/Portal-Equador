@@ -24,5 +24,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Entity
 
         [ForeignKey("InterventionTimeId")]
         public GroupItemEntity InterventionTimeGroupItemEntity { get; set; }
+
+        public int CurrentState { get; set; }
     }
 }
