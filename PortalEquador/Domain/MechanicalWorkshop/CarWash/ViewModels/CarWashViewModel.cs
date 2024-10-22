@@ -74,5 +74,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
 
         [Display(Name = StringConstants.Display.CODE)]
         public string? Code { get; set; }
+
+        public int CurrentState { get; set; } = CarWashState.Open;
     }
 }
