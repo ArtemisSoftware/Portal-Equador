@@ -4,8 +4,8 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Criar Novo Agendamento</h1>
-<h4>@Html.DisplayFor(model => model.ScheduleDate)</h4>
+<h1>Criar Novo Agendamento Para lavagem</h1>
+<h4>Data: @Html.DisplayFor(model => model.ScheduleDate)</h4>
 
 <hr />
 <br />
@@ -44,32 +44,11 @@
                     </dd>
                     <dd class="col-sm-6">
                         <div class="form-group">
-                            <label asp-for="Contract" class="control-label"></label>
-                            <input asp-for="Contract" class="form-control" id="vehicleContract" disabled />
+                            <label asp-for="ContractDescription" class="control-label"></label>
+                            <input asp-for="ContractDescription" class="form-control" id="vehicleContract" disabled />
                         </div>
                     </dd>
                 </dl>
-
-                <div class="form-group">
-                    <label asp-for="Service" class="control-label"></label>
-                    <input asp-for="Service" class="form-control" />
-                    <span asp-validation-for="Service" class="text-danger"></span>
-                </div>
-                <br />
-
-                <div class="form-group">
-                    <label asp-for="Telephone" class="control-label"></label>
-                    <input asp-for="Telephone" class="form-control" />
-                    <span asp-validation-for="Telephone" class="text-danger"></span>
-                </div>
-                <br />
-
-                <div class="form-group">
-                    <label asp-for="Code" class="control-label"></label>
-                    <input asp-for="Code" class="form-control" />
-                    <span asp-validation-for="Code" class="text-danger"></span>
-                </div>
-                <br />
 
                 <div class="form-group">
                     <span asp-validation-for="Error" class="text-danger"></span>
@@ -105,7 +84,7 @@
 
         function handleVehicle(vehicleId) {
                 if (vehicleId) {
-                    fetch(`/MechanicalWorkshopScheduler/GetVehicleDetails?vehicleId=${vehicleId}`)
+                fetch(`/CarWashScheduler/GetVehicleDetails?vehicleId=${vehicleId}`)
                         .then(response => response.json())
                         .then(data => {
                             document.getElementById("vehicleModel").value = data.model;

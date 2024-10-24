@@ -19,6 +19,8 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
 
         public List<GroupItemViewModel> Schedules { get; set; }
 
+        public Dictionary<int, GroupItemViewModel> InterventionTimes { get; set; }
+
         public Dictionary<int, List<CarWashViewModel>> Appointements { get; set; } = new Dictionary<int, List<CarWashViewModel>>();
 
         public void OrderAppointements()

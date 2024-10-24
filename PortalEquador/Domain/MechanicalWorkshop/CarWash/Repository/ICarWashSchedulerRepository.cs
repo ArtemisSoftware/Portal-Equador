@@ -11,6 +11,8 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.Repository
         Task<CarWashViewModel> GetCreateModel(string scheduleDate, int interventionTimeId);
         Task<CarWashViewModel> GetCreateModel(CarWashViewModel model);
         Task Save(CarWashViewModel model);
+
+        Task ConfirmWash(int id);
         Task<CarWashViewModel> GetSchedule(int id);
     }
 }

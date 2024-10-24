@@ -1,14 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.MechanicalWorkshop.CarWash.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels;
+using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
 using PortalEquador.Util;
 
 namespace PortalEquador.Controllers.MechanicalWorkshop
 {
 
     public class CarWashSchedulerController(
-    ICarWashSchedulerRepository repository
- ) : Controller
+        ICarWashSchedulerRepository repository,
+        IMechanicalWorkshopVehicleRepository vehicleRepository
+    ) : Controller
     {
 
         // GET: CarWashScheduler
@@ -57,137 +59,170 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             return await repository.GetCreateModel(model);
         }
 
+        public async Task<IActionResult> GetVehicleDetails(int vehicleId)
+        {
+            var vehicle = await vehicleRepository.GetVehicleDetail(vehicleId);
+
+            if (vehicle == null)
+            {
+                return NotFound();
+            }
+
+            var vehicleDetails = new
+            {
+                Model = vehicle.Model,
+                Contract = vehicle.Contract.Description
+            };
+
+            return Json(vehicleDetails);
+        }
 
 
-
-
-
-
-
-
-
-/*
 
         // GET: CarWashScheduler/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var carWashSchedulerEntity = await _context.CarWashSchedulerEntity
-                .Include(c => c.ApplicationUserEntity)
-                .Include(c => c.ContractGroupItemEntity)
-                .Include(c => c.InterventionTimeGroupItemEntity)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (carWashSchedulerEntity == null)
-            {
-                return NotFound();
-            }
-
-            return View(carWashSchedulerEntity);
-        }
-
-
-
-        // GET: CarWashScheduler/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var carWashSchedulerEntity = await _context.CarWashSchedulerEntity.FindAsync(id);
-            if (carWashSchedulerEntity == null)
-            {
-                return NotFound();
-            }
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", carWashSchedulerEntity.EditorId);
-            ViewData["ContractId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", carWashSchedulerEntity.ContractId);
-            ViewData["InterventionTimeId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", carWashSchedulerEntity.InterventionTimeId);
-            return View(carWashSchedulerEntity);
-        }
-
-        // POST: CarWashScheduler/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ScheduleDate,ContractId,InterventionTimeId,Id,EditorId,DateCreated,DateModified")] CarWashSchedulerEntity carWashSchedulerEntity)
-        {
-            if (id != carWashSchedulerEntity.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(carWashSchedulerEntity);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CarWashSchedulerEntityExists(carWashSchedulerEntity.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", carWashSchedulerEntity.EditorId);
-            ViewData["ContractId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", carWashSchedulerEntity.ContractId);
-            ViewData["InterventionTimeId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", carWashSchedulerEntity.InterventionTimeId);
-            return View(carWashSchedulerEntity);
+            var model = await repository.GetSchedule(id);
+            return View(model);
         }
 
         // GET: CarWashScheduler/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id, string time)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var carWashSchedulerEntity = await _context.CarWashSchedulerEntity
-                .Include(c => c.ApplicationUserEntity)
-                .Include(c => c.ContractGroupItemEntity)
-                .Include(c => c.InterventionTimeGroupItemEntity)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (carWashSchedulerEntity == null)
-            {
-                return NotFound();
-            }
-
-            return View(carWashSchedulerEntity);
+            await repository.DeleteAsync(id);
+            return RedirectToAction(nameof(Index), new { time = time });
         }
 
-        // POST: CarWashScheduler/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        // GET: CarWashScheduler/Delete/5
+        public async Task<IActionResult> Confirm(int id, string time)
         {
-            var carWashSchedulerEntity = await _context.CarWashSchedulerEntity.FindAsync(id);
-            if (carWashSchedulerEntity != null)
-            {
-                _context.CarWashSchedulerEntity.Remove(carWashSchedulerEntity);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            await repository.ConfirmWash(id);
+            return RedirectToAction(nameof(Index), new { time = time });
         }
 
-        private bool CarWashSchedulerEntityExists(int id)
-        {
-            return _context.CarWashSchedulerEntity.Any(e => e.Id == id);
-        }
-*/
+
+        /*
+
+                // GET: CarWashScheduler/Details/5
+                public async Task<IActionResult> Details(int? id)
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
+
+                    var carWashSchedulerEntity = await _context.CarWashSchedulerEntity
+                        .Include(c => c.ApplicationUserEntity)
+                        .Include(c => c.ContractGroupItemEntity)
+                        .Include(c => c.InterventionTimeGroupItemEntity)
+                        .FirstOrDefaultAsync(m => m.Id == id);
+                    if (carWashSchedulerEntity == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return View(carWashSchedulerEntity);
+                }
+
+
+
+                // GET: CarWashScheduler/Edit/5
+                public async Task<IActionResult> Edit(int? id)
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
+
+                    var carWashSchedulerEntity = await _context.CarWashSchedulerEntity.FindAsync(id);
+                    if (carWashSchedulerEntity == null)
+                    {
+                        return NotFound();
+                    }
+                    ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", carWashSchedulerEntity.EditorId);
+                    ViewData["ContractId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", carWashSchedulerEntity.ContractId);
+                    ViewData["InterventionTimeId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", carWashSchedulerEntity.InterventionTimeId);
+                    return View(carWashSchedulerEntity);
+                }
+
+                // POST: CarWashScheduler/Edit/5
+                // To protect from overposting attacks, enable the specific properties you want to bind to.
+                // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+                [HttpPost]
+                [ValidateAntiForgeryToken]
+                public async Task<IActionResult> Edit(int id, [Bind("ScheduleDate,ContractId,InterventionTimeId,Id,EditorId,DateCreated,DateModified")] CarWashSchedulerEntity carWashSchedulerEntity)
+                {
+                    if (id != carWashSchedulerEntity.Id)
+                    {
+                        return NotFound();
+                    }
+
+                    if (ModelState.IsValid)
+                    {
+                        try
+                        {
+                            _context.Update(carWashSchedulerEntity);
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (DbUpdateConcurrencyException)
+                        {
+                            if (!CarWashSchedulerEntityExists(carWashSchedulerEntity.Id))
+                            {
+                                return NotFound();
+                            }
+                            else
+                            {
+                                throw;
+                            }
+                        }
+                        return RedirectToAction(nameof(Index));
+                    }
+                    ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", carWashSchedulerEntity.EditorId);
+                    ViewData["ContractId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", carWashSchedulerEntity.ContractId);
+                    ViewData["InterventionTimeId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", carWashSchedulerEntity.InterventionTimeId);
+                    return View(carWashSchedulerEntity);
+                }
+
+                // GET: CarWashScheduler/Delete/5
+                public async Task<IActionResult> Delete(int? id)
+                {
+                    if (id == null)
+                    {
+                        return NotFound();
+                    }
+
+                    var carWashSchedulerEntity = await _context.CarWashSchedulerEntity
+                        .Include(c => c.ApplicationUserEntity)
+                        .Include(c => c.ContractGroupItemEntity)
+                        .Include(c => c.InterventionTimeGroupItemEntity)
+                        .FirstOrDefaultAsync(m => m.Id == id);
+                    if (carWashSchedulerEntity == null)
+                    {
+                        return NotFound();
+                    }
+
+                    return View(carWashSchedulerEntity);
+                }
+
+                // POST: CarWashScheduler/Delete/5
+                [HttpPost, ActionName("Delete")]
+                [ValidateAntiForgeryToken]
+                public async Task<IActionResult> DeleteConfirmed(int id)
+                {
+                    var carWashSchedulerEntity = await _context.CarWashSchedulerEntity.FindAsync(id);
+                    if (carWashSchedulerEntity != null)
+                    {
+                        _context.CarWashSchedulerEntity.Remove(carWashSchedulerEntity);
+                    }
+
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+
+                private bool CarWashSchedulerEntityExists(int id)
+                {
+                    return _context.CarWashSchedulerEntity.Any(e => e.Id == id);
+                }
+        */
     }
 }
