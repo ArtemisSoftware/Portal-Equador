@@ -107,5 +107,12 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Index" class="btn btn-dark" asp-route-id="@Model?.Id">Regressar ao index</a>
+    @if (ViewBag.origin == "search")
+    {
+        <a asp-action="Search" asp-route-licencePlate="@Model?.Vehicle.LicencePlate" class="btn btn-dark">Regressar ao index</a>
+    }
+    else
+    {
+        <a asp-action="Index" class="btn btn-dark" asp-route-id="@Model?.Id">Regressar ao index</a>
+    }
 </div>

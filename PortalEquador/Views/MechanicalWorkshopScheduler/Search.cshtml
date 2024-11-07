@@ -1,0 +1,115 @@
+﻿@using PortalEquador.Domain.MechanicalWorkshop.Scheduler
+@model PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels.SearchDayPlannerViewModel
+
+@{
+    ViewData["Title"] = "Pesquisa";
+}
+
+
+
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>Oficina Morro Bento</h1>
+        <h4> Pesquisa - Revisão de veículos da frota </h4>
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="MechanicalWorkshop" asp-action="Index" class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+     </div>
+</div>
+<hr />
+<br />
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Search">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="LicencePlate" class="control-label"></label>
+                <dl class="row">
+                    <dt class="col-sm-1">
+                        <input asp-for="LicencePlatePosition0" id="lp0" class="form-control text-center" maxlength="3" style="text-transform:uppercase" />
+                    </dt>
+                    <dt class="col-sm-1">
+                        <input asp-for="LicencePlatePosition1" id="lp1" class="form-control text-center" maxlength="2" style="text-transform:uppercase" />
+                    </dt>
+                    <dt class="col-sm-1">
+                        <input asp-for="LicencePlatePosition2" id="lp2" class="form-control text-center" maxlength="2" style="text-transform:uppercase" />
+                    </dt>
+                    <dt class="col-sm-1">
+                        <input asp-for="LicencePlatePosition3" id="lp3" class="form-control text-center" maxlength="2" style="text-transform:uppercase" />
+                    </dt>
+                    <dt class="col-sm-2">
+                        <a href="#" id="searchButton" class="btn btn-info">
+                            <i class="fas fa-search" title="Pesquisar"></i> Pesquisar
+                        </a>
+                    </dt>
+                </dl>
+            </div>
+
+            <br />
+            <br />
+
+            @if (Model.Interventions.Count == 0 && Model.LicencePlate != "")
+            {
+                <h4> Não existem agendamentos marcados. </h4>
+            }
+
+
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                @foreach (var intervention in Model.Interventions)
+                {
+
+                    <div class="col">
+
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h5 class="card-title">@Html.DisplayFor(modelItem => intervention.Vehicle.LicencePlate)</h5>
+                                    <br />
+                                    <h6 class="card-title">Data: @Html.DisplayFor(modelItem => intervention.ScheduleDate)</h6>
+                                    <p class="card-text">Hora: @Html.DisplayFor(modelItem => intervention.InterventionTime.Description)</p>
+                                    <p class="card-text">
+                                        Mecânico: @Html.DisplayFor(modelItem => intervention.Mechanic.Description)
+                                        <br />
+                                        Contracto: @Html.DisplayFor(modelItem => intervention.Contract)
+                                    </p>
+                                @if (intervention.ScheduleType == SchedulerType.BlockedDateInThePast)
+                                {
+                                    <a asp-action="Details" asp-route-id="@intervention.Id" asp-route-origin="search"  class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                                    <a href="#" class="btn btn-light">
+                                        <i class="fas fa-solid fa-lock"></i>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-action="Details" asp-route-id="@intervention.Id" asp-route-origin="search" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                                    <a asp-action="Delete" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-licencePlate="@intervention.Vehicle.LicencePlate" class="btn btn-danger"><i class="fas fa-trash-can" title="Remover"></i></a>
+                                }
+                                </div>
+                            </div>
+                    </div>
+                }
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+@section Scripts{
+<script>
+    document.getElementById("searchButton").addEventListener("click", function () {
+            var lp0 = document.getElementById("lp0").value;
+            var lp1 = document.getElementById("lp1").value;
+            var lp2 = document.getElementById("lp2").value;
+            var lp3 = document.getElementById("lp3").value;
+            var licencePlate = lp0 + "-" + lp1 + "-" + lp2 + "-" + lp3
+
+            // Build the URL with the time as a route parameter
+            var url = '@Url.Action("Search")' + '?LicencePlate=' + encodeURIComponent(licencePlate);
+
+            // Navigate to the constructed URL
+            window.location.href = url;
+    });
+</script>
+}
