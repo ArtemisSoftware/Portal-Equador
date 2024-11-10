@@ -13,6 +13,8 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.Repository
         Task Save(CarWashViewModel model);
 
         Task ConfirmWash(int id);
+        Task NotPerformed(int id);
         Task<CarWashViewModel> GetSchedule(int id);
+        Task<CarWashSearchDayPlannerViewModel> SearchGetDayPlan(string licencePlate);
     }
 }

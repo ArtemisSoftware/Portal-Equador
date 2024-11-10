@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.MechanicalWorkshop.CarWash.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels;
+using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
 using PortalEquador.Util;
+using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.MechanicalWorkshop
 {
@@ -80,24 +82,65 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
 
 
         // GET: CarWashScheduler/Details/5
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, string? origin)
         {
+            ViewData[ViewBagConstants.ORIGIN] = origin;
             var model = await repository.GetSchedule(id);
             return View(model);
         }
 
         // GET: CarWashScheduler/Delete/5
-        public async Task<IActionResult> Delete(int id, string time)
+        public async Task<IActionResult> Delete(int id, string time, string? origin, string? licencePlate)
         {
             await repository.DeleteAsync(id);
-            return RedirectToAction(nameof(Index), new { time = time });
+            if (origin == null)
+            {
+                return RedirectToAction(nameof(Index), new { time = time });
+            }
+            else
+            {
+                return RedirectToAction(nameof(Search), new { licencePlate = licencePlate });
+            }
         }
 
         // GET: CarWashScheduler/Delete/5
-        public async Task<IActionResult> Confirm(int id, string time)
+        public async Task<IActionResult> Confirm(int id, string? time, string? origin, string? licencePlate)
         {
             await repository.ConfirmWash(id);
-            return RedirectToAction(nameof(Index), new { time = time });
+            if (origin == null)
+            {
+                return RedirectToAction(nameof(Index), new { time = time });
+            }
+            else
+            {
+                return RedirectToAction(nameof(Search), new { licencePlate = licencePlate });
+            }
+        }
+
+        public async Task<IActionResult> NotPerformed(int id, string? time, string? origin, string? licencePlate)
+        {
+            await repository.NotPerformed(id);
+            if (origin == null)
+            {
+                return RedirectToAction(nameof(Index), new { time = time });
+            }
+            else
+            {
+                return RedirectToAction(nameof(Search), new { licencePlate = licencePlate });
+            }
+        }
+
+        public async Task<IActionResult> Search(string? licencePlate)
+        {
+            if (licencePlate == null)
+            {
+                return View(new CarWashSearchDayPlannerViewModel());
+            }
+            else
+            {
+                var model = await repository.SearchGetDayPlan(licencePlate);
+                return View(model);
+            }
         }
 
 

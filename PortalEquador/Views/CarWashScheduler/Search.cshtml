@@ -1,5 +1,7 @@
-﻿@using PortalEquador.Domain.MechanicalWorkshop.Scheduler
-@model PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels.SearchDayPlannerViewModel
+﻿@using PortalEquador.Domain.MechanicalWorkshop
+@using PortalEquador.Domain.MechanicalWorkshop.Scheduler
+@using PortalEquador.Domain.MechanicalWorkshop.CarWash
+@model PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels.CarWashSearchDayPlannerViewModel
 
 @{
     ViewData["Title"] = "Pesquisa";
@@ -10,11 +12,11 @@
 <div class="row align-items-center">
     <div class="col-md-10">
         <h1>Oficina Morro Bento</h1>
-        <h4> Pesquisa - Revisão de veículos da frota </h4>
+        <h4> Pesquisa - Lavagens </h4>
     </div>
     <div class="col-md-2 text-right">
-        <a asp-controller="CarWashScheduler" asp-action="Index" class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
-     </div>
+        <a asp-controller="MechanicalWorkshop" asp-action="Index" class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
 </div>
 <hr />
 <br />
@@ -62,20 +64,18 @@
 
                     <div class="col">
 
-                            <div class="card text-center">
-                                <div class="card-body">
-                                    <h5 class="card-title">@Html.DisplayFor(modelItem => intervention.Vehicle.LicencePlate)</h5>
-                                    <br />
-                                    <h6 class="card-title">Data: @Html.DisplayFor(modelItem => intervention.ScheduleDate)</h6>
-                                    <p class="card-text">Hora: @Html.DisplayFor(modelItem => intervention.InterventionTime.Description)</p>
-                                    <p class="card-text">
-                                        Mecânico: @Html.DisplayFor(modelItem => intervention.Mechanic.Description)
-                                        <br />
-                                        Contracto: @Html.DisplayFor(modelItem => intervention.Contract)
-                                    </p>
-                                @if (intervention.ScheduleType == SchedulerType.BlockedDateInThePast)
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">@Html.DisplayFor(modelItem => intervention.Vehicle.LicencePlate)</h5>
+                                <br />
+                                <h6 class="card-title">Data: @Html.DisplayFor(modelItem => intervention.ScheduleDate)</h6>
+                                <p class="card-text">Hora: @Html.DisplayFor(modelItem => intervention.InterventionTime.Description)</p>
+                                <p class="card-text">
+                                    Contracto: @Html.DisplayFor(modelItem => intervention.Contract.Description)
+                                </p>
+                                @if (intervention.ScheduleType == CarWashSchedulerType.BlockedDateInThePast)
                                 {
-                                    <a asp-action="Details" asp-route-id="@intervention.Id" asp-route-origin="search"  class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                                    <a asp-action="Details" asp-route-id="@intervention.Id" asp-route-origin="search" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
                                     <a href="#" class="btn btn-light">
                                         <i class="fas fa-solid fa-lock"></i>
                                     </a>
@@ -83,10 +83,34 @@
                                 else
                                 {
                                     <a asp-action="Details" asp-route-id="@intervention.Id" asp-route-origin="search" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                                    @if (intervention.CurrentState == CarWashState.Open)
+                                    {
                                     <a asp-action="Delete" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-licencePlate="@intervention.Vehicle.LicencePlate" class="btn btn-danger"><i class="fas fa-trash-can" title="Remover"></i></a>
+                                    }
                                 }
-                                </div>
+                                @if (intervention.CurrentState == CarWashState.Open)
+                                {
+                                    <span style="display: inline-block; width: 20px;"></span>
+                                    <a asp-action="NotPerformed" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-licencePlate="@intervention.Vehicle.LicencePlate" class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
+                                    <a asp-action="Confirm" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-licencePlate="@intervention.Vehicle.LicencePlate" class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
+                                }
+                                else
+                                {
+                                    @switch (intervention.CurrentState)
+                                    {
+                                        case CarWashState.NotPerformed:
+                                            <span class="badge bg-danger">@intervention.StatusDescription</span>
+                                            break;
+                                        case CarWashState.Performed:
+                                            <span class="badge bg-success">@intervention.StatusDescription</span>
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+
                             </div>
+                        </div>
                     </div>
                 }
             </div>
@@ -96,9 +120,9 @@
 
 </div>
 
-@section Scripts{
-<script>
-    document.getElementById("searchButton").addEventListener("click", function () {
+@section Scripts {
+    <script>
+        document.getElementById("searchButton").addEventListener("click", function () {
             var lp0 = document.getElementById("lp0").value;
             var lp1 = document.getElementById("lp1").value;
             var lp2 = document.getElementById("lp2").value;
@@ -110,6 +134,6 @@
 
             // Navigate to the constructed URL
             window.location.href = url;
-    });
-</script>
+        });
+    </script>
 }

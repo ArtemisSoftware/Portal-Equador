@@ -47,6 +47,11 @@ namespace PortalEquador.Data.Mappers
             .ForMember(dest => dest.ContractDescription, opt => opt.MapFrom(src => src.ContractGroupItemEntity.Description))
             .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
             .ReverseMap();
+
+            CreateMap<CarWashSchedulerEntity, CarWashSearchDayPlannerViewModel>()
+            .ForMember(dest => dest.LicencePlate, opt => opt.MapFrom(src => src.VehicleEntity.LicencePlate))
+            .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+            .ReverseMap();
         }
     }
 }
