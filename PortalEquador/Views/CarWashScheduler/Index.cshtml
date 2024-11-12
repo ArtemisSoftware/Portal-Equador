@@ -43,11 +43,12 @@
                             }
                         </tr>
                     </thead>
-
+                    <tr>
+                        <th class="align-middle"><p class="fs-5"></p></th>
                     @foreach (var appointement in Model.Appointements[i])
                     {
-                        <tr>
-                            <th class="align-middle"><p class="fs-5"></p></th>
+
+                            
                             <td>
                                 @if (appointement.ScheduleType == CarWashSchedulerType.Free)
                                 {
@@ -111,9 +112,9 @@
                                     </div>
                                 }
                             </td>
-                        </tr>
+                       
                     }
-
+                    </tr>
 
 
 

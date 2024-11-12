@@ -46,7 +46,7 @@ namespace PortalEquador.Util.Constants
             public const int LANGUAGE_LEVEL = 9;
 
             public static readonly int COMPANIES = (new Item { Debug = 10, Production = 14 }).Value;
-            public static readonly int WORKSTATIONS = (new Item { Debug = 11, Production = 19 }).Value;
+            public static readonly int WORKSTATIONS = (new Item { Debug = 11, Production = 18 }).Value;
             public static readonly int COMPETENCES = (new Item { Debug = 12, Production = 11 }).Value;
 
             public static readonly int SCHOOLS = (new Item { Debug = 13, Production = 15 }).Value;
@@ -59,7 +59,7 @@ namespace PortalEquador.Util.Constants
 
             public static readonly int DRIVERS_LICENCE = (new Item { Debug = 19, Production = 10 }).Value;
 
-            public static readonly int CAR_WASH_SCHEDULES = (new Item { Debug = 20, Production = -1 }).Value;
+            public static readonly int CAR_WASH_SCHEDULES = (new Item { Debug = 20, Production = 21 }).Value;
         }
 
         public static class ItemFromGroup
