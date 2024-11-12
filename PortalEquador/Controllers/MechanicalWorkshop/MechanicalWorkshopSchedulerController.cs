@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
-using PortalEquador.Data;
-using PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity;
+﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
-using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 
@@ -65,18 +55,25 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
         }
 
         // GET: MechanicalWorkshopScheduler/Details/5
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(int id, string? origin)
         {
+            ViewData[ViewBagConstants.ORIGIN] = origin;
             var model = await repository.GetSchedule(id);
             return View(model);
         }
 
 
         // GET: MechanicalWorkshopScheduler/Delete/5
-        public async Task<IActionResult> Delete(int id, string time)
+        public async Task<IActionResult> Delete(int id, string time, string? origin, string? licencePlate)
         {
             await repository.DeleteAsync(id);
-            return RedirectToAction(nameof(Index), new { time = time});
+            if(origin == null)
+            {
+                return RedirectToAction(nameof(Index), new { time = time });
+            } else
+            {
+                return RedirectToAction(nameof(Search), new { licencePlate = licencePlate });
+            }
         }
 
 
@@ -103,5 +100,17 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             return Json(vehicleDetails);
         }
 
+        // GET: MechanicalWorkshopScheduler
+        public async Task<IActionResult> Search(string? licencePlate)
+        {
+            if (licencePlate == null) { 
+                return View(new SearchDayPlannerViewModel()); 
+            }
+            else
+            {
+                var model = await repository.SearchGetDayPlan(licencePlate);
+                return View(model);
+            }
+        }
     }
 }

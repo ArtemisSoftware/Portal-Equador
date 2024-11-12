@@ -152,6 +152,12 @@
             public const string PROVISIONAL_EXPIRED = "Verbete Caducado";
         }
 
+        public static class CarWashStatus
+        {
+            public const string PERFORMED = "Lavagem realizada";
+            public const string NOT_PERFORMED = "Lavagem não realizada";
+        }
+
         public static class Controller
         {
             public const string Curriculums = "Curriculum";

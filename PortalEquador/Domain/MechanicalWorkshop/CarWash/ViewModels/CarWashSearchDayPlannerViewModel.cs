@@ -1,18 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.IdentityModel.Tokens;
 using PortalEquador.Domain.Generic;
-using PortalEquador.Domain.GroupTypes.ViewModels;
+using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
 using PortalEquador.Util.Constants;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
-namespace PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels
+namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
 {
-    public class VehicleViewModel : ViewModel
+    public class CarWashSearchDayPlannerViewModel : ViewModel
     {
-        public int Id { get; set; }
-
-
         [NotMapped]
         public string LicencePlatePosition0 { get; set; }
 
@@ -26,12 +22,14 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels
         public string LicencePlatePosition3 { get; set; }
 
 
-        public bool IsLicencePlateValid()
+        private string _licencePlate = "";
+
+        private bool IsLicencePlateValid()
         {
-            if (LicencePlatePosition0.IsNullOrEmpty() 
-                || 
-                LicencePlatePosition1.IsNullOrEmpty() 
-                || 
+            if (LicencePlatePosition0.IsNullOrEmpty()
+                ||
+                LicencePlatePosition1.IsNullOrEmpty()
+                ||
                 LicencePlatePosition2.IsNullOrEmpty()
                ||
                 LicencePlatePosition3.IsNullOrEmpty()
@@ -43,20 +41,21 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels
             return true;
         }
 
-        private string _licencePlate = "";
 
         [Display(Name = StringConstants.Display.LICENCE_PLATE)]
         public string LicencePlate
         {
             get
             {
-                if (IsLicencePlateValid()){
+                if (IsLicencePlateValid())
+                {
                     return LicencePlatePosition0.ToUpper() + "-" + LicencePlatePosition1.ToUpper() + "-" + LicencePlatePosition2.ToUpper() + "-" + LicencePlatePosition3.ToUpper();
-                } else
+                }
+                else
                 {
                     return _licencePlate;
                 }
-                
+
             }
             set
             {
@@ -67,24 +66,14 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels
                 try
                 {
                     LicencePlatePosition3 = _licencePlate.Split("-")[3];
-                } catch(IndexOutOfRangeException ex)  {  }
-                
+                }
+                catch (IndexOutOfRangeException ex) { }
+
             }
         }
 
 
-        [Display(Name = StringConstants.Display.MODEL)]
-        [Required(ErrorMessage = StringConstants.Error.MANDATORY_FIELD)]
-        public string Model { get; set; }
+        public List<CarWashViewModel> Interventions { get; set; } = new List<CarWashViewModel>();
 
-
-        public bool Active { get; set; } = true;
-
-        [Display(Name = StringConstants.Display.CONTRACT_IN_USE)]
-        [Required]
-        public int ContractId { get; set; }
-
-        [Display(Name = StringConstants.Display.CONTRACT_IN_USE)]
-        public SelectList? Contracts { get; set; }
     }
 }

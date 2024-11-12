@@ -1,0 +1,156 @@
+﻿@using PortalEquador.Domain.MechanicalWorkshop
+@using PortalEquador.Domain.MechanicalWorkshop.CarWash
+@model PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels.CarWashDayPlannerViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Oficina Morro Bento</h1>
+<h4> Planificação de trabalhos - Lavagens </h4>
+<hr />
+<br />
+
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <dl class="row">
+                <dt class="col-sm-2">
+                    <input id="interventionDate" asp-for="MainTime" class="form-control" />
+                </dt>
+                <dd class="col-sm-10">
+                    <a href="#" id="searchButton" class="btn btn-info">
+                        <i class="fas fa-search" title="Pesquisar"></i>
+                    </a>
+                </dd>
+            </dl>
+
+            <br />
+            <br />
+
+            @for (int i = 0; i < Model.SchedulesPerDayPart().Count; i++)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Horário</th>
+                            @foreach (var schedule in Model.SchedulesPerDayPart()[i])
+                            {
+                                <th scope="col">@Html.DisplayFor(modelItem => schedule.Description)</th>
+                            }
+                        </tr>
+                    </thead>
+
+                    @foreach (var appointement in Model.Appointements[i])
+                    {
+                        <tr>
+                            <th class="align-middle"><p class="fs-5"></p></th>
+                            <td>
+                                @if (appointement.ScheduleType == CarWashSchedulerType.Free)
+                                {
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Sem agendamento</h5>
+                                            <p class="card-text">Horário livre</p>
+
+                                            <a asp-action="Create" class="btn btn-success"
+                                               asp-route-date="@Model.MainTime"
+                                               asp-route-interventionTimeId="@appointement.InterventionTimeId">
+                                                <i class="fas fa-plus"></i> Agendar
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                }
+                                else if (appointement.ScheduleType == CarWashSchedulerType.BlockedFree)
+                                {
+                                    <div class="card bg-light  text-center shadow-sm">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Fechado</h5>
+                                            <p class="card-text">Horário não preenchido</p>
+                                            <a href="#" class="btn btn-light">
+                                                <i class="fas fa-solid fa-lock"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h5 class="card-title">@Html.DisplayFor(modelItem => appointement.Vehicle.LicencePlate)</h5>
+                                            <p class="card-text">Contracto: @Html.DisplayFor(modelItem => appointement.ContractDescription)</p>
+
+                                            @if (appointement.CurrentState == CarWashState.Open)
+                                            {
+                                                <a asp-action="Details" asp-route-id="@appointement.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                                                <a asp-action="Delete" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-danger"><i class="fas fa-trash-can" title="Remover"></i></a>
+
+                                                <span style="display: inline-block; width: 20px;"></span>
+                                                <a asp-action="Create" class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
+                                                <a asp-action="Confirm" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
+                                            }
+                                            else
+                                            {
+                                                @switch (appointement.CurrentState)
+                                                {
+                                                    case CarWashState.NotPerformed:
+                                                        <span class="badge bg-danger">@appointement.StatusDescription</span>
+                                                        break;
+                                                    case CarWashState.Performed:
+                                                        <span class="badge bg-success">@appointement.StatusDescription</span>
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    }
+
+
+
+
+                </table>
+
+
+                <br />
+                <br />
+            }
+
+
+
+        
+        
+        
+        
+        
+        
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("searchButton").addEventListener("click", function () {
+            // Get the selected time
+                var selectedTime = document.getElementById("interventionDate").value;
+            // Check if a time is selected
+            if (selectedTime) {
+                // Build the URL with the time as a route parameter
+                var url = '@Url.Action("Index")' + '?Time=' + encodeURIComponent(selectedTime);
+
+                // Navigate to the constructed URL
+                window.location.href = url;
+            } else {
+                alert("Please select a time.");
+            }
+        });
+    </script>
+}

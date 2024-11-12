@@ -2,27 +2,22 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
-using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity;
-using PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity;
-using PortalEquador.Domain.Document.ViewModels;
-using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
-using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
-using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
-using PortalEquador.Domain.PersonalInformation.ViewModels;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
-using System;
-using System.Text.RegularExpressions;
-using static PortalEquador.Util.Constants.GroupTypesConstants;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
 {
-    public class MechanicalWorkshopSchedulerRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment hostEnvironment) : GenericRepository<MechanicalWorkshopSchedulerEntity>(context, httpContextAccessor), IMechanicalWorkshopSchedulerRepository
+    public class MechanicalWorkshopSchedulerRepositoryImpl(
+        ApplicationDbContext context, 
+        IMapper mapper, 
+        IHttpContextAccessor httpContextAccessor, 
+        IWebHostEnvironment hostEnvironment
+        ) : GenericRepository<MechanicalWorkshopSchedulerEntity>(context, httpContextAccessor), IMechanicalWorkshopSchedulerRepository
     {
 
         private Dictionary<int, GroupItemViewModel> colabTime(List<GroupItemViewModel> schedules)
@@ -75,6 +70,31 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             }
         }
 
+        public async Task<SearchDayPlannerViewModel> SearchGetDayPlan(string licencePlate)
+        {
+            var results = await context.MechanicalWorkshopSchedulerEntity
+                                       .Include(item => item.VehicleEntity)
+                                       .Include(item => item.MechanicGroupItemEntity)
+                                       .Include(item => item.ContractGroupItemEntity)
+                                       .Include(item => item.InterventionTimeGroupItemEntity)
+                                      .Where(item => item.VehicleEntity.LicencePlate == licencePlate)
+                                      .OrderByDescending(item => item.ScheduleDate)
+                                      .Take(20)
+                                      .ToListAsync();
+
+            var model = new SearchDayPlannerViewModel
+            {
+                LicencePlate = licencePlate
+            };
+
+            if (results.Count != 0)
+            {
+                var interventions = mapper.Map<List<SchedulerViewModel>>(results);
+                model.Interventions = interventions;
+            }
+            
+            return model;
+        }
 
         public async Task<SchedulerViewModel> GetCreateModel(string scheduleDate, int mechanicId, int interventionTimeId)
         {
@@ -154,5 +174,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
 
             return mapper.Map<SchedulerViewModel>(result);
         }
+
+
     }
 }
