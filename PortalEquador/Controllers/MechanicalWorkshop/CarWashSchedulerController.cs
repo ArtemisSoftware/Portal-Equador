@@ -90,7 +90,7 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
         }
 
         // GET: CarWashScheduler/Delete/5
-        public async Task<IActionResult> Delete(int id, string time, string? origin, string? licencePlate)
+        public async Task<IActionResult> Delete(int id, string time, string? origin, string? vehicleId)
         {
             await repository.DeleteAsync(id);
             if (origin == null)
@@ -99,12 +99,12 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             }
             else
             {
-                return RedirectToAction(nameof(Search), new { licencePlate = licencePlate });
+                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId });
             }
         }
 
         // GET: CarWashScheduler/Delete/5
-        public async Task<IActionResult> Confirm(int id, string? time, string? origin, string? licencePlate)
+        public async Task<IActionResult> Confirm(int id, string? time, string? origin, string? vehicleId)
         {
             await repository.ConfirmWash(id);
             if (origin == null)
@@ -113,11 +113,11 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             }
             else
             {
-                return RedirectToAction(nameof(Search), new { licencePlate = licencePlate });
+                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId });
             }
         }
 
-        public async Task<IActionResult> NotPerformed(int id, string? time, string? origin, string? licencePlate)
+        public async Task<IActionResult> NotPerformed(int id, string? time, string? origin, string? vehicleId)
         {
             await repository.NotPerformed(id);
             if (origin == null)
@@ -126,21 +126,19 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             }
             else
             {
-                return RedirectToAction(nameof(Search), new { licencePlate = licencePlate });
+                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId });
             }
         }
 
-        public async Task<IActionResult> Search(string? licencePlate)
+        public async Task<IActionResult> Search(string? vehicleId)
         {
-            if (licencePlate == null)
+            var model = await repository.SearchGetDayPlan(vehicleId);
+            if(vehicleId != null)
             {
-                return View(new CarWashSearchDayPlannerViewModel());
+                model.VehicleId = int.Parse(vehicleId);
             }
-            else
-            {
-                var model = await repository.SearchGetDayPlan(licencePlate);
-                return View(model);
-            }
+            
+            return View(model);
         }
 
 

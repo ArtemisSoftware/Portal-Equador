@@ -70,29 +70,29 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             }
         }
 
-        public async Task<SearchDayPlannerViewModel> SearchGetDayPlan(string licencePlate)
+        public async Task<SearchDayPlannerViewModel> SearchGetDayPlan(string? vehicleId)
         {
-            var results = await context.MechanicalWorkshopSchedulerEntity
-                                       .Include(item => item.VehicleEntity)
-                                       .Include(item => item.MechanicGroupItemEntity)
-                                       .Include(item => item.ContractGroupItemEntity)
-                                       .Include(item => item.InterventionTimeGroupItemEntity)
-                                      .Where(item => item.VehicleEntity.LicencePlate == licencePlate)
-                                      .OrderByDescending(item => item.ScheduleDate)
-                                      .Take(20)
-                                      .ToListAsync();
+            var model = new SearchDayPlannerViewModel();
 
-            var model = new SearchDayPlannerViewModel
+            if(vehicleId != null)
             {
-                LicencePlate = licencePlate
-            };
-
-            if (results.Count != 0)
-            {
-                var interventions = mapper.Map<List<SchedulerViewModel>>(results);
-                model.Interventions = interventions;
+                var results = await context.MechanicalWorkshopSchedulerEntity
+                                      .Include(item => item.VehicleEntity)
+                                      .Include(item => item.MechanicGroupItemEntity)
+                                      .Include(item => item.ContractGroupItemEntity)
+                                      .Include(item => item.InterventionTimeGroupItemEntity)
+                                     .Where(item => item.VehicleEntity.Id == int.Parse(vehicleId))
+                                     .OrderByDescending(item => item.ScheduleDate)
+                                     .Take(20)
+                                     .ToListAsync();
+                if (results.Count != 0)
+                {
+                    var interventions = mapper.Map<List<SchedulerViewModel>>(results);
+                    model.Interventions = interventions;
+                }
             }
-            
+           
+            model.Vehicles = Vehicles();
             return model;
         }
 
@@ -155,10 +155,30 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             var result = from vehicle in context.MechanicalWorkshopVehicleEntity
                                          where vehicle.Active &&
                                                !context.MechanicalWorkshopSchedulerEntity
-                                                  .Any(scheduler => scheduler.VehicleId == vehicle.Id && scheduler.InterventionTimeId == interventionTimeId && scheduler.ScheduleDate == scheduleDate)
-                                         select vehicle;
+                                                  .Any(scheduler => scheduler.VehicleId == vehicle.Id && 
+                                                                                        scheduler.InterventionTimeId == interventionTimeId && 
+                                                                                        scheduler.ScheduleDate == scheduleDate)
+                         orderby vehicle.LicencePlate
+                         select vehicle;
 
             return new SelectList(result, "Id", "LicencePlate");
+        }
+
+        private SelectList Vehicles()
+        {
+            var vehicles = (from vehicle in context.MechanicalWorkshopVehicleEntity
+                            where vehicle.Active
+                            orderby vehicle.LicencePlate
+                            select new
+                            {
+                                Id = vehicle.Id,
+                                LicencePlate = vehicle.LicencePlate
+                            }).ToList();
+
+            // Add a placeholder item
+            vehicles.Insert(0, new { Id = 0, LicencePlate = "" });
+
+            return new SelectList(vehicles, "Id", "LicencePlate");
         }
 
         public async Task<SchedulerViewModel> GetSchedule(int id)

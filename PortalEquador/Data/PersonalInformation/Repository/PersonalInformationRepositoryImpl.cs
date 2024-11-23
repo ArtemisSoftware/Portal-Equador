@@ -101,7 +101,7 @@ namespace PortalEquador.Data.PersonalInformation.Repository
                              select document)
                         on personal.Id equals profileDoc.PersonalInformationId into resultProfileDocs
                         from resultProfileDocument in resultProfileDocs.DefaultIfEmpty()
-
+                        orderby personal.FirstName
                         select new PersonalInformationViewModel
                         {
                             Id = personal.Id,

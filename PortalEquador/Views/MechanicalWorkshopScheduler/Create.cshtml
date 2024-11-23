@@ -44,6 +44,8 @@
                 </div>
                 <br />
 
+
+
                 <dl class="row">
                     <dd class="col-sm-6">
                         <div class="form-group">
@@ -108,12 +110,42 @@
     </div>
 </div>
 
+
+
 @section Scripts {
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Select2 library -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
     <script>
-        
+        $(document).ready(function () {
+            // Apply Select2 to the dropdown
+            $('#vehicleDropdown').select2({
+                placeholder: "Selecione uma viatura",
+                allowClear: true,
+                theme: "bootstrap-5"
+            });
+
+            // Attach the change event listener after initializing Select2
+            $('#vehicleDropdown').on('change', function () {
+                var vehicleId = $(this).val();
+                handleVehicle(vehicleId);
+            });
+
+            // Handle page load logic
+            var initialVehicleId = $('#vehicleDropdown').val();
+            handleVehicle(initialVehicleId);
+        });
+    </script>
+
+    <script>
+
         function handleVehicle(vehicleId) {
                 if (vehicleId) {
-                    fetch(`/MechanicalWorkshopScheduler/GetVehicleDetails?vehicleId=${vehicleId}`)
+                fetch(`/MechanicalWorkshopScheduler/GetVehicleDetails?vehicleId=${vehicleId}`)
                         .then(response => response.json())
                         .then(data => {
                             document.getElementById("vehicleModel").value = data.model;
@@ -141,6 +173,7 @@
             var vehicleDropdown = document.getElementById("vehicleDropdown");
             var vehicleId = vehicleDropdown.value;
             handleVehicle(vehicleId);
-        };  
+        };
     </script>
+
 }

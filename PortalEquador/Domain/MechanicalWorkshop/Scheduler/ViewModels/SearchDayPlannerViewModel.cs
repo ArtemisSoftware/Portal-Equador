@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.IdentityModel.Tokens;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Util.Constants;
 using System.ComponentModel.DataAnnotations;
@@ -74,5 +75,31 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
 
         public List<SchedulerViewModel> Interventions { get; set; } = new List<SchedulerViewModel> ();
 
+
+        [Display(Name = StringConstants.Display.VEHICLE)]
+        [Required]
+        public int VehicleId { get; set; }
+
+
+        [Display(Name = StringConstants.Display.VEHICLE)]
+        public SelectList? Vehicles { get; set; }
+
+        public bool NoSchedules()
+        {
+            if (Interventions.Count == 0 && VehicleId != 0)
+            {
+                return true;
+            }
+            else return false;
+        }
+
+        public bool NoLicencePlateSelected()
+        {
+            if (Interventions.Count == 0 && LicencePlate == "" && VehicleId == 0)
+            {
+                return true;
+            }
+            else return false;
+        }
     }
 }

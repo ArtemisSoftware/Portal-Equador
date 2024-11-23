@@ -29,22 +29,10 @@
             <div class="form-group">
                 <label asp-for="LicencePlate" class="control-label"></label>
                 <dl class="row">
-                    <dt class="col-sm-1">
-                        <input asp-for="LicencePlatePosition0" id="lp0" class="form-control text-center" maxlength="3" style="text-transform:uppercase" />
-                    </dt>
-                    <dt class="col-sm-1">
-                        <input asp-for="LicencePlatePosition1" id="lp1" class="form-control text-center" maxlength="2" style="text-transform:uppercase" />
-                    </dt>
-                    <dt class="col-sm-1">
-                        <input asp-for="LicencePlatePosition2" id="lp2" class="form-control text-center" maxlength="2" style="text-transform:uppercase" />
-                    </dt>
-                    <dt class="col-sm-1">
-                        <input asp-for="LicencePlatePosition3" id="lp3" class="form-control text-center" maxlength="2" style="text-transform:uppercase" />
-                    </dt>
-                    <dt class="col-sm-2">
-                        <a href="#" id="searchButton" class="btn btn-info">
-                            <i class="fas fa-search" title="Pesquisar"></i> Pesquisar
-                        </a>
+                    <dt class="col-sm-3">
+                        <div class="form-group">
+                            <select asp-for="VehicleId" class="form-select" asp-items="Model.Vehicles" id="vehicleDropdown"></select>
+                        </div>
                     </dt>
                 </dl>
             </div>
@@ -52,11 +40,15 @@
             <br />
             <br />
 
-            @if (Model.Interventions.Count == 0 && Model.LicencePlate != "")
+            @if (Model.NoLicencePlateSelected())
+            {
+                <h4> Nenhuma matricula selecionada</h4>
+            }
+
+            @if (Model.NoSchedules())
             {
                 <h4> Não existem agendamentos marcados. </h4>
             }
-
 
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 @foreach (var intervention in Model.Interventions)
@@ -85,14 +77,16 @@
                                     <a asp-action="Details" asp-route-id="@intervention.Id" asp-route-origin="search" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
                                     @if (intervention.CurrentState == CarWashState.Open)
                                     {
-                                    <a asp-action="Delete" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-licencePlate="@intervention.Vehicle.LicencePlate" class="btn btn-danger"><i class="fas fa-trash-can" title="Remover"></i></a>
+                                        <a asp-action="Delete" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-vehicleId="@intervention.Vehicle.Id" class="btn btn-danger"><i class="fas fa-trash-can" title="Remover"></i></a>
                                     }
                                 }
                                 @if (intervention.CurrentState == CarWashState.Open)
                                 {
-                                    <span style="display: inline-block; width: 20px;"></span>
-                                    <a asp-action="NotPerformed" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-licencePlate="@intervention.Vehicle.LicencePlate" class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
-                                    <a asp-action="Confirm" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-licencePlate="@intervention.Vehicle.LicencePlate" class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
+                                    <br />
+                                    <hr />
+                                    <a asp-action="Confirm" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-vehicleId="@intervention.Vehicle.Id" class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
+                                    <br /> <br />
+                                    <a asp-action="NotPerformed" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-vehicleId="@intervention.Vehicle.Id" class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
                                 }
                                 else
                                 {
@@ -121,19 +115,45 @@
 </div>
 
 @section Scripts {
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Select2 library -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
     <script>
-        document.getElementById("searchButton").addEventListener("click", function () {
-            var lp0 = document.getElementById("lp0").value;
-            var lp1 = document.getElementById("lp1").value;
-            var lp2 = document.getElementById("lp2").value;
-            var lp3 = document.getElementById("lp3").value;
-            var licencePlate = lp0 + "-" + lp1 + "-" + lp2 + "-" + lp3
+        $(document).ready(function () {
+            // Apply Select2 to the dropdown
+            $('#vehicleDropdown').select2({
+                placeholder: "Selecione uma viatura",
+                allowClear: true,
+                theme: "bootstrap-5"
+            });
 
-            // Build the URL with the time as a route parameter
-            var url = '@Url.Action("Search")' + '?LicencePlate=' + encodeURIComponent(licencePlate);
+            // Attach the change event listener after initializing Select2
+            $('#vehicleDropdown').on('change', function () {
+                var vehicleId = $(this).val();
+                handleVehicle(vehicleId);
+            });
 
-            // Navigate to the constructed URL
-            window.location.href = url;
         });
     </script>
+
+    <script>
+
+        function handleVehicle(vehicleId) {
+            window.location.href = `/CarWashScheduler/Search?vehicleId=${vehicleId}`;
+        }
+
+        function handleVehicleChange() {
+            var vehicleDropdown = document.getElementById("vehicleDropdown");
+            vehicleDropdown.addEventListener("change", function () {
+                var vehicleId = this.value;
+                handleVehicle(vehicleId)
+            });
+        }
+
+    </script>
+
 }

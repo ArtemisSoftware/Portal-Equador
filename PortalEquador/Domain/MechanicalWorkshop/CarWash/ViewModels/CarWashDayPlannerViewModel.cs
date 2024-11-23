@@ -43,10 +43,10 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
                 return;
             }
 
+            var registreisList = new List<CarWashViewModel>();
+
             foreach (var schedule in Schedules)
             {
-                var registreisList = new List<CarWashViewModel>();
-
                 var res = Interventions
                          .Where(intervention => intervention.InterventionTimeId == schedule.Id)
                          .FirstOrDefault();
@@ -59,8 +59,8 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
                 {
                     registreisList.Add(FreeSchedule(schedule));
                 }
-                OrganizeAppointements(registreisList);
             }
+            OrganizeAppointements(registreisList);
         }
 
         private List<CarWashViewModel> NoSchedules()
@@ -80,10 +80,17 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
         {
             int middleIndex = (interventions.Count + 1) / 2;
 
-            List<CarWashViewModel> firstHalf = interventions.GetRange(0, middleIndex);
-            List<CarWashViewModel> secondHalf = interventions.GetRange(middleIndex, interventions.Count - middleIndex);
-            Appointements.Add(0, firstHalf);
-            Appointements.Add(1, secondHalf);
+            try
+            {
+                List<CarWashViewModel> firstHalf = interventions.GetRange(0, middleIndex);
+                List<CarWashViewModel> secondHalf = interventions.GetRange(middleIndex, interventions.Count - middleIndex);
+                Appointements.Add(0, firstHalf);
+                Appointements.Add(1, secondHalf);
+            } catch (ArgumentException){
+                var f = 0;
+
+            }
+         
         }
 
         private CarWashViewModel FreeSchedule(GroupItemViewModel schedule)

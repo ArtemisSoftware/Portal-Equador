@@ -170,34 +170,60 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
             var result = from vehicle in context.MechanicalWorkshopVehicleEntity
                          where vehicle.Active &&
                                !context.CarWashSchedulerEntity
-                                  .Any(scheduler => scheduler.VehicleId == vehicle.Id && scheduler.InterventionTimeId == interventionTimeId && scheduler.ScheduleDate == scheduleDate)
+                                  .Any(
+                                       scheduler => scheduler.VehicleId == vehicle.Id 
+                                       && 
+                                       scheduler.InterventionTimeId == interventionTimeId 
+                                       && 
+                                       scheduler.ScheduleDate == scheduleDate
+                                   )
+                         orderby vehicle.LicencePlate
                          select vehicle;
 
             return new SelectList(result, "Id", "LicencePlate");
         }
 
-        public async Task<CarWashSearchDayPlannerViewModel> SearchGetDayPlan(string licencePlate)
+        private SelectList Vehicles()
         {
-            var results = await context.CarWashSchedulerEntity
-                           .Include(item => item.VehicleEntity)
-                           .Include(item => item.ContractGroupItemEntity)
-                           .Include(item => item.InterventionTimeGroupItemEntity)
-                          .Where(item => item.VehicleEntity.LicencePlate == licencePlate)
-                          .OrderByDescending(item => item.ScheduleDate)
-                          .Take(20)
-                          .ToListAsync();
+            var vehicles = (from vehicle in context.MechanicalWorkshopVehicleEntity
+                            where vehicle.Active
+                            orderby vehicle.LicencePlate
+                            select new
+                            {
+                                Id = vehicle.Id,
+                                LicencePlate = vehicle.LicencePlate
+                            }).ToList();
 
-            var model = new CarWashSearchDayPlannerViewModel
-            {
-                LicencePlate = licencePlate
-            };
+            // Add a placeholder item
+            vehicles.Insert(0, new { Id = 0, LicencePlate = "" });
 
-            if (results.Count != 0)
+            return new SelectList(vehicles, "Id", "LicencePlate");
+        }
+
+        public async Task<CarWashSearchDayPlannerViewModel> SearchGetDayPlan(string? vehicleId)
+        {
+            var model = new CarWashSearchDayPlannerViewModel();
+
+            if (vehicleId != null)
             {
-                var interventions = mapper.Map<List<CarWashViewModel>>(results);
-                model.Interventions = interventions;
+                var results = await context.CarWashSchedulerEntity
+                    .Include(item => item.VehicleEntity)
+                    .Include(item => item.ContractGroupItemEntity)
+                    .Include(item => item.InterventionTimeGroupItemEntity)
+                   .Where(item => item.VehicleEntity.Id == int.Parse(vehicleId))
+                   .OrderByDescending(item => item.ScheduleDate)
+                   .Take(20)
+                   .ToListAsync();
+
+                if (results.Count != 0)
+                {
+                    var interventions = mapper.Map<List<CarWashViewModel>>(results);
+                    model.Interventions = interventions;
+                }
+                model.VehicleId = int.Parse(vehicleId);
             }
 
+            model.Vehicles = Vehicles();
             return model;
         }
 

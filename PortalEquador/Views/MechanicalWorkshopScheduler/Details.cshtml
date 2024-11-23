@@ -109,7 +109,7 @@
 <div>
     @if (ViewBag.origin == "search")
     {
-        <a asp-action="Search" asp-route-licencePlate="@Model?.Vehicle.LicencePlate" class="btn btn-dark">Regressar ao index</a>
+        <a asp-action="Search" asp-route-vehicleId="@Model?.Vehicle.Id" class="btn btn-dark">Regressar ao index</a>
     }
     else
     {

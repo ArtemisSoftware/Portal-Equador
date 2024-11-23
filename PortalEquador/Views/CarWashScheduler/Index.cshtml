@@ -6,11 +6,17 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Oficina Morro Bento</h1>
-<h4> Planificação de trabalhos - Lavagens </h4>
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>Oficina Morro Bento</h1>
+        <h4>Planificação de trabalhos - Lavagens</h4>
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="MechanicalWorkshop" asp-action="Index" class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
+</div>
 <hr />
 <br />
-
 
 <div class="row">
     <div class="col-md-12">
@@ -89,9 +95,10 @@
                                             {
                                                 <a asp-action="Details" asp-route-id="@appointement.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
                                                 <a asp-action="Delete" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-danger"><i class="fas fa-trash-can" title="Remover"></i></a>
-
-                                                <span style="display: inline-block; width: 20px;"></span>
+                                                 <br />
+                                                 <hr />
                                                 <a asp-action="Create" class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
+                                               <br /> <br />
                                                 <a asp-action="Confirm" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
                                             }
                                             else

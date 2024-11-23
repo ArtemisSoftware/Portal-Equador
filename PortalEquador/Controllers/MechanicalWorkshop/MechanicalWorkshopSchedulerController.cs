@@ -64,7 +64,7 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
 
 
         // GET: MechanicalWorkshopScheduler/Delete/5
-        public async Task<IActionResult> Delete(int id, string time, string? origin, string? licencePlate)
+        public async Task<IActionResult> Delete(int id, string time, string? origin, string? vehicleId)
         {
             await repository.DeleteAsync(id);
             if(origin == null)
@@ -72,7 +72,7 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
                 return RedirectToAction(nameof(Index), new { time = time });
             } else
             {
-                return RedirectToAction(nameof(Search), new { licencePlate = licencePlate });
+                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId });
             }
         }
 
@@ -101,16 +101,10 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
         }
 
         // GET: MechanicalWorkshopScheduler
-        public async Task<IActionResult> Search(string? licencePlate)
+        public async Task<IActionResult> Search(string? vehicleId)
         {
-            if (licencePlate == null) { 
-                return View(new SearchDayPlannerViewModel()); 
-            }
-            else
-            {
-                var model = await repository.SearchGetDayPlan(licencePlate);
-                return View(model);
-            }
+            var model = await repository.SearchGetDayPlan(vehicleId);
+            return View(model);
         }
     }
 }

@@ -5,10 +5,20 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Oficina Morro Bento</h1>
-<h4> Planificação de trabalhos - Revisão dos veículos da frota </h4>
+
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>Oficina Morro Bento</h1>
+        <h4>Planificação de trabalhos - Revisão dos veículos da frota</h4>
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="MechanicalWorkshop" asp-action="Index" class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
+</div>
 <hr />
 <br />
+
+
 
 <div class="row">
     <div class="col-md-12">
