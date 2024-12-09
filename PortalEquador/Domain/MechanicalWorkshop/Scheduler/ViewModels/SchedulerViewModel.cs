@@ -62,9 +62,10 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
 
         public SelectList? Vehicles { get; set; }
 
+        public GroupItemViewModel? Contract { get; set; }
 
         [Display(Name = StringConstants.Display.CONTRACT)]
-        public string? Contract { get; set; }
+        public string? ContractDescription { get; set; }
 
 
         [Display(Name = StringConstants.Display.MODEL)]
@@ -82,5 +83,35 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
         [Display(Name = StringConstants.Display.CODE)]
         public string? Code { get; set; }
 
+        public int CurrentState { get; set; } = SchedulerState.Open;
+
+        public string StatusDescription
+        {
+            get
+            {
+                var description = "";
+
+                switch (CurrentState)
+                {
+                    case SchedulerState.Open:
+                        description = "";
+                        break;
+
+                    case SchedulerState.NotPerformed:
+                        description = StringConstants.SchedulerStatus.NOT_PERFORMED;
+                        break;
+
+                    case SchedulerState.Performed:
+                        description = StringConstants.SchedulerStatus.PERFORMED;
+                        break;
+
+                    default:
+                        description = "";
+                        break;
+                }
+
+                return description;
+            }
+        }
     }
 }

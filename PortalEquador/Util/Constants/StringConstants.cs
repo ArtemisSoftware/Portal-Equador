@@ -158,6 +158,12 @@
             public const string NOT_PERFORMED = "Lavagem não realizada";
         }
 
+        public static class SchedulerStatus
+        {
+            public const string PERFORMED = "Revisão realizada";
+            public const string NOT_PERFORMED = "Revisão não realizada";
+        }
+
         public static class Controller
         {
             public const string Curriculums = "Curriculum";

@@ -76,6 +76,32 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             }
         }
 
+        public async Task<IActionResult> Confirm(int id, string? time, string? origin, string? vehicleId)
+        {
+            await repository.ConfirmRevision(id);
+            if (origin == null)
+            {
+                return RedirectToAction(nameof(Index), new { time = time });
+            }
+            else
+            {
+                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId });
+            }
+        }
+
+        public async Task<IActionResult> NotPerformed(int id, string? time, string? origin, string? vehicleId)
+        {
+            await repository.NotPerformed(id);
+            if (origin == null)
+            {
+                return RedirectToAction(nameof(Index), new { time = time });
+            }
+            else
+            {
+                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId });
+            }
+        }
+
 
         private async Task<SchedulerViewModel> RecoverModel(SchedulerViewModel model)
         {

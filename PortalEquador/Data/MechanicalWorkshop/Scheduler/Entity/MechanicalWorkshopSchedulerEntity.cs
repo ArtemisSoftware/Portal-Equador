@@ -34,13 +34,6 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity
         [ForeignKey("MechanicId")]
         public GroupItemEntity MechanicGroupItemEntity { get; set; }
 
-
-
-
-        //public string? Observation { get; set; }
-
-        //public string? Observation { get; set; }
-
-        //HORARIO  CONTRATO    CODIGO SERVIÇO MODELO TELEFONE
+        public int CurrentState { get; set; }
     }
 }

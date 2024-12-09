@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
+using PortalEquador.Data.MechanicalWorkshop.CarWash.Entity;
 using PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity;
 using PortalEquador.Domain.GroupTypes.ViewModels;
+using PortalEquador.Domain.MechanicalWorkshop;
+using PortalEquador.Domain.MechanicalWorkshop.Scheduler;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
 using PortalEquador.Util;
@@ -149,6 +152,41 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
                 await UpdateAsync(entity);
             }
         }
+
+        public async Task ConfirmRevision(int id)
+        {
+            await PerformedRevision(id, SchedulerState.Performed);
+        }
+
+        public async Task NotPerformed(int id)
+        {
+            await PerformedRevision(id, SchedulerState.NotPerformed);
+        }
+
+
+        private async Task PerformedRevision(int id, int state)
+        {
+            var model = await GetSchedule(id);
+            MechanicalWorkshopSchedulerEntity entity = mapper.Map<MechanicalWorkshopSchedulerEntity>(model);
+
+            entity.CurrentState = state;
+            entity.EditorId = GetCurrentUserId();
+            entity.DateModified = DateTime.UtcNow;
+
+            // set Modified flag in your entry
+            var local = context.Set<MechanicalWorkshopSchedulerEntity>().Local.FirstOrDefault(entry => entry.Id.Equals(model.Id));
+
+            // check if local is not null 
+            if (local != null)
+            {
+                // detach
+                context.Entry(local).State = EntityState.Detached;
+            }
+            context.Entry(entity).State = EntityState.Modified;
+
+            await UpdateAsync(entity);
+        }
+
 
         public SelectList Vehicles(int interventionTimeId, DateOnly scheduleDate)
         {

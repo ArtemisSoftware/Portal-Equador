@@ -29,7 +29,8 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.InterventionTime, opt => opt.MapFrom(src => src.InterventionTimeGroupItemEntity))
                 .ForMember(dest => dest.Mechanic, opt => opt.MapFrom(src => src.MechanicGroupItemEntity))
                 .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.VehicleEntity))
-                .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity.Description))
+                .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity))
+                .ForMember(dest => dest.ContractDescription, opt => opt.MapFrom(src => src.ContractGroupItemEntity.Description))
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ReverseMap();
 

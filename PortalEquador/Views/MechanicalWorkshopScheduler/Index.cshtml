@@ -60,68 +60,76 @@
                             @foreach (var appointement in Model.Appointements[interventionTime.Key])
                             {
                                 <td>
-                                    @if (appointement.ScheduleType == SchedulerType.Free)
-                                    {
-                                        <div class="card text-center">
-                                            <div class="card-body">
-                                                <h5 class="card-title">Sem agendamento</h5>
-                                                <p class="card-text">Horário livre</p>
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            @switch (appointement.ScheduleType)
+                                            {
+                                                case SchedulerType.Free:
+                                                    <h5 class="card-title">Sem agendamento</h5>
+                                                    <p class="card-text">Horário livre</p>
 
-                                                <a asp-action="Create" class="btn btn-success" asp-route-date="@Model.MainTime" asp-route-interventionTimeId="@interventionTime.Value.Id" asp-route-mechanicId="@appointement.Mechanic.Id">
-                                                    <i class="fas fa-plus"></i> Agendar
-                                                </a>
+                                                    <a asp-action="Create" class="btn btn-success" asp-route-date="@Model.MainTime" asp-route-interventionTimeId="@interventionTime.Value.Id" asp-route-mechanicId="@appointement.Mechanic.Id">
+                                                        <i class="fas fa-plus"></i> Agendar
+                                                    </a>
+                                                    break;
 
-                                            </div>
+                                               case SchedulerType.BlockedFree:
+                                                    <h5 class="card-title">Fechado</h5>
+                                                    <p class="card-text">Horário não preenchido</p>
+                                                    <a href="#" class="btn btn-light">
+                                                        <i class="fas fa-solid fa-lock"></i>
+                                                    </a>
+                                                    break;
+
+                                                case SchedulerType.Blocked:
+                                                    <h5 class="card-title">Indisponível</h5>
+                                                    <p class="card-text">Horário bloqueado</p>
+                                                    <a href="#" class="btn btn-danger">
+                                                        <i class="fas fa-stop-circle"></i>
+                                                    </a>
+                                                    break;
+
+                                                case SchedulerType.BlockedDateInThePast:
+                                                    <h5 class="card-title">@Html.DisplayFor(modelItem => appointement.Vehicle.LicencePlate)</h5>
+                                                    <p class="card-text">Contracto: @Html.DisplayFor(modelItem => appointement.ContractDescription)</p>
+                                                    <a asp-action="Details" asp-route-id="@appointement.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                                                    <a href="#" class="btn btn-light">
+                                                        <i class="fas fa-solid fa-lock"></i>
+                                                    </a>
+                                                    break;
+
+                                                default:
+                                                    <h5 class="card-title">@Html.DisplayFor(modelItem => appointement.Vehicle.LicencePlate)</h5>
+                                                    <p class="card-text">Contracto: @Html.DisplayFor(modelItem => appointement.ContractDescription)</p>
+                                                    if (appointement.CurrentState == SchedulerState.Open)
+                                                    {
+                                                        <a asp-action="Details" asp-route-id="@appointement.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                                                        <a asp-action="Delete" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-danger"><i class="fas fa-trash-can" title="Remover"></i></a>
+                                                        <br />
+                                                        <hr />
+                                                        <a asp-action="NotPerformed" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
+
+                                                        <br /> <br />
+                                                        <a asp-action="Confirm" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        @switch (appointement.CurrentState)
+                                                        {
+                                                            case SchedulerState.NotPerformed:
+                                                                <span class="badge bg-danger">@appointement.StatusDescription</span>
+                                                                break;
+                                                            case SchedulerState.Performed:
+                                                                <span class="badge bg-success">@appointement.StatusDescription</span>
+                                                                break;
+                                                            default:
+                                                                break;
+                                                        }
+                                                    }
+                                                    break;
+                                            }
                                         </div>
-                                    }
-                                    else if (appointement.ScheduleType == SchedulerType.BlockedFree)
-                                    {
-                                        <div class="card bg-light  text-center shadow-sm">
-                                            <div class="card-body">
-                                                <h5 class="card-title">Fechado</h5>
-                                                <p class="card-text">Horário não preenchido</p>
-                                                <a href="#" class="btn btn-light">
-                                                    <i class="fas fa-solid fa-lock"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    }
-                                    else if (appointement.ScheduleType == SchedulerType.Blocked)
-                                    {
-                                        <div class="card bg-light  text-center shadow-sm">
-                                            <div class="card-body">
-                                                <h5 class="card-title">Indisponível</h5>
-                                                <p class="card-text">Horário bloqueado</p>
-                                                <a href="#" class="btn btn-danger">
-                                                    <i class="fas fa-stop-circle"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    }
-                                    else if (appointement.ScheduleType == SchedulerType.BlockedDateInThePast)
-                                    {
-                                        <div class="card text-center">
-                                            <div class="card-body">
-                                                <h5 class="card-title">@Html.DisplayFor(modelItem => appointement.Vehicle.LicencePlate)</h5>
-                                                <p class="card-text">Contracto: @Html.DisplayFor(modelItem => appointement.Contract)</p>
-                                                <a asp-action="Details" asp-route-id="@appointement.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
-                                                <a href="#" class="btn btn-light">
-                                                    <i class="fas fa-solid fa-lock"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="card text-center">
-                                            <div class="card-body">
-                                                <h5 class="card-title">@Html.DisplayFor(modelItem => appointement.Vehicle.LicencePlate)</h5>
-                                                <p class="card-text">Contracto: @Html.DisplayFor(modelItem => appointement.Contract)</p>
-                                                <a asp-action="Details" asp-route-id="@appointement.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
-                                                <a asp-action="Delete" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-danger"><i class="fas fa-trash-can" title="Remover"></i></a>
-                                            </div>
-                                        </div>
-                                    }
+                                    </div>
 
                                 </td>
                             }

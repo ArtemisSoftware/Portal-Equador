@@ -64,20 +64,52 @@
                                     <p class="card-text">
                                         Mecânico: @Html.DisplayFor(modelItem => intervention.Mechanic.Description)
                                         <br />
-                                        Contracto: @Html.DisplayFor(modelItem => intervention.Contract)
+                                        Contracto: @Html.DisplayFor(modelItem => intervention.ContractDescription)
                                     </p>
-                                @if (intervention.ScheduleType == SchedulerType.BlockedDateInThePast)
+
+                                @switch (intervention.ScheduleType)
                                 {
-                                    <a asp-action="Details" asp-route-id="@intervention.Id" asp-route-origin="search"  class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
-                                    <a href="#" class="btn btn-light">
-                                        <i class="fas fa-solid fa-lock"></i>
-                                    </a>
+                                    case SchedulerType.BlockedDateInThePast:
+                                        <a asp-action="Details" asp-route-id="@intervention.Id" asp-route-origin="search" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                                        <a href="#" class="btn btn-light">
+                                            <i class="fas fa-solid fa-lock"></i>
+                                        </a>
+                                        break;
+
+                                    default:
+                                        <a asp-action="Details" asp-route-id="@intervention.Id" asp-route-origin="search" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                                        @if (intervention.CurrentState == SchedulerState.Open)
+                                        {
+                                            <a asp-action="Delete" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-vehicleId="@intervention.Vehicle.Id" class="btn btn-danger"><i class="fas fa-trash-can" title="Remover"></i></a>
+                                        }
+                                        break;
                                 }
-                                else
+                                @switch (intervention.CurrentState)
                                 {
-                                    <a asp-action="Details" asp-route-id="@intervention.Id" asp-route-origin="search" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
-                                    <a asp-action="Delete" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-vehicleId="@intervention.Vehicle.Id" class="btn btn-danger"><i class="fas fa-trash-can" title="Remover"></i></a>
+                                    case SchedulerState.Open:
+                                        <br />
+                                        <hr />
+                                        <a asp-action="Confirm" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-vehicleId="@intervention.Vehicle.Id" class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
+                                        <br /> <br />
+                                        <a asp-action="NotPerformed" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-vehicleId="@intervention.Vehicle.Id" class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
+
+                                        break;
+
+                                    default:
+                                        @switch (intervention.CurrentState)
+                                        {
+                                            case SchedulerState.NotPerformed:
+                                                <span class="badge bg-danger">@intervention.StatusDescription</span>
+                                                break;
+                                            case SchedulerState.Performed:
+                                                <span class="badge bg-success">@intervention.StatusDescription</span>
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                        break;
                                 }
+
                                 </div>
                             </div>
                     </div>

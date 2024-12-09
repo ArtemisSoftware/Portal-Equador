@@ -56,68 +56,66 @@
 
                             
                             <td>
-                                @if (appointement.ScheduleType == CarWashSchedulerType.Free)
-                                {
-                                    <div class="card text-center">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Sem agendamento</h5>
-                                            <p class="card-text">Horário livre</p>
 
-                                            <a asp-action="Create" class="btn btn-success"
-                                               asp-route-date="@Model.MainTime"
-                                               asp-route-interventionTimeId="@appointement.InterventionTimeId">
-                                                <i class="fas fa-plus"></i> Agendar
-                                            </a>
+                                <div class="card text-center">
+                                    <div class="card-body">
 
-                                        </div>
-                                    </div>
-                                }
-                                else if (appointement.ScheduleType == CarWashSchedulerType.BlockedFree)
-                                {
-                                    <div class="card bg-light  text-center shadow-sm">
-                                        <div class="card-body">
-                                            <h5 class="card-title">Fechado</h5>
-                                            <p class="card-text">Horário não preenchido</p>
-                                            <a href="#" class="btn btn-light">
-                                                <i class="fas fa-solid fa-lock"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="card text-center">
-                                        <div class="card-body">
-                                            <h5 class="card-title">@Html.DisplayFor(modelItem => appointement.Vehicle.LicencePlate)</h5>
-                                            <p class="card-text">Contracto: @Html.DisplayFor(modelItem => appointement.ContractDescription)</p>
+                                        @switch (appointement.ScheduleType)
+                                        {
+                                            case CarWashSchedulerType.Free:
+                                                <h5 class="card-title">Sem agendamento</h5>
+                                                <p class="card-text">Horário livre</p>
+                                                <a asp-action="Create" class="btn btn-success"
+                                                   asp-route-date="@Model.MainTime"
+                                                   asp-route-interventionTimeId="@appointement.InterventionTimeId">
+                                                    <i class="fas fa-plus"></i> Agendar
+                                                </a>
+                                                break;
 
-                                            @if (appointement.CurrentState == CarWashState.Open)
-                                            {
-                                                <a asp-action="Details" asp-route-id="@appointement.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
-                                                <a asp-action="Delete" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-danger"><i class="fas fa-trash-can" title="Remover"></i></a>
-                                                 <br />
-                                                 <hr />
-                                                <a asp-action="Create" class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
-                                               <br /> <br />
-                                                <a asp-action="Confirm" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
-                                            }
-                                            else
-                                            {
-                                                @switch (appointement.CurrentState)
+                                            case CarWashSchedulerType.BlockedFree:
+                                                <h5 class="card-title">Fechado</h5>
+                                                <p class="card-text">Horário não preenchido</p>
+                                                <a href="#" class="btn btn-light">
+                                                    <i class="fas fa-solid fa-lock"></i>
+                                                </a>
+                                                break;
+
+                                            default:
+
+                                                <h5 class="card-title">@Html.DisplayFor(modelItem => appointement.Vehicle.LicencePlate)</h5>
+                                                <p class="card-text">Contracto: @Html.DisplayFor(modelItem => appointement.ContractDescription)</p>
+
+                                                @if (appointement.CurrentState == CarWashState.Open)
                                                 {
-                                                    case CarWashState.NotPerformed:
-                                                        <span class="badge bg-danger">@appointement.StatusDescription</span>
-                                                        break;
-                                                    case CarWashState.Performed:
-                                                        <span class="badge bg-success">@appointement.StatusDescription</span>
-                                                        break;
-                                                    default:
-                                                        break;
+                                                    <a asp-action="Details" asp-route-id="@appointement.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
+                                                    <a asp-action="Delete" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-danger"><i class="fas fa-trash-can" title="Remover"></i></a>
+                                                    <br />
+                                                    <hr />
+                                                    <a asp-action="NotPerformed" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
+
+                                                    <br /> <br />
+                                                    <a asp-action="Confirm" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
                                                 }
-                                            }
-                                        </div>
+                                                else
+                                                {
+                                                    @switch (appointement.CurrentState)
+                                                    {
+                                                        case CarWashState.NotPerformed:
+                                                            <span class="badge bg-danger">@appointement.StatusDescription</span>
+                                                            break;
+                                                        case CarWashState.Performed:
+                                                            <span class="badge bg-success">@appointement.StatusDescription</span>
+                                                            break;
+                                                        default:
+                                                            break;
+                                                    }
+                                                }
+
+
+                                                break;
+                                        }
                                     </div>
-                                }
+                                </div>
                             </td>
                        
                     }

@@ -12,6 +12,9 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository
         Task Save(SchedulerViewModel model);
         Task<SchedulerViewModel> GetSchedule(int id);
 
+        Task ConfirmRevision(int id);
+        Task NotPerformed(int id);
+
         Task<SearchDayPlannerViewModel> SearchGetDayPlan(string? vehicleId);
     }
 }
