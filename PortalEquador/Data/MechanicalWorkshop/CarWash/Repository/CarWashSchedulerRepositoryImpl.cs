@@ -21,8 +21,10 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
         IWebHostEnvironment hostEnvironment
         ) : GenericRepository<CarWashSchedulerEntity>(context, httpContextAccessor), ICarWashSchedulerRepository
     {
-        public async Task<CarWashViewModel> GetCreateModel(string scheduleDate, int interventionTimeId)
+        public async Task<CarWashViewModel> GetCreateModel(string scheduleDate, int laneId,  int interventionTimeId)
         {
+            var lane = await GroupItem(laneId);
+            var selectedLane = mapper.Map<GroupItemViewModel>(lane);
             var schedule = await GroupItem(interventionTimeId);
             var selectedSchedule = mapper.Map<GroupItemViewModel>(schedule);
             var dateOnly = TimeUtil.ToDateOnly(scheduleDate);
@@ -32,6 +34,8 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
                 ScheduleDate = dateOnly,
                 InterventionTimeId = interventionTimeId,
                 InterventionTime = selectedSchedule,
+                LaneId = laneId,
+                Lane = selectedLane,
                 Vehicles = Vehicles(interventionTimeId, dateOnly)
             };
             return model;
@@ -39,9 +43,12 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
 
         public async Task<CarWashViewModel> GetCreateModel(CarWashViewModel model)
         {
+            var lane = await GroupItem(model.LaneId);
+            var selectedLane = mapper.Map<GroupItemViewModel>(lane);
             var schedule = await GroupItem(model.InterventionTimeId);
             var selectedSchedule = mapper.Map<GroupItemViewModel>(schedule);
 
+            model.Lane = selectedLane;
             model.InterventionTime = selectedSchedule;
             model.Vehicles = Vehicles(model.InterventionTimeId, model.ScheduleDate);
             return model;
@@ -49,29 +56,32 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
 
         public async Task<CarWashDayPlannerViewModel> GetDayPlan(DateOnly date)
         {
+            var lanes = await GroupItemsList(GroupTypesConstants.Groups.WASH_LANE);
             var schedules = await GroupItemsList(GroupTypesConstants.Groups.CAR_WASH_SCHEDULES);
             var schedulesList = mapper.Map<List<GroupItemViewModel>>(schedules);
-
+            
             var results = await context.CarWashSchedulerEntity
                             .Include(item => item.VehicleEntity)
+                            .Include(item => item.LaneGroupItemEntity)
                             .Include(item => item.ContractGroupItemEntity)
                            .Where(item => item.ScheduleDate == date)
                            .ToListAsync();
-
+            
             var model = new CarWashDayPlannerViewModel
             {
+                Lanes = mapper.Map<List<GroupItemViewModel>>(lanes),
                 Schedules = schedulesList,
                 MainTime = TimeUtil.ToDateTime(date),
-
+                Interventions = new List<CarWashViewModel>(),
                 InterventionTimes = colabTime(schedulesList),
-                //Interventions = colabTime(schedulesList),
             };
-
+            
             if (results.Count == 0)
             {
                 model.OrderAppointements();
+                
                 return model;
-            }
+           }
             else
             {
                 var interventions = mapper.Map<List<CarWashViewModel>>(results);
@@ -79,6 +89,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
                 model.OrderAppointements();
                 return model;
             }
+           
         }
 
         private Dictionary<int, GroupItemViewModel> colabTime(List<GroupItemViewModel> schedules)
@@ -102,6 +113,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
                             .Include(item => item.VehicleEntity)
                             .Include(item => item.InterventionTimeGroupItemEntity)
                             .Include(item => item.ContractGroupItemEntity)
+                            .Include(item => item.LaneGroupItemEntity)
                             .Include(item => item.ApplicationUserEntity)
                            .Where(item => item.Id == id)
                            .FirstOrDefaultAsync();
@@ -154,11 +166,13 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
             var local = context.Set<CarWashSchedulerEntity>().Local.FirstOrDefault(entry => entry.Id.Equals(model.Id));
 
             // check if local is not null 
+            
             if (local != null)
             {
                 // detach
                 context.Entry(local).State = EntityState.Detached;
             }
+            
             context.Entry(entity).State = EntityState.Modified;
 
 
@@ -167,6 +181,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
 
         public SelectList Vehicles(int interventionTimeId, DateOnly scheduleDate)
         {
+            
             var result = from vehicle in context.MechanicalWorkshopVehicleEntity
                          where vehicle.Active &&
                                !context.CarWashSchedulerEntity
@@ -203,12 +218,13 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
         public async Task<CarWashSearchDayPlannerViewModel> SearchGetDayPlan(string? vehicleId)
         {
             var model = new CarWashSearchDayPlannerViewModel();
-
+            
             if (vehicleId != null)
             {
                 var results = await context.CarWashSchedulerEntity
                     .Include(item => item.VehicleEntity)
                     .Include(item => item.ContractGroupItemEntity)
+                    .Include(item => item.LaneGroupItemEntity)
                     .Include(item => item.InterventionTimeGroupItemEntity)
                    .Where(item => item.VehicleEntity.Id == int.Parse(vehicleId))
                    .OrderByDescending(item => item.ScheduleDate)
@@ -224,6 +240,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
             }
 
             model.Vehicles = Vehicles();
+           
             return model;
         }
 

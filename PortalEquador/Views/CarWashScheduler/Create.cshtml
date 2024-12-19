@@ -17,6 +17,7 @@
 
             <input type="hidden" asp-for="ScheduleDate" />
             <input type="hidden" asp-for="InterventionTimeId" />
+            <input type="hidden" asp-for="LaneId" />
 
             <dl class="row">
                 <dt class="col-sm-4">
@@ -24,6 +25,15 @@
                 </dt>
                 <dd class="col-sm-8">
                     @Html.DisplayFor(model => model.InterventionTime.Description)
+                </dd>
+            </dl>
+
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Lane)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Lane.Description)
                 </dd>
             </dl>
 

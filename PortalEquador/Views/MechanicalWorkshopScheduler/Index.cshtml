@@ -68,7 +68,10 @@
                                                     <h5 class="card-title">Sem agendamento</h5>
                                                     <p class="card-text">Horário livre</p>
 
-                                                    <a asp-action="Create" class="btn btn-success" asp-route-date="@Model.MainTime" asp-route-interventionTimeId="@interventionTime.Value.Id" asp-route-mechanicId="@appointement.Mechanic.Id">
+                                                    <a asp-action="Create" class="btn btn-success" 
+                                                        asp-route-date="@Model.MainTime" 
+                                                        asp-route-interventionTimeId="@interventionTime.Value.Id" 
+                                                        asp-route-mechanicId="@appointement.Mechanic.Id">
                                                         <i class="fas fa-plus"></i> Agendar
                                                     </a>
                                                     break;

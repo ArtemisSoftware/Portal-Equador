@@ -15,6 +15,15 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
         [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
         public DateOnly ScheduleDate { get; set; }
 
+
+        [Required]
+        public int LaneId { get; set; }
+
+        [Display(Name = StringConstants.Display.LANE)]
+        public GroupItemViewModel? Lane { get; set; }
+
+
+
         [Required]
         public int InterventionTimeId { get; set; }
 

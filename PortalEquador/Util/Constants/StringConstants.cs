@@ -36,6 +36,7 @@
 
             // L
             public const string LANGUANGE = "Língua";
+            public const string LANE = "Baia";
             public const string LICENCE_PLATE = "Matricula";
 
             // M

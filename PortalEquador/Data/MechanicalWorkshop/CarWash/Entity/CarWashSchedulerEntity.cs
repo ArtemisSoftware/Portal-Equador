@@ -14,6 +14,11 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Entity
         [ForeignKey("VehicleId")]
         public MechanicalWorkshopVehicleEntity VehicleEntity { get; set; }
 
+        public int LaneId { get; set; }
+
+        [ForeignKey("LaneId")]
+        public GroupItemEntity LaneGroupItemEntity { get; set; }
+
         public int ContractId { get; set; }
 
         [ForeignKey("ContractId")]

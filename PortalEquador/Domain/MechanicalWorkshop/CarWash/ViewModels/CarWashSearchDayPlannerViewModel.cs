@@ -13,7 +13,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
         [Display(Name = StringConstants.Display.VEHICLE)]
         [Required]
         public int VehicleId { get; set; }
-
+         
 
         [Display(Name = StringConstants.Display.VEHICLE)]
         public SelectList? Vehicles { get; set; }

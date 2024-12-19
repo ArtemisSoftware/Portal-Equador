@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PortalEquador.Data;
 
@@ -11,9 +12,11 @@ using PortalEquador.Data;
 namespace PortalEquador.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241219155100_RemoveCarWashSchedulerEntity")]
+    partial class RemoveCarWashSchedulerEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -503,7 +506,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "408aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6c9b8e90-5d95-4c3e-86f4-9d34659f6f22",
+                            ConcurrencyStamp = "a636a8c9-754a-4cdf-b6cc-f5c81c130d5e",
                             Email = "adminEquador@teste.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -511,9 +514,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKpnZwfOwEKHh2oe1NH3G/13nXM5tuzojxPde//3NG/1srrcbgv2Ql1v0HysrzF8+Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKXMpUuqe0+QxiRCRgLMCcpMfWM9cGav9RbzyWfJ4Ecsw4i3zIlSrvEMMbJ7sBiFaw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1a63aebb-d050-4083-a594-62cea28932c8",
+                            SecurityStamp = "9f83cfd2-5ce4-4a9b-a2f2-660dff64d823",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         },
@@ -521,7 +524,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "418aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "88a9010e-66b3-4977-aacc-e0e93ca26ab1",
+                            ConcurrencyStamp = "3378642e-5b92-4730-8fb9-f07303c123fd",
                             Email = "aguiar@teste.com",
                             EmailConfirmed = true,
                             FirstName = "António",
@@ -529,9 +532,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "AGUIAR@EQUADOR.COM",
                             NormalizedUserName = "AGUIAR@EQUADOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKUwiNfiHAPQg6UTrPdnDTgUgUEDPc5ndivbE0GW00MUrzbbMq+69DwQ8v4dzktn2g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKmzhsCzWxdaxrFg/Igyxvshd2FOg0lSuw3ACJxEpZLMqKDBaaCzvI3K3UebpoXR+Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7175a9fa-291d-44bc-8da5-d0f0b35f321b",
+                            SecurityStamp = "e05ab708-265c-4575-9373-0c1fe396114e",
                             TwoFactorEnabled = false,
                             UserName = "aguiar@equador.com"
                         },
@@ -539,7 +542,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "428aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c7846b07-1efc-4d09-8212-a0e72324283a",
+                            ConcurrencyStamp = "e52dd3e0-c4a6-4d0f-9c9c-14ed228c908a",
                             Email = "dovictor@equador.com",
                             EmailConfirmed = true,
                             FirstName = "Domingos",
@@ -547,9 +550,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "DOVICTOR@EQUADOR.COM",
                             NormalizedUserName = "DOVICTOR@EQUADOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHzbAKs1uoc2vqECh86KzKggqF6NzMqvkTaOayl7sgNhYGGMtSd5Qdq5qT7/CoDRQg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGbSpe9WYgV5gjzxYdWavOq7YITcVjq0y15Cc+2Tb9zuE4y7n/5VMK6s1CuqSttwgQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fc9a70a9-4289-49a5-ab0d-189c9603e80c",
+                            SecurityStamp = "b6678150-51b9-4735-b8f6-39a013f6f712",
                             TwoFactorEnabled = false,
                             UserName = "dovictor@equador.com"
                         },
@@ -557,7 +560,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "438aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dbddb3df-3fe2-45b2-9e46-d02a6a3b02a3",
+                            ConcurrencyStamp = "0c9ee257-5679-4fda-95ce-01d234fa3e48",
                             Email = "manioca@equador.com",
                             EmailConfirmed = true,
                             FirstName = "Mateus",
@@ -565,9 +568,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MANIOCA@EQUADOR.COM",
                             NormalizedUserName = "MANIOCA@EQUADOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAELjha9+RcsWctGJpWxUu/lOer/BcAPND/5RF+LrYr+9VZWHrrgi4VOTTiUJW4/mJFg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMGAJsDbpk8R4QZ7oA5JYyBNYamX20Egt43RYaEDedQNfojWOGVE4nBjBsXZfs9/fg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "413c4ee2-6a76-48b4-ae8c-11571ba7e1ff",
+                            SecurityStamp = "73690948-d410-4e58-87c8-7a9f3b96bffd",
                             TwoFactorEnabled = false,
                             UserName = "manioca@equador.com"
                         },
@@ -575,7 +578,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "448aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "59d2429a-a857-4463-997b-44bf8caaced9",
+                            ConcurrencyStamp = "6336e2b4-e3b3-4deb-aa8d-efefefff865c",
                             Email = "lumira@equador.com",
                             EmailConfirmed = true,
                             FirstName = "Luís",
@@ -583,9 +586,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "LUMIRA@EQUADOR.COM",
                             NormalizedUserName = "LUMIRA@EQUADOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAoI0RyKMuaAOdeM/ferCbXoXscXNnBJD7ARulmRlnJY6BpVu63GFizH2Rt5qsYHnQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEA8K5ELl6F4gjeJkcI+iUQZbJRLPeqPLslRXDWc4GPIJZ27mIXK7j+zSjBnAlpAAcQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "09597b21-ceac-479d-ad03-53d0f3fb3547",
+                            SecurityStamp = "a28fe1e4-bf77-42cc-ad70-8e48b8a61915",
                             TwoFactorEnabled = false,
                             UserName = "lumira@equador.com"
                         });
@@ -712,58 +715,6 @@ namespace PortalEquador.Data.Migrations
                     b.HasIndex("WrittenLevelId");
 
                     b.ToTable("LanguageEntity");
-                });
-
-            modelBuilder.Entity("PortalEquador.Data.MechanicalWorkshop.CarWash.Entity.CarWashSchedulerEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ContractId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CurrentState")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EditorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("InterventionTimeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("LaneId")
-                        .HasColumnType("int");
-
-                    b.Property<DateOnly>("ScheduleDate")
-                        .HasColumnType("date");
-
-                    b.Property<int>("VehicleId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContractId");
-
-                    b.HasIndex("EditorId");
-
-                    b.HasIndex("InterventionTimeId");
-
-                    b.HasIndex("LaneId");
-
-                    b.HasIndex("VehicleId");
-
-                    b.ToTable("CarWashSchedulerEntity");
                 });
 
             modelBuilder.Entity("PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity.MechanicalWorkshopSchedulerEntity", b =>
@@ -1315,49 +1266,6 @@ namespace PortalEquador.Data.Migrations
                     b.Navigation("PersonalInformationEntity");
 
                     b.Navigation("WrittenLevelGroupItemEntity");
-                });
-
-            modelBuilder.Entity("PortalEquador.Data.MechanicalWorkshop.CarWash.Entity.CarWashSchedulerEntity", b =>
-                {
-                    b.HasOne("PortalEquador.Data.GroupTypes.entities.GroupItemEntity", "ContractGroupItemEntity")
-                        .WithMany()
-                        .HasForeignKey("ContractId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PortalEquador.Data.Generic.ApplicationUser", "ApplicationUserEntity")
-                        .WithMany()
-                        .HasForeignKey("EditorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PortalEquador.Data.GroupTypes.entities.GroupItemEntity", "InterventionTimeGroupItemEntity")
-                        .WithMany()
-                        .HasForeignKey("InterventionTimeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PortalEquador.Data.GroupTypes.entities.GroupItemEntity", "LaneGroupItemEntity")
-                        .WithMany()
-                        .HasForeignKey("LaneId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity.MechanicalWorkshopVehicleEntity", "VehicleEntity")
-                        .WithMany()
-                        .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUserEntity");
-
-                    b.Navigation("ContractGroupItemEntity");
-
-                    b.Navigation("InterventionTimeGroupItemEntity");
-
-                    b.Navigation("LaneGroupItemEntity");
-
-                    b.Navigation("VehicleEntity");
                 });
 
             modelBuilder.Entity("PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity.MechanicalWorkshopSchedulerEntity", b =>

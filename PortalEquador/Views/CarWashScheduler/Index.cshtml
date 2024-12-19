@@ -37,28 +37,28 @@
             <br />
             <br />
 
-            @for (int i = 0; i < Model.SchedulesPerDayPart().Count; i++)
-            {
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Horário</th>
-                            @foreach (var schedule in Model.SchedulesPerDayPart()[i])
-                            {
-                                <th scope="col">@Html.DisplayFor(modelItem => schedule.Description)</th>
-                            }
-                        </tr>
-                    </thead>
+
+            <table class="table">
+                <thead>
                     <tr>
-                        <th class="align-middle"><p class="fs-5"></p></th>
-                    @foreach (var appointement in Model.Appointements[i])
+                        <th scope="col">Horário</th>
+                        @foreach (var lane in Model.Lanes)
+                        {
+                            <th scope="col">@Html.DisplayFor(modelItem => lane.Description)</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var interventionTime in Model.InterventionTimes)
                     {
+                        <tr>
+                            <th class="align-middle"><p class="fs-5">@Html.DisplayFor(modelItem => interventionTime.Value.Description)</p></th>
 
-                            
-                            <td>
-
-                                <div class="card text-center">
-                                    <div class="card-body">
+                            @foreach (var appointement in Model.Appointements[interventionTime.Key])
+                            {
+                                <td>
+                                    <div class="card text-center">
+                                        <div class="card-body">
 
                                         @switch (appointement.ScheduleType)
                                         {
@@ -67,6 +67,7 @@
                                                 <p class="card-text">Horário livre</p>
                                                 <a asp-action="Create" class="btn btn-success"
                                                    asp-route-date="@Model.MainTime"
+                                                    asp-route-laneId="@appointement.Lane.Id"
                                                    asp-route-interventionTimeId="@appointement.InterventionTimeId">
                                                     <i class="fas fa-plus"></i> Agendar
                                                 </a>
@@ -114,27 +115,15 @@
 
                                                 break;
                                         }
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                       
+
+                               </td>
+                            }
+                        </tr>
                     }
-                    </tr>
-
-
-
-                </table>
-
-
-                <br />
-                <br />
-            }
-
-
-
-        
-        
-        
+                </tbody>
+            </table>        
         
         
         

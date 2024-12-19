@@ -2,12 +2,9 @@
 using PortalEquador.Data.MechanicalWorkshop.CarWash.Entity;
 using PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity;
-using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
-using PortalEquador.Domain.PersonalInformation.ViewModels;
-using System;
 
 namespace PortalEquador.Data.Mappers
 {
@@ -38,15 +35,16 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.InterventionTime, opt => opt.MapFrom(src => src.InterventionTimeGroupItemEntity))
                 .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.VehicleEntity))
                 .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity.Description))
-                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                //--.ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ReverseMap();
 
             CreateMap<CarWashSchedulerEntity, CarWashViewModel>()
             .ForMember(dest => dest.InterventionTime, opt => opt.MapFrom(src => src.InterventionTimeGroupItemEntity))
+            .ForMember(dest => dest.Lane, opt => opt.MapFrom(src => src.LaneGroupItemEntity))
             .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.VehicleEntity))
             .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity))
             .ForMember(dest => dest.ContractDescription, opt => opt.MapFrom(src => src.ContractGroupItemEntity.Description))
-            .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+            //--.ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
             .ReverseMap();
 
             CreateMap<CarWashSchedulerEntity, CarWashSearchDayPlannerViewModel>()

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.MechanicalWorkshop.CarWash.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels;
-using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
@@ -33,9 +32,9 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
         }
 
         // GET: CarWashScheduler/Create
-        public async Task<IActionResult> Create(string date, int interventionTimeId)
+        public async Task<IActionResult> Create(string date, int laneId, int interventionTimeId)
         {
-            var model = await repository.GetCreateModel(date, interventionTimeId);
+            var model = await repository.GetCreateModel(date, laneId, interventionTimeId);
             return View(model);
         }
 

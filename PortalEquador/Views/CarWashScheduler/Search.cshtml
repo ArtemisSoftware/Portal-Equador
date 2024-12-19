@@ -63,6 +63,8 @@
                                 <h6 class="card-title">Data: @Html.DisplayFor(modelItem => intervention.ScheduleDate)</h6>
                                 <p class="card-text">Hora: @Html.DisplayFor(modelItem => intervention.InterventionTime.Description)</p>
                                 <p class="card-text">
+                                    @Html.DisplayFor(modelItem => intervention.Lane.Description)
+                                    <br />
                                     Contracto: @Html.DisplayFor(modelItem => intervention.Contract.Description)
                                 </p>
 
