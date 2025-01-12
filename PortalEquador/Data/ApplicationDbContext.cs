@@ -15,6 +15,7 @@ using PortalEquador.Data.Education.School.Entity;
 using PortalEquador.Data.Education.University.Entity;
 using PortalEquador.Data.DriversLicence.Entity;
 using PortalEquador.Data.MechanicalWorkshop.CarWash.Entity;
+using PortalEquador.Data.MechanicalWorkshop.Admin.Entity;
 
 namespace PortalEquador.Data
 {
@@ -179,5 +180,6 @@ namespace PortalEquador.Data
         public DbSet<UniversityEntity> UniversityEntity { get; set; } = default!;
         public DbSet<DriversLicenceEntity> DriversLicenceEntity { get; set; } = default!;
         public DbSet<CarWashSchedulerEntity> CarWashSchedulerEntity { get; set; }
+        public DbSet<AdminMechanicalWorkShopContractEntity> AdminMechanicalWorkShopContractEntity { get; set; } = default!;
     }
 }

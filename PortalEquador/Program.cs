@@ -9,6 +9,7 @@ using PortalEquador.Data.Education.University.Repository;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.GroupTypes.repository;
 using PortalEquador.Data.Languages.Repository;
+using PortalEquador.Data.MechanicalWorkshop.Admin.Repository;
 using PortalEquador.Data.MechanicalWorkshop.CarWash.Repository;
 using PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Repository;
@@ -24,6 +25,7 @@ using PortalEquador.Domain.Education.University.Repository;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.Repository;
 using PortalEquador.Domain.Languages.Repository;
+using PortalEquador.Domain.MechanicalWorkshop.Admin.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.CarWash.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
@@ -76,6 +78,7 @@ builder.Services.AddScoped<GetDriversLicenceUseCase> ();
 builder.Services.AddScoped<IMechanicalWorkshopVehicleRepository, MechanicalWorkshopVehicleRepositoryImpl>();
 builder.Services.AddScoped<IMechanicalWorkshopSchedulerRepository, MechanicalWorkshopSchedulerRepositoryImpl>();
 builder.Services.AddScoped<ICarWashSchedulerRepository, CarWashSchedulerRepositoryImpl>();
+builder.Services.AddScoped<IAdminMechanicalWorkShopRepository, AdminMechanicalWorkShopRepositoryImpl>();
 
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());

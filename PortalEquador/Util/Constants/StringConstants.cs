@@ -11,6 +11,7 @@
         {
             // A
             public const string ADRESS = "Endereço";
+            public const string ADMIN = "Administradores";
 
             // C
             public const string CONTRACT = "Contrato";
