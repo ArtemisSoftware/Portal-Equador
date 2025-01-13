@@ -6,7 +6,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Admin.Entity
 {
     public class AdminMechanicalWorkShopContractEntity : BaseEntity
     {
-        public int Id { get; set; }
+        public string UserId { get; set; }
 
         public int ContractId { get; set; }
 

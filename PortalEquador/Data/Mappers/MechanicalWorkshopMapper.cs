@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using PortalEquador.Data.MechanicalWorkshop.Admin.Entity;
 using PortalEquador.Data.MechanicalWorkshop.CarWash.Entity;
 using PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity;
+using PortalEquador.Domain.MechanicalWorkshop.Admin.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
@@ -49,6 +51,11 @@ namespace PortalEquador.Data.Mappers
 
             CreateMap<CarWashSchedulerEntity, CarWashSearchDayPlannerViewModel>()
             .ForMember(dest => dest.LicencePlate, opt => opt.MapFrom(src => src.VehicleEntity.LicencePlate))
+            .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+            .ReverseMap();
+
+            CreateMap<AdminMechanicalWorkShopContractEntity, AdminMechanicalWorkshopCreateViewModel>()
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
             .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
             .ReverseMap();
         }

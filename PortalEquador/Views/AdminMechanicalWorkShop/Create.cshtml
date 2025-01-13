@@ -1,41 +1,55 @@
-﻿@model PortalEquador.Data.MechanicalWorkshop.Admin.Entity.AdminMechanicalWorkShopContractEntity
+﻿@model PortalEquador.Domain.MechanicalWorkshop.Admin.ViewModels.AdminMechanicalWorkshopCreateViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
 
-<h4>AdminMechanicalWorkShopContractEntity</h4>
+<h1>Criar Novo Administrador</h1>
+<h4>Oficina Morro Bento</h4>
+
 <hr />
+<br />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+        <dd class="col-sm-8">
             <div class="form-group">
-                <label asp-for="ContractId" class="control-label"></label>
-                <select asp-for="ContractId" class ="form-control" asp-items="ViewBag.ContractId"></select>
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" class="form-control form-select" asp-items="@Model.Users"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="EditorId" class="control-label"></label>
-                <select asp-for="EditorId" class ="form-control" asp-items="ViewBag.EditorId"></select>
+        </dd>
+
+        <br />
+        <h6>Contratos</h6>
+        <hr />
+
+            @for (int index = 0; index < Model.Contracts.Count; index++)
+            {
+            <div class="form-check">
+                <input asp-for="@Model.SelectedContracts[index]" class="form-check-input" type="checkbox" id="@Model.Contracts[index].Id" />
+                <label asp-for="@Model.SelectedContracts[index]" class="form-check-label">
+                        @Html.DisplayFor(modelItem => @Model.Contracts[index].Description)
+                 </label>
             </div>
-            <div class="form-group">
-                <label asp-for="DateModified" class="control-label"></label>
-                <input asp-for="DateModified" class="form-control" />
-                <span asp-validation-for="DateModified" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+            }
+    
+
+
+        <div class="form-group">
+            <span asp-validation-for="Error" class="text-danger"></span>
+        </div>
+
+        <br />
+        <br />
+        <div class="form-group">
+            <a asp-action="Index" class="btn btn-dark">Regressar ao index</a> &nbsp;
+            <input type="submit" value="Criar registo" class="btn btn-primary" />
+        </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

@@ -10,7 +10,9 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Admin.Repository
     public interface IAdminMechanicalWorkShopRepository : IGenericRepository<AdminMechanicalWorkShopContractEntity>
     {
         Task<AdminMechanicalWorkshopCreateViewModel> GetCreateModel();
-        Task Save(AdminMechanicalWorkshopContractViewModel model);
+        Task<AdminMechanicalWorkshopCreateViewModel> GetCreateModel(AdminMechanicalWorkshopCreateViewModel model);
+        Task Save(AdminMechanicalWorkshopCreateViewModel model);
+        Task<AdminMechanicalWorkshopViewModel> GetAdmin(string userId);
         Task<List<AdminMechanicalWorkshopViewModel>> GetAdmins();
         Task DeleteContracts(int id);
     }

@@ -1,16 +1,17 @@
-﻿using PortalEquador.Domain.Generic;
+﻿using PortalEquador.Data.Generic;
+using PortalEquador.Domain.Generic;
+using PortalEquador.Domain.GroupTypes.ViewModels;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PortalEquador.Domain.MechanicalWorkshop.Admin.ViewModels
 {
     public class AdminMechanicalWorkshopViewModel: ViewModel
     {
-        public int Id { get; set; }
+        public AdminUser user { get; set; }
 
-        public string Name { get; set; }
+        public List<GroupItemViewModel> Contracts { get; set; } = new List<GroupItemViewModel>();
 
-        public string Role { get; set; }
-
-        public List<AdminMechanicalWorkshopContractViewModel> Contracts { get; set; } = new List<AdminMechanicalWorkshopContractViewModel>();
+        public List<GroupItemViewModel> AllContracts { get; set; } = new List<GroupItemViewModel>();
+        public List<bool> SelectedContracts { get; set; } = new List<bool>();
     }
 }

@@ -26,10 +26,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.user.UserName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Role)
+                @Html.DisplayNameFor(model => model.user.Role)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Contracts)
@@ -42,19 +42,23 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.Name)
+                <td class="align-middle"> item
+                    @Html.DisplayFor(modelItem => item.user.UserName)
                 </td>
                 <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.Role)
+                    @Html.DisplayFor(modelItem => item.user.Role)
                 </td>
                 <td class="align-middle">
                     @foreach (var contract in item.Contracts)
                     {
-                        @Html.DisplayFor(modelItem => contract.ContractId)
+                        @Html.DisplayFor(modelItem => contract.Description)
+                        <br />
                     }
                 </td>
-                <td></td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.user.UserId" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+
+                </td>
               
             </tr>
         }

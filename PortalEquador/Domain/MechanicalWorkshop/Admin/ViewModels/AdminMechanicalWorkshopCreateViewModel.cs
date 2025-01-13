@@ -9,8 +9,29 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Admin.ViewModels
 {
     public class AdminMechanicalWorkshopCreateViewModel: ViewModel
     {
-        public List<GroupItemViewModel> Contracts { get; set; }
-        public SelectList Users { get; internal set; }
-        public List<AdminUser> UserDetails { get; internal set; }
+        [Required]
+        public string UserId { get; set; }
+
+
+        public List<GroupItemViewModel> Contracts { get; set; } = new List<GroupItemViewModel>();
+        public List<bool> SelectedContracts { get; set; } = new List<bool>();
+        public SelectList? Users { get; set; }
+        public List<AdminUser> UserDetails { get; set; } = new List<AdminUser>();
+
+        public bool HasSelectedContracts()
+        {
+            return SelectedContracts.Contains(true);
+        }
+
+        public List<GroupItemViewModel> ContractsToMonitor() {
+            var contracts = new List<GroupItemViewModel>();
+
+            for (int index = 0; index < Contracts.Count; index++){
+
+                if (SelectedContracts[index] == true) {  contracts.Add(Contracts[index]); }
+            }
+            return contracts;
+        }
+
     }
 }
