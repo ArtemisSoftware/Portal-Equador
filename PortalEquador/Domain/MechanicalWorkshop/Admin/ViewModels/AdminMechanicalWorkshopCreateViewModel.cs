@@ -15,6 +15,8 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Admin.ViewModels
 
         public List<GroupItemViewModel> Contracts { get; set; } = new List<GroupItemViewModel>();
         public List<bool> SelectedContracts { get; set; } = new List<bool>();
+
+        [Display(Name = StringConstants.Display.ADMIN)]
         public SelectList? Users { get; set; }
         public List<AdminUser> UserDetails { get; set; } = new List<AdminUser>();
 

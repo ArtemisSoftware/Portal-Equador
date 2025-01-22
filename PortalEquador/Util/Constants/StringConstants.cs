@@ -15,6 +15,7 @@
 
             // C
             public const string CONTRACT = "Contrato";
+            public const string CONTRACTS = "Contratos";
             public const string CONTRACT_IN_USE = "Contrato associado";
             public const string COMPETENCE = "Habilitação";
             public const string CODE = "Código";
@@ -31,6 +32,12 @@
             public const string DATE_OF_BIRTH = "Data de nascimento";
             public const string DURATION = "Duração";
             public const string DOCUMENT = "Documento";
+
+            //E
+
+            //F
+
+            public const string FULL_NAME = "Nome completo";
 
             // I
             public const string INSTITUTION = "Instituição";
@@ -56,6 +63,9 @@
             public const string PROFESSIONAL_EXPERIENCE = "Experiência profissional";
             public const string PROFESSIONAL_COMPETENCE = "Habilitações profissionais";
 
+            //R
+            public const string ROLE = "Tipo de administrador";
+
             // S
             public const string SERVICE = "Serviço";
             public const string SCHEDULE = "Horário";
@@ -80,7 +90,6 @@
 
 
             public const string OBSERVATION = "Observação";
-            public const string FULL_NAME = "Nome completo";
             public const string NATIONALITY = "Nacionalidade";
             public const string PROVINCE = "Provincia";
             public const string NEIGHBOURHOOD = "Bairro";

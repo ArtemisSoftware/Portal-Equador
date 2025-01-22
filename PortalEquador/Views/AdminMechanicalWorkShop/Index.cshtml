@@ -42,14 +42,14 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td class="align-middle"> item
+                <td class="align-middle"> 
                     @Html.DisplayFor(modelItem => item.user.UserName)
                 </td>
                 <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.user.Role)
                 </td>
                 <td class="align-middle">
-                    @foreach (var contract in item.Contracts)
+                    @foreach (var contract in item.MarkedContracts())
                     {
                         @Html.DisplayFor(modelItem => contract.Description)
                         <br />
@@ -57,6 +57,7 @@
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.user.UserId" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                    <button class="btn btn-danger deleteBtn" type="button" data-identifier="@item.user.UserId"><i class="fas fa-trash-alt" title="Eliminar"></i></button>
 
                 </td>
               
@@ -65,6 +66,9 @@
     </tbody>
 </table>
 
+<form id="deleteContracts" asp-action="DeleteContracts">
+    <input type="hidden" id="identifier" name="identifier" />
+</form>
 
 
 @section Scripts {
@@ -72,6 +76,26 @@
         $(function () {
 
             $('.table').DataTable();
+
+            $('.deleteBtn').click(function (e) {
+                swal({
+                    title: "Eliminar permissões",
+                    text: "Tem a certeza que pretende eliminar as permissões do utilizador?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var btn = $(this);
+                        var identifier = btn.data("identifier");
+                        $('#identifier').val(identifier);
+                        $('#deleteContracts').submit();
+
+                    }
+                });
+            });
+
+
         });
     </script>
 }

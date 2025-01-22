@@ -20,6 +20,15 @@
             <input type="hidden" asp-for="user.Role" />
             <input type="hidden" asp-for="DateCreated" />
 
+            <dl class="row">
+                <dt class="col-sm-8">
+                    @Html.DisplayNameFor(model => model.user.Role)
+                </dt>
+                <dd class="col-sm-4">
+                    @Html.DisplayFor(model => model.user.Role)
+                </dd>
+             </dl>
+
             <h6>Contratos</h6>
             <hr />
 
@@ -30,6 +39,16 @@
                     <label asp-for="@Model.SelectedContracts[index]" class="form-check-label">
                         @Html.DisplayFor(modelItem => @Model.AllContracts[index].Description)
                     </label>
+                </div>
+            }
+
+            @if (Model.Error != null)
+            {
+                <br />
+                <div class="form-group">
+                    <div class="alert alert-danger" role="alert">
+                        <span asp-validation-for="Error" class="text-danger"></span>
+                    </div>
                 </div>
             }
 

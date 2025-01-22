@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data;
 using PortalEquador.Data.MechanicalWorkshop.Admin.Entity;
+using PortalEquador.Domain.Document.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Admin.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Admin.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
+using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.MechanicalWorkshop
@@ -70,10 +72,53 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             return View(model);
         }
 
+        // POST: AdminMechanicalWorkShop/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(AdminMechanicalWorkshopViewModel @viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+
+                if (@viewModel.HasSelectedContracts() == false)
+                {
+                    ModelState.AddModelError(nameof(viewModel.Error), StringConstants.Error.MANDATORY_CONTRACT_SELECTION);
+                    //viewModel = await RecoverModel(viewModel);
+                    return View(viewModel);
+                }
+
+                await repository.Save(viewModel);
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["id"] = viewModel.user.UserId;
+            //viewModel = await RecoverModel(viewModel);
+            return View(viewModel);
+        }
+
+
+        [HttpPost, ActionName("DeleteContracts")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteContracts(string? identifier)
+        {
+            if (identifier == null)
+            {
+                return NotFound();
+            }
+
+            await repository.DeleteContracts(identifier);
+            return RedirectToAction(nameof(Index));
+        }
+
+
         private async Task<AdminMechanicalWorkshopCreateViewModel> RecoverModel(AdminMechanicalWorkshopCreateViewModel model)
         {
             return await repository.GetCreateModel(model);
         }
+
+
+
 
         /*
                 // GET: AdminMechanicalWorkShop/Details/5
@@ -102,62 +147,9 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
 
 
 
-                // POST: AdminMechanicalWorkShop/Edit/5
-                // To protect from overposting attacks, enable the specific properties you want to bind to.
-                // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-                [HttpPost]
-                [ValidateAntiForgeryToken]
-                public async Task<IActionResult> Edit(int id, [Bind("Id,ContractId,EditorId,DateCreated,DateModified")] AdminMechanicalWorkShopContractEntity adminMechanicalWorkShopContractEntity)
-                {
-                    if (id != adminMechanicalWorkShopContractEntity.Id)
-                    {
-                        return NotFound();
-                    }
 
-                    if (ModelState.IsValid)
-                    {
-                        try
-                        {
-                            _context.Update(adminMechanicalWorkShopContractEntity);
-                            await _context.SaveChangesAsync();
-                        }
-                        catch (DbUpdateConcurrencyException)
-                        {
-                            if (!AdminMechanicalWorkShopContractEntityExists(adminMechanicalWorkShopContractEntity.Id))
-                            {
-                                return NotFound();
-                            }
-                            else
-                            {
-                                throw;
-                            }
-                        }
-                        return RedirectToAction(nameof(Index));
-                    }
-                    ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", adminMechanicalWorkShopContractEntity.EditorId);
-                    ViewData["ContractId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", adminMechanicalWorkShopContractEntity.ContractId);
-                    return View(adminMechanicalWorkShopContractEntity);
-                }
 
-                // GET: AdminMechanicalWorkShop/Delete/5
-                public async Task<IActionResult> Delete(int? id)
-                {
-                    if (id == null)
-                    {
-                        return NotFound();
-                    }
 
-                    var adminMechanicalWorkShopContractEntity = await _context.AdminMechanicalWorkShopContractEntity
-                        .Include(a => a.ApplicationUserEntity)
-                        .Include(a => a.ContractGroupItemEntity)
-                        .FirstOrDefaultAsync(m => m.Id == id);
-                    if (adminMechanicalWorkShopContractEntity == null)
-                    {
-                        return NotFound();
-                    }
-
-                    return View(adminMechanicalWorkShopContractEntity);
-                }
 
                 // POST: AdminMechanicalWorkShop/Delete/5
                 [HttpPost, ActionName("Delete")]
