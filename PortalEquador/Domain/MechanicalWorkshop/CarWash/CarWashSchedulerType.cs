@@ -2,13 +2,14 @@
 {
     public enum CarWashSchedulerType
     {
-        Free,
+        
+        Free, // slot is available 
         BlockedFree,
         InSchedule,
         BlockedDateInThePast,
 
         Complete,
         NoShow,
-        Blocked,
+        Blocked, // slot has filled but user cannot have access to it
     }
 }

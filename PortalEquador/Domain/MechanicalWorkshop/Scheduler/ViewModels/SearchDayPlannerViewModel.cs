@@ -84,6 +84,8 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
         [Display(Name = StringConstants.Display.VEHICLE)]
         public SelectList? Vehicles { get; set; }
 
+        public bool hasFullAccess { get; set; } = false;
+
         public bool NoSchedules()
         {
             if (Interventions.Count == 0 && VehicleId != 0)

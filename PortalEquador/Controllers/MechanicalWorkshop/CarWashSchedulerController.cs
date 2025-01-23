@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.MechanicalWorkshop.CarWash.Repository;
+using PortalEquador.Domain.MechanicalWorkshop.CarWash.UseCase;
 using PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
 using PortalEquador.Util;
@@ -10,7 +11,9 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
 
     public class CarWashSchedulerController(
         ICarWashSchedulerRepository repository,
-        IMechanicalWorkshopVehicleRepository vehicleRepository
+        IMechanicalWorkshopVehicleRepository vehicleRepository,
+        GetCarWashDayPlanUseCase getCarWashDayPlanUseCase,
+        SearchCarWashDayPlanUseCase searchCarWashDayPlanUseCase
     ) : Controller
     {
 
@@ -27,7 +30,7 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             {
                 currentDate = DateOnly.FromDateTime(DateTime.Parse(time));
             }
-            var model = await repository.GetDayPlan(currentDate);
+            var model = await getCarWashDayPlanUseCase.Invoke(currentDate);
             return View(model);
         }
 
@@ -131,7 +134,7 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
 
         public async Task<IActionResult> Search(string? vehicleId)
         {
-            var model = await repository.SearchGetDayPlan(vehicleId);
+            var model = await searchCarWashDayPlanUseCase.Invoke(vehicleId);
             if(vehicleId != null)
             {
                 model.VehicleId = int.Parse(vehicleId);

@@ -42,7 +42,6 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
         {
             var mechanics = await GroupItemsList(GroupTypesConstants.Groups.MECHANICAL_SHOP_MECHANICS);
             var schedules = await GroupItemsList(GroupTypesConstants.Groups.MECHANICAL_SHOP_SCHEDULES);
-
             var schedulesList = mapper.Map<List<GroupItemViewModel>>(schedules);
 
             var results = await context.MechanicalWorkshopSchedulerEntity
@@ -57,18 +56,17 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
                 InterventionTimes = colabTime(schedulesList),
                 Schedules = schedulesList,
                 Interventions = new List<SchedulerViewModel>(),
-                MainTime = TimeUtil.ToDateTime(date)
+                MainTime = TimeUtil.ToDateTime(date),
+                hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole()),
             };
 
             if (results.Count == 0)
             {
-                model.OrderAppointements();
                 return model;
             } else
             {
                 var interventions = mapper.Map<List<SchedulerViewModel>>(results);
                 model.Interventions = interventions;
-                model.OrderAppointements();
                 return model;
             }
         }
@@ -94,7 +92,8 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
                     model.Interventions = interventions;
                 }
             }
-           
+
+            model.hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
             model.Vehicles = Vehicles();
             return model;
         }
@@ -108,6 +107,8 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             var selectedSchedule = mapper.Map<GroupItemViewModel>(schedule);
             var dateOnly = TimeUtil.ToDateOnly(scheduleDate);
 
+            var vehicles = Vehicles(interventionTimeId, dateOnly);
+
             var model = new SchedulerViewModel
             {
                 ScheduleDate = dateOnly,
@@ -115,7 +116,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
                 Mechanic = selectedMechanic,
                 InterventionTimeId = interventionTimeId,
                 InterventionTime = selectedSchedule,
-                Vehicles = Vehicles(interventionTimeId, dateOnly)
+                Vehicles = vehicles
             };
             return model;
         }
@@ -190,16 +191,39 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
 
         public SelectList Vehicles(int interventionTimeId, DateOnly scheduleDate)
         {
-            var result = from vehicle in context.MechanicalWorkshopVehicleEntity
-                                         where vehicle.Active &&
-                                               !context.MechanicalWorkshopSchedulerEntity
-                                                  .Any(scheduler => scheduler.VehicleId == vehicle.Id && 
-                                                                                        scheduler.InterventionTimeId == interventionTimeId && 
-                                                                                        scheduler.ScheduleDate == scheduleDate)
-                         orderby vehicle.LicencePlate
-                         select vehicle;
 
-            return new SelectList(result, "Id", "LicencePlate");
+            var userId = GetCurrentUserId();
+            var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
+
+            if (hasFullAccess)
+            {
+                var result =
+                from vehicle in context.MechanicalWorkshopVehicleEntity
+                join scheduler in context.MechanicalWorkshopSchedulerEntity on vehicle.Id equals scheduler.VehicleId into vehicleSchedules
+                where vehicle.Active &&
+                                !vehicleSchedules
+                                .Any(s => s.InterventionTimeId == interventionTimeId &&
+                                                    s.ScheduleDate == scheduleDate)
+                orderby vehicle.LicencePlate
+                select vehicle;
+
+                return new SelectList(result, "Id", "LicencePlate");
+            } else
+            {
+                var result =
+                from vehicle in context.MechanicalWorkshopVehicleEntity
+                join contract in context.AdminMechanicalWorkShopContractEntity on vehicle.ContractId equals contract.ContractId
+                join scheduler in context.MechanicalWorkshopSchedulerEntity on vehicle.Id equals scheduler.VehicleId into vehicleSchedules
+                where vehicle.Active &&
+                                contract.UserId == userId &&
+                                !vehicleSchedules
+                                .Any(s => s.InterventionTimeId == interventionTimeId &&
+                                                    s.ScheduleDate == scheduleDate)
+                orderby vehicle.LicencePlate
+                select vehicle;
+
+                return new SelectList(result, "Id", "LicencePlate");
+            }
         }
 
         private SelectList Vehicles()

@@ -18,6 +18,8 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
         [Display(Name = StringConstants.Display.VEHICLE)]
         public SelectList? Vehicles { get; set; }
 
+        public bool hasFullAccess { get; set; } = false;
+
         [NotMapped]
         public string LicencePlatePosition0 { get; set; }
 

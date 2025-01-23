@@ -16,6 +16,7 @@ using PortalEquador.Data.Education.University.Entity;
 using PortalEquador.Data.DriversLicence.Entity;
 using PortalEquador.Data.MechanicalWorkshop.CarWash.Entity;
 using PortalEquador.Data.MechanicalWorkshop.Admin.Entity;
+using PortalEquador.Util;
 
 namespace PortalEquador.Data
 {

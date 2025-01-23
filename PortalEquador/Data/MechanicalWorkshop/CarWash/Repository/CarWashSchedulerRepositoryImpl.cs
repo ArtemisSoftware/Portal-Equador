@@ -9,8 +9,6 @@ using PortalEquador.Util.Constants;
 using PortalEquador.Util;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PortalEquador.Domain.MechanicalWorkshop;
-using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
-using Mono.TextTemplating;
 
 namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
 {
@@ -74,19 +72,17 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
                 MainTime = TimeUtil.ToDateTime(date),
                 Interventions = new List<CarWashViewModel>(),
                 InterventionTimes = colabTime(schedulesList),
+                hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole()),
             };
             
             if (results.Count == 0)
             {
-                model.OrderAppointements();
-                
                 return model;
            }
             else
             {
                 var interventions = mapper.Map<List<CarWashViewModel>>(results);
                 model.Interventions = interventions;
-                model.OrderAppointements();
                 return model;
             }
            
@@ -181,21 +177,40 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
 
         public SelectList Vehicles(int interventionTimeId, DateOnly scheduleDate)
         {
-            
-            var result = from vehicle in context.MechanicalWorkshopVehicleEntity
-                         where vehicle.Active &&
-                               !context.CarWashSchedulerEntity
-                                  .Any(
-                                       scheduler => scheduler.VehicleId == vehicle.Id 
-                                       && 
-                                       scheduler.InterventionTimeId == interventionTimeId 
-                                       && 
-                                       scheduler.ScheduleDate == scheduleDate
-                                   )
-                         orderby vehicle.LicencePlate
-                         select vehicle;
 
-            return new SelectList(result, "Id", "LicencePlate");
+            var userId = GetCurrentUserId();
+            var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
+
+            if (hasFullAccess)
+            {
+                var result =
+                from vehicle in context.MechanicalWorkshopVehicleEntity
+                join scheduler in context.MechanicalWorkshopSchedulerEntity on vehicle.Id equals scheduler.VehicleId into vehicleSchedules
+                where vehicle.Active &&
+                                !vehicleSchedules
+                                .Any(s => s.InterventionTimeId == interventionTimeId &&
+                                                    s.ScheduleDate == scheduleDate)
+                orderby vehicle.LicencePlate
+                select vehicle;
+
+                return new SelectList(result, "Id", "LicencePlate");
+            }
+            else
+            {
+                var result =
+                from vehicle in context.MechanicalWorkshopVehicleEntity
+                join contract in context.AdminMechanicalWorkShopContractEntity on vehicle.ContractId equals contract.ContractId
+                join scheduler in context.MechanicalWorkshopSchedulerEntity on vehicle.Id equals scheduler.VehicleId into vehicleSchedules
+                where vehicle.Active &&
+                                contract.UserId == userId &&
+                                !vehicleSchedules
+                                .Any(s => s.InterventionTimeId == interventionTimeId &&
+                                                    s.ScheduleDate == scheduleDate)
+                orderby vehicle.LicencePlate
+                select vehicle;
+
+                return new SelectList(result, "Id", "LicencePlate");
+            }
         }
 
         private SelectList Vehicles()
@@ -239,6 +254,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
                 model.VehicleId = int.Parse(vehicleId);
             }
 
+            model.hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
             model.Vehicles = Vehicles();
            
             return model;

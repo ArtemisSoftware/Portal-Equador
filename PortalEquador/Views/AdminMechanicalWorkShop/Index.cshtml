@@ -49,11 +49,16 @@
                     @Html.DisplayFor(modelItem => item.user.Role)
                 </td>
                 <td class="align-middle">
-                    @foreach (var contract in item.MarkedContracts())
-                    {
-                        @Html.DisplayFor(modelItem => contract.Description)
-                        <br />
-                    }
+                    <ul class="align-middle list-unstyled">
+                            <ul>
+                                    @foreach (var contract in item.MarkedContracts())
+                                    {
+                                    <li>
+                                        @Html.DisplayFor(modelItem => contract.Description)
+                                    </li>
+                                    }
+                            </ul>
+                    </ul>
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.user.UserId" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>

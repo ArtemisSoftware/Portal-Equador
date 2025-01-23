@@ -1,4 +1,10 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using PortalEquador.Data.Generic
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using PortalEquador.Util
+
+@{
     ViewData["Title"] = "Dashboard";
 }
 
@@ -6,6 +12,8 @@
     <h1 class="display-4">Oficina - Morro Bento</h1>
     <br />
     <br />
+
+
     <div class="row">
         <div class="col-sm-6">
             <div class="card">
@@ -15,27 +23,13 @@
                     <div class="d-grid gap-2 col-6 mx-auto">
                         <a asp-controller="MechanicalWorkshopScheduler" asp-action="Index" class="btn btn-primary">Gerir</a>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Agendamentos</h3>
-                    <p class="card-text">Pesquisa de agendamentos</p>
-                    <div class="d-grid gap-2 col-6 mx-auto">
+                    <br />
+                    <div class="d-grid gap-2 col-4 mx-auto">
                         <a asp-controller="MechanicalWorkshopScheduler" asp-action="Search" class="btn btn-primary">Pesquisar</a>
                     </div>
                 </div>
             </div>
         </div>
-                </div>
-
-
-    <br />
-    <br />
-    <div class="row">
 
         <div class="col-sm-6">
             <div class="card">
@@ -45,22 +39,14 @@
                     <div class="d-grid gap-2 col-6 mx-auto">
                         <a asp-controller="CarWashScheduler" asp-action="Index" class="btn btn-primary">Gerir</a>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="card-title">Lavagens</h3>
-                    <p class="card-text">Pesquisar lavagens</p>
-                    <div class="d-grid gap-2 col-6 mx-auto">
+                    <br />
+                    <div class="d-grid gap-2 col-4 mx-auto">
                         <a asp-controller="CarWashScheduler" asp-action="Search" class="btn btn-primary">Pesquisar</a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+                </div>
 
 
     <br />
@@ -80,27 +66,23 @@
                 </div>
             </div>
         </div>
-    </div>
-
-
-    <br />
-    <br />
-
-    <div class="row">
-
-
+                    @if (User.IsInRole(Roles.Administrator) || User.IsInRole(Roles.Supervisor))
+    {
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-body">
-                    <h3 class="card-title">Viaturas</h3>
-                    <p class="card-text">Gestão de viaturas e contratos associados</p>
+                    <h3 class="card-title">Administradores</h3>
+                    <p class="card-text">Gestão de contratos e administradores</p>
                     <div class="d-grid gap-2 col-6 mx-auto">
                         <a asp-controller="AdminMechanicalWorkShop" asp-action="Index" class="btn btn-primary">Gerir</a>
                     </div>
                 </div>
             </div>
         </div>
+    }
     </div>
+
+
 
     <br />
 

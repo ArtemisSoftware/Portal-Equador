@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 using PortalEquador.Data.Education.University.Entity;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.MechanicalWorkshop.Admin.Entity;
 using PortalEquador.Data.MechanicalWorkshop.CarWash.Entity;
 using PortalEquador.Data.Migrations;
+using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Domain.Education.University.ViewModels;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Admin.Repository;
@@ -155,6 +157,18 @@ namespace PortalEquador.Data.MechanicalWorkshop.Admin.Repository
 
             query.SelectedContracts = GetSelectedContractsMarkers(contractList, query.Contracts);
             return query;
+        }
+
+        public async Task<List<AdminMechanicalWorkshopContractViewModel>> GetUserContracts()
+        {
+            var userId = GetCurrentUserId();
+            var result = await context.AdminMechanicalWorkShopContractEntity
+                .Where(item => item.UserId == userId)
+            .ToListAsync();
+
+            var models = mapper.Map<List<AdminMechanicalWorkshopContractViewModel>>(result);
+            return models;
+
         }
 
         private List<bool> GetSelectedContractsMarkers(

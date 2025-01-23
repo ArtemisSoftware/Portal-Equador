@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
+using PortalEquador.Domain.MechanicalWorkshop.Scheduler.UseCase;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
 using PortalEquador.Util;
@@ -9,7 +10,9 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
 {
     public class MechanicalWorkshopSchedulerController(
         IMechanicalWorkshopSchedulerRepository repository,
-        IMechanicalWorkshopVehicleRepository vehicleRepository
+        IMechanicalWorkshopVehicleRepository vehicleRepository,
+        GetDayPlanUseCase getDayPlanUseCase,
+        SearchDayPlanUseCase searchDayPlanUseCase
      ) : Controller
     {
 
@@ -26,7 +29,7 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             {
                 currentDate = DateOnly.FromDateTime(DateTime.Parse(time));
             }
-            var model = await repository.GetDayPlan(currentDate);
+            var model = await getDayPlanUseCase.Invoke(currentDate);
             return View(model);
         }
 
@@ -129,7 +132,7 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
         // GET: MechanicalWorkshopScheduler
         public async Task<IActionResult> Search(string? vehicleId)
         {
-            var model = await repository.SearchGetDayPlan(vehicleId);
+            var model = await searchDayPlanUseCase.Invoke(vehicleId);
             return View(model);
         }
     }

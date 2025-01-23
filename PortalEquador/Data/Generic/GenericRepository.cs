@@ -25,6 +25,12 @@ namespace PortalEquador.Data.Generic
             return userId;
         }
 
+        public string GetCurrentUserRole()
+        {
+            var role = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+            return role;
+        }
+
         public async Task<T> AddAsync(T entity)
         {
             await context.AddAsync(entity);
