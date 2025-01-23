@@ -79,21 +79,21 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(AdminMechanicalWorkshopViewModel @viewModel)
         {
+            viewModel = await repository.RecoverModel(viewModel);
+
             if (ModelState.IsValid)
             {
 
                 if (@viewModel.HasSelectedContracts() == false)
                 {
-                    ModelState.AddModelError(nameof(viewModel.Error), StringConstants.Error.MANDATORY_CONTRACT_SELECTION);
-                    //viewModel = await RecoverModel(viewModel);
-                    return View(viewModel);
+                    ModelState.AddModelError(nameof(@viewModel.Error), StringConstants.Error.MANDATORY_CONTRACT_SELECTION);
+                    return View(@viewModel);
                 }
 
                 await repository.Save(viewModel);
                 return RedirectToAction(nameof(Index));
             }
             ViewData["id"] = viewModel.user.UserId;
-            //viewModel = await RecoverModel(viewModel);
             return View(viewModel);
         }
 

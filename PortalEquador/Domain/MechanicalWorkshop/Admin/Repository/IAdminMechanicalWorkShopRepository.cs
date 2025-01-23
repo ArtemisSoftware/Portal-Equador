@@ -12,6 +12,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Admin.Repository
         Task<List<AdminMechanicalWorkshopViewModel>> GetAdmins();
         Task<AdminMechanicalWorkshopCreateViewModel> GetCreateModel();
         Task<AdminMechanicalWorkshopCreateViewModel> GetCreateModel(AdminMechanicalWorkshopCreateViewModel model);
+        Task<AdminMechanicalWorkshopViewModel> RecoverModel(AdminMechanicalWorkshopViewModel model);
 
         Task Save(AdminMechanicalWorkshopCreateViewModel model);
         Task Save(AdminMechanicalWorkshopViewModel model);

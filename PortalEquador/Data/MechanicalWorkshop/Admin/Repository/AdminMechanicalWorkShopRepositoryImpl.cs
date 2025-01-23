@@ -90,6 +90,16 @@ namespace PortalEquador.Data.MechanicalWorkshop.Admin.Repository
             return model;
         }
 
+        public async Task<AdminMechanicalWorkshopViewModel> RecoverModel(AdminMechanicalWorkshopViewModel model)
+        {
+            var contracts = await GroupItemsList(Groups.MECHANICAL_SHOP_CONTRACTS);
+            var contractList = mapper.Map<List<GroupItemViewModel>>(contracts);
+
+            model.AllContracts = contractList;
+
+            return model;
+        }
+
         public async Task Save(AdminMechanicalWorkshopCreateViewModel model)
         {
             var entities = mapper.Map<List<AdminMechanicalWorkShopContractEntity>>(model.ContractsToMonitor());
