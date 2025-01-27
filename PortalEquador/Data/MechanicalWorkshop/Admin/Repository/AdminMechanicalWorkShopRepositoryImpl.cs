@@ -34,7 +34,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Admin.Repository
 
         public async Task<List<AdminMechanicalWorkshopViewModel>> GetAdmins()
         {
-            var contracts = await GroupItemsList(Groups.MECHANICAL_SHOP_CONTRACTS);
+            var contracts = await GroupItemsList(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
             var contractList = mapper.Map<List<GroupItemViewModel>>(contracts);
             
             var usersWithContracts = await (
@@ -63,7 +63,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Admin.Repository
             var query = await GetUsersWithNoContracts();
             var users = new SelectList(query, "UserId", "UserName");
 
-            var contracts = await GroupItemsList(Groups.MECHANICAL_SHOP_CONTRACTS);
+            var contracts = await GroupItemsList(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
             var contractList = mapper.Map<List<GroupItemViewModel>>(contracts);
 
             var model = new AdminMechanicalWorkshopCreateViewModel
@@ -82,7 +82,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Admin.Repository
             var query = await GetUsersWithNoContracts();
             var users = new SelectList(query, "UserId", "UserName");
 
-            var contracts = await GroupItemsList(Groups.MECHANICAL_SHOP_CONTRACTS);
+            var contracts = await GroupItemsList(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
             var contractList = mapper.Map<List<GroupItemViewModel>>(contracts);
 
             model.Contracts = contractList;
@@ -94,7 +94,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Admin.Repository
 
         public async Task<AdminMechanicalWorkshopViewModel> RecoverModel(AdminMechanicalWorkshopViewModel model)
         {
-            var contracts = await GroupItemsList(Groups.MECHANICAL_SHOP_CONTRACTS);
+            var contracts = await GroupItemsList(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
             var contractList = mapper.Map<List<GroupItemViewModel>>(contracts);
 
             model.AllContracts = contractList;
@@ -134,7 +134,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Admin.Repository
         public async Task<AdminMechanicalWorkshopViewModel> GetAdmin(string userId)
         {
 
-            var contracts = await GroupItemsList(Groups.MECHANICAL_SHOP_CONTRACTS);
+            var contracts = await GroupItemsList(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
             var contractList = mapper.Map<List<GroupItemViewModel>>(contracts);
 
             var query = await (

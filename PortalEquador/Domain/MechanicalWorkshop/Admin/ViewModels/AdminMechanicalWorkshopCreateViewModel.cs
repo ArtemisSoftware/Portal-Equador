@@ -9,6 +9,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Admin.ViewModels
 {
     public class AdminMechanicalWorkshopCreateViewModel: ViewModel
     {
+        [Display(Name = StringConstants.Display.ADMIN)]
         [Required]
         public string UserId { get; set; }
 

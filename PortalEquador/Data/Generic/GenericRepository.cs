@@ -93,10 +93,22 @@ namespace PortalEquador.Data.Generic
             return new SelectList(result, "Id", "Description");
         }
 
-        public async Task<List<GroupItemEntity>> GroupItemsList(int groupId)
+        public async Task<List<GroupItemEntity>> GroupItemsList(int groupId, OrderType orderType = OrderType.No_order)
         {
-            var result = await context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true).ToListAsync();
-            return result;
+            var result = context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true);
+            switch (orderType)
+            {
+                case OrderType.No_order:
+                    break;
+
+                case OrderType.Alphabetic:
+                    result = result.OrderBy(x => x.Description);
+                    break;
+
+                default:
+                    break;
+            }
+            return await result.ToListAsync();
         }
 
         public async Task<GroupItemEntity> GroupItem(int itemId)
