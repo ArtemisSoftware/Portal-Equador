@@ -42,7 +42,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Admin.Repository
                                             join userRole in context.UserRoles on user.Id equals userRole.UserId
                                             join role in context.Roles on userRole.RoleId equals role.Id
                                             join contract in context.AdminMechanicalWorkShopContractEntity  on user.Id equals contract.UserId  into userContracts
-                                            where role.Name != Roles.Administrator && userContracts.ToList().Count  != 0
+                                            where (role.Name != Roles.Administrator && role.Name != Roles.DataManager) && userContracts.ToList().Count  != 0
                                             select new AdminMechanicalWorkshopViewModel
                                             {
                                                 user = new AdminUser
@@ -207,7 +207,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Admin.Repository
                               join userRole in context.UserRoles on user.Id equals userRole.UserId
                               join role in context.Roles on userRole.RoleId equals role.Id
                               join contracts in context.AdminMechanicalWorkShopContractEntity on userRole.UserId equals contracts.UserId
-                              where role.Name != Roles.Administrator
+                              where (role.Name != Roles.Administrator && role.Name != Roles.DataManager)
                               select new AdminUser
                               {
                                   UserId = user.Id,
@@ -224,8 +224,8 @@ namespace PortalEquador.Data.MechanicalWorkshop.Admin.Repository
                                join userRole in context.UserRoles on user.Id equals userRole.UserId
                                join role in context.Roles on userRole.RoleId equals role.Id
                                join contracts in context.AdminMechanicalWorkShopContractEntity on userRole.UserId equals contracts.UserId into userContracts
-                               from contract in userContracts.DefaultIfEmpty() 
-                               where role.Name != Roles.Administrator && contract == null
+                               from contract in userContracts.DefaultIfEmpty()
+                               where (role.Name != Roles.Administrator && role.Name != Roles.DataManager) && contract == null
 
                                select new AdminUser
                                {
