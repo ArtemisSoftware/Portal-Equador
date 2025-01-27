@@ -54,7 +54,8 @@
 
     <div class="row">
 
-
+        @if (User.IsInRole(Roles.Administrator) || User.IsInRole(Roles.DataManager))
+        {
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-body">
@@ -66,8 +67,7 @@
                 </div>
             </div>
         </div>
-                    @if (User.IsInRole(Roles.Administrator) || User.IsInRole(Roles.Supervisor))
-    {
+
         <div class="col-sm-6">
             <div class="card">
                 <div class="card-body">

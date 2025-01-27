@@ -55,6 +55,12 @@ namespace PortalEquador.Data
                     Id = "e9f639de-624f-4a4e-b8bf-2381725462f1",
                     Name = "Administrator",
                     NormalizedName = "ADMINISTRATOR"
+                },
+                new IdentityRole
+                {
+                    Id = "e9f639de-624f-4a4e-b8bf-2381725462f2",
+                    Name = "DataManager",
+                    NormalizedName = "DATAMANAGER"
                 }
             );
 

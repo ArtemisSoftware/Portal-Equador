@@ -6,7 +6,7 @@ namespace PortalEquador.Data.MechanicalWorkshop
     {
         public static bool HasFullAccess(string role)
         {
-            if (role == Roles.Administrator)
+            if (role == Roles.Administrator || role == Roles.DataManager)
             {
                 return true;
             }
