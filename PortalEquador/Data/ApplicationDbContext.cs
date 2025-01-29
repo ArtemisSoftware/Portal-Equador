@@ -17,6 +17,7 @@ using PortalEquador.Data.DriversLicence.Entity;
 using PortalEquador.Data.MechanicalWorkshop.CarWash.Entity;
 using PortalEquador.Data.MechanicalWorkshop.Admin.Entity;
 using PortalEquador.Util;
+using PortalEquador.Data.Configurations.Entities;
 
 namespace PortalEquador.Data
 {
@@ -30,7 +31,7 @@ namespace PortalEquador.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
+
             builder.Entity<IdentityRole>().HasData(
                 new IdentityRole
                 {
@@ -171,6 +172,248 @@ namespace PortalEquador.Data
                     RoleId = "cc4fcb01-de88-4c20-b4ac-8df5c2a65160",
                     UserId = "448aa945-3d84-4421-8342-7269ec64d949"
                 });
+
+
+
+            //----------------------NOVA LISTA-------------------------
+
+
+            //Lazáro Mazuela
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            {
+                Id = "1a2b3c4d-0001-4421-8342-7269ec64d949",
+                Email = "supervisor.cvx@equador.co.ao",
+                NormalizedEmail = "SUPERVISOR.CVX@EQUADOR.CO.AO",
+                NormalizedUserName = "SUPERVISOR.CVX@EQUADOR.CO.AO",
+                UserName = "supervisor.cvx@equador.co.ao",
+                PasswordHash = hasher.HashPassword(null, "Mazuela123"),
+                EmailConfirmed = true,
+                FirstName = "Lazáro",
+                LastName = "Mazuela",
+            });
+
+            builder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
+            {
+                RoleId = "cc4fcb01-de88-4c20-b4ac-8df5c2a65160",
+                UserId = "1a2b3c4d-0001-4421-8342-7269ec64d949"
+            });
+
+
+
+            //Benedito Joaquim
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            {
+                Id = "2a2b3c4d-0002-4421-8342-7269ec64d949",
+                Email = "benedito.equador@gmail.com",
+                NormalizedEmail = "BENEDITO.EQUADOR@GMAIL.COM",
+                NormalizedUserName = "BENEDITO.EQUADOR@GMAIL.COM",
+                UserName = "benedito.equador@gmail.com",
+                PasswordHash = hasher.HashPassword(null, "Joaquim123"),
+                EmailConfirmed = true,
+                FirstName = "Benedito",
+                LastName = "Joaquim",
+            });
+
+            builder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
+            {
+                RoleId = "cc4fcb01-de88-4c20-b4ac-8df5c2a65160",
+                UserId = "2a2b3c4d-0002-4421-8342-7269ec64d949"
+            });
+
+            //Pascoal José
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            {
+                Id = "3a2b3c4d-0003-4421-8342-7269ec64d949",
+                Email = "pascoaljose79@gmail.com",
+                NormalizedEmail = "PASCOALJOSE79@GMAIL.COM",
+                NormalizedUserName = "PASCOALJOSE79@GMAIL.COM",
+                UserName = "pascoaljose79@gmail.com",
+                PasswordHash = hasher.HashPassword(null, "Jose123"),
+                EmailConfirmed = true,
+                FirstName = "Pascoal",
+                LastName = "José",
+            });
+
+            builder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
+            {
+                RoleId = "cc4fcb01-de88-4c20-b4ac-8df5c2a65160",
+                UserId = "3a2b3c4d-0003-4421-8342-7269ec64d949"
+            });
+
+            //Manuel Lima
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            {
+                Id = "4a2b3c4d-0004-4421-8342-7269ec64d949",
+                Email = "manuellima171@hotmail.com",
+                NormalizedEmail = "MANUELLIMA171@HOTMAIL.COM",
+                NormalizedUserName = "MANUELLIMA171@HOTMAIL.COM",
+                UserName = "manuellima171@hotmail.com",
+                PasswordHash = hasher.HashPassword(null, "Lima123"),
+                EmailConfirmed = true,
+                FirstName = "Manuel",
+                LastName = "Lima",
+            });
+
+            builder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
+            {
+                RoleId = "cc4fcb01-de88-4c20-b4ac-8df5c2a65160",
+                UserId = "4a2b3c4d-0004-4421-8342-7269ec64d949"
+            });
+
+            //Gabriel Antonio
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            {
+                Id = "5a2b3c4d-0005-4421-8342-7269ec64d949",
+                Email = "GANT@equinor.com",
+                NormalizedEmail = "GANT@EQUINOR.COM",
+                NormalizedUserName = "GANT@EQUINOR.COM",
+                UserName = "GANT@equinor.com",
+                PasswordHash = hasher.HashPassword(null, "Antonio123"),
+                EmailConfirmed = true,
+                FirstName = "Gabriel",
+                LastName = "Antonio",
+            });
+
+            builder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
+            {
+                RoleId = "cc4fcb01-de88-4c20-b4ac-8df5c2a65160",
+                UserId = "5a2b3c4d-0005-4421-8342-7269ec64d949"
+            });
+
+            // Trindade Luis
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            {
+                Id = "6a2b3c4d-0006-4421-8342-7269ec64d949",
+                Email = "Trindadeluis60@gmail.com",
+                NormalizedEmail = "TRINDADELUIS60@GMAIL.COM",
+                NormalizedUserName = "TRINDADELUIS60@GMAIL.COM",
+                UserName = "Trindadeluis60@gmail.com",
+                PasswordHash = hasher.HashPassword(null, "Luis123"),
+                EmailConfirmed = true,
+                FirstName = "Trindade",
+                LastName = "Luis",
+            });
+
+            builder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
+            {
+                RoleId = "e9f639de-624f-4a4e-b8bf-2381725462f2",
+                UserId = "6a2b3c4d-0006-4421-8342-7269ec64d949"
+            });
+
+            //Almeida Inorio
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            {
+                Id = "7a2b3c4d-0007-4421-8342-7269ec64d949",
+                Email = "fleetbp.one@equador.co.ao",
+                NormalizedEmail = "FLEETBP.ONE@EQUADOR.CO.AO",
+                NormalizedUserName = "FLEETBP.ONE@EQUADOR.CO.AO",
+                UserName = "fleetbp.one@equador.co.ao",
+                PasswordHash = hasher.HashPassword(null, "Inorio123"),
+                EmailConfirmed = true,
+                FirstName = "Almeida",
+                LastName = "Inorio",
+            });
+
+            builder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
+            {
+                RoleId = "cc4fcb01-de88-4c20-b4ac-8df5c2a65160",
+                UserId = "7a2b3c4d-0007-4421-8342-7269ec64d949"
+            });
+
+            //Alfredo Matos
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            {
+                Id = "8a2b3c4d-0008-4421-8342-7269ec64d949",
+                Email = "fleetbp.two@equador.co.ao",
+                NormalizedEmail = "FLEETBP.TWO@EQUADOR.CO.AO",
+                NormalizedUserName = "FLEETBP.TWO@EQUADOR.CO.AO",
+                UserName = "fleetbp.two@equador.co.ao",
+                PasswordHash = hasher.HashPassword(null, "Matos123"),
+                EmailConfirmed = true,
+                FirstName = "Alfredo",
+                LastName = "Matos",
+            });
+
+            builder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
+            {
+                RoleId = "cc4fcb01-de88-4c20-b4ac-8df5c2a65160",
+                UserId = "8a2b3c4d-0008-4421-8342-7269ec64d949"
+            });
+
+            //Ilisio dos Santos
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            {
+                Id = "9a2b3c4d-0009-4421-8342-7269ec64d949",
+                Email = "fleetbp.three@equador.co.ao",
+                NormalizedEmail = "FLEETBP.THREE@EQUADOR.CO.AO",
+                NormalizedUserName = "FLEETBP.THREE@EQUADOR.CO.AO",
+                UserName = "fleetbp.three@equador.co.ao",
+                PasswordHash = hasher.HashPassword(null, "Santos123"),
+                EmailConfirmed = true,
+                FirstName = "Ilisio",
+                LastName = "dos Santos",
+            });
+
+            builder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
+            {
+                RoleId = "cc4fcb01-de88-4c20-b4ac-8df5c2a65160",
+                UserId = "9a2b3c4d-0009-4421-8342-7269ec64d949"
+            });
+
+            //Armando Suca
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            {
+                Id = "1b2b3c4d-0010-4421-8342-7269ec64d949",
+                Email = "armandosuca@etuenergias.co.ao",
+                NormalizedEmail = "ARMANDOSUCA@ETUENERGIAS.CO.AO",
+                NormalizedUserName = "ARMANDOSUCA@ETUENERGIAS.CO.AO",
+                UserName = "armandosuca@etuenergias.co.ao",
+                PasswordHash = hasher.HashPassword(null, "Suca123"),
+                EmailConfirmed = true,
+                FirstName = "Armando",
+                LastName = "Suca",
+            });
+
+            builder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
+            {
+                RoleId = "cc4fcb01-de88-4c20-b4ac-8df5c2a65160",
+                UserId = "1b2b3c4d-0010-4421-8342-7269ec64d949"
+            });
+
+            // João Magalhães
+            builder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            {
+                Id = "2b2b3c4d-0011-4421-8342-7269ec64d949",
+                Email = "magalhaes.equador@gmail.com",
+                NormalizedEmail = "MAGALHAES.EQUADOR@GMAIL.COM",
+                NormalizedUserName = "MAGALHAES.EQUADOR@GMAIL.COM",
+                UserName = "magalhaes.equador@gmail.com",
+                PasswordHash = hasher.HashPassword(null, "Magalhaes123"),
+                EmailConfirmed = true,
+                FirstName = "João",
+                LastName = "Magalhães",
+            });
+
+            builder.Entity<IdentityUserRole<string>>().HasData(
+            new IdentityUserRole<string>
+            {
+                RoleId = "cc4fcb01-de88-4c20-b4ac-8df5c2a65160",
+                UserId = "2b2b3c4d-0011-4421-8342-7269ec64d949"
+            });
+            //-----------------------------###----------------------------
+
+
+
         }
 
         public DbSet<GroupEntity> GroupEntity { get; set; }

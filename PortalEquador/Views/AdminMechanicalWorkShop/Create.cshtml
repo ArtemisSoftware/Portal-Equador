@@ -16,45 +16,54 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-
-        <dd class="col-sm-8">
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control form-select" asp-items="@Model.Users"></select>
-            </div>
-        </dd>
-
-        <br />
-        <h6>Contratos</h6>
-        <hr />
-
-            @for (int index = 0; index < Model.Contracts.Count; index++)
+            @if (Model.UserDetails.Count == 0)
             {
-            <div class="form-check">
-                <input asp-for="@Model.SelectedContracts[index]" class="form-check-input" type="checkbox" id="@Model.Contracts[index].Id" />
-                <label asp-for="@Model.SelectedContracts[index]" class="form-check-label">
-                        @Html.DisplayFor(modelItem => @Model.Contracts[index].Description)
-                 </label>
-            </div>
-            }
-    
-            @if(@Model.Error != null)
+                <h4>Nenhuma matricula selecionada</h4>
+            } else
             {
+            <dd class="col-sm-8">
+                <div class="form-group">
+                    <label asp-for="UserId" class="control-label"></label>
+                    <select asp-for="UserId" class="form-control form-select" asp-items="@Model.Users"></select>
+                </div>
+            </dd>
+
+            <br />
+            <h6>Contratos</h6>
+            <hr />
+
+                @for (int index = 0; index < Model.Contracts.Count; index++)
+                {
+                <div class="form-check">
+                    <input asp-for="@Model.SelectedContracts[index]" class="form-check-input" type="checkbox" id="@Model.Contracts[index].Id" />
+                    <label asp-for="@Model.SelectedContracts[index]" class="form-check-label">
+                            @Html.DisplayFor(modelItem => @Model.Contracts[index].Description)
+                    </label>
+                </div>
+                }
+
+                @if (@Model.Error != null)
+                {
                 <div class="form-group">
                     <div class="alert alert-danger" role="alert">
                         <span asp-validation-for="Error" class="text-danger"></span>
                     </div>
                 </div>
+                }
+
+
+
+            <br />
+            <br />
+            <div class="form-group">
+                <a asp-action="Index" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <input type="submit" value="Criar registo" class="btn btn-primary" />
+            </div>
             }
-        
 
 
-        <br />
-        <br />
-        <div class="form-group">
-            <a asp-action="Index" class="btn btn-dark">Regressar ao index</a> &nbsp;
-            <input type="submit" value="Criar registo" class="btn btn-primary" />
-        </div>
+
+
         </form>
     </div>
 </div>
