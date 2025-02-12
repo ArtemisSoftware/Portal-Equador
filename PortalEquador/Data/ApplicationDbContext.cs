@@ -18,6 +18,8 @@ using PortalEquador.Data.MechanicalWorkshop.CarWash.Entity;
 using PortalEquador.Data.MechanicalWorkshop.Admin.Entity;
 using PortalEquador.Util;
 using PortalEquador.Data.Configurations.Entities;
+using PortalEquador.Data.Contract.Entities;
+using PortalEquador.Data.MedicalExam.Entity;
 
 namespace PortalEquador.Data
 {
@@ -431,5 +433,7 @@ namespace PortalEquador.Data
         public DbSet<DriversLicenceEntity> DriversLicenceEntity { get; set; } = default!;
         public DbSet<CarWashSchedulerEntity> CarWashSchedulerEntity { get; set; }
         public DbSet<AdminMechanicalWorkShopContractEntity> AdminMechanicalWorkShopContractEntity { get; set; } = default!;
+        public DbSet<PortalEquador.Data.Contract.Entities.ContractEntity> ContractEntity { get; set; } = default!;
+        public DbSet<PortalEquador.Data.MedicalExam.Entity.MedicalExamEntity> MedicalExamEntity { get; set; } = default!;
     }
 }

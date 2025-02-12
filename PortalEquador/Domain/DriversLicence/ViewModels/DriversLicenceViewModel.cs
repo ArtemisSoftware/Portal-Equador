@@ -1,15 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using PortalEquador.Domain.Document.ViewModels;
-using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.ViewModels;
-using PortalEquador.Domain.PersonalInformation.ViewModels;
 using PortalEquador.Util.Constants;
 using static PortalEquador.Util.Constants.StringConstants;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using PortalEquador.Util;
-using PortalEquador.Util.Extensions;
-using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Domain.DriversLicence.ViewModels
 {

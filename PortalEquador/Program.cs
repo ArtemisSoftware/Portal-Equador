@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data;
+using PortalEquador.Data.Contract.Repository;
 using PortalEquador.Data.Curriculum.Repository;
 using PortalEquador.Data.Document.Repository;
 using PortalEquador.Data.DriversLicence.Repository;
@@ -13,9 +14,11 @@ using PortalEquador.Data.MechanicalWorkshop.Admin.Repository;
 using PortalEquador.Data.MechanicalWorkshop.CarWash.Repository;
 using PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Repository;
+using PortalEquador.Data.MedicalExam.Repository;
 using PortalEquador.Data.PersonalInformation.Repository;
 using PortalEquador.Data.Profession.Competence.Repository;
 using PortalEquador.Data.Profession.Experience.Repository;
+using PortalEquador.Domain.Contract.Repository;
 using PortalEquador.Domain.Curriculum.Repository;
 using PortalEquador.Domain.Document.Repository;
 using PortalEquador.Domain.DriversLicence.Repository;
@@ -31,6 +34,7 @@ using PortalEquador.Domain.MechanicalWorkshop.CarWash.UseCase;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.UseCase;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
+using PortalEquador.Domain.MedicalExam.Repository;
 using PortalEquador.Domain.PersonalInformation.Repository;
 using PortalEquador.Domain.Profession.Competence.Repository;
 using PortalEquador.Domain.Profession.Experience.Repository;
@@ -85,6 +89,10 @@ builder.Services.AddScoped<GetCarWashDayPlanUseCase>();
 builder.Services.AddScoped<SearchCarWashDayPlanUseCase>();
 builder.Services.AddScoped<GetDayPlanUseCase>();
 builder.Services.AddScoped<SearchDayPlanUseCase>();
+
+//Contact
+builder.Services.AddScoped<IContractRepository, ContractRepositoryImpl>();
+builder.Services.AddScoped<IMedicalExamRepository, MedicalExamRepositoryImpl>();
 
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());

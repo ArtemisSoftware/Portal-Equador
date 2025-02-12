@@ -1,0 +1,53 @@
+﻿@model PortalEquador.Domain.Contract.ViewModels.ContractDashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h1>Painel</h1>
+
+<div>
+    <br />
+
+    <div class="row align-items-center">
+        <div class="col-md-10">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <img src="@Url.Content(@Model.ProfileImagePath)" alt="" style="width: 90px; height: 90px" class="rounded-circle" />
+                </div>
+                <div class="col-auto">
+                    <h4>@Model.FullName</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 text-right">
+            <a asp-controller="Curriculum" asp-action="Index" class="btn btn-dark"> Regressar aos CVs</a>
+        </div>
+    </div>
+    <hr />
+
+    <div class="row">
+
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Exames</h5>
+                    <span class="badge bg-success">@Model.TotalExams Registo(s)</span>
+                    <p class="card-text">Formulário para o registo de exames.</p>
+                    @if (Model.TotalExams != 0)
+                    {
+                        <a asp-controller="MedicalExam" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                    }
+                    <a asp-controller="MedicalExam" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+                </div>
+            </div>
+        </div>
+
+
+        
+    </div>
+
+    <br />
+
+
+</div>

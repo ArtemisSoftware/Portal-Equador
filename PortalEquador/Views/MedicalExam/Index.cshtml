@@ -1,0 +1,98 @@
+﻿@model IEnumerable<PortalEquador.Domain.MedicalExam.ViewModels.MedicalExamViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>@ViewBag.username</h1>
+        <h3>Exames</h3>
+        <p>
+            <a asp-controller="MedicalExam" asp-action="Create" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
+        </p>
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="Curriculum" asp-action="Dashboard" asp-route-identifier="@ViewBag.identifier" class="btn btn-success"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
+</div>
+<hr />
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Exam)
+            </th>
+            <th>
+                Documento
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Exam.Description)
+                </td>
+                <td class="align-middle">
+                    <button class="btn btn-link" onclick="window.open('@Url.Content(@item.PicturePath)', '_blank')">Link opacity 100</button>
+
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                    <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username"><i class="fas fa-trash-alt" title="Eliminar"></i></button>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<form id="deleteEducation" asp-action="DeleteEducation">
+    <input type="hidden" id="id" name="Id" />
+    <input type="hidden" id="identifier" name="identifier" />
+    <input type="hidden" id="username" name="username" />
+</form>
+
+
+@section Scripts {
+    <script>
+        $(function () {
+
+            $('.table').DataTable();
+
+            $('.deleteBtn').click(function (e) {
+                swal({
+                    title: "Eliminar educação escolar",
+                    text: "Tem a certeza que pretende eliminar a educação escolar?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var btn = $(this);
+                        var id = btn.data("id");
+                        var identifier = btn.data("identifier");
+                        var username = btn.data("username");
+                        $('#id').val(id);
+                        $('#identifier').val(identifier);
+                        $('#username').val(username);
+                        $('#deleteEducation').submit();
+
+                    }
+                });
+            });
+        });
+
+    </script>
+}

@@ -34,7 +34,9 @@
             public const string DOCUMENT = "Documento";
 
             //E
-
+            public const string EXAM = "Exame";
+            public const string EMAIL = "Email";
+            public const string EXPIRATION_DATE = "Data de expiração";
             //F
 
             public const string FULL_NAME = "Nome completo";
@@ -94,8 +96,7 @@
             public const string PROVINCE = "Provincia";
             public const string NEIGHBOURHOOD = "Bairro";
 
-            public const string EMAIL = "Email";
-            public const string EXPIRATION_DATE = "Data de expiração";
+
             public const string IDENTITY_CARD_EXPIRATION_DATE = "Data de expiração do bilhete de identidade";
             public const string PROVISIONAL_EXPIRATION_DATE = "Data de expiração do verbete";
             public const string PROVISIONAL_UPDATE_NUMBER = "Nº de atualizações realizadas";
@@ -168,6 +169,13 @@
         {
             public const string PERFORMED = "Lavagem realizada";
             public const string NOT_PERFORMED = "Lavagem não realizada";
+        }
+
+        public static class ContractStatus
+        {
+            public const string COMPLETE = "Concluído";
+            public const string CANCELED = "Cancelado";
+            public const string VALID = "Em Vigor";
         }
 
         public static class SchedulerStatus

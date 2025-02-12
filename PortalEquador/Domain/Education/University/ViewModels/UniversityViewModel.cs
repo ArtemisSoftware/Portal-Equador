@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.ViewModels;
-using PortalEquador.Domain.PersonalInformation.ViewModels;
 using PortalEquador.Util.Constants;
 using System.ComponentModel.DataAnnotations;
 
