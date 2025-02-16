@@ -7,6 +7,7 @@ using PortalEquador.Domain.PersonalInformation.Repository;
 using PortalEquador.Domain.PersonalInformation.ViewModels;
 using PortalEquador.Util.Constants;
 using PortalEquador.Util;
+using Microsoft.EntityFrameworkCore;
 
 namespace PortalEquador.Data.Contract.Repository
 {
@@ -19,44 +20,141 @@ namespace PortalEquador.Data.Contract.Repository
     {
         public async Task<List<ContractViewModel>> GetAll()
         {
-            /*
-            var query = from contract in context.ContractEntity
+            var query = from personal in context.PersonalInformationEntity
                         join profileDoc in
                             (from document in context.DocumentEntity
                              where document.DocumentTypeId == GroupTypesConstants.ItemFromGroup.Documents.PROFILE_PICTURE
                              select document)
-                        on contract.PersonalInformationId equals profileDoc.PersonalInformationId into resultProfileDocs
+                        on personal.Id equals profileDoc.PersonalInformationId into resultProfileDocs
                         from resultProfileDocument in resultProfileDocs.DefaultIfEmpty()
-                        orderby contract.FirstName
+                        orderby personal.FirstName
                         select new ContractViewModel
                         {
-                            Id = contract.Id,
-                            FullName = contract.FirstName,
-                            LastName = contract.LastName,
-
-                            ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, contract.Id)
+                            Id = personal.Id,
+                            FullName = personal.FirstName + " " + personal.LastName,   
+                            ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, personal.Id)
                         };
             return await query.ToListAsync();
-            */
-            var list = new List<ContractViewModel>();
-            list.Add(
-                    new ContractViewModel {
-                        Id = 1,
-                        FullName = "Name",
-                        StartDate = DateTime.Now,
-                    }
-                );
-            return list;
         }
 
         public async Task<ContractDashboardViewModel> GetDashboard(int id)
         {
+            /*
+var query = from personal in context.PersonalInformationEntity
+                        join docCount in
+                            (from document in context.DocumentEntity
+                             where document.PersonalInformationId == id
+                             select document).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                OrderDetailCount = grouped.Count()
+                            })
+                        on personal.Id equals docCount.PersonalInformationId into resultDocs
+                        from resultDocuments in resultDocs.DefaultIfEmpty()
+
+                        join driversLicenceCount in
+                            (from driversLicence in context.DriversLicenceEntity
+                             where driversLicence.PersonalInformationId == id
+                             select driversLicence).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                DriversLicenceCount = grouped.Count()
+                            })
+                        on personal.Id equals driversLicenceCount.PersonalInformationId into resultDriversLicence
+                        from resultDriversLicences in resultDriversLicence.DefaultIfEmpty()
+
+                        join languageCount in
+                            (from language in context.LanguageEntity
+                             where language.PersonalInformationId == id
+                             select language).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                LanguageCount = grouped.Count()
+                            })
+                        on personal.Id equals languageCount.PersonalInformationId into resultLanguage
+                        from resultLanguages in resultLanguage.DefaultIfEmpty()
+
+                        join professionalCompetenceCount in
+                            (from professionalCompetence in context.ProfessionalCompetenceEntity
+                             where professionalCompetence.PersonalInformationId == id
+                             select professionalCompetence).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                ProfessionalCompetenceCount = grouped.Count()
+                            })
+                        on personal.Id equals professionalCompetenceCount.PersonalInformationId into resultProfessionalCompetence
+                        from resultProfessionalCompetences in resultProfessionalCompetence.DefaultIfEmpty()
+
+                        join professionalExperienceCount in
+                            (from professionalExperience in context.ProfessionalExperienceEntity
+                             where professionalExperience.PersonalInformationId == id
+                             select professionalExperience).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                Count = grouped.Count()
+                            })
+                        on personal.Id equals professionalExperienceCount.PersonalInformationId into resultProfessionalExperience
+                        from resultProfessionalExperiences in resultProfessionalExperience.DefaultIfEmpty()
+
+                        join schoolCount in
+                            (from school in context.SchoolEntity
+                             where school.PersonalInformationId == id
+                             select school).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                Count = grouped.Count()
+                            })
+                        on personal.Id equals schoolCount.PersonalInformationId into resultSchool
+                        from resultSchools in resultSchool.DefaultIfEmpty()
+
+                        join universityCount in
+                            (from school in context.UniversityEntity
+                             where school.PersonalInformationId == id
+                             select school).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                Count = grouped.Count()
+                            })
+                        on personal.Id equals universityCount.PersonalInformationId into resultUniversity
+                        from resultUniversities in resultUniversity.DefaultIfEmpty()
+
+                        where personal.Id == id
+
+                        select new CurriculumDashboardViewModel
+                        {
+                            Id = id,
+                            FullName = personal.FirstName + " " + personal.LastName,
+                            IsPersonalInformationComplete = (personal.Id != 0),
+                            TotalLanguages = resultLanguages.LanguageCount == null ? 0 : resultLanguages.LanguageCount,
+                            TotalDocuments = resultDocuments.OrderDetailCount == null ? 0 : resultDocuments.OrderDetailCount,
+                            TotalProfessionalCompetences = resultProfessionalCompetences.ProfessionalCompetenceCount == null ? 0 : resultProfessionalCompetences.ProfessionalCompetenceCount,
+                            TotalProfessionalExperiences = resultProfessionalExperiences.Count == null ? 0 : resultProfessionalExperiences.Count,
+                            TotalSchoolEducation = resultSchools.Count == null ? 0 : resultSchools.Count,
+                            TotalUniversityEducation = resultUniversities.Count == null ? 0 : resultUniversities.Count,
+                            TotalDriversLicence = resultDriversLicences.DriversLicenceCount == null ? 0 : resultDriversLicences.DriversLicenceCount,
+                            ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, id)
+                        };
+
+            var result = await query.FirstOrDefaultAsync();
+            return result;
+            */
+
+
             var lolo = new ContractDashboardViewModel
             {
                 Id = 1,
                 FullName = "Name",
                 ProfileImagePath = "",
-                TotalExams = 1
+                TotalExams = 1,
+                TotalDisciplinaryNotification = 1,
+                TotalTrainning = 1,
             };
 
            return lolo;

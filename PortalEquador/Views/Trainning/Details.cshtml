@@ -1,0 +1,51 @@
+﻿@model PortalEquador.Domain.Trainning.ViewModels.TrainningViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detalhes</h1>
+<h4>Para: @ViewBag.username</h4>
+
+<hr />
+
+<div class="row">
+
+    <div class="col-md-5">
+
+        <dl class="row">
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Date)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Date)
+            </dd>
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Trainning)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Trainning.Description)
+            </dd>
+
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Observation)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Observation)
+            </dd>
+        </dl>
+
+    </div>
+
+    <div class="col-md-7">
+
+        <div class="row">
+        </div>
+
+
+    </div>
+
+</div>

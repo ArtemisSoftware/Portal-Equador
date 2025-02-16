@@ -12,7 +12,12 @@ using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Data.PersonalInformation.Repository
 {
-    public class PersonalInformationRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment hostEnvironment) : GenericRepository<PersonalInformationEntity>(context, httpContextAccessor), IPersonalInformationRepository
+    public class PersonalInformationRepositoryImpl(
+        ApplicationDbContext context, 
+        IMapper mapper, 
+        IHttpContextAccessor httpContextAccessor, 
+        IWebHostEnvironment hostEnvironment
+        ) : GenericRepository<PersonalInformationEntity>(context, httpContextAccessor), IPersonalInformationRepository
     {
 
         public async Task<PersonalInformationViewModel> GetCreateModel(PersonalInformationViewModel? model)

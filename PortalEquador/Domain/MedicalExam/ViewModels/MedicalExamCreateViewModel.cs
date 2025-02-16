@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using PortalEquador.Domain.Generic;
-using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Util.Constants;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
@@ -23,7 +22,16 @@ namespace PortalEquador.Domain.MedicalExam.ViewModels
         [Display(Name = StringConstants.Display.OBSERVATION)]
         public string? Observation { get; set; }
 
-        public string? Extension { get; set; }
+
+        [Display(Name = StringConstants.Display.EXAM)]
+        [Required]
+        public int ExamId { get; set; }
+
+        public SelectList? Exams { get; set; }
+
+
+
+
 
         [Display(Name = StringConstants.Display.FILE)]
         [Required(ErrorMessage = StringConstants.Error.MANDATORY_FILE)]
@@ -31,15 +39,6 @@ namespace PortalEquador.Domain.MedicalExam.ViewModels
         public IFormFile ImageFile { get; set; }
 
         public string? PicturePath { get; set; }
-
-
-
-
-        [Display(Name = StringConstants.Display.DOCUMENT)]
-        [Required]
-        public int ExamId { get; set; }
-
-        public SelectList? Exam { get; set; }
 
     }
 }

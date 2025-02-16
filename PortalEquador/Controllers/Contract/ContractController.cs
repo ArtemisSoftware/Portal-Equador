@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using PortalEquador.Data;
-using PortalEquador.Data.Contract.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.Contract.Repository;
-using PortalEquador.Domain.Education.School.Repository;
-using PortalEquador.Domain.PersonalInformation.Repository;
 
 namespace PortalEquador.Controllers.Contract
 {
@@ -31,19 +21,7 @@ namespace PortalEquador.Controllers.Contract
         }
 
         /*
-        private readonly ApplicationDbContext _context;
-
-        public ContractController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        // GET: Contract
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.ContractEntity.Include(c => c.ApplicationUserEntity).Include(c => c.LocationGroupItemEntity).Include(c => c.PersonalInformationEntity).Include(c => c.RegimentGroupItemEntity);
-            return View(await applicationDbContext.ToListAsync());
-        }
+        
 
         // GET: Contract/Details/5
         public async Task<IActionResult> Details(int? id)

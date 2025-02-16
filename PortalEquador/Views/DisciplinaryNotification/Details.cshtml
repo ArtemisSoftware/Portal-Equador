@@ -1,0 +1,74 @@
+﻿@model PortalEquador.Domain.DisciplinaryNotification.ViewModels.DisciplinaryNotificationViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detalhes</h1>
+<h4>Para: @ViewBag.username</h4>
+
+<hr />
+
+<div class="row">
+
+    <div class="col-md-5">
+
+        <dl class="row">
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Date)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Date)
+            </dd>
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Notification)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Notification.Description)
+            </dd>
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.AccidentLevel)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.AccidentLevel.Description)
+            </dd>
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Local)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Local)
+            </dd>
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Decision)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Decision)
+            </dd>
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Observation)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Observation)
+            </dd>
+        </dl>
+
+    </div>
+
+    <div class="col-md-7">
+
+        <div class="row">
+
+            
+
+        </div>
+
+
+    </div>
+
+</div>

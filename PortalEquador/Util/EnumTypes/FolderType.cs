@@ -6,7 +6,10 @@ namespace PortalEquador.Util.EnumTypes
     {
         Curriculum,
         DriversLicence,
-        Placeholder
+        Placeholder,
+        MedicalExam,
+        Trainning,
+        DisciplinaryNotification
     }
 
     public static class FolderTypeExtensions
@@ -23,6 +26,15 @@ namespace PortalEquador.Util.EnumTypes
 
                 case FolderType.Placeholder:
                     return "/placeholder";
+
+                case FolderType.MedicalExam:
+                    return "/medicalexam";
+
+                case FolderType.Trainning:
+                    return "/trainning";
+
+                case FolderType.DisciplinaryNotification:
+                    return "/disciplinarynotification";
 
                 default:
                     throw new ArgumentOutOfRangeException();

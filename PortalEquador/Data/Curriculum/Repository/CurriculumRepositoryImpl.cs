@@ -12,13 +12,16 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PortalEquador.Data.Curriculum.Repository
 {
-    public class CurriculumRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment hostEnvironment) : GenericRepository<CurriculumEntity>(context, httpContextAccessor), CurriculumRepository
+    public class CurriculumRepositoryImpl(
+        ApplicationDbContext context, 
+        IMapper mapper, 
+        IHttpContextAccessor httpContextAccessor, 
+        IWebHostEnvironment hostEnvironment
+        ) : GenericRepository<CurriculumEntity>(context, httpContextAccessor), CurriculumRepository
     {
         public async Task<CurriculumDashboardViewModel> GetCurriculumDashboard(int id)
         {
-
             var query = from personal in context.PersonalInformationEntity
-
                         join docCount in
                             (from document in context.DocumentEntity
                              where document.PersonalInformationId == id

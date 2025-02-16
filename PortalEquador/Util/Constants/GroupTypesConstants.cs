@@ -61,6 +61,11 @@ namespace PortalEquador.Util.Constants
 
             public static readonly int CAR_WASH_SCHEDULES = (new Item { Debug = 20, Production = 21 }).Value;
             public static readonly int WASH_LANE = (new Item { Debug = 21, Production = 22 }).Value;
+
+            public static readonly int EXAM = (new Item { Debug = 22, Production = 23 }).Value;
+            public static readonly int TRAINNING = (new Item { Debug = 23, Production = 23 }).Value;
+            public static readonly int ACCIDENT_LEVEL = (new Item { Debug = 24, Production = 23 }).Value;
+            public static readonly int NOTIFICATIONS = (new Item { Debug = 25, Production = 23 }).Value;
         }
 
         public static class ItemFromGroup
@@ -76,10 +81,13 @@ namespace PortalEquador.Util.Constants
                 public static readonly int PROFILE_PICTURE = (new Item { Debug = 7, Production = 2 }).Value;
                 public static readonly int DRIVERS_LICENCE = (new Item { Debug = 43, Production = 39 }).Value;
                 public static readonly int DRIVERS_LICENCE_PROVISIONAL = (new Item { Debug = 44, Production = 69 }).Value;
-             
+                public static readonly int MEDICAL_EXAM = (new Item { Debug = 45, Production = 69 }).Value;
+                public static readonly int TRAINNIG = (new Item { Debug = 45, Production = 69 }).Value;
+                public static readonly int DISCIPLINARY_NOTIFICATION = (new Item { Debug = 45, Production = 69 }).Value;
 
 
-             private static List<int> driversLicenceDocuments = new List<int>();
+
+                private static List<int> driversLicenceDocuments = new List<int>();
 
                 static Documents()
                 {

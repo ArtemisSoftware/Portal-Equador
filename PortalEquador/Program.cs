@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data;
 using PortalEquador.Data.Contract.Repository;
 using PortalEquador.Data.Curriculum.Repository;
+using PortalEquador.Data.DisciplinaryNotification.Repository;
 using PortalEquador.Data.Document.Repository;
 using PortalEquador.Data.DriversLicence.Repository;
 using PortalEquador.Data.Education.School.Repository;
@@ -18,8 +19,11 @@ using PortalEquador.Data.MedicalExam.Repository;
 using PortalEquador.Data.PersonalInformation.Repository;
 using PortalEquador.Data.Profession.Competence.Repository;
 using PortalEquador.Data.Profession.Experience.Repository;
+using PortalEquador.Data.Trainning.Repository;
 using PortalEquador.Domain.Contract.Repository;
 using PortalEquador.Domain.Curriculum.Repository;
+using PortalEquador.Domain.DisciplinaryNotification.Repository;
+using PortalEquador.Domain.DisciplinaryNotification.UseCases;
 using PortalEquador.Domain.Document.Repository;
 using PortalEquador.Domain.DriversLicence.Repository;
 using PortalEquador.Domain.DriversLicence.UseCases;
@@ -35,9 +39,12 @@ using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.UseCase;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
 using PortalEquador.Domain.MedicalExam.Repository;
+using PortalEquador.Domain.MedicalExam.UseCases;
 using PortalEquador.Domain.PersonalInformation.Repository;
 using PortalEquador.Domain.Profession.Competence.Repository;
 using PortalEquador.Domain.Profession.Experience.Repository;
+using PortalEquador.Domain.Trainning.Repository;
+using PortalEquador.Domain.Trainning.UseCases;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -90,9 +97,17 @@ builder.Services.AddScoped<SearchCarWashDayPlanUseCase>();
 builder.Services.AddScoped<GetDayPlanUseCase>();
 builder.Services.AddScoped<SearchDayPlanUseCase>();
 
-//Contact
+//Contract
 builder.Services.AddScoped<IContractRepository, ContractRepositoryImpl>();
 builder.Services.AddScoped<IMedicalExamRepository, MedicalExamRepositoryImpl>();
+builder.Services.AddScoped<ITrainningRepository, TrainningRepositoryImpl>();
+builder.Services.AddScoped<IDisciplinaryNotificationRepository, DisciplinaryNotificationRepositoryImpl>();
+builder.Services.AddScoped<SaveMedicalExamUseCase>();
+builder.Services.AddScoped<SaveTrainningUseCase>();
+builder.Services.AddScoped<SaveDisciplinaryNotificationUseCase>();
+builder.Services.AddScoped<DeleteMedicalExamUseCase>();
+builder.Services.AddScoped<DeleteTrainningUseCase>();
+builder.Services.AddScoped<DeleteDisciplinaryNotificationUseCase>();
 
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());

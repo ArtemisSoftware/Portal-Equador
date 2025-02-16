@@ -12,13 +12,13 @@ namespace PortalEquador.Data.MedicalExam.Entity
         [ForeignKey("PersonalInformationId")]
         public PersonalInformationEntity PersonalInformationEntity { get; set; }
 
+        public DateTime Date { get; set; }
+
         public int ExamId { get; set; }
 
         [ForeignKey("ExamId")]
         public GroupItemEntity ExamGroupItemEntity { get; set; }
 
         public string? Observation { get; set; }
-
-        public string Extension { get; set; }
     }
 }

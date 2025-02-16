@@ -11,6 +11,7 @@
         {
             // A
             public const string ADRESS = "Endereço";
+            public const string ACCIDENT_LEVEL = "Nível do acidente";
             public const string ADMIN = "Administradores";
 
             // C
@@ -25,6 +26,7 @@
 
             // D
             public const string DEGREE = "Grau";
+            public const string DECISION = "Decisao do MVC";
             public const string DATE = "Data";
             public const string DESCRIPTION = "Descrição";
             public const string DRIVERS_LICENCE_TYPE = "Tipo de carta";
@@ -48,6 +50,7 @@
             public const string LANGUANGE = "Língua";
             public const string LANE = "Baia";
             public const string LICENCE_PLATE = "Matricula";
+            public const string LOCAL = "Local";
 
             // M
             public const string MAJOR_UNVAILABLE = "Curso não disponível";
@@ -57,6 +60,10 @@
             public const string MODIFIED_BY = "Alterado por";
             public const string MONTHS = "Meses";
             public const string MOTHER = "Mãe";
+
+            //N
+            public const string NOTIFICATION = "Notificação";
+
 
             // O
             public const string ORAL_LEVEL = "Nível oral";
@@ -76,6 +83,8 @@
 
             //  T
             public const string TELEPHONE = "Telefone";
+            public const string TRAINNING = "Formação";
+            public const string TRAINNING_NATURE = "Natureza da formação";
 
             //  V
             public const string VEHICLE = "Veículo";

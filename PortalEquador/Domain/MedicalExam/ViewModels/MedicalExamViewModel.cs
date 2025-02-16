@@ -27,7 +27,8 @@ namespace PortalEquador.Domain.MedicalExam.ViewModels
         [Display(Name = StringConstants.Display.OBSERVATION)]
         public string? Observation { get; set; }
 
-        public string? Extension { get; set; }
+
+
 
 
         [Display(Name = StringConstants.Display.FILE)]
