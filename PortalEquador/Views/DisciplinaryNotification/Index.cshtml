@@ -13,7 +13,7 @@
         </p>
     </div>
     <div class="col-md-2 text-right">
-        <a asp-controller="Curriculum" asp-action="Dashboard" asp-route-identifier="@ViewBag.identifier" class="btn btn-success"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+        <a asp-controller="Contract" asp-action="Dashboard" asp-route-identifier="@ViewBag.identifier" class="btn btn-success"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
     </div>
 </div>
 <hr />
@@ -28,7 +28,10 @@
                 @Html.DisplayNameFor(model => model.Notification)
             </th>
             <th>
-                Documento
+                @Html.DisplayNameFor(model => model.AccidentLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PicturePath)
             </th>
             <th></th>
         </tr>
@@ -44,10 +47,19 @@
                     @Html.DisplayFor(modelItem => item.Notification.Description)
                 </td>
                 <td class="align-middle">
-                    
+                    @Html.DisplayFor(modelItem => item.AccidentLevel.Description)
+                </td>
+                <td class="align-middle">
+                    @if (item.PicturePath != null)
+                    {
+                        <a class="link-offset-1" href="@Url.Content(@item.PicturePath)" target="_blank">
+                            Documento
+                        </a>
+                    }
+
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-identifier="@item.Id" asp-route-fullName="@ViewBag.username" class="btn btn-info"><i class="fas fa-eye" title="Editar"></i></a>
                     <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username"><i class="fas fa-trash-alt" title="Eliminar"></i></button>
 
                 </td>
@@ -57,7 +69,7 @@
 </table>
 
 
-<form id="deleteEducation" asp-action="DeleteEducation">
+<form id="deleteDisciplinaryNotification" asp-action="DeleteDisciplinaryNotification">
     <input type="hidden" id="id" name="Id" />
     <input type="hidden" id="identifier" name="identifier" />
     <input type="hidden" id="username" name="username" />
@@ -72,8 +84,8 @@
 
             $('.deleteBtn').click(function (e) {
                 swal({
-                    title: "Eliminar educação escolar",
-                    text: "Tem a certeza que pretende eliminar a educação escolar?",
+                    title: "Eliminar notificação disciplinar",
+                    text: "Tem a certeza que pretende eliminar a notificação disciplinar?",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true
@@ -86,7 +98,7 @@
                         $('#id').val(id);
                         $('#identifier').val(identifier);
                         $('#username').val(username);
-                        $('#deleteEducation').submit();
+                        $('#deleteDisciplinaryNotification').submit();
 
                     }
                 });

@@ -10,6 +10,8 @@ namespace PortalEquador.Domain.Contract.ViewModels
         public int Id { get; set; }
 
         public int PersonaInformationId { get; set; }
+
+        [Display(Name = StringConstants.Display.FULL_NAME)]
         public required string FullName { get; set; }
 
         [Display(Name = StringConstants.Display.EXPIRATION_DATE)]

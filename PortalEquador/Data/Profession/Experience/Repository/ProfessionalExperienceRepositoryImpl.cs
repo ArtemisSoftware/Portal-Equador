@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.Profession.Experience.Entity;
-using PortalEquador.Domain.Languages.Repository;
-using PortalEquador.Domain.Languages.ViewModels;
 using PortalEquador.Domain.Profession.Experience.Repository;
 using PortalEquador.Domain.Profession.Experience.ViewModels;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
@@ -26,8 +24,8 @@ namespace PortalEquador.Data.Profession.Experience.Repository
 
         public async Task<ProfessionalExperienceViewModel> GetCreateModel(int personalInformationId, string fullName)
         {
-            var companies = GroupItems(Groups.COMPANIES);
-            var workstations = GroupItems(Groups.WORKSTATIONS);
+            var companies = GroupItems(Groups.COMPANIES, OrderType.Alphabetic);
+            var workstations = GroupItems(Groups.WORKSTATIONS, OrderType.Alphabetic);
 
             var model = new ProfessionalExperienceViewModel
             {
@@ -42,8 +40,8 @@ namespace PortalEquador.Data.Profession.Experience.Repository
 
         public async Task<ProfessionalExperienceViewModel> GetCreateModel(ProfessionalExperienceViewModel model)
         {
-            var companies = GroupItems(Groups.COMPANIES);
-            var workstations = GroupItems(Groups.WORKSTATIONS);
+            var companies = GroupItems(Groups.COMPANIES, OrderType.Alphabetic);
+            var workstations = GroupItems(Groups.WORKSTATIONS, OrderType.Alphabetic);
 
             model.Workstations = workstations;
             model.Companies = companies;

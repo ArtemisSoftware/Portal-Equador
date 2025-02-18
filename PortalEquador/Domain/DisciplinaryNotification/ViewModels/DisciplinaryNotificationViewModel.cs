@@ -32,5 +32,8 @@ namespace PortalEquador.Domain.DisciplinaryNotification.ViewModels
 
         [Display(Name = StringConstants.Display.OBSERVATION)]
         public string? Observation { get; set; }
+
+        [Display(Name = StringConstants.Display.FILE)]
+        public string? PicturePath { get; set; }
     }
 }

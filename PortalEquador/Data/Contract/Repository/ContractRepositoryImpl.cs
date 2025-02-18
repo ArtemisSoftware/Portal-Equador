@@ -68,7 +68,7 @@ namespace PortalEquador.Data.Contract.Repository
                         from resultTrainnings in resultTrn.DefaultIfEmpty()
 
                         join disciplinaryNotificationCount in
-                            (from disciplinaryNotification in context.TrainningEntity
+                            (from disciplinaryNotification in context.DisciplinaryNotificationEntity
                              where disciplinaryNotification.PersonalInformationId == id
                              select disciplinaryNotification).GroupBy(d => d.PersonalInformationId)
                             .Select(grouped => new

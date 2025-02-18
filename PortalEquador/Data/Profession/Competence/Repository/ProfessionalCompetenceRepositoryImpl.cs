@@ -2,13 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.Profession.Competence.Entity;
-using PortalEquador.Data.Profession.Experience.Entity;
-using PortalEquador.Domain.Languages.Repository;
-using PortalEquador.Domain.Languages.ViewModels;
 using PortalEquador.Domain.Profession.Competence.Repository;
 using PortalEquador.Domain.Profession.Competence.ViewModels;
-using PortalEquador.Domain.Profession.Experience.ViewModels;
-using System.ComponentModel.Design;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Data.Profession.Competence.Repository
@@ -27,7 +22,7 @@ namespace PortalEquador.Data.Profession.Competence.Repository
 
         public async Task<ProfessionalCompetenceViewModel> GetCreateModel(int personalInformationId, string fullName)
         {
-            var competences = GroupItems(Groups.COMPETENCES);
+            var competences = GroupItems(Groups.COMPETENCES, OrderType.Alphabetic);
 
             var model = new ProfessionalCompetenceViewModel
             {
@@ -41,7 +36,7 @@ namespace PortalEquador.Data.Profession.Competence.Repository
 
         public async Task<ProfessionalCompetenceViewModel> GetCreateModel(ProfessionalCompetenceViewModel model)
         {
-            var competences = GroupItems(Groups.COMPETENCES);
+            var competences = GroupItems(Groups.COMPETENCES, OrderType.Alphabetic);
             model.Competences = competences;
             return model;
         }

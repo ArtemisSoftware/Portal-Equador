@@ -39,7 +39,7 @@ namespace PortalEquador.Domain.Trainning.UseCases
                         FullName = model.FullName,
                         ImageFile = model.ImageFile,
                         DocumentTypeId = ItemFromGroup.Documents.TRAINNIG,
-                        SubTypeId = model.TrainningId,
+                        SubTypeId = trainningId,
                         ParentId = trainningId,
                         Extension = ImagesUtil.GetImageExtension(model.ImageFile)
                     };

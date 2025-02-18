@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.DisciplinaryNotification.Entity;
 using PortalEquador.Data.Generic;
-using PortalEquador.Data.Trainning.Entity;
 using PortalEquador.Domain.DisciplinaryNotification.Repository;
 using PortalEquador.Domain.DisciplinaryNotification.ViewModels;
-using PortalEquador.Domain.GroupTypes.ViewModels;
-using PortalEquador.Domain.Trainning.ViewModels;
+using PortalEquador.Util;
+using PortalEquador.Util.EnumTypes;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Data.DisciplinaryNotification.Repository
@@ -20,28 +20,17 @@ namespace PortalEquador.Data.DisciplinaryNotification.Repository
     {
         public async Task<List<DisciplinaryNotificationViewModel>> GetAll(int personalInformationId)
         {
-            var list = new List<DisciplinaryNotificationViewModel>();
-            list.Add(
-                new DisciplinaryNotificationViewModel
-                {
-                    Id = 1,
-                    Date = DateTime.Now,
-                    PersonaInformationId = 1,
-                    FullName = "The guy",
-                    Local = "The local",
-                    AccidentLevel = new GroupItemViewModel
-                    {
-                        Id = 1,
-                        Description = "AccidentLevel 1"
-                    },
-                    Notification = new GroupItemViewModel
-                    {
-                        Id = 1,
-                        Description = "Notification -- 1"
-                    }
-                }
-                );
-            return list;
+            var result = await context.DisciplinaryNotificationEntity
+                          .Include(d => d.AccidentLevelGroupItemEntity)
+                          .Include(d => d.NotificationGroupItemEntity)
+                            .Include(d => d.PersonalInformationEntity)
+                          .Where(item => item.PersonalInformationId == personalInformationId)
+                          .OrderByDescending(item => item.Date)
+                          .ToListAsync();
+
+            var models = mapper.Map<List<DisciplinaryNotificationViewModel>>(result);
+            models.ForEach(item => item.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.DisciplinaryNotification, item.PersonaInformationId, item.Id));
+            return models;
         }
 
         public async Task<DisciplinaryNotificationCreateViewModel> GetCreateModel(int personalInformationId, string fullName)
@@ -73,24 +62,17 @@ namespace PortalEquador.Data.DisciplinaryNotification.Repository
 
         public async Task<DisciplinaryNotificationViewModel> GetDetail(int id)
         {
-            return new DisciplinaryNotificationViewModel
-            {
-                Id = 1,
-                Date = DateTime.Now,
-                PersonaInformationId = 1,
-                FullName = "The guy",
-                Local = "The local",
-                AccidentLevel = new GroupItemViewModel
-                {
-                    Id = 1,
-                    Description = "AccidentLevel 1"
-                },
-                Notification = new GroupItemViewModel
-                {
-                    Id = 1,
-                    Description = "Notification -- 1"
-                }
-            };
+            var result = await context.DisciplinaryNotificationEntity
+                .Include(d => d.AccidentLevelGroupItemEntity)
+                .Include(d => d.NotificationGroupItemEntity)
+                .Include(d => d.PersonalInformationEntity)
+                .Include(d => d.ApplicationUserEntity)
+               .Where(item => item.Id == id)
+               .FirstAsync();
+
+            var model = mapper.Map<DisciplinaryNotificationViewModel>(result);
+            model.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.DisciplinaryNotification, model.PersonaInformationId, model.Id);
+            return model;
         }
 
         public async Task<DisciplinaryNotificationCreateViewModel> GetDisciplinaryNotification(int id)

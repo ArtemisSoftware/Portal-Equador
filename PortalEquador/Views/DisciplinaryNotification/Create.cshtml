@@ -24,6 +24,7 @@
                 <input asp-for="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
+            <br />
 
             <div class="form-group" id="Notification">
                 <label asp-for="NotificationId" class="control-label"></label>
@@ -36,6 +37,14 @@
                 <textarea asp-for="Local" class="form-control" rows="2"></textarea>
                 <span asp-validation-for="Local" class="text-danger"></span>
             </div>
+            <br />
+
+            <div class="mb-3">
+                <label asp-for="Decision" class="control-label"></label>
+                <textarea asp-for="Decision" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Decision" class="text-danger"></span>
+            </div>
+            <br />
 
             <div class="form-group" id="AccidentLevel">
                 <label asp-for="AccidentLevelId" class="control-label"></label>

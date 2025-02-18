@@ -24,12 +24,14 @@
                 <input asp-for="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
+            <br />
 
             <div class="form-group" id="Trainning">
                 <label asp-for="TrainningId" class="control-label"></label>
                 <select asp-for="TrainningId" class="form-select" asp-items="Model.Trainnings"></select>
             </div>
             <br />
+
 
             <div class="mb-3">
                 <label asp-for="Observation" class="control-label"></label>

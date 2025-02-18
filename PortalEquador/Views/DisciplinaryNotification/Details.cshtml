@@ -56,19 +56,68 @@
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.Observation)
             </dd>
+
+
+            <dt class="col-sm-12">
+                <br />
+            </dt>
+
+            @if (@Model.DateModified != null)
+            {
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DateModified)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.DateModified)
+                </dd>
+            }
+            else
+            {
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DateCreated)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.DateCreated)
+                </dd>
+            }
+
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Editor)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Editor)
+            </dd>
         </dl>
 
     </div>
 
     <div class="col-md-7">
+        @if (Model.PicturePath != null)
+        {
+            <div class="row">
 
-        <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <img id="frame" src="@Url.Content(@Model.PicturePath)" class="card-img-top">
+                        <div class="card-body">
 
-            
+                            <button class="btn btn-info" onclick="window.open('@Url.Content(@Model.PicturePath)', '_blank')">
+                                <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
+                            </button>
+                        </div>
+                    </div>
 
-        </div>
+                </div>
+            </div>
 
-
+        }
+        else
+        {
+            <div class="col-sm-6">
+                <h4>Nenhum documento associado</h4>
+            </div>
+        }
     </div>
 
 </div>

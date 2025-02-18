@@ -17,7 +17,7 @@ namespace PortalEquador.Domain.Trainning.ViewModels
         [Display(Name = StringConstants.Display.DATE)]
         [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
         [DataType(DataType.Date)]
-        public DateTime? Date { get; set; }
+        public DateTime? Date { get; set; } = DateTime.Now;
 
         [Display(Name = StringConstants.Display.OBSERVATION)]
         public string? Observation { get; set; }
@@ -37,10 +37,9 @@ namespace PortalEquador.Domain.Trainning.ViewModels
 
         public string? Extension { get; set; }
 
-        [Display(Name = StringConstants.Display.FILE)]
-        [Required(ErrorMessage = StringConstants.Error.MANDATORY_FILE)]
+        [Display(Name = StringConstants.Display.OPTIONAL_FILE)]
         [NotMapped]
-        public IFormFile ImageFile { get; set; }
+        public IFormFile? ImageFile { get; set; }
 
         public string? PicturePath { get; set; }
     }

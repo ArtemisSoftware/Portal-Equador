@@ -64,13 +64,15 @@ namespace PortalEquador.Controllers.DisciplinaryNotification
         // GET: DisciplinaryNotification/Details/5
         public async Task<IActionResult> Details(int identifier, string fullName)
         {
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
             var model = await repository.GetDetail (identifier);
             return View(model);
         }
 
-        [HttpPost, ActionName("DisciplinaryNotification")]
+        [HttpPost, ActionName("DeleteDisciplinaryNotification")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DisciplinaryNotification(int id, int identifier, string username)
+        public async Task<IActionResult> DeleteDisciplinaryNotification(int id, int identifier, string username)
         {
             await deleteDisciplinaryNotificationUseCase.Invoke(id);
             return RedirectToAction(nameof(Index), new { identifier = identifier, fullName = username });

@@ -110,6 +110,48 @@ namespace PortalEquador.Util
             return path;
         }
 
+        public static string? GetImagePath(
+            IWebHostEnvironment hostEnvironment,
+            FolderType folder,
+            int personaInformationId,
+            int imageId
+            )
+        {
+            string imageErrorPath = GetFileFullPath(FolderType.Placeholder, ImageConstants.Placeholder.NO_IMAGE.ToString());
+            string root = hostEnvironment.WebRootPath + folder.GetFullPath() + "/" + personaInformationId;
+            string folderPath = Path.Combine(root);
+
+            try
+            {
+                var images = Directory.GetFiles(folderPath, "*.*", SearchOption.TopDirectoryOnly)
+                      .ToList();
+
+                if (images.Count > 0)
+                {
+                    var image = images.Find(item => item.Contains("\\" + imageId.ToString() + "."));
+
+                    if (image != null)
+                    {
+                        var extension = image.Split(".")[1];
+                        return GetFileFullPath(folder, personaInformationId, imageId.ToString(), "." + extension);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                return imageErrorPath;
+            }
+        }
+
+
         public static string GetImageExtension(IFormFile imageFile)
         {
             return Path.GetExtension(imageFile.FileName);
@@ -257,45 +299,6 @@ namespace PortalEquador.Util
             }
         }
 
-
-        public static string? GetMedicalExamImagePath(IWebHostEnvironment hostEnvironment, int personaInformationId, int examId)
-        {
-            string imageErrorPath = GetFileFullPath(FolderType.Placeholder, ImageConstants.Placeholder.NO_IMAGE.ToString());
-
-            string root = hostEnvironment.WebRootPath + FolderType.MedicalExam.GetFullPath() + "/" + personaInformationId;
-            string folderPath = Path.Combine(root);
-
-            try
-            {
-                var images = Directory.GetFiles(folderPath, "*.*", SearchOption.TopDirectoryOnly)
-                      //.Where(s => s.Contains(GroupTypesConstants.ItemFromGroup.Documents.MEDICAL_EXAM.ToString()))
-                      .ToList();
-
-                if (images.Count > 0)
-                {
-
-                    var image = images.Find(item => item.Contains("\\" + examId.ToString() + "."));
-
-                    if (image != null) {
-
-                        var extension = image.Split(".")[1];
-                        return GetFileFullPath(FolderType.MedicalExam, personaInformationId, examId.ToString(), "." + extension);
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (DirectoryNotFoundException ex)
-            {
-                return imageErrorPath;
-            }
-        }
 
 
         public static string GetProfileImagePath(IWebHostEnvironment hostEnvironment, int personaInformationId)

@@ -36,7 +36,7 @@ namespace PortalEquador.Domain.DisciplinaryNotification.UseCases
                         FullName = model.FullName,
                         ImageFile = model.ImageFile,
                         DocumentTypeId = ItemFromGroup.Documents.DISCIPLINARY_NOTIFICATION,
-                        SubTypeId = model.NotificationId,
+                        SubTypeId = disciplinaryNotificationId,
                         ParentId = disciplinaryNotificationId,
                         Extension = ImagesUtil.GetImageExtension(model.ImageFile)
                     };

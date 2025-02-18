@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using PortalEquador.Data.DisciplinaryNotification.Entity;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.MedicalExam.Entity;
-using PortalEquador.Domain.DisciplinaryNotification.ViewModels;
-using PortalEquador.Domain.Education.School.ViewModels;
-using PortalEquador.Domain.GroupTypes.ViewModels;
-using PortalEquador.Domain.Languages.ViewModels;
 using PortalEquador.Domain.MedicalExam.Repository;
 using PortalEquador.Domain.MedicalExam.ViewModels;
 using PortalEquador.Util;
+using PortalEquador.Util.EnumTypes;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Data.MedicalExam.Repository
@@ -33,7 +29,7 @@ namespace PortalEquador.Data.MedicalExam.Repository
                 .ToListAsync();
 
             var models = mapper.Map<List<MedicalExamViewModel>>(result);
-            models.ForEach(item => item.PicturePath = ImagesUtil.GetMedicalExamImagePath(hostEnvironment, item.PersonaInformationId, item.Id));
+            models.ForEach(item => item.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.MedicalExam, item.PersonaInformationId, item.Id));
             return models ;
         }
 
@@ -68,7 +64,7 @@ namespace PortalEquador.Data.MedicalExam.Repository
                .FirstAsync();
 
             var model = mapper.Map<MedicalExamViewModel>(result);
-            model.PicturePath = ImagesUtil.GetMedicalExamImagePath(hostEnvironment, model.PersonaInformationId, model.Id);
+            model.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.MedicalExam, model.PersonaInformationId, model.Id);
             return model;
         }
 

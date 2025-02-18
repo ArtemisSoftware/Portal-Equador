@@ -1,6 +1,7 @@
 ﻿using PortalEquador.Domain.Document.Repository;
 using PortalEquador.Domain.MedicalExam.Repository;
 using PortalEquador.Domain.Trainning.Repository;
+using PortalEquador.Util.EnumTypes;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Domain.Trainning.UseCases
@@ -17,7 +18,7 @@ namespace PortalEquador.Domain.Trainning.UseCases
 
             if (document != null)
             {
-                await documentRepository.DeleteDocument(document.PersonaInformationId, document);
+                await documentRepository.DeleteDocument(FolderType.Trainning, document.PersonaInformationId, trainningId, document);
             }
         }
     }

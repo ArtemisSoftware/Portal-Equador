@@ -1,6 +1,7 @@
 ﻿using PortalEquador.Domain.DisciplinaryNotification.Repository;
 using PortalEquador.Domain.Document.Repository;
 using PortalEquador.Domain.MedicalExam.Repository;
+using PortalEquador.Util.EnumTypes;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Domain.DisciplinaryNotification.UseCases
@@ -17,7 +18,7 @@ namespace PortalEquador.Domain.DisciplinaryNotification.UseCases
 
             if (document != null)
             {
-                await documentRepository.DeleteDocument(document.PersonaInformationId, document);
+                await documentRepository.DeleteDocument(FolderType.DisciplinaryNotification, document.PersonaInformationId, disciplinaryNotificationRepositoryId, document);
             }
         }
     }
