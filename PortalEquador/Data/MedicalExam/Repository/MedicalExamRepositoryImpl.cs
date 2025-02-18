@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.DisciplinaryNotification.Entity;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.MedicalExam.Entity;
 using PortalEquador.Domain.DisciplinaryNotification.ViewModels;
 using PortalEquador.Domain.Education.School.ViewModels;
 using PortalEquador.Domain.GroupTypes.ViewModels;
+using PortalEquador.Domain.Languages.ViewModels;
 using PortalEquador.Domain.MedicalExam.Repository;
 using PortalEquador.Domain.MedicalExam.ViewModels;
+using PortalEquador.Util;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Data.MedicalExam.Repository
@@ -21,21 +24,17 @@ namespace PortalEquador.Data.MedicalExam.Repository
     {
         public async Task<List<MedicalExamViewModel>> GetAll(int personalInformationId)
         {
-            var list = new List<MedicalExamViewModel>();
-            list.Add(
-                new MedicalExamViewModel {
-                    Id = 1,
-                    Date =  DateTime.Now,
-                    PersonaInformationId = 1,
-                    FullName = "The guy",
-                    Exam = new GroupItemViewModel
-                    {
-                        Id = 1,
-                        Description = "EXAM1"
-                    }
-                }
-                );
-            return list; 
+
+            var result = await context.MedicalExamEntity
+                .Include(d => d.ExamGroupItemEntity)
+                .Include(d => d.PersonalInformationEntity)
+                .Where(item => item.PersonalInformationId == personalInformationId)
+                .OrderByDescending(item => item.Date)
+                .ToListAsync();
+
+            var models = mapper.Map<List<MedicalExamViewModel>>(result);
+            models.ForEach(item => item.PicturePath = ImagesUtil.GetMedicalExamImagePath(hostEnvironment, item.PersonaInformationId, item.Id));
+            return models ;
         }
 
         public async Task<MedicalExamCreateViewModel> GetCreateModel(int personalInformationId, string fullName)
@@ -61,18 +60,16 @@ namespace PortalEquador.Data.MedicalExam.Repository
 
         public async Task<MedicalExamViewModel> GetDetail(int id)
         {
-            return new MedicalExamViewModel
-            {
-                Id = 1,
-                Date = DateTime.Now,
-                PersonaInformationId = 1,
-                FullName = "The guy",
-                Exam = new GroupItemViewModel
-                {
-                    Id = 1,
-                    Description = "EXAM1"
-                }
-            };
+            var result = await context.MedicalExamEntity
+               .Include(d => d.ExamGroupItemEntity)
+               .Include(d => d.PersonalInformationEntity)
+                .Include(d => d.ApplicationUserEntity)
+               .Where(item => item.Id == id)
+               .FirstAsync();
+
+            var model = mapper.Map<MedicalExamViewModel>(result);
+            model.PicturePath = ImagesUtil.GetMedicalExamImagePath(hostEnvironment, model.PersonaInformationId, model.Id);
+            return model;
         }
 
         public async Task<MedicalExamCreateViewModel> GetMedicalExam(int id)

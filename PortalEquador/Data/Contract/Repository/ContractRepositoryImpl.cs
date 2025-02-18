@@ -8,6 +8,7 @@ using PortalEquador.Domain.PersonalInformation.ViewModels;
 using PortalEquador.Util.Constants;
 using PortalEquador.Util;
 using Microsoft.EntityFrameworkCore;
+using PortalEquador.Domain.Curriculum.ViewModels;
 
 namespace PortalEquador.Data.Contract.Repository
 {
@@ -31,6 +32,7 @@ namespace PortalEquador.Data.Contract.Repository
                         select new ContractViewModel
                         {
                             Id = personal.Id,
+                            PersonaInformationId = personal.Id,
                             FullName = personal.FirstName + " " + personal.LastName,   
                             ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, personal.Id)
                         };
@@ -39,125 +41,60 @@ namespace PortalEquador.Data.Contract.Repository
 
         public async Task<ContractDashboardViewModel> GetDashboard(int id)
         {
-            /*
-var query = from personal in context.PersonalInformationEntity
-                        join docCount in
-                            (from document in context.DocumentEntity
-                             where document.PersonalInformationId == id
-                             select document).GroupBy(d => d.PersonalInformationId)
+
+            var query = from personal in context.PersonalInformationEntity
+                        join medicalExamCount in
+                            (from medicalExam in context.MedicalExamEntity
+                             where medicalExam.PersonalInformationId == id
+                             select medicalExam).GroupBy(d => d.PersonalInformationId)
                             .Select(grouped => new
                             {
                                 PersonalInformationId = grouped.Key,
                                 OrderDetailCount = grouped.Count()
                             })
-                        on personal.Id equals docCount.PersonalInformationId into resultDocs
-                        from resultDocuments in resultDocs.DefaultIfEmpty()
+                        on personal.Id equals medicalExamCount.PersonalInformationId into resultMd
+                        from resultMedicalExams in resultMd.DefaultIfEmpty()
 
-                        join driversLicenceCount in
-                            (from driversLicence in context.DriversLicenceEntity
-                             where driversLicence.PersonalInformationId == id
-                             select driversLicence).GroupBy(d => d.PersonalInformationId)
+                        join trainningCount in
+                            (from trainning in context.TrainningEntity
+                             where trainning.PersonalInformationId == id
+                             select trainning).GroupBy(d => d.PersonalInformationId)
                             .Select(grouped => new
                             {
                                 PersonalInformationId = grouped.Key,
-                                DriversLicenceCount = grouped.Count()
+                                OrderDetailCount = grouped.Count()
                             })
-                        on personal.Id equals driversLicenceCount.PersonalInformationId into resultDriversLicence
-                        from resultDriversLicences in resultDriversLicence.DefaultIfEmpty()
+                        on personal.Id equals trainningCount.PersonalInformationId into resultTrn
+                        from resultTrainnings in resultTrn.DefaultIfEmpty()
 
-                        join languageCount in
-                            (from language in context.LanguageEntity
-                             where language.PersonalInformationId == id
-                             select language).GroupBy(d => d.PersonalInformationId)
+                        join disciplinaryNotificationCount in
+                            (from disciplinaryNotification in context.TrainningEntity
+                             where disciplinaryNotification.PersonalInformationId == id
+                             select disciplinaryNotification).GroupBy(d => d.PersonalInformationId)
                             .Select(grouped => new
                             {
                                 PersonalInformationId = grouped.Key,
-                                LanguageCount = grouped.Count()
+                                OrderDetailCount = grouped.Count()
                             })
-                        on personal.Id equals languageCount.PersonalInformationId into resultLanguage
-                        from resultLanguages in resultLanguage.DefaultIfEmpty()
+                        on personal.Id equals disciplinaryNotificationCount.PersonalInformationId into resultDN
+                        from resultDisciplinaryNotifications in resultDN.DefaultIfEmpty()
 
-                        join professionalCompetenceCount in
-                            (from professionalCompetence in context.ProfessionalCompetenceEntity
-                             where professionalCompetence.PersonalInformationId == id
-                             select professionalCompetence).GroupBy(d => d.PersonalInformationId)
-                            .Select(grouped => new
-                            {
-                                PersonalInformationId = grouped.Key,
-                                ProfessionalCompetenceCount = grouped.Count()
-                            })
-                        on personal.Id equals professionalCompetenceCount.PersonalInformationId into resultProfessionalCompetence
-                        from resultProfessionalCompetences in resultProfessionalCompetence.DefaultIfEmpty()
-
-                        join professionalExperienceCount in
-                            (from professionalExperience in context.ProfessionalExperienceEntity
-                             where professionalExperience.PersonalInformationId == id
-                             select professionalExperience).GroupBy(d => d.PersonalInformationId)
-                            .Select(grouped => new
-                            {
-                                PersonalInformationId = grouped.Key,
-                                Count = grouped.Count()
-                            })
-                        on personal.Id equals professionalExperienceCount.PersonalInformationId into resultProfessionalExperience
-                        from resultProfessionalExperiences in resultProfessionalExperience.DefaultIfEmpty()
-
-                        join schoolCount in
-                            (from school in context.SchoolEntity
-                             where school.PersonalInformationId == id
-                             select school).GroupBy(d => d.PersonalInformationId)
-                            .Select(grouped => new
-                            {
-                                PersonalInformationId = grouped.Key,
-                                Count = grouped.Count()
-                            })
-                        on personal.Id equals schoolCount.PersonalInformationId into resultSchool
-                        from resultSchools in resultSchool.DefaultIfEmpty()
-
-                        join universityCount in
-                            (from school in context.UniversityEntity
-                             where school.PersonalInformationId == id
-                             select school).GroupBy(d => d.PersonalInformationId)
-                            .Select(grouped => new
-                            {
-                                PersonalInformationId = grouped.Key,
-                                Count = grouped.Count()
-                            })
-                        on personal.Id equals universityCount.PersonalInformationId into resultUniversity
-                        from resultUniversities in resultUniversity.DefaultIfEmpty()
 
                         where personal.Id == id
 
-                        select new CurriculumDashboardViewModel
+                        select new  ContractDashboardViewModel
                         {
-                            Id = id,
+                            Id = 1,
+                            PersonaInformationId = personal.Id,
                             FullName = personal.FirstName + " " + personal.LastName,
-                            IsPersonalInformationComplete = (personal.Id != 0),
-                            TotalLanguages = resultLanguages.LanguageCount == null ? 0 : resultLanguages.LanguageCount,
-                            TotalDocuments = resultDocuments.OrderDetailCount == null ? 0 : resultDocuments.OrderDetailCount,
-                            TotalProfessionalCompetences = resultProfessionalCompetences.ProfessionalCompetenceCount == null ? 0 : resultProfessionalCompetences.ProfessionalCompetenceCount,
-                            TotalProfessionalExperiences = resultProfessionalExperiences.Count == null ? 0 : resultProfessionalExperiences.Count,
-                            TotalSchoolEducation = resultSchools.Count == null ? 0 : resultSchools.Count,
-                            TotalUniversityEducation = resultUniversities.Count == null ? 0 : resultUniversities.Count,
-                            TotalDriversLicence = resultDriversLicences.DriversLicenceCount == null ? 0 : resultDriversLicences.DriversLicenceCount,
-                            ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, id)
+                            ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, id),
+                            TotalExams = resultMedicalExams.OrderDetailCount == null ? 0 : resultMedicalExams.OrderDetailCount,
+                            TotalDisciplinaryNotification = resultDisciplinaryNotifications.OrderDetailCount == null ? 0 : resultDisciplinaryNotifications.OrderDetailCount,
+                            TotalTrainning = resultTrainnings.OrderDetailCount == null ? 0 : resultTrainnings.OrderDetailCount,
                         };
 
             var result = await query.FirstOrDefaultAsync();
             return result;
-            */
-
-
-            var lolo = new ContractDashboardViewModel
-            {
-                Id = 1,
-                FullName = "Name",
-                ProfileImagePath = "",
-                TotalExams = 1,
-                TotalDisciplinaryNotification = 1,
-                TotalTrainning = 1,
-            };
-
-           return lolo;
         }
     }
 }

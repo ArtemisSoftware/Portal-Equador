@@ -67,6 +67,7 @@
 
             // O
             public const string ORAL_LEVEL = "Nível oral";
+            public const string OPTIONAL_FILE = "Ficheiro (*opcional)";
 
             // P
             public const string PROFESSIONAL_EXPERIENCE = "Experiência profissional";

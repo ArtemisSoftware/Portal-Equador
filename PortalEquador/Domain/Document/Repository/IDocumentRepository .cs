@@ -21,5 +21,6 @@ namespace PortalEquador.Domain.Document.Repository
 
         Task DeleteDocument(int personaInformationId, int documentTypeId);
         Task DeleteDocument(int personaInformationId, DocumentViewModel model);
+        Task DeleteDocument(FolderType folder, int personaInformationId, int fileId, DocumentViewModel model);
     }
 }

@@ -20,6 +20,12 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.Exam, opt => opt.MapFrom(src => src.ExamGroupItemEntity))
                 .ReverseMap();
 
+            CreateMap<MedicalExamEntity, MedicalExamCreateViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.ExamId, opt => opt.MapFrom(src => src.ExamId))
+                .ReverseMap();
+
             CreateMap<MedicalExamEntity, MedicalExamDetailViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
@@ -30,6 +36,12 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 .ForMember(dest => dest.Trainning, opt => opt.MapFrom(src => src.TrainningGroupItemEntity))
+                .ReverseMap();
+
+            CreateMap<TrainningEntity, TrainningCreateViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.TrainningId, opt => opt.MapFrom(src => src.TrainningId))
                 .ReverseMap();
 
             CreateMap<TrainningEntity, TrainningDetailViewModel>()
@@ -43,6 +55,13 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 .ForMember(dest => dest.Notification, opt => opt.MapFrom(src => src.NotificationGroupItemEntity))
                 .ForMember(dest => dest.AccidentLevel, opt => opt.MapFrom(src => src.AccidentLevelGroupItemEntity))
+                .ReverseMap();
+
+            CreateMap<DisciplinaryNotificationEntity, DisciplinaryNotificationCreateViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.NotificationId, opt => opt.MapFrom(src => src.NotificationId))
+                .ForMember(dest => dest.AccidentLevelId, opt => opt.MapFrom(src => src.AccidentLevelId))
                 .ReverseMap();
 
             CreateMap<DisciplinaryNotificationEntity, DisciplinaryNotificationDetailViewModel>()

@@ -18,7 +18,7 @@ namespace PortalEquador.Domain.MedicalExam.ViewModels
         [Display(Name = StringConstants.Display.DATE)]
         [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
         [DataType(DataType.Date)]
-        public DateTime? Date { get; set; }
+        public DateTime? Date { get; set; } = DateTime.Now;
 
         [Display(Name = StringConstants.Display.EXAM)]
         public GroupItemViewModel? Exam { get; set; }
@@ -36,6 +36,7 @@ namespace PortalEquador.Domain.MedicalExam.ViewModels
         [NotMapped]
         public IFormFile ImageFile { get; set; }
 
+        [Display(Name = StringConstants.Display.FILE)]
         public string? PicturePath { get; set; }
     }
 }

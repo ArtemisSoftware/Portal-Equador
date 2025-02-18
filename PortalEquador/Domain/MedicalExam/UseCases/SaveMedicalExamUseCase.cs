@@ -17,9 +17,12 @@ namespace PortalEquador.Domain.MedicalExam.UseCases
         public async Task Invoke(MedicalExamCreateViewModel model)
         {
             var medicalExamId = await medicalExamRepository.Save(model);
-            var document = await documentRepository.GetDocumentByParentId(medicalExamId, ItemFromGroup.Documents.MEDICAL_EXAM);
 
-            await SaveDocument(model, medicalExamId, document);
+            if (model.ImageFile != null)
+            {
+                var document = await documentRepository.GetDocumentByParentId(medicalExamId, ItemFromGroup.Documents.MEDICAL_EXAM);
+                await SaveDocument(model, medicalExamId, document);
+            }
         }
 
  
@@ -35,7 +38,7 @@ namespace PortalEquador.Domain.MedicalExam.UseCases
                         FullName = model.FullName,
                         ImageFile = model.ImageFile,
                         DocumentTypeId = ItemFromGroup.Documents.MEDICAL_EXAM,
-                        SubTypeId = model.ExamId,
+                        SubTypeId = medicalExamId,
                         ParentId = medicalExamId,
                         Extension = ImagesUtil.GetImageExtension(model.ImageFile)
                     };

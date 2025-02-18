@@ -81,9 +81,9 @@ namespace PortalEquador.Util.Constants
                 public static readonly int PROFILE_PICTURE = (new Item { Debug = 7, Production = 2 }).Value;
                 public static readonly int DRIVERS_LICENCE = (new Item { Debug = 43, Production = 39 }).Value;
                 public static readonly int DRIVERS_LICENCE_PROVISIONAL = (new Item { Debug = 44, Production = 69 }).Value;
-                public static readonly int MEDICAL_EXAM = (new Item { Debug = 45, Production = 69 }).Value;
-                public static readonly int TRAINNIG = (new Item { Debug = 45, Production = 69 }).Value;
-                public static readonly int DISCIPLINARY_NOTIFICATION = (new Item { Debug = 45, Production = 69 }).Value;
+                public static readonly int MEDICAL_EXAM = (new Item { Debug = 65, Production = 69 }).Value;
+                public static readonly int TRAINNIG = (new Item { Debug = 66, Production = 69 }).Value;
+                public static readonly int DISCIPLINARY_NOTIFICATION = (new Item { Debug = 67, Production = 69 }).Value;
 
 
 

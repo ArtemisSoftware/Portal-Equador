@@ -36,9 +36,9 @@
                     <p class="card-text">Formulário para o registo de exames.</p>
                     @if (Model.TotalExams != 0)
                     {
-                        <a asp-controller="MedicalExam" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                        <a asp-controller="MedicalExam" asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
                     }
-                    <a asp-controller="MedicalExam" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+                    <a asp-controller="MedicalExam" asp-action="Create" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
                 </div>
             </div>
         </div>
@@ -51,9 +51,9 @@
                     <p class="card-text">Formulário para o registo de formações.</p>
                     @if (Model.TotalTrainning != 0)
                     {
-                        <a asp-controller="Trainning" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                        <a asp-controller="Trainning" asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
                     }
-                    <a asp-controller="Trainning" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+                    <a asp-controller="Trainning" asp-action="Create" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
                 </div>
             </div>
         </div>
@@ -66,9 +66,9 @@
                     <p class="card-text">Formulário para o registo de notificações disciplinares.</p>
                     @if (Model.TotalDisciplinaryNotification != 0)
                     {
-                        <a asp-controller="DisciplinaryNotification" asp-action="Index" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                        <a asp-controller="DisciplinaryNotification" asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
                     }
-                    <a asp-controller="DisciplinaryNotification" asp-action="Create" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+                    <a asp-controller="DisciplinaryNotification" asp-action="Create" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
                 </div>
             </div>
         </div>

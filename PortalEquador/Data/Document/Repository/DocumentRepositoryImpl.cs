@@ -196,6 +196,12 @@ namespace PortalEquador.Data.Document.Repository
             }
         }
 
+        public async Task DeleteDocument(FolderType folder, int personaInformationId, int fileId, DocumentViewModel model)
+        {
+            ImagesUtil.DeleteImage_(hostEnvironment, folder,  personaInformationId, fileId, model);
+            await DeleteAsync(model.Id);
+        }
+
         public async Task DeleteDocument(int personaInformationId, DocumentViewModel model)
         {
             ImagesUtil.DeleteImage_(hostEnvironment, model);

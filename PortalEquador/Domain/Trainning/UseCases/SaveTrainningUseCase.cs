@@ -18,9 +18,12 @@ namespace PortalEquador.Domain.Trainning.UseCases
         public async Task Invoke(TrainningCreateViewModel model)
         {
             var trainningId = await trainningRepository.Save(model);
-            var document = await documentRepository.GetDocumentByParentId(trainningId, ItemFromGroup.Documents.TRAINNIG);
 
-            await SaveDocument(model, trainningId, document);
+            if(model.ImageFile != null)
+            {
+                var document = await documentRepository.GetDocumentByParentId(trainningId, ItemFromGroup.Documents.TRAINNIG);
+                await SaveDocument(model, trainningId, document);
+            }
         }
 
 

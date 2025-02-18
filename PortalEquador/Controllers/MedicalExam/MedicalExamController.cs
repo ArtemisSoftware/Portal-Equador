@@ -52,6 +52,8 @@ namespace PortalEquador.Controllers.MedicalExam
 
         public async Task<IActionResult> Details(int identifier, string fullName)
         {
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
             var model = await repository.GetDetail(identifier);
             return View(model);
         }

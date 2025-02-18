@@ -5,6 +5,7 @@ namespace PortalEquador.Domain.Contract.ViewModels
     public class ContractDashboardViewModel : ViewModel
     {
         public int Id { get; set; }
+        public int PersonaInformationId { get; set; }
 
         public required string FullName { get; set; }
 

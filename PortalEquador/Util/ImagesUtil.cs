@@ -103,6 +103,13 @@ namespace PortalEquador.Util
             return path;
         }
 
+        private static string GetImagePath(IWebHostEnvironment hostEnvironment, FolderType folder, int personalInformatiId, int imageId, string extension, DocumentViewModel document)
+        {
+            string root = GetRootDirectory(hostEnvironment, document, folder);
+            string path = Path.Combine(root, imageId.ToString() + extension);
+            return path;
+        }
+
         public static string GetImageExtension(IFormFile imageFile)
         {
             return Path.GetExtension(imageFile.FileName);
@@ -123,7 +130,16 @@ namespace PortalEquador.Util
                     return GetImageId(document) + document.Extension; 
 
                 case FolderType.DriversLicence:
-                    return GetImageId(document) + document.Extension; ;
+                    return GetImageId(document) + document.Extension;
+
+                case FolderType.Trainning:
+                    return GetImageId(document) + document.Extension;
+
+                case FolderType.DisciplinaryNotification:
+                    return GetImageId(document) + document.Extension;
+
+                case FolderType.MedicalExam:
+                    return GetImageId(document) + document.Extension;
 
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -203,6 +219,18 @@ namespace PortalEquador.Util
             {
                 return model.SubTypeId.ToString() + ImageConstants.NameSuffix.DRIVERS_LICENCE_PROVISIONAL;
             }
+            else if (model.DocumentTypeId == ItemFromGroup.Documents.TRAINNIG)
+            {
+                return ((int)model.SubTypeId).ToString();
+            }
+            else if (model.DocumentTypeId == ItemFromGroup.Documents.MEDICAL_EXAM)
+            {
+                return ((int)model.SubTypeId).ToString();
+            }
+            else if (model.DocumentTypeId == ItemFromGroup.Documents.DISCIPLINARY_NOTIFICATION)
+            {
+                return ((int)model.SubTypeId).ToString();
+            }
             else
             {
                 return model.DocumentTypeId.ToString();
@@ -213,12 +241,62 @@ namespace PortalEquador.Util
         {
             FolderType folder = GetFolder(document);
             string path = GetImagePath(hostEnvironment, document, folder);
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+
+        public static void DeleteImage_(IWebHostEnvironment hostEnvironment, FolderType folder, int personaInformationId, int fileId, DocumentViewModel document)
+        {
+            string path = GetImagePath(hostEnvironment, folder, personaInformationId, fileId, document.Extension, document);
 
             if (File.Exists(path))
             {
                 File.Delete(path);
             }
         }
+
+
+        public static string? GetMedicalExamImagePath(IWebHostEnvironment hostEnvironment, int personaInformationId, int examId)
+        {
+            string imageErrorPath = GetFileFullPath(FolderType.Placeholder, ImageConstants.Placeholder.NO_IMAGE.ToString());
+
+            string root = hostEnvironment.WebRootPath + FolderType.MedicalExam.GetFullPath() + "/" + personaInformationId;
+            string folderPath = Path.Combine(root);
+
+            try
+            {
+                var images = Directory.GetFiles(folderPath, "*.*", SearchOption.TopDirectoryOnly)
+                      //.Where(s => s.Contains(GroupTypesConstants.ItemFromGroup.Documents.MEDICAL_EXAM.ToString()))
+                      .ToList();
+
+                if (images.Count > 0)
+                {
+
+                    var image = images.Find(item => item.Contains("\\" + examId.ToString() + "."));
+
+                    if (image != null) {
+
+                        var extension = image.Split(".")[1];
+                        return GetFileFullPath(FolderType.MedicalExam, personaInformationId, examId.ToString(), "." + extension);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                return imageErrorPath;
+            }
+        }
+
 
         public static string GetProfileImagePath(IWebHostEnvironment hostEnvironment, int personaInformationId)
         {
