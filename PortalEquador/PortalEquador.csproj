@@ -23,9 +23,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\curriculum\" />
-    <Folder Include="wwwroot\images\disciplinarynotification\4\" />
     <Folder Include="wwwroot\images\driverslicence\" />
-    <Folder Include="wwwroot\images\medicalexam\" />
   </ItemGroup>
 
 </Project>

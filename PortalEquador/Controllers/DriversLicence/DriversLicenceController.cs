@@ -2,6 +2,7 @@
 using PortalEquador.Domain.DriversLicence.Repository;
 using PortalEquador.Domain.DriversLicence.UseCases;
 using PortalEquador.Domain.DriversLicence.ViewModels;
+using PortalEquador.Domain.MedicalExam.UseCases;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 
@@ -16,7 +17,8 @@ namespace PortalEquador.Controllers.DriversLicence
         GetDriversLicenceRenewUseCase getDriversLicenceRenewUseCase,
         GetDriversLicenceProvisionalUseCase getDriversLicenceProvisionalUseCase,
         GetDriversLicenceProvisionalRenewUseCase getDriversLicenceProvisionalRenewUseCase,
-        GetDriversLicenceUseCase getDriversLicenceUseCase
+        GetDriversLicenceUseCase getDriversLicenceUseCase,
+        DeleteDriversLicenceUseCase deleteDriversLicenceUseCase
      ) : Controller
     {
 
@@ -205,6 +207,15 @@ namespace PortalEquador.Controllers.DriversLicence
         {
             await saveProvisionalUseCase.Invoke(model);
             return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+        }
+
+
+        [HttpPost, ActionName("DeleteDriversLicence")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteDriversLicence(int id, int identifier, string username)
+        {
+            await deleteDriversLicenceUseCase.Invoke(id, identifier);
+            return RedirectToAction(nameof(Index), new { identifier = identifier, fullName = username });
         }
 
 

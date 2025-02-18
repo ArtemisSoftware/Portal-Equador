@@ -24,7 +24,7 @@ namespace PortalEquador.Data.Document.Repository
                 .Include(d => d.DocumentTypeGroupItemEntity)
                 .Include(d => d.PersonalInformationEntity)
                .Include(d => d.SubTypeGroupItemEntity)
-                .Where(item => item.PersonalInformationId == PersonalInformationId)
+                .Where(item => item.PersonalInformationId == PersonalInformationId && !ItemFromGroup.Documents.GetContractDocuments().Contains(item.DocumentTypeId))
                 .ToListAsync();
 
             var models = new List<DocumentViewModel>();

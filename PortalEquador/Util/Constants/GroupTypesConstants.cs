@@ -1,8 +1,4 @@
-﻿using PortalEquador.Domain.MechanicalWorkshop.Scheduler;
-using System;
-using System.Diagnostics;
-
-namespace PortalEquador.Util.Constants
+﻿namespace PortalEquador.Util.Constants
 {
     public static class GroupTypesConstants
     {
@@ -88,16 +84,26 @@ namespace PortalEquador.Util.Constants
 
 
                 private static List<int> driversLicenceDocuments = new List<int>();
+                private static List<int> contractDocuments = new List<int>();
 
                 static Documents()
                 {
                     driversLicenceDocuments.Add(DRIVERS_LICENCE);
                     driversLicenceDocuments.Add(DRIVERS_LICENCE_PROVISIONAL);
+
+                    contractDocuments.Add(MEDICAL_EXAM);
+                    contractDocuments.Add(TRAINNIG);
+                    contractDocuments.Add(DISCIPLINARY_NOTIFICATION);
                 }
 
                 public static List<int> GetDriversLicenceDocuments()
                 {
                     return driversLicenceDocuments;
+                }
+
+                public static List<int> GetContractDocuments()
+                {
+                    return contractDocuments;
                 }
             }
 
