@@ -416,8 +416,8 @@ namespace PortalEquador.Data
             });
             //-----------------------------###----------------------------
 
-
-
+            builder.ApplyConfiguration(new UserSeedNewUsers1Configuration());
+            builder.ApplyConfiguration(new UserSeedNewUsers1RoleConfiguration());
         }
 
         public DbSet<GroupEntity> GroupEntity { get; set; }

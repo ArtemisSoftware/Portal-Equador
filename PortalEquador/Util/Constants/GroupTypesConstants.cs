@@ -59,9 +59,9 @@
             public static readonly int WASH_LANE = (new Item { Debug = 21, Production = 22 }).Value;
 
             public static readonly int EXAM = (new Item { Debug = 22, Production = 23 }).Value;
-            public static readonly int TRAINNING = (new Item { Debug = 23, Production = 23 }).Value;
-            public static readonly int ACCIDENT_LEVEL = (new Item { Debug = 24, Production = 23 }).Value;
-            public static readonly int NOTIFICATIONS = (new Item { Debug = 25, Production = 23 }).Value;
+            public static readonly int TRAINNING = (new Item { Debug = 23, Production = 24 }).Value;
+            public static readonly int ACCIDENT_LEVEL = (new Item { Debug = 24, Production = 26 }).Value;
+            public static readonly int NOTIFICATIONS = (new Item { Debug = 25, Production = 25 }).Value;
         }
 
         public static class ItemFromGroup
@@ -77,9 +77,9 @@
                 public static readonly int PROFILE_PICTURE = (new Item { Debug = 7, Production = 2 }).Value;
                 public static readonly int DRIVERS_LICENCE = (new Item { Debug = 43, Production = 39 }).Value;
                 public static readonly int DRIVERS_LICENCE_PROVISIONAL = (new Item { Debug = 44, Production = 69 }).Value;
-                public static readonly int MEDICAL_EXAM = (new Item { Debug = 65, Production = 69 }).Value;
-                public static readonly int TRAINNIG = (new Item { Debug = 66, Production = 69 }).Value;
-                public static readonly int DISCIPLINARY_NOTIFICATION = (new Item { Debug = 67, Production = 69 }).Value;
+                public static readonly int MEDICAL_EXAM = (new Item { Debug = 65, Production = 296 }).Value;
+                public static readonly int TRAINNIG = (new Item { Debug = 66, Production = 298 }).Value;
+                public static readonly int DISCIPLINARY_NOTIFICATION = (new Item { Debug = 67, Production = 297 }).Value;
 
 
 
