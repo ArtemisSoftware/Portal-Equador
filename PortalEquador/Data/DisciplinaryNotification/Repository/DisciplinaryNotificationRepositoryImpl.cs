@@ -23,7 +23,7 @@ namespace PortalEquador.Data.DisciplinaryNotification.Repository
             var result = await context.DisciplinaryNotificationEntity
                           .Include(d => d.AccidentLevelGroupItemEntity)
                           .Include(d => d.NotificationGroupItemEntity)
-                            .Include(d => d.PersonalInformationEntity)
+                          .Include(d => d.PersonalInformationEntity)
                           .Where(item => item.PersonalInformationId == personalInformationId)
                           .OrderByDescending(item => item.Date)
                           .ToListAsync();
