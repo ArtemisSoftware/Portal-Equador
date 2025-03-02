@@ -29,7 +29,7 @@ namespace PortalEquador.Data.MedicalExam.Repository
                 .ToListAsync();
 
             var models = mapper.Map<List<MedicalExamViewModel>>(result);
-            models.ForEach(item => item.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.MedicalExam, item.PersonaInformationId, item.Id));
+            models.ForEach(item => item.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.MedicalExam, item.PersonaInformationId, item.Id, true));
             return models ;
         }
 
@@ -64,7 +64,7 @@ namespace PortalEquador.Data.MedicalExam.Repository
                .FirstAsync();
 
             var model = mapper.Map<MedicalExamViewModel>(result);
-            model.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.MedicalExam, model.PersonaInformationId, model.Id);
+            model.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.MedicalExam, model.PersonaInformationId, model.Id, true);
             return model;
         }
 

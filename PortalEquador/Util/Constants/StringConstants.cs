@@ -14,6 +14,9 @@
             public const string ACCIDENT_LEVEL = "Nível do acidente";
             public const string ADMIN = "Administradores";
 
+            //B
+            public const string BULLETIN_NUMBER = "Buletim nº";
+
             // C
             public const string CONTRACT = "Contrato";
             public const string CONTRACTS = "Contratos";
@@ -84,6 +87,7 @@
 
             //  T
             public const string TELEPHONE = "Telefone";
+            public const string TEST_RESULT = "Resultado do teste";
             public const string TRAINNING = "Formação";
             public const string TRAINNING_NATURE = "Natureza da formação";
 

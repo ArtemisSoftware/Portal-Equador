@@ -1,4 +1,5 @@
-﻿@model PortalEquador.Domain.DisciplinaryNotification.ViewModels.DisciplinaryNotificationViewModel
+﻿﻿@using PortalEquador.Util.Constants
+@model PortalEquador.Domain.DisciplinaryNotification.ViewModels.DisciplinaryNotificationViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -29,26 +30,70 @@
                 @Html.DisplayFor(model => model.Notification.Description)
             </dd>
 
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.AccidentLevel)
+            <dt class="col-sm-12">
+                <br />
             </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.AccidentLevel.Description)
-            </dd>
 
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Local)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Local)
-            </dd>
+            @if(Model.Notification.Id == GroupTypesConstants.ItemFromGroup.DisciplinaryNotification.ALCOOL)
+            {
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Bulletin)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Bulletin)
+                </dd>
 
-            <dt class="col-sm-4">
-                @Html.DisplayNameFor(model => model.Decision)
-            </dt>
-            <dd class="col-sm-8">
-                @Html.DisplayFor(model => model.Decision)
-            </dd>
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.AlcoolTestResult)
+                </dt>
+                <dd class="col-sm-8">
+
+                    @if (Model.isAlcoolTestPositive())
+                    {
+                        <span class="badge bg-danger">@Html.DisplayFor(model => model.AlcoolTestResult.Description)</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">@Html.DisplayFor(model => model.AlcoolTestResult.Description)</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-12">
+                    <br />
+                </dt>
+            }
+
+            @if (Model.Notification.Id == GroupTypesConstants.ItemFromGroup.DisciplinaryNotification.ACCIDENT)
+            {
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Local)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Local)
+                </dd>
+
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.AccidentLevel)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.AccidentLevel.Description)
+                </dd>
+
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Decision)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Decision)
+                </dd>
+
+                <dt class="col-sm-12">
+                    <br />
+                </dt>
+            }
+
+
+
+
 
             <dt class="col-sm-4">
                 @Html.DisplayNameFor(model => model.Observation)

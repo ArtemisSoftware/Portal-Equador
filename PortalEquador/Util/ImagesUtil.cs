@@ -114,7 +114,8 @@ namespace PortalEquador.Util
             IWebHostEnvironment hostEnvironment,
             FolderType folder,
             int personaInformationId,
-            int imageId
+            int imageId,
+            bool noErrorImage = false
             )
         {
             string imageErrorPath = GetFileFullPath(FolderType.Placeholder, ImageConstants.Placeholder.NO_IMAGE.ToString());
@@ -147,7 +148,13 @@ namespace PortalEquador.Util
             }
             catch (DirectoryNotFoundException ex)
             {
-                return imageErrorPath;
+                if (noErrorImage)
+                {
+                    return null;
+                } else {
+                    return imageErrorPath;
+                }
+                
             }
         }
 

@@ -28,7 +28,7 @@
                 @Html.DisplayNameFor(model => model.Notification)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AccidentLevel)
+                @Html.DisplayNameFor(model => model.Observation)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.PicturePath)
@@ -47,7 +47,7 @@
                     @Html.DisplayFor(modelItem => item.Notification.Description)
                 </td>
                 <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.AccidentLevel.Description)
+                    @Html.DisplayFor(modelItem => item.Observation)
                 </td>
                 <td class="align-middle">
                     @if (item.PicturePath != null)

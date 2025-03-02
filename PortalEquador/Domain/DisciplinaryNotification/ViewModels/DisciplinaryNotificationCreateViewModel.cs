@@ -40,8 +40,14 @@ namespace PortalEquador.Domain.DisciplinaryNotification.ViewModels
 
         public SelectList? AccidentLevels { get; set; }
 
+        [Display(Name = StringConstants.Display.TEST_RESULT)]
+        [Required]
+        public int AlcoolTestResultId { get; set; }
 
+        public SelectList? AlcoolTestResults { get; set; }
 
+        [Display(Name = StringConstants.Display.BULLETIN_NUMBER)]
+        public string? Bulletin { get; set; }
 
 
         public string? Extension { get; set; }

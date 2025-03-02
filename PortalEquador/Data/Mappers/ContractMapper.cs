@@ -55,6 +55,7 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 .ForMember(dest => dest.Notification, opt => opt.MapFrom(src => src.NotificationGroupItemEntity))
                 .ForMember(dest => dest.AccidentLevel, opt => opt.MapFrom(src => src.AccidentLevelGroupItemEntity))
+                .ForMember(dest => dest.AlcoolTestResult, opt => opt.MapFrom(src => src.AlcoolTestResultGroupItemEntity))
                 .ForMember(dest => dest.Decision, opt => opt.MapFrom(src => src.Decision))
                 .ReverseMap();
 
@@ -63,6 +64,7 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 .ForMember(dest => dest.NotificationId, opt => opt.MapFrom(src => src.NotificationId))
                 .ForMember(dest => dest.AccidentLevelId, opt => opt.MapFrom(src => src.AccidentLevelId))
+                .ForMember(dest => dest.AlcoolTestResultId, opt => opt.MapFrom(src => src.AlcoolTestResultId))
                 .ForMember(dest => dest.Decision, opt => opt.MapFrom(src => src.Decision))
                 .ReverseMap();
 
@@ -71,6 +73,7 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 .ForMember(dest => dest.Notification, opt => opt.MapFrom(src => src.NotificationGroupItemEntity))
                 .ForMember(dest => dest.AccidentLevel, opt => opt.MapFrom(src => src.AccidentLevelGroupItemEntity))
+                .ForMember(dest => dest.AlcoolTestResult, opt => opt.MapFrom(src => src.AlcoolTestResultGroupItemEntity))
                 .ForMember(dest => dest.Nature, opt => opt.MapFrom(src => src.Decision))
                 .ReverseMap();
         }

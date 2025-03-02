@@ -62,6 +62,7 @@
             public static readonly int TRAINNING = (new Item { Debug = 23, Production = 24 }).Value;
             public static readonly int ACCIDENT_LEVEL = (new Item { Debug = 24, Production = 26 }).Value;
             public static readonly int NOTIFICATIONS = (new Item { Debug = 25, Production = 25 }).Value;
+            public static readonly int ALCOOL_TEST_RESULT = (new Item { Debug = 26, Production = 28 }).Value;
         }
 
         public static class ItemFromGroup
@@ -70,6 +71,17 @@
             public static class Nationality
             {
                 public static readonly int ANGOLAN = (new Item{ Debug = 3, Production = 1 }).Value;
+            }
+
+            public static class DisciplinaryNotification
+            {
+                public static readonly int ALCOOL = (new Item { Debug = 309, Production = 1 }).Value;
+                public static readonly int ACCIDENT = (new Item { Debug = 316, Production = 1 }).Value;
+            }
+
+            public static class AlcoolTestResults
+            {
+                public static readonly int POSITIVE = (new Item { Debug = 319, Production = 1 }).Value;
             }
 
             public static class Documents

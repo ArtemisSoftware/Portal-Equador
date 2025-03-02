@@ -28,7 +28,7 @@ namespace PortalEquador.Data.Trainning.Repository
                           .ToListAsync();
 
             var models = mapper.Map<List<TrainningViewModel>>(result);
-            models.ForEach(item => item.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.Trainning, item.PersonaInformationId, item.Id));
+            models.ForEach(item => item.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.Trainning, item.PersonaInformationId, item.Id, true));
             return models;
         }
 
@@ -63,7 +63,7 @@ namespace PortalEquador.Data.Trainning.Repository
                .FirstAsync();
 
             var model = mapper.Map<TrainningViewModel>(result);
-            model.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.Trainning, model.PersonaInformationId, model.Id);
+            model.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.Trainning, model.PersonaInformationId, model.Id, true);
             return model;
         }
 

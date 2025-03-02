@@ -1,4 +1,5 @@
-﻿@model PortalEquador.Domain.DisciplinaryNotification.ViewModels.DisciplinaryNotificationCreateViewModel
+﻿﻿@using PortalEquador.Util.Constants
+@model PortalEquador.Domain.DisciplinaryNotification.ViewModels.DisciplinaryNotificationCreateViewModel
 
 
 @{
@@ -28,29 +29,49 @@
 
             <div class="form-group" id="Notification">
                 <label asp-for="NotificationId" class="control-label"></label>
-                <select asp-for="NotificationId" class="form-select" asp-items="Model.Notifications"></select>
+                <select asp-for="NotificationId" class="form-select" asp-items="Model.Notifications" onChange="NotificationSelect()" id="SelectNotification"></select>
             </div>
             <br />
 
-            <div class="mb-3">
-                <label asp-for="Local" class="control-label"></label>
-                <textarea asp-for="Local" class="form-control" rows="2"></textarea>
-                <span asp-validation-for="Local" class="text-danger"></span>
+            <div id="Accident">
+                <div class="mb-3">
+                    <label asp-for="Local" class="control-label"></label>
+                    <input asp-for="Local" class="form-control" />
+                    <span asp-validation-for="Local" class="text-danger"></span>
+                </div>
+                <div class="form-group" id="AccidentLevel">
+                    <label asp-for="AccidentLevelId" class="control-label"></label>
+                    <select asp-for="AccidentLevelId" class="form-select" asp-items="Model.AccidentLevels"></select>
+                </div>
+                <br />
+                <div class="mb-3">
+                    <label asp-for="Decision" class="control-label"></label>
+                    <textarea asp-for="Decision" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Decision" class="text-danger"></span>
+                </div>
+                <br />
             </div>
-            <br />
+            
 
-            <div class="mb-3">
-                <label asp-for="Decision" class="control-label"></label>
-                <textarea asp-for="Decision" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="Decision" class="text-danger"></span>
-            </div>
-            <br />
+ 
 
-            <div class="form-group" id="AccidentLevel">
-                <label asp-for="AccidentLevelId" class="control-label"></label>
-                <select asp-for="AccidentLevelId" class="form-select" asp-items="Model.AccidentLevels"></select>
+            <div id="Alcool">
+                <div class="form-group">
+                    <label asp-for="Bulletin" class="control-label"></label>
+                    <input asp-for="Bulletin" class="form-control" />
+                    <span asp-validation-for="Bulletin" class="text-danger"></span>
+                </div>
+
+                <br />
+
+                <div class="form-group" id="AlcoolTestResult">
+                    <label asp-for="AlcoolTestResultId" class="control-label"></label>
+                    <select asp-for="AlcoolTestResultId" class="form-select" asp-items="Model.AlcoolTestResults"></select>
+                </div>
+                <br />
             </div>
-            <br />
+
+            
 
             <div class="mb-3">
                 <label asp-for="Observation" class="control-label"></label>
@@ -92,6 +113,28 @@
             document.getElementById('formFile').value = null;
             frame.src = "";
         }
+        function NotificationSelect() {
+
+            var response = document.getElementById('SelectNotification').value;
+            var alcool = document.getElementById('Alcool');
+           var accident = document.getElementById('Accident');
+
+            const alcoolNotificationId = '@GroupTypesConstants.ItemFromGroup.DisciplinaryNotification.ALCOOL';
+            const accidentNotificationId = '@GroupTypesConstants.ItemFromGroup.DisciplinaryNotification.ACCIDENT';
+
+            accident.hidden = true
+            alcool.hidden = true
+           
+            if (response == alcoolNotificationId) {
+                alcool.hidden = false
+            }
+            if (response == accidentNotificationId) {
+                accident.hidden = false
+            }
+        }
+        window.onload = function () {
+            NotificationSelect()
+        };
     </script>
 }
 

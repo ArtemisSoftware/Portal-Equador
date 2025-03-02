@@ -35,6 +35,9 @@ namespace PortalEquador.Domain.DisciplinaryNotification.ViewModels
         [Display(Name = StringConstants.Display.TRAINNING_NATURE)]
         public string? Nature { get; set; }
 
+        [Display(Name = StringConstants.Display.TEST_RESULT)]
+        public GroupItemViewModel? AlcoolTestResult { get; set; }
+
 
         public string PicturePath => ImagesUtil.GetFilePath(PersonaInformationId, Notification.Id, Extension + "?v=123456");
     }

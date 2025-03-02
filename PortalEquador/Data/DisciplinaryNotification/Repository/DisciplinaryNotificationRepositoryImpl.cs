@@ -24,12 +24,13 @@ namespace PortalEquador.Data.DisciplinaryNotification.Repository
                           .Include(d => d.AccidentLevelGroupItemEntity)
                           .Include(d => d.NotificationGroupItemEntity)
                           .Include(d => d.PersonalInformationEntity)
+                          .Include(d => d.AlcoolTestResultGroupItemEntity)
                           .Where(item => item.PersonalInformationId == personalInformationId)
                           .OrderByDescending(item => item.Date)
                           .ToListAsync();
 
             var models = mapper.Map<List<DisciplinaryNotificationViewModel>>(result);
-            models.ForEach(item => item.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.DisciplinaryNotification, item.PersonaInformationId, item.Id));
+            models.ForEach(item => item.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.DisciplinaryNotification, item.PersonaInformationId, item.Id, true));
             return models;
         }
 
@@ -37,13 +38,15 @@ namespace PortalEquador.Data.DisciplinaryNotification.Repository
         {
             var levels = GroupItems(Groups.ACCIDENT_LEVEL, OrderType.Alphabetic);
             var notifications = GroupItems(Groups.NOTIFICATIONS, OrderType.Alphabetic);
+            var alcoolResult = GroupItems(Groups.ALCOOL_TEST_RESULT, OrderType.Alphabetic);
 
             var model = new DisciplinaryNotificationCreateViewModel
             {
                 PersonaInformationId = personalInformationId,
                 FullName = fullName,
                 AccidentLevels = levels,
-                Notifications = notifications
+                Notifications = notifications,
+                AlcoolTestResults = alcoolResult
             };
 
             return model;
@@ -53,9 +56,11 @@ namespace PortalEquador.Data.DisciplinaryNotification.Repository
         {
             var levels = GroupItems(Groups.ACCIDENT_LEVEL, OrderType.Alphabetic);
             var notifications = GroupItems(Groups.NOTIFICATIONS, OrderType.Alphabetic);
+            var alcoolResult = GroupItems(Groups.ALCOOL_TEST_RESULT, OrderType.Alphabetic);
 
             model.AccidentLevels = levels;
             model.Notifications = levels;
+            model.AlcoolTestResults = alcoolResult; 
 
             return model;
         }
@@ -66,12 +71,13 @@ namespace PortalEquador.Data.DisciplinaryNotification.Repository
                 .Include(d => d.AccidentLevelGroupItemEntity)
                 .Include(d => d.NotificationGroupItemEntity)
                 .Include(d => d.PersonalInformationEntity)
+               .Include(d => d.AlcoolTestResultGroupItemEntity)
                 .Include(d => d.ApplicationUserEntity)
                .Where(item => item.Id == id)
                .FirstAsync();
 
             var model = mapper.Map<DisciplinaryNotificationViewModel>(result);
-            model.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.DisciplinaryNotification, model.PersonaInformationId, model.Id);
+            model.PicturePath = ImagesUtil.GetImagePath(hostEnvironment, FolderType.DisciplinaryNotification, model.PersonaInformationId, model.Id, true);
             return model;
         }
 
@@ -99,6 +105,26 @@ namespace PortalEquador.Data.DisciplinaryNotification.Repository
         {
             var entity = mapper.Map<DisciplinaryNotificationEntity>(model);
             entity.EditorId = GetCurrentUserId();
+
+            if(model.NotificationId == ItemFromGroup.DisciplinaryNotification.ALCOOL)
+            {
+                entity.AccidentLevelId = null;
+                entity.Local = null;
+                entity.Decision = null;
+            }
+            else if (model.NotificationId == ItemFromGroup.DisciplinaryNotification.ACCIDENT)
+            {
+                entity.AlcoolTestResultId = null;
+                entity.Bulletin = null;
+            }
+            else
+            {
+                entity.AccidentLevelId = null;
+                entity.Local = null;
+                entity.Decision = null;
+                entity.AlcoolTestResultId = null;
+                entity.Bulletin = null;
+            }
 
             if (model.Id == 0)
             {

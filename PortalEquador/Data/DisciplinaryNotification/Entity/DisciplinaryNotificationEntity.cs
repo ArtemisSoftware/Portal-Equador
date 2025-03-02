@@ -21,10 +21,10 @@ namespace PortalEquador.Data.DisciplinaryNotification.Entity
 
         public string? Local { get; set; }
 
-        public int AccidentLevelId { get; set; }
+        public int? AccidentLevelId { get; set; }
 
         [ForeignKey("AccidentLevelId")]
-        public GroupItemEntity AccidentLevelGroupItemEntity { get; set; }
+        public GroupItemEntity? AccidentLevelGroupItemEntity { get; set; }
 
         public int? AlcoolTestResultId { get; set; }
 
