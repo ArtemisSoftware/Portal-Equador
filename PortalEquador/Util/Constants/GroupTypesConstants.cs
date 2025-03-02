@@ -75,13 +75,13 @@
 
             public static class DisciplinaryNotification
             {
-                public static readonly int ALCOOL = (new Item { Debug = 309, Production = 1 }).Value;
-                public static readonly int ACCIDENT = (new Item { Debug = 316, Production = 1 }).Value;
+                public static readonly int ALCOOL = (new Item { Debug = 63, Production = 309 }).Value;
+                public static readonly int ACCIDENT = (new Item { Debug = 70, Production = 316 }).Value;
             }
 
             public static class AlcoolTestResults
             {
-                public static readonly int POSITIVE = (new Item { Debug = 319, Production = 1 }).Value;
+                public static readonly int POSITIVE = (new Item { Debug = 68, Production = 319 }).Value;
             }
 
             public static class Documents
