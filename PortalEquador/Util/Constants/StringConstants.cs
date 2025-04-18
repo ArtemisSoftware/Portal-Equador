@@ -71,6 +71,7 @@
             // O
             public const string ORAL_LEVEL = "Nível oral";
             public const string OPTIONAL_FILE = "Ficheiro (*opcional)";
+            public const string OBSERVATION = "Observação";
 
             // P
             public const string PROFESSIONAL_EXPERIENCE = "Experiência profissional";
@@ -78,12 +79,14 @@
 
             //R
             public const string ROLE = "Tipo de administrador";
+            public const string REASON_TO_BE_FIRED = "Razão do despedimento";
 
             // S
             public const string SERVICE = "Serviço";
             public const string SCHEDULE = "Horário";
             public const string STATE = "Estado";
             public const string SURNAME = "Apelido";
+            public const string STATE_OF_HIRED = "Estado da contratação";
 
             //  T
             public const string TELEPHONE = "Telefone";
@@ -105,7 +108,6 @@
             public const string BENIFICIARY_NUMBER = "Nº de benificiário";
 
 
-            public const string OBSERVATION = "Observação";
             public const string NATIONALITY = "Nacionalidade";
             public const string PROVINCE = "Provincia";
             public const string NEIGHBOURHOOD = "Bairro";
@@ -190,6 +192,9 @@
             public const string COMPLETE = "Concluído";
             public const string CANCELED = "Cancelado";
             public const string VALID = "Em Vigor";
+            public const string UNASSIGNED = "Não contratado";
+            public const string CONTRACTED = "Contratado";
+            public const string FIRED = "Dispensado";
         }
 
         public static class SchedulerStatus

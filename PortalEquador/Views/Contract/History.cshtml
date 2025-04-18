@@ -1,0 +1,94 @@
+﻿@model IEnumerable<PortalEquador.Domain.Contract.ViewModels.ContractViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>@ViewBag.username</h1>
+        <h3>Contratos</h3>
+     </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="Curriculum" asp-action="Dashboard" asp-route-identifier="@ViewBag.identifier" class="btn btn-success"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
+</div>
+<hr />
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ContractState)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ResignationReasons)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Observation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.ContractState.Description)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.ResignationReasons.Description)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Observation)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+@section Scripts {
+    <script>
+        $(function () {
+
+            $('.table').DataTable();
+
+            $('.deleteBtn').click(function (e) {
+                swal({
+                    title: "Eliminar lingua",
+                    text: "Tem a certeza que pretende eliminar a lingua?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var btn = $(this);
+                        var id = btn.data("id");
+                        var identifier = btn.data("identifier");
+                        var username = btn.data("username");
+                        $('#languageId').val(id);
+                        $('#identifier').val(identifier);
+                        $('#username').val(username);
+                        $('#deleteLanguage').submit();
+
+                    }
+                });
+            });
+        });
+
+    </script>
+}

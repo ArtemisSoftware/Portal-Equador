@@ -5,13 +5,13 @@ namespace PortalEquador.Domain.Contract
 {
     public class ContractState
     {
-        [Description(StringConstants.ContractStatus.COMPLETE)]
-        public const int Complete = 1;
+        [Description(StringConstants.ContractStatus.UNASSIGNED)]
+        public const int Unassigned = 0;
 
-        [Description(StringConstants.ContractStatus.VALID)]
-        public const int Valid = 2;
+        [Description(StringConstants.ContractStatus.CONTRACTED)]
+        public const int Contracted = 1;
 
-        [Description(StringConstants.ContractStatus.CANCELED)]
-        public const int Canceled = 3;
+        [Description(StringConstants.ContractStatus.FIRED)]
+        public const int Fired = 2;
     }
 }

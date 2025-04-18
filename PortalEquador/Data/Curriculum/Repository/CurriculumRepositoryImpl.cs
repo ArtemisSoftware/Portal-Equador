@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Curriculum.Entities;
 using PortalEquador.Data.Generic;
+using PortalEquador.Domain.Contract;
 using PortalEquador.Domain.Curriculum.Repository;
 using PortalEquador.Domain.Curriculum.ViewModels;
 using PortalEquador.Domain.GroupTypes.Repository;
+using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -22,6 +24,35 @@ namespace PortalEquador.Data.Curriculum.Repository
         public async Task<CurriculumDashboardViewModel> GetCurriculumDashboard(int id)
         {
             var query = from personal in context.PersonalInformationEntity
+                        
+                        join ctc in
+                            (from contract in context.ContractEntity
+                             where contract.PersonalInformationId == id
+                             orderby contract.Id descending
+                             select contract).Take(1)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.PersonalInformationId,
+                                ContractId = grouped.Id,
+                                ContractStateId = grouped.ContractStateId
+                            })
+                        on personal.Id equals ctc.PersonalInformationId into resultCtc
+                        from resultContract in resultCtc.DefaultIfEmpty()
+
+
+                        join contractCount in
+                            (from contract in context.ContractEntity
+                             where contract.PersonalInformationId == id
+                             select contract).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                ContractCount = grouped.Count()
+                            })
+                        on personal.Id equals contractCount.PersonalInformationId into resultCtcs
+                        from resultContracts in resultCtcs.DefaultIfEmpty()
+
+
                         join docCount in
                             (from document in context.DocumentEntity
                              where document.PersonalInformationId == id
@@ -120,10 +151,18 @@ namespace PortalEquador.Data.Curriculum.Repository
                             TotalSchoolEducation = resultSchools.Count == null ? 0 : resultSchools.Count,
                             TotalUniversityEducation = resultUniversities.Count == null ? 0 : resultUniversities.Count,
                             TotalDriversLicence = resultDriversLicences.DriversLicenceCount == null ? 0 : resultDriversLicences.DriversLicenceCount,
+                            ContractId = resultContract.ContractStateId == null ? 0 : resultContract.ContractStateId,
+                            TotalContracts = resultContracts.ContractCount == null ? 0 : resultContracts.ContractCount,
                             ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, id)
                         };
 
             var result = await query.FirstOrDefaultAsync();
+            var contractModel = await GroupItem(result.ContractId);
+            if(contractModel != null)
+            {
+                result.Contract = mapper.Map<GroupItemViewModel>(contractModel);
+            }
+            
             return result;
         }
     }

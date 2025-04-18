@@ -9,6 +9,11 @@ using PortalEquador.Util.Constants;
 using PortalEquador.Util;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Domain.Curriculum.ViewModels;
+using static PortalEquador.Util.Constants.GroupTypesConstants;
+using PortalEquador.Data.Education.University.Entity;
+using PortalEquador.Domain.GroupTypes.ViewModels;
+using System.Diagnostics.Contracts;
+using PortalEquador.Domain.Languages.ViewModels;
 
 namespace PortalEquador.Data.Contract.Repository
 {
@@ -19,8 +24,35 @@ namespace PortalEquador.Data.Contract.Repository
         IWebHostEnvironment hostEnvironment
         ) : GenericRepository<ContractEntity>(context, httpContextAccessor), IContractRepository
     {
-        public async Task<List<ContractViewModel>> GetAll()
+
+        public async Task Contract(int id)
         {
+            var contract = new ContractCreateViewModel
+            {
+                Id = 0,
+                PersonaInformationId = id,
+                ContractStateId = GroupTypesConstants.ItemFromGroup.ContractStates.CONTRACTED,
+            };
+
+            await Save(contract);
+        }
+
+
+        public async Task Save(ContractCreateViewModel model)
+        {
+            
+            var entity = mapper.Map<ContractEntity>(model);
+            entity.EditorId = GetCurrentUserId();
+
+            await AddAsync(entity);
+        }
+
+        public async Task<ContractsViewModel> GetAll()
+        {
+
+            var contractStates = await GroupItemsList(Groups.CONTRACT_STATE, OrderType.Alphabetic);
+            var states = mapper.Map<List<GroupItemViewModel>>(contractStates);
+
             var query = from personal in context.PersonalInformationEntity
                         join profileDoc in
                             (from document in context.DocumentEntity
@@ -31,18 +63,61 @@ namespace PortalEquador.Data.Contract.Repository
                         orderby personal.FirstName
                         select new ContractViewModel
                         {
-                            Id = personal.Id,
-                            PersonaInformationId = personal.Id,
-                            FullName = personal.FirstName + " " + personal.LastName,   
-                            ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, personal.Id)
+                            //Id = personal.Id,
+                            //PersonalInformationId = personal.Id,
+                            //--FullName = personal.FirstName + " " + personal.LastName,   
+                            //--ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, personal.Id)
                         };
-            return await query.ToListAsync();
+
+                var models = await query.ToListAsync();
+
+                return new ContractsViewModel
+                {
+                    Contracts = models,
+                    States = states
+                };
+        }
+
+
+        public async Task<ContractCreateViewModel> GetContract(int personalInformationId)
+        {
+            var result = await context.ContractEntity
+                .Include(d => d.PersonalInformationEntity)
+                .Include(d => d.ContractStateGroupItemEntity)
+                .Include(d => d.ResignationReasonGroupItemEntity)
+                .Where(item => item.PersonalInformationId == personalInformationId)
+                .OrderByDescending(item => item.Id) 
+                .FirstOrDefaultAsync();           
+
+            var model = mapper.Map<ContractCreateViewModel>(result);
+
+            var contractStates = GroupItems(Groups.CONTRACT_STATE, OrderType.Alphabetic, GroupTypesConstants.ItemFromGroup.ContractStates.CONTRACTED);
+            var resignationReasons = GroupItems(Groups.RESIGNATION_REASONS, OrderType.Alphabetic);
+
+            model.ContractStates = contractStates;
+            model.ResignationReasons = resignationReasons;
+            return model;
+        }
+
+        public async Task<List<ContractViewModel>> GetAllContracts(int personalInformationId)
+        {
+            var result = await context.ContractEntity
+                .Include(d => d.PersonalInformationEntity)
+                .Include(d => d.ContractStateGroupItemEntity)
+                .Include(d => d.ResignationReasonGroupItemEntity)
+                .Where(item => item.PersonalInformationId == personalInformationId)
+                .OrderByDescending(item => item.Id)
+                .ToListAsync();
+
+            var model = mapper.Map<List<ContractViewModel>>(result);
+            return model;
         }
 
         public async Task<ContractDashboardViewModel> GetDashboard(int id)
         {
 
             var query = from personal in context.PersonalInformationEntity
+
                         join medicalExamCount in
                             (from medicalExam in context.MedicalExamEntity
                              where medicalExam.PersonalInformationId == id
@@ -96,5 +171,7 @@ namespace PortalEquador.Data.Contract.Repository
             var result = await query.FirstOrDefaultAsync();
             return result;
         }
+
+
     }
 }

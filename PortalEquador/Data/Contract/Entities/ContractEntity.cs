@@ -12,25 +12,16 @@ namespace PortalEquador.Data.Contract.Entities
         [ForeignKey("PersonalInformationId")]
         public PersonalInformationEntity PersonalInformationEntity { get; set; }
 
-
-        public DateTime StartDate { get; set; }
-        public int Duration { get; set; }
-        public bool UndeterminateDuration { get; set; }
-        public DateTime? EndDate { get; set; } = null;
         
-        
-        public int LocationId { get; set; }
+        public int? ResignationReasonId { get; set; }
 
-        [ForeignKey("LocationId")]
-        public GroupItemEntity LocationGroupItemEntity { get; set; }
+        [ForeignKey("ResignationReasonId")]
+        public GroupItemEntity? ResignationReasonGroupItemEntity { get; set; }
 
-        public DateTime LocationDate { get; set; }
+        public int ContractStateId { get; set; }
 
-        public int RegimentId { get; set; }
-
-        [ForeignKey("RegimentId")]
-        public GroupItemEntity RegimentGroupItemEntity { get; set; }
-
+        [ForeignKey("ContractStateId")]
+        public GroupItemEntity ContractStateGroupItemEntity { get; set; }
 
         public string? Observation { get; set; }
     }

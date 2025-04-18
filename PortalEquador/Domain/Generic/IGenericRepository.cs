@@ -11,6 +11,6 @@ namespace PortalEquador.Domain.Generic
         Task<bool> Exists(int id);
         Task DeleteAsync(int id);
         Task UpdateAsync(T entity);
-        SelectList GroupItems(int groupId, OrderType orderType);
+        SelectList GroupItems(int groupId, OrderType orderType, int idToExclude);
     }
 }

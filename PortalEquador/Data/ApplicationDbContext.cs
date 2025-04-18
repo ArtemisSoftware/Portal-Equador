@@ -441,5 +441,6 @@ namespace PortalEquador.Data
         public DbSet<MedicalExamEntity> MedicalExamEntity { get; set; } = default!;
         public DbSet<TrainningEntity> TrainningEntity { get; set; } = default!;
         public DbSet<DisciplinaryNotificationEntity> DisciplinaryNotificationEntity { get; set; } = default!;
+        public DbSet<ContractEntity> ContractEntity { get; set; }
     }
 }

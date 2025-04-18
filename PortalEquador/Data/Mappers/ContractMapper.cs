@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using PortalEquador.Data.Contract.Entities;
 using PortalEquador.Data.DisciplinaryNotification.Entity;
-using PortalEquador.Data.DriversLicence.Entity;
 using PortalEquador.Data.MedicalExam.Entity;
 using PortalEquador.Data.Trainning.Entity;
+using PortalEquador.Domain.Contract.ViewModels;
 using PortalEquador.Domain.DisciplinaryNotification.ViewModels;
-using PortalEquador.Domain.DriversLicence.ViewModels;
 using PortalEquador.Domain.MedicalExam.ViewModels;
 using PortalEquador.Domain.Trainning.ViewModels;
 
@@ -75,6 +75,23 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.AccidentLevel, opt => opt.MapFrom(src => src.AccidentLevelGroupItemEntity))
                 .ForMember(dest => dest.AlcoolTestResult, opt => opt.MapFrom(src => src.AlcoolTestResultGroupItemEntity))
                 .ForMember(dest => dest.Nature, opt => opt.MapFrom(src => src.Decision))
+                .ReverseMap();
+
+            CreateMap<ContractEntity, ContractCreateViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.ContractStateId, opt => opt.MapFrom(src => src.ContractStateId))
+                .ForMember(dest => dest.ResignationReasonsId, opt => opt.MapFrom(src => src.ResignationReasonId))
+
+                .ReverseMap();
+
+            CreateMap<ContractEntity, ContractViewModel>()
+                 //.ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                 .ForMember(dest => dest.ContractState, opt => opt.MapFrom(src => src.ContractStateGroupItemEntity))
+                .ForMember(dest => dest.ResignationReasons, opt => opt.MapFrom(src => src.ResignationReasonGroupItemEntity))
+                //.ForMember(dest => dest.PersonalInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                //                .ForMember(dest => dest.ContractStatesId, opt => opt.MapFrom(src => src.ContractStateId))
+                //                .ForMember(dest => dest.ResignationReasonsId, opt => opt.MapFrom(src => src.ResignationReasonId))
                 .ReverseMap();
         }
     }

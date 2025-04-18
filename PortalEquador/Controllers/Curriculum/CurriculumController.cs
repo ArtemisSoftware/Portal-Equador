@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PortalEquador.Domain.Contract.Repository;
 using PortalEquador.Domain.Curriculum.Repository;
 using PortalEquador.Domain.PersonalInformation.Repository;
 
@@ -6,7 +7,8 @@ namespace PortalEquador.Controllers.Curriculum
 {
     public class CurriculumController(
         CurriculumRepository repository,
-        IPersonalInformationRepository personalInformationRepository
+        IPersonalInformationRepository personalInformationRepository,
+        IContractRepository contractRepository
         ) : Controller
     {
 
@@ -22,6 +24,13 @@ namespace PortalEquador.Controllers.Curriculum
         {
             var model = await repository.GetCurriculumDashboard(identifier);
             return View(model);
+        }
+
+        public async Task<IActionResult> Contract(int identifier)
+        {
+            await contractRepository.Contract(identifier);
+
+            return await Dashboard(identifier);
         }
     }
 }

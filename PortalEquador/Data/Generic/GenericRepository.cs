@@ -73,9 +73,9 @@ namespace PortalEquador.Data.Generic
             await context.SaveChangesAsync();
         }
 
-        public SelectList GroupItems(int groupId, OrderType orderType = OrderType.No_order)
+        public SelectList GroupItems(int groupId, OrderType orderType = OrderType.No_order, int idToExclude = -1)
         {
-            var result = context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true);
+            var result = context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true & x.Id != idToExclude);
 
             switch (orderType)
             {
@@ -111,9 +111,9 @@ namespace PortalEquador.Data.Generic
             return await result.ToListAsync();
         }
 
-        public async Task<GroupItemEntity> GroupItem(int itemId)
+        public async Task<GroupItemEntity?> GroupItem(int itemId)
         {
-            var result = await context.GroupItemEntity.Where(x => x.Id == itemId).FirstAsync();
+            var result = await context.GroupItemEntity.Where(x => x.Id == itemId).FirstOrDefaultAsync();
             return result;
         }
     }
