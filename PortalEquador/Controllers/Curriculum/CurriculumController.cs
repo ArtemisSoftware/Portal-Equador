@@ -26,11 +26,6 @@ namespace PortalEquador.Controllers.Curriculum
             return View(model);
         }
 
-        public async Task<IActionResult> Contract(int identifier)
-        {
-            await contractRepository.Contract(identifier);
 
-            return await Dashboard(identifier);
-        }
     }
 }

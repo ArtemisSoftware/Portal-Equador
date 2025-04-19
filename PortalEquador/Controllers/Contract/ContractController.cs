@@ -10,11 +10,12 @@ namespace PortalEquador.Controllers.Contract
     {
 
         // GET: Contract
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int stateId = -1)
         {
-            var result = await repository.GetAll();
+            var result = await repository.GetAll(stateId);
             return View(result);
         }
+
 
         // GET: Contract/Dashboard
         public async Task<IActionResult> Dashboard(int identifier)
@@ -23,14 +24,20 @@ namespace PortalEquador.Controllers.Contract
             return View(model);
         }
 
-        public async Task<IActionResult> Contract(int identifier)
+        public async Task<IActionResult> Contract(int identifier, string origin)
         {
-
             await repository.Contract(identifier);
 
-            var model = await repository.GetDashboard(identifier);
-            return View(model);
+            if(origin == "cv")
+            {
+                return RedirectToAction(nameof(Dashboard), "Curriculum", new { identifier = identifier });
+            } else
+            {
+                return RedirectToAction(nameof(Dashboard), "Contract", new { identifier = identifier });
+            }
+           
         }
+
 
 
         // GET: Language/Create
@@ -45,14 +52,22 @@ namespace PortalEquador.Controllers.Contract
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ContractCreateViewModel model)
+        public async Task<IActionResult> Edit(ContractCreateViewModel model, string origin)
         {
             await repository.Save(model);
-            return RedirectToAction(nameof(Dashboard), "Curriculum", new { identifier = model.PersonaInformationId });
+            if (origin == "cv")
+            {
+                return RedirectToAction(nameof(Dashboard), "Curriculum", new { identifier = model.PersonaInformationId });
+            } else
+            {
+                return RedirectToAction(nameof(Dashboard), "Contract", new { identifier = model.PersonaInformationId });
+            }
         }
 
         public async Task<IActionResult> History(int identifier, string fullName)
         {
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
             var model = await repository.GetAllContracts(identifier);
             return View(model);
         }

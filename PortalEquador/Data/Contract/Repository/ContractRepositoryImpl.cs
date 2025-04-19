@@ -14,6 +14,8 @@ using PortalEquador.Data.Education.University.Entity;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using System.Diagnostics.Contracts;
 using PortalEquador.Domain.Languages.ViewModels;
+using PortalEquador.Data.Migrations;
+using static PortalEquador.Util.Constants.GroupTypesConstants.ItemFromGroup;
 
 namespace PortalEquador.Data.Contract.Repository
 {
@@ -47,35 +49,87 @@ namespace PortalEquador.Data.Contract.Repository
             await AddAsync(entity);
         }
 
-        public async Task<ContractsViewModel> GetAll()
+        public async Task<ContractsViewModel> GetAll(int filter)
         {
 
-            var contractStates = await GroupItemsList(Groups.CONTRACT_STATE, OrderType.Alphabetic);
-            var states = mapper.Map<List<GroupItemViewModel>>(contractStates);
+            var contractStates = GroupItems(Groups.CONTRACT_STATE, OrderType.Alphabetic, -1, StringConstants.ContractStatus.UNASSIGNED);
 
+            if (filter == -1) {
+                var models = await NoFilter();
+                models.ContractStates = contractStates;
+                models.ContractStatesId = filter;
+                return models;
+            } else
+            {
+                var models = await Filter(filter);
+                models.ContractStates = contractStates;
+                models.ContractStatesId = filter;
+                return models;
+            }
+        }
+
+        private async Task<ContractsViewModel> NoFilter()
+        {
             var query = from personal in context.PersonalInformationEntity
-                        join profileDoc in
-                            (from document in context.DocumentEntity
-                             where document.DocumentTypeId == GroupTypesConstants.ItemFromGroup.Documents.PROFILE_PICTURE
-                             select document)
-                        on personal.Id equals profileDoc.PersonalInformationId into resultProfileDocs
-                        from resultProfileDocument in resultProfileDocs.DefaultIfEmpty()
-                        orderby personal.FirstName
-                        select new ContractViewModel
+
+                        join ctc in
+                            (from contract in context.ContractEntity
+                             orderby contract.Id descending
+                             select contract)
+                            on personal.Id equals ctc.PersonalInformationId into resultCtc
+
+                        from resultContract in resultCtc.DefaultIfEmpty()
+
+                        where resultContract == null // ✅ This filters only the ones with NO contracts
+
+                        select new CurrentContractViewModel
                         {
-                            //Id = personal.Id,
-                            //PersonalInformationId = personal.Id,
-                            //--FullName = personal.FirstName + " " + personal.LastName,   
-                            //--ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, personal.Id)
+                            PersonalInformationId = personal.Id,
+                            FullName = personal.FirstName + " " + personal.LastName,
                         };
 
-                var models = await query.ToListAsync();
+            var result = await query.ToListAsync();
 
-                return new ContractsViewModel
+            return new ContractsViewModel
+            {
+                Contracts = result,
+            };
+        }
+
+            private async Task<ContractsViewModel> Filter(int filter)
+        {
+            // Step 1: Get IDs of latest contracts per PersonalInformationId
+            var latestContractIds = await context.ContractEntity
+                .GroupBy(c => c.PersonalInformationId)
+                .Select(g => g.OrderByDescending(c => c.Id)
+                                        .Select(c => c.Id).FirstOrDefault())
+
+                .ToListAsync();
+
+            // Step 2: Load full contracts with related entities
+            var latestContracts = await context.ContractEntity
+                .Where(c => latestContractIds.Contains(c.Id))
+                .Include(c => c.PersonalInformationEntity)
+                .Include(c => c.ContractStateGroupItemEntity)
+                .Include(c => c.ResignationReasonGroupItemEntity)
+                .ToListAsync();
+
+            var models = mapper.Map<List<CurrentContractViewModel>>(latestContracts);
+
+            var updatedContracts = models
+                .Select(contract =>
                 {
-                    Contracts = models,
-                    States = states
-                };
+                    // Modify fields (or even make a copy if needed)
+                    contract.ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, contract.PersonalInformationId);
+                    return contract;
+                })
+                .Where(c => c.ContractState.Id == filter)
+                .ToList(); // This gives you the new list!
+
+            return new ContractsViewModel
+            {
+                Contracts = updatedContracts,
+            };
         }
 
 
@@ -117,6 +171,33 @@ namespace PortalEquador.Data.Contract.Repository
         {
 
             var query = from personal in context.PersonalInformationEntity
+
+                        join ctc in
+                            (from contract in context.ContractEntity
+                             where contract.PersonalInformationId == id
+                             orderby contract.Id descending
+                             select contract).Take(1)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.PersonalInformationId,
+                                ContractId = grouped.Id,
+                                ContractStateId = grouped.ContractStateId
+                            })
+                        on personal.Id equals ctc.PersonalInformationId into resultCtc
+                                                from resultContract in resultCtc.DefaultIfEmpty()
+
+
+                        join contractCount in
+                            (from contract in context.ContractEntity
+                             where contract.PersonalInformationId == id
+                             select contract).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                ContractCount = grouped.Count()
+                            })
+                        on personal.Id equals contractCount.PersonalInformationId into resultCtcs
+                        from resultContracts in resultCtcs.DefaultIfEmpty()
 
                         join medicalExamCount in
                             (from medicalExam in context.MedicalExamEntity
@@ -166,9 +247,17 @@ namespace PortalEquador.Data.Contract.Repository
                             TotalExams = resultMedicalExams.OrderDetailCount == null ? 0 : resultMedicalExams.OrderDetailCount,
                             TotalDisciplinaryNotification = resultDisciplinaryNotifications.OrderDetailCount == null ? 0 : resultDisciplinaryNotifications.OrderDetailCount,
                             TotalTrainning = resultTrainnings.OrderDetailCount == null ? 0 : resultTrainnings.OrderDetailCount,
+                            ContractId = resultContract.ContractStateId == null ? 0 : resultContract.ContractStateId,
+                            TotalContracts = resultContracts.ContractCount == null ? 0 : resultContracts.ContractCount,
                         };
 
             var result = await query.FirstOrDefaultAsync();
+
+            var contractModel = await GroupItem(result.ContractId);
+            if (contractModel != null)
+            {
+                result.Contract = mapper.Map<GroupItemViewModel>(contractModel);
+            }
             return result;
         }
 

@@ -1,1 +1,104 @@
-﻿
+﻿@model PortalEquador.Domain.Contract.ViewModels.ContractsViewModel
+
+
+@{
+    ViewData["Title"] = "Pesquisa";
+}
+
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>Funcionários</h1>
+    </div>
+</div>
+<hr />
+<br />
+
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Index">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="ContractStatesId" class="control-label"></label>
+                <dl class="row">
+                    <dt class="col-sm-3">
+                        <div class="form-group">
+                            <select asp-for="ContractStatesId" class="form-select" asp-items="Model.ContractStates"  id="State"></select>
+                        </div>
+                    </dt>
+                </dl>
+            </div>
+
+            <br />
+            <br />
+
+            @if (Model.Contracts.Count == 0)
+            {
+                <h4>Nenhum resultado para o filtro selecionado</h4>
+            } else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>
+                                Nome Completo
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Contracts)
+                        {
+                            <tr>
+                                <td style="width:70px;">
+                                    <img src="@Url.Content(@item.ProfileImagePath)" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
+                                </td>
+                                <td class="align-middle">
+                                    @Html.DisplayFor(modelItem => item.FullName)
+                                </td>
+                                <td class="align-middle">
+                                    <a asp-action="Dashboard" asp-route-identifier="@item.PersonalInformationId" class="btn btn-success"> <i class="fas fa-info-circle" title="Ver items "></i> Painel</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            }
+
+        </form>
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Select2 library -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+    <script>
+        $(document).ready(function () {
+            
+            // Attach the change event listener after initializing Select2
+            $('#State').on('change', function () {
+                var vehicleId = $(this).val();
+                handleVehicle(vehicleId);
+            });
+
+        });
+    </script>
+
+    <script>
+
+        function handleVehicle(vehicleId) {
+            window.location.href = `/Contract/Index?stateId=${vehicleId}`;
+        }
+
+    </script>
+
+}

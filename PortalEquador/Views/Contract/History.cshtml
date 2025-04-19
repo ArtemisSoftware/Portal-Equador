@@ -20,6 +20,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.ContractState)
             </th>
             <th>
@@ -28,9 +31,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Observation)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
+            
             <th></th>
         </tr>
     </thead>
@@ -39,7 +40,27 @@
         {
             <tr>
                 <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.ContractState.Description)
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td class="align-middle">
+                    @switch (item.ContractStateDescription())
+                    {
+                        case PortalEquador.Domain.Contract.ContractState.Unassigned:
+                            <span class="badge bg-secondary">@PortalEquador.Util.Constants.StringConstants.ContractStatus.UNASSIGNED </span>
+                            break;
+
+                        case PortalEquador.Domain.Contract.ContractState.Contracted:
+                            <span class="badge bg-success">@Html.DisplayFor(modelItem => item.ContractState.Description) </span>
+                            break;
+
+                        case PortalEquador.Domain.Contract.ContractState.Fired:
+                            <span class="badge bg-danger">@Html.DisplayFor(modelItem =>item.ContractState.Description)</span>
+                            break;
+
+                        default:
+                            <span class="badge bg-primary">@Html.DisplayFor(modelItem => item.ContractState.Description)</span>
+                            break;
+                    }
                 </td>
                 <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.ResignationReasons.Description)
@@ -47,9 +68,7 @@
                 <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.Observation)
                 </td>
-                <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.DateCreated)
-                </td>
+                
                 <td>
                     
                 </td>
@@ -64,30 +83,7 @@
 @section Scripts {
     <script>
         $(function () {
-
             $('.table').DataTable();
-
-            $('.deleteBtn').click(function (e) {
-                swal({
-                    title: "Eliminar lingua",
-                    text: "Tem a certeza que pretende eliminar a lingua?",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true
-                }).then((confirm) => {
-                    if (confirm) {
-                        var btn = $(this);
-                        var id = btn.data("id");
-                        var identifier = btn.data("identifier");
-                        var username = btn.data("username");
-                        $('#languageId').val(id);
-                        $('#identifier').val(identifier);
-                        $('#username').val(username);
-                        $('#deleteLanguage').submit();
-
-                    }
-                });
-            });
         });
 
     </script>

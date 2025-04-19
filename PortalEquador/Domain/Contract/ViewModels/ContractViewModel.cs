@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using PortalEquador.Domain.Generic;
+﻿using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Util.Constants;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PortalEquador.Domain.Contract.ViewModels
 {
@@ -17,5 +15,22 @@ namespace PortalEquador.Domain.Contract.ViewModels
 
         [Display(Name = StringConstants.Display.OBSERVATION)]
         public string? Observation { get; set; }
+
+        public int ContractStateDescription()
+        {
+            if (ContractState.Id == GroupTypesConstants.ItemFromGroup.ContractStates.CONTRACTED)
+            {
+                return PortalEquador.Domain.Contract.ContractState.Contracted;
+            }
+            else if (ContractState.Id == GroupTypesConstants.ItemFromGroup.ContractStates.FIRED)
+            {
+                return PortalEquador.Domain.Contract.ContractState.Fired;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
     }
 }

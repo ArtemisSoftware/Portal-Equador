@@ -33,7 +33,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Contrato</h5> 
-                    <p class="card-text">Descrição do contrato corrente </p>
+                    <p class="card-text">Descrição do estado da contratação </p>
                       
                      @switch (Model.ContractStateDescription())
                        {
@@ -60,27 +60,25 @@
                        {
                           case PortalEquador.Domain.Contract.ContractState.Unassigned:
                                 
-                                        <a
-                                            asp-controller="Curriculum"
-                                            asp-action="Contract" 
-                                                asp-route-identifier="@Model.Id"  class="btn btn-success">Contratar</a> 
-                                
-                                   break;
+                                        <a asp-controller="Contract"
+                                            asp-action="Contract"
+                               asp-route-identifier="@Model.Id" asp-route-origin="cv" class="btn btn-success">Contratar</a>
+
+                            break;
 
                           case PortalEquador.Domain.Contract.ContractState.Contracted:
-                                
-                                        <a asp-controller="Contract" asp-action="Edit" asp-route-identifier="@Model.Id" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+
+                            <a asp-controller="Contract" asp-action="Edit" asp-route-identifier="@Model.Id" asp-route-origin="cv" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
                            
                                    break;
 
                                       default:
                                               
-                                                <a
-                                                    asp-controller="Curriculum"
-                                                    asp-action="Contract" 
-                                                        asp-route-identifier="@Model.Id"  class="btn btn-success">Contratar</a> 
-                                        
-                               break;
+                                                <a asp-controller="Contract"
+                                                    asp-action="Contract"
+                               asp-route-identifier="@Model.Id" asp-route-origin="cv" class="btn btn-success">Contratar</a>
+
+                            break;
                        }
 
                     @if (Model.TotalContracts > 1)

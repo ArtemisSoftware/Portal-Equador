@@ -93,6 +93,11 @@ namespace PortalEquador.Data.Mappers
                 //                .ForMember(dest => dest.ContractStatesId, opt => opt.MapFrom(src => src.ContractStateId))
                 //                .ForMember(dest => dest.ResignationReasonsId, opt => opt.MapFrom(src => src.ResignationReasonId))
                 .ReverseMap();
+
+            CreateMap<ContractEntity, CurrentContractViewModel>()
+             .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.PersonalInformationEntity.FirstName + " " + src.PersonalInformationEntity.LastName))
+                .ForMember(dest => dest.ContractState, opt => opt.MapFrom(src => src.ContractStateGroupItemEntity))
+              .ReverseMap();
         }
     }
 }

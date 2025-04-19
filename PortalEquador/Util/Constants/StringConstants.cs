@@ -45,6 +45,7 @@
             //F
 
             public const string FULL_NAME = "Nome completo";
+            public const string FILTER = "Filtro";
 
             // I
             public const string INSTITUTION = "Instituição";
@@ -79,7 +80,7 @@
 
             //R
             public const string ROLE = "Tipo de administrador";
-            public const string REASON_TO_BE_FIRED = "Razão do despedimento";
+            public const string REASON_TO_BE_FIRED = "Razão da dispensa";
 
             // S
             public const string SERVICE = "Serviço";

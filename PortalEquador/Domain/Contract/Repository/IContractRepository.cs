@@ -9,7 +9,7 @@ namespace PortalEquador.Domain.Contract.Repository
     public interface IContractRepository : IGenericRepository<ContractEntity>
     {
         Task Contract(int id);
-        Task<ContractsViewModel> GetAll();
+        Task<ContractsViewModel> GetAll(int filter = -1);
         Task<ContractDashboardViewModel> GetDashboard(int id);
         Task<ContractCreateViewModel> GetContract(int personalInformationId);
         Task Save(ContractCreateViewModel model);

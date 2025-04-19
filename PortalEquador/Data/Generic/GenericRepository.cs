@@ -73,7 +73,7 @@ namespace PortalEquador.Data.Generic
             await context.SaveChangesAsync();
         }
 
-        public SelectList GroupItems(int groupId, OrderType orderType = OrderType.No_order, int idToExclude = -1)
+        public SelectList GroupItems(int groupId, OrderType orderType = OrderType.No_order, int idToExclude = -1, string extraOption = "")
         {
             var result = context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true & x.Id != idToExclude);
 
@@ -90,7 +90,31 @@ namespace PortalEquador.Data.Generic
                 break;
             }
 
-            return new SelectList(result, "Id", "Description");
+            if(extraOption != "")
+            {
+                var items = result.ToList();
+
+                // Add a new register
+                items.Add(new GroupItemEntity
+                {
+                    ApplicationUserEntity = new ApplicationUser(),
+                    EditorId = "",
+                    Id = -1,
+                    Description = extraOption,
+                    GroupEntity = new GroupEntity
+                    {
+                        ApplicationUserEntity = new ApplicationUser(),
+                        EditorId = "",
+                        Description = "New Register"
+                    }
+                });
+
+                return new SelectList(items, "Id", "Description");
+            }
+            else
+            {
+                return (new SelectList(result, "Id", "Description"));
+            }
         }
 
         public async Task<List<GroupItemEntity>> GroupItemsList(int groupId, OrderType orderType = OrderType.No_order)
