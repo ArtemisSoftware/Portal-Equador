@@ -23,9 +23,9 @@ namespace PortalEquador.Data.PersonalInformation.Repository
         public async Task<PersonalInformationViewModel> GetCreateModel(PersonalInformationViewModel? model)
         {
 
-            var nationalities =  GroupItems(GroupTypesConstants.Groups.NATIONALITY);
-            var neighbourhoods = GroupItems(GroupTypesConstants.Groups.NEIGHBOURHOOD);
-            var provinces = GroupItems(GroupTypesConstants.Groups.PROVINCE);
+            var nationalities =  GroupItems(GroupTypesConstants.Groups.NATIONALITY, OrderType.Alphabetic);
+            var neighbourhoods = GroupItems(GroupTypesConstants.Groups.NEIGHBOURHOOD, OrderType.Alphabetic);
+            var provinces = GroupItems(GroupTypesConstants.Groups.PROVINCE, OrderType.Alphabetic);
 
             if (model == null)
             {

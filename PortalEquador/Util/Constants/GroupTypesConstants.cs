@@ -63,6 +63,7 @@
             public static readonly int ACCIDENT_LEVEL = (new Item { Debug = 24, Production = 26 }).Value;
             public static readonly int NOTIFICATIONS = (new Item { Debug = 25, Production = 25 }).Value;
             public static readonly int ALCOOL_TEST_RESULT = (new Item { Debug = 26, Production = 28 }).Value;
+
             public static readonly int CONTRACT_STATE = (new Item { Debug = 27, Production = -1 }).Value;
             public static readonly int RESIGNATION_REASONS = (new Item { Debug = 28, Production = -1 }).Value;
         }

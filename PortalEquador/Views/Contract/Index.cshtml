@@ -31,7 +31,6 @@
             </div>
 
             <br />
-            <br />
 
             @if (Model.Contracts.Count == 0)
             {
@@ -86,8 +85,8 @@
             
             // Attach the change event listener after initializing Select2
             $('#State').on('change', function () {
-                var vehicleId = $(this).val();
-                handleVehicle(vehicleId);
+                var stateId = $(this).val();
+                handleState(stateId);
             });
 
         });
@@ -95,8 +94,8 @@
 
     <script>
 
-        function handleVehicle(vehicleId) {
-            window.location.href = `/Contract/Index?stateId=${vehicleId}`;
+        function handleState(stateId) {
+            window.location.href = `/Contract/Index?stateId=${stateId}`;
         }
 
     </script>
