@@ -1,7 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using PortalEquador.Data.Contract.Entities;
 using PortalEquador.Domain.Contract.Repository;
 using PortalEquador.Domain.Contract.ViewModels;
+using PortalEquador.Domain.Document.Repository;
+using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Domain.Languages.ViewModels;
+using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.Contract
@@ -35,26 +41,90 @@ namespace PortalEquador.Controllers.Contract
             {
                 return RedirectToAction(nameof(Dashboard), "Contract", new { identifier = identifier });
             }
-           
+        }
+
+
+        public async Task<IActionResult> Create(int identifier, string fullName, string origin)
+        {
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
+            ViewData[ViewBagConstants.ORIGIN] = origin;
+
+            var model = await repository.GetCreateModel(identifier, fullName);
+            return View(model);
+        }
+
+
+        // POST: Contract/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(ContractCreate__ViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await repository.Save(model);
+                await Redirect();
+            }
+
+            var recoverModel = await RecoverModel(model);
+            return View(recoverModel);
+        }
+
+        private async Task<ContractCreate__ViewModel> RecoverModel(ContractCreate__ViewModel model)
+        {
+            return await repository.GetCreateModel(model);
+        }
+
+        // GET: Language/Edit
+        public async Task<IActionResult> Resign(int identifier)
+        {
+            var model = await repository.GetResignationModel(identifier);
+            return View(model);
+        }
+
+        // POST: Language/Edit
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ContractResignViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await repository.Save(model);
+                await Redirect();
+            }
+
+            var recoverModel = await RecoverModel(model);
+            return View(recoverModel);
+        }
+
+        private async Task<ContractResignViewModel> RecoverModel(ContractResignViewModel model)
+        {
+            return await repository.GetResignationModel(model);
         }
 
 
 
-        // GET: Language/Create
+
+
+
+        // GET: Language/Edit
         public async Task<IActionResult> Edit(int identifier)
         {
             var model = await repository.GetContract(identifier);
             return View(model);
         }
 
-        // POST: Language/Create
+        // POST: Language/Edit
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ContractCreateViewModel model, string origin)
         {
-            await repository.Save(model);
             if (origin == "cv")
             {
                 return RedirectToAction(nameof(Dashboard), "Curriculum", new { identifier = model.PersonaInformationId });
@@ -71,6 +141,24 @@ namespace PortalEquador.Controllers.Contract
             var model = await repository.GetAllContracts(identifier);
             return View(model);
         }
+
+        private async Task<IActionResult> Redirect()
+        {
+
+            var origin = ViewData[ViewBagConstants.ORIGIN];
+            var identifier = ViewData[ViewBagConstants.ORIGIN];
+
+            if (origin == "cv")
+            {
+                return RedirectToAction(nameof(Dashboard), "Curriculum", new { identifier = identifier });
+            }
+            else
+            {
+                return RedirectToAction(nameof(Dashboard), "Contract", new { identifier = identifier });
+            }
+        }
+
+
 
         /*
         
@@ -97,35 +185,7 @@ namespace PortalEquador.Controllers.Contract
             return View(contractEntity);
         }
 
-        // GET: Contract/Create
-        public IActionResult Create()
-        {
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["LocationId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id");
-            ViewData["RegimentId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
-            return View();
-        }
-
-        // POST: Contract/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PersonalInformationId,StartDate,Duration,UndeterminateDuration,EndDate,LocationId,LocationDate,RegimentId,Observation,Id,EditorId,DateCreated,DateModified")] ContractEntity contractEntity)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(contractEntity);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", contractEntity.EditorId);
-            ViewData["LocationId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", contractEntity.LocationId);
-            ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", contractEntity.PersonalInformationId);
-            ViewData["RegimentId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", contractEntity.RegimentId);
-            return View(contractEntity);
-        }
+       
 
         // GET: Contract/Edit/5
         public async Task<IActionResult> Edit(int? id)

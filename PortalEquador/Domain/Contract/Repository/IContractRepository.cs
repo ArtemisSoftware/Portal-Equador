@@ -14,5 +14,13 @@ namespace PortalEquador.Domain.Contract.Repository
         Task<ContractCreateViewModel> GetContract(int personalInformationId);
         Task Save(ContractCreateViewModel model);
         Task<List<ContractViewModel>> GetAllContracts(int personalInformationId);
+
+        Task<ContractCreate__ViewModel> GetCreateModel(int personalInformationId, string fullName);
+        Task<ContractCreate__ViewModel> GetCreateModel(ContractCreate__ViewModel model);
+        Task Save(ContractCreate__ViewModel model);
+
+        Task<ContractResignViewModel> GetResignationModel(int personalInformationId);
+        Task<ContractResignViewModel> GetResignationModel(ContractResignViewModel model);
+        Task Save(ContractResignViewModel model);
     }
 }

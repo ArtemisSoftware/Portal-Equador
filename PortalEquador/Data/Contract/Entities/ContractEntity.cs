@@ -12,7 +12,12 @@ namespace PortalEquador.Data.Contract.Entities
         [ForeignKey("PersonalInformationId")]
         public PersonalInformationEntity PersonalInformationEntity { get; set; }
 
-        
+        public int? ContractId { get; set; }
+
+        [ForeignKey("ContractId")]
+        public GroupItemEntity? ContractGroupItemEntity { get; set; }
+
+
         public int? ResignationReasonId { get; set; }
 
         [ForeignKey("ResignationReasonId")]

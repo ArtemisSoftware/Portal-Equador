@@ -1,0 +1,84 @@
+﻿﻿@using PortalEquador.Util.Constants
+@model PortalEquador.Domain.Contract.ViewModels.ContractResignViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Editar Contrato</h1>
+<hr />
+<br />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="PersonaInformationId" />
+
+
+            <div class="form-group">
+                <label asp-for="ContractStateId" class="control-label"></label>
+                <select asp-for="ContractStateId" class="form-control form-select" asp-items="@Model.ContractStates"
+                        onChange="ReasonSelect()" id="SelectReason"></select>
+            </div>
+            <br />
+
+            <div class="form-group" id="Reason">
+                <label asp-for="ResignationReasonsId" class="control-label"></label>
+                <select asp-for="ResignationReasonsId" class="form-control form-select" asp-items="@Model.ResignationReasons"></select>
+            </div>
+            <br />
+
+            <div class="mb-3">
+                <label asp-for="Observation" class="control-label"></label>
+                <textarea asp-for="Observation" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Observation" class="text-danger"></span>
+            </div>
+
+            <br />
+            <div class="form-group">
+                <a asp-controller="Curriculum" asp-action="Index" class="btn btn-dark"> Regressar ao index</a> &nbsp;
+                <input type="submit" value="Alterar contrato" class="btn btn-primary" />
+            </div>
+
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            ReasonSelect();
+        });
+
+        function ReasonSelect() {
+
+            var response = document.getElementById('SelectReason').value;
+            var reason = document.getElementById('Reason');
+            const firedId = '@GroupTypesConstants.ItemFromGroup.ContractStates.FIRED';
+
+
+            if (response == firedId) {
+                reason.hidden = false
+            }
+            else {
+                reason.hidden = true
+            }
+        }
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

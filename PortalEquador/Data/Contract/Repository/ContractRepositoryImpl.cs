@@ -3,19 +3,11 @@ using PortalEquador.Data.Contract.Entities;
 using PortalEquador.Data.Generic;
 using PortalEquador.Domain.Contract.Repository;
 using PortalEquador.Domain.Contract.ViewModels;
-using PortalEquador.Domain.PersonalInformation.Repository;
-using PortalEquador.Domain.PersonalInformation.ViewModels;
 using PortalEquador.Util.Constants;
 using PortalEquador.Util;
 using Microsoft.EntityFrameworkCore;
-using PortalEquador.Domain.Curriculum.ViewModels;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
-using PortalEquador.Data.Education.University.Entity;
 using PortalEquador.Domain.GroupTypes.ViewModels;
-using System.Diagnostics.Contracts;
-using PortalEquador.Domain.Languages.ViewModels;
-using PortalEquador.Data.Migrations;
-using static PortalEquador.Util.Constants.GroupTypesConstants.ItemFromGroup;
 
 namespace PortalEquador.Data.Contract.Repository
 {
@@ -42,7 +34,14 @@ namespace PortalEquador.Data.Contract.Repository
 
         public async Task Save(ContractCreateViewModel model)
         {
-            
+            var entity = mapper.Map<ContractEntity>(model);
+            entity.EditorId = GetCurrentUserId();
+
+            await AddAsync(entity);
+        }
+
+        public async Task Save(ContractCreate__ViewModel model)
+        {
             var entity = mapper.Map<ContractEntity>(model);
             entity.EditorId = GetCurrentUserId();
 
@@ -69,7 +68,7 @@ namespace PortalEquador.Data.Contract.Repository
         }
 
         private async Task<ContractsViewModel> NoFilter()
-        {
+        {/*
             var query = from personal in context.PersonalInformationEntity
 
                         join ctc in
@@ -89,15 +88,15 @@ namespace PortalEquador.Data.Contract.Repository
                         };
 
             var result = await query.ToListAsync();
-
+            */
             return new ContractsViewModel
             {
-                Contracts = result,
+                //Contracts = result,
             };
         }
 
-            private async Task<ContractsViewModel> Filter(int filter)
-        {
+      private async Task<ContractsViewModel> Filter(int filter)
+        {/*
             // Step 1: Get IDs of latest contracts per PersonalInformationId
             var latestContractIds = await context.ContractEntity
                 .GroupBy(c => c.PersonalInformationId)
@@ -125,16 +124,16 @@ namespace PortalEquador.Data.Contract.Repository
                 })
                 .Where(c => c.ContractState.Id == filter)
                 .ToList(); // This gives you the new list!
-
+            */
             return new ContractsViewModel
             {
-                Contracts = updatedContracts,
+                //Contracts = updatedContracts,
             };
         }
 
 
         public async Task<ContractCreateViewModel> GetContract(int personalInformationId)
-        {
+        {/*
             var result = await context.ContractEntity
                 .Include(d => d.PersonalInformationEntity)
                 .Include(d => d.ContractStateGroupItemEntity)
@@ -150,11 +149,59 @@ namespace PortalEquador.Data.Contract.Repository
 
             model.ContractStates = contractStates;
             model.ResignationReasons = resignationReasons;
+
+            return model;
+                        */
+
+            return new ContractCreateViewModel();
+        }
+
+        public async Task<ContractResignViewModel> GetResignationModel(int personalInformationId)
+        {
+            /*
+            var result = await context.ContractEntity
+                            .Include(d => d.PersonalInformationEntity)
+                            .Include(d => d.ContractStateGroupItemEntity)
+                            .Include(d => d.ResignationReasonGroupItemEntity)
+                            .Include(d => d.ContractGroupItemEntity)
+                            .Where(item => item.PersonalInformationId == personalInformationId)
+                            .OrderByDescending(item => item.Id)
+                            .FirstOrDefaultAsync();
+
+            var model = mapper.Map<ContractResignViewModel>(result);
+
+            var contractStates = GroupItems(Groups.CONTRACT_STATE, OrderType.Alphabetic, GroupTypesConstants.ItemFromGroup.ContractStates.CONTRACTED);
+            var resignationReasons = GroupItems(Groups.RESIGNATION_REASONS, OrderType.Alphabetic);
+
+            model.ContractStates = contractStates;
+            model.ResignationReasons = resignationReasons;
+            return model;
+            */
+            return new ContractResignViewModel { FullName = "" };
+        }
+
+        public async Task<ContractResignViewModel> GetResignationModel(ContractResignViewModel model)
+        {
+            var contractStates = GroupItems(Groups.CONTRACT_STATE, OrderType.Alphabetic, GroupTypesConstants.ItemFromGroup.ContractStates.CONTRACTED);
+            var resignationReasons = GroupItems(Groups.RESIGNATION_REASONS, OrderType.Alphabetic);
+
+            model.ContractStates = contractStates;
+            model.ResignationReasons = resignationReasons;
             return model;
         }
 
+        public async Task Save(ContractResignViewModel model)
+        {
+            var entity = mapper.Map<ContractEntity>(model);
+            entity.EditorId = GetCurrentUserId();
+
+            await AddAsync(entity);
+        }
+
+
         public async Task<List<ContractViewModel>> GetAllContracts(int personalInformationId)
         {
+            /*
             var result = await context.ContractEntity
                 .Include(d => d.PersonalInformationEntity)
                 .Include(d => d.ContractStateGroupItemEntity)
@@ -165,11 +212,13 @@ namespace PortalEquador.Data.Contract.Repository
 
             var model = mapper.Map<List<ContractViewModel>>(result);
             return model;
+            */
+            return new List<ContractViewModel> ();
         }
 
         public async Task<ContractDashboardViewModel> GetDashboard(int id)
         {
-
+            /*
             var query = from personal in context.PersonalInformationEntity
 
                         join ctc in
@@ -259,7 +308,32 @@ namespace PortalEquador.Data.Contract.Repository
                 result.Contract = mapper.Map<GroupItemViewModel>(contractModel);
             }
             return result;
+            */
+
+            return new ContractDashboardViewModel { FullName = "" , ProfileImagePath = ""};
         }
+
+        public async Task<ContractCreate__ViewModel> GetCreateModel(int personalInformationId, string fullName)
+        {
+            var contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
+
+
+            return new ContractCreate__ViewModel
+            {
+                PersonaInformationId = personalInformationId,
+                FullName = fullName,
+                Contracts = contracts
+            };
+        }
+
+        public async Task<ContractCreate__ViewModel> GetCreateModel(ContractCreate__ViewModel model)
+        {
+            var contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
+
+            model.Contracts = contracts;
+            return model;
+        }
+
 
 
     }

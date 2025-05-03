@@ -35,6 +35,7 @@
             public const string DRIVERS_LICENCE_TYPE = "Tipo de carta";
             public const string DRIVERS_LICENCE = "Carta de condução";
             public const string DATE_OF_BIRTH = "Data de nascimento";
+            public const string DATE_OF_CONTRACT_CREATION = "Data de criação do contracto";
             public const string DURATION = "Duração";
             public const string DOCUMENT = "Documento";
 

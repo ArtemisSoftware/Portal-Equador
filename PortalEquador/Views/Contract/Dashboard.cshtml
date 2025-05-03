@@ -60,23 +60,30 @@
                     {
                         case PortalEquador.Domain.Contract.ContractState.Unassigned:
 
-                            <a asp-controller="Contract"
-                               asp-action="Contract"
-                               asp-route-identifier="@Model.Id" asp-route-origin="ct" class="btn btn-success">Contratar</a>
+                                        <a asp-controller="Contract"
+                                            asp-action="Create"
+                                            asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success">Contratar**</a>
+
 
                             break;
 
                         case PortalEquador.Domain.Contract.ContractState.Contracted:
 
-                            <a asp-controller="Contract" asp-action="Edit" asp-route-identifier="@Model.Id" asp-route-origin="ct" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                            <a asp-controller="Contract" 
+                                asp-action="Resign" asp-route-identifier="@Model.Id" asp-route-origin="ct" class="btn btn-warning">Dispensar</a>
+
+                            <a asp-controller="Contract"
+                                asp-action="Create"
+                                asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success">Alterar Contrato</a>
 
                             break;
 
                         default:
 
-                            <a asp-controller="Contract"
-                               asp-action="Contract"
-                               asp-route-identifier="@Model.Id" asp-route-origin="ct"  class="btn btn-success">Contratar</a>
+
+                                <a asp-controller="Contract"
+                                    asp-action="Create"
+                                    asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success">Contratar**</a>
 
                             break;
                     }

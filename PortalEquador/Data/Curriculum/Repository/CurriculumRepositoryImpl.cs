@@ -23,6 +23,7 @@ namespace PortalEquador.Data.Curriculum.Repository
     {
         public async Task<CurriculumDashboardViewModel> GetCurriculumDashboard(int id)
         {
+            /*
             var query = from personal in context.PersonalInformationEntity
                         
                         join ctc in
@@ -164,6 +165,8 @@ namespace PortalEquador.Data.Curriculum.Repository
             }
             
             return result;
+            */
+            return new CurriculumDashboardViewModel { FullName = "", ProfileImagePath = ""};
         }
     }
 }
