@@ -1,13 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using PortalEquador.Data.Contract.Entities;
 using PortalEquador.Domain.Contract.Repository;
 using PortalEquador.Domain.Contract.ViewModels;
-using PortalEquador.Domain.Document.Repository;
-using PortalEquador.Domain.Document.ViewModels;
-using PortalEquador.Domain.Languages.ViewModels;
-using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.Contract
@@ -30,19 +23,6 @@ namespace PortalEquador.Controllers.Contract
             return View(model);
         }
 
-        public async Task<IActionResult> Contract(int identifier, string origin)
-        {
-            await repository.Contract(identifier);
-
-            if(origin == "cv")
-            {
-                return RedirectToAction(nameof(Dashboard), "Curriculum", new { identifier = identifier });
-            } else
-            {
-                return RedirectToAction(nameof(Dashboard), "Contract", new { identifier = identifier });
-            }
-        }
-
 
         public async Task<IActionResult> Create(int identifier, string fullName, string origin)
         {
@@ -62,10 +42,15 @@ namespace PortalEquador.Controllers.Contract
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ContractCreate__ViewModel model)
         {
+
+            ViewData[ViewBagConstants.ORIGIN] = model.Origin;
+            ViewData[ViewBagConstants.PERSONAL_ID] = model.PersonaInformationId;
+            ViewData[ViewBagConstants.FULL_NAME] = model.FullName;
+
             if (ModelState.IsValid)
             {
                 await repository.Save(model);
-                await Redirect();
+                return await Redirect();
             }
 
             var recoverModel = await RecoverModel(model);
@@ -77,10 +62,17 @@ namespace PortalEquador.Controllers.Contract
             return await repository.GetCreateModel(model);
         }
 
-        // GET: Language/Edit
-        public async Task<IActionResult> Resign(int identifier)
+        // GET: Contract/Resign
+        public async Task<IActionResult> Resign(int identifier, string fullName, string origin)
         {
             var model = await repository.GetResignationModel(identifier);
+            model.Origin = origin;
+            model.FullName = fullName;
+
+            ViewData[ViewBagConstants.ORIGIN] = origin;
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = model.FullName;
+
             return View(model);
         }
 
@@ -89,12 +81,17 @@ namespace PortalEquador.Controllers.Contract
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ContractResignViewModel model)
+        public async Task<IActionResult> Resign(ContractResignViewModel model)
         {
+
+            ViewData[ViewBagConstants.ORIGIN] = model.Origin;
+            ViewData[ViewBagConstants.PERSONAL_ID] = model.PersonaInformationId;
+            ViewData[ViewBagConstants.FULL_NAME] = model.FullName;
+
             if (ModelState.IsValid)
             {
                 await repository.Save(model);
-                await Redirect();
+                return await Redirect();
             }
 
             var recoverModel = await RecoverModel(model);
@@ -111,29 +108,6 @@ namespace PortalEquador.Controllers.Contract
 
 
 
-        // GET: Language/Edit
-        public async Task<IActionResult> Edit(int identifier)
-        {
-            var model = await repository.GetContract(identifier);
-            return View(model);
-        }
-
-        // POST: Language/Edit
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(ContractCreateViewModel model, string origin)
-        {
-            if (origin == "cv")
-            {
-                return RedirectToAction(nameof(Dashboard), "Curriculum", new { identifier = model.PersonaInformationId });
-            } else
-            {
-                return RedirectToAction(nameof(Dashboard), "Contract", new { identifier = model.PersonaInformationId });
-            }
-        }
-
         public async Task<IActionResult> History(int identifier, string fullName)
         {
             ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
@@ -146,7 +120,7 @@ namespace PortalEquador.Controllers.Contract
         {
 
             var origin = ViewData[ViewBagConstants.ORIGIN];
-            var identifier = ViewData[ViewBagConstants.ORIGIN];
+            var identifier = ViewData[ViewBagConstants.PERSONAL_ID];
 
             if (origin == "cv")
             {

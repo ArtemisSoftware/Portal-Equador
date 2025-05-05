@@ -25,5 +25,7 @@ namespace PortalEquador.Domain.Contract.ViewModels
 
         [Display(Name = StringConstants.Display.OBSERVATION)]
         public string? Observation { get; set; }
+
+        public string Origin { get; set; }
     }
 }

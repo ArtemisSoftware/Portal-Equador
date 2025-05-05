@@ -15,7 +15,7 @@ namespace PortalEquador.Controllers.Curriculum
         // GET: CurriculumsController
         public async Task<IActionResult> Index()
         {
-            var result = await personalInformationRepository.GetAll();
+            var result = await repository.GetCurriculums();
             return View(result);
         }
 

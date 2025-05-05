@@ -7,5 +7,6 @@ namespace PortalEquador.Domain.Curriculum.Repository
     public interface CurriculumRepository : IGenericRepository<CurriculumEntity>
     {
         Task<CurriculumDashboardViewModel> GetCurriculumDashboard(int curriculumId);
+        Task<List<CurriculumViewModel>> GetCurriculums();
     }
 }

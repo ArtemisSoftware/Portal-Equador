@@ -8,6 +8,7 @@ using PortalEquador.Util;
 using Microsoft.EntityFrameworkCore;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 using PortalEquador.Domain.GroupTypes.ViewModels;
+using PortalEquador.Domain.Curriculum.ViewModels;
 
 namespace PortalEquador.Data.Contract.Repository
 {
@@ -19,146 +20,110 @@ namespace PortalEquador.Data.Contract.Repository
         ) : GenericRepository<ContractEntity>(context, httpContextAccessor), IContractRepository
     {
 
-        public async Task Contract(int id)
-        {
-            var contract = new ContractCreateViewModel
-            {
-                Id = 0,
-                PersonaInformationId = id,
-                ContractStateId = GroupTypesConstants.ItemFromGroup.ContractStates.CONTRACTED,
-            };
 
-            await Save(contract);
-        }
-
-
-        public async Task Save(ContractCreateViewModel model)
-        {
-            var entity = mapper.Map<ContractEntity>(model);
-            entity.EditorId = GetCurrentUserId();
-
-            await AddAsync(entity);
-        }
 
         public async Task Save(ContractCreate__ViewModel model)
         {
             var entity = mapper.Map<ContractEntity>(model);
+            entity.ContractStateId = GroupTypesConstants.ItemFromGroup.ContractStates.CONTRACTED;
             entity.EditorId = GetCurrentUserId();
 
             await AddAsync(entity);
         }
 
-        public async Task<ContractsViewModel> GetAll(int filter)
+        public async Task Save(ContractResignViewModel model)
         {
+            var entity = mapper.Map<ContractEntity>(model);
+            entity.EditorId = GetCurrentUserId();
 
-            var contractStates = GroupItems(Groups.CONTRACT_STATE, OrderType.Alphabetic, -1, StringConstants.ContractStatus.UNASSIGNED);
-
-            if (filter == -1) {
-                var models = await NoFilter();
-                models.ContractStates = contractStates;
-                models.ContractStatesId = filter;
-                return models;
-            } else
-            {
-                var models = await Filter(filter);
-                models.ContractStates = contractStates;
-                models.ContractStatesId = filter;
-                return models;
-            }
+            await AddAsync(entity);
         }
 
+
+
         private async Task<ContractsViewModel> NoFilter()
-        {/*
+        {
+
             var query = from personal in context.PersonalInformationEntity
 
-                        join ctc in
-                            (from contract in context.ContractEntity
-                             orderby contract.Id descending
-                             select contract)
-                            on personal.Id equals ctc.PersonalInformationId into resultCtc
+                        join contract in (
+                            from c in context.ContractEntity
+                            orderby c.Id descending
+                            select new
+                            {
+                                c.Id,
+                                c.PersonalInformationId,
+                                c.ContractStateId
+                            }
+                        ) on personal.Id equals contract.PersonalInformationId into contractJoin
+                        from contract in contractJoin.Take(1).DefaultIfEmpty()
 
-                        from resultContract in resultCtc.DefaultIfEmpty()
+                        join groupItem in context.GroupItemEntity
+                                           on contract.ContractStateId equals groupItem.Id into groupItemGroup
+                        from groupItem in groupItemGroup.DefaultIfEmpty()
 
-                        where resultContract == null // ✅ This filters only the ones with NO contracts
+                        where contract.ContractStateId == null
 
                         select new CurrentContractViewModel
                         {
                             PersonalInformationId = personal.Id,
                             FullName = personal.FirstName + " " + personal.LastName,
+                            ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, personal.Id),
+                            ContractDescription = groupItem != null ? groupItem.Description : "",
+                            ContractId = groupItem != null ? groupItem.Id : null,
                         };
 
             var result = await query.ToListAsync();
-            */
+            
             return new ContractsViewModel
             {
-                //Contracts = result,
+                Contracts = result,
             };
         }
 
       private async Task<ContractsViewModel> Filter(int filter)
-        {/*
-            // Step 1: Get IDs of latest contracts per PersonalInformationId
-            var latestContractIds = await context.ContractEntity
-                .GroupBy(c => c.PersonalInformationId)
-                .Select(g => g.OrderByDescending(c => c.Id)
-                                        .Select(c => c.Id).FirstOrDefault())
+        {
 
-                .ToListAsync();
+            var query = from personal in context.PersonalInformationEntity
 
-            // Step 2: Load full contracts with related entities
-            var latestContracts = await context.ContractEntity
-                .Where(c => latestContractIds.Contains(c.Id))
-                .Include(c => c.PersonalInformationEntity)
-                .Include(c => c.ContractStateGroupItemEntity)
-                .Include(c => c.ResignationReasonGroupItemEntity)
-                .ToListAsync();
+                        join contract in (
+                            from c in context.ContractEntity
+                            orderby c.Id descending
+                            select new
+                            {
+                                c.Id,
+                                c.PersonalInformationId,
+                                c.ContractStateId
+                            }
+                        ) on personal.Id equals contract.PersonalInformationId into contractJoin
+                        from contract in contractJoin.Take(1).DefaultIfEmpty()
 
-            var models = mapper.Map<List<CurrentContractViewModel>>(latestContracts);
+                        join groupItem in context.GroupItemEntity
+                                           on contract.ContractStateId equals groupItem.Id into groupItemGroup
+                        from groupItem in groupItemGroup.DefaultIfEmpty()
 
-            var updatedContracts = models
-                .Select(contract =>
-                {
-                    // Modify fields (or even make a copy if needed)
-                    contract.ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, contract.PersonalInformationId);
-                    return contract;
-                })
-                .Where(c => c.ContractState.Id == filter)
-                .ToList(); // This gives you the new list!
-            */
+                        where contract.ContractStateId == filter
+
+                        select new CurrentContractViewModel
+                        {
+                            PersonalInformationId = personal.Id,
+                            FullName = personal.FirstName + " " + personal.LastName,
+                            ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, personal.Id),
+                            ContractDescription = groupItem != null ? groupItem.Description : "",
+                            ContractId = groupItem != null ? groupItem.Id : null,
+                        };
+
+            var result = await query.ToListAsync();
+
             return new ContractsViewModel
             {
-                //Contracts = updatedContracts,
+                Contracts = result,
             };
         }
 
 
-        public async Task<ContractCreateViewModel> GetContract(int personalInformationId)
-        {/*
-            var result = await context.ContractEntity
-                .Include(d => d.PersonalInformationEntity)
-                .Include(d => d.ContractStateGroupItemEntity)
-                .Include(d => d.ResignationReasonGroupItemEntity)
-                .Where(item => item.PersonalInformationId == personalInformationId)
-                .OrderByDescending(item => item.Id) 
-                .FirstOrDefaultAsync();           
-
-            var model = mapper.Map<ContractCreateViewModel>(result);
-
-            var contractStates = GroupItems(Groups.CONTRACT_STATE, OrderType.Alphabetic, GroupTypesConstants.ItemFromGroup.ContractStates.CONTRACTED);
-            var resignationReasons = GroupItems(Groups.RESIGNATION_REASONS, OrderType.Alphabetic);
-
-            model.ContractStates = contractStates;
-            model.ResignationReasons = resignationReasons;
-
-            return model;
-                        */
-
-            return new ContractCreateViewModel();
-        }
-
         public async Task<ContractResignViewModel> GetResignationModel(int personalInformationId)
         {
-            /*
             var result = await context.ContractEntity
                             .Include(d => d.PersonalInformationEntity)
                             .Include(d => d.ContractStateGroupItemEntity)
@@ -175,50 +140,75 @@ namespace PortalEquador.Data.Contract.Repository
 
             model.ContractStates = contractStates;
             model.ResignationReasons = resignationReasons;
+            model.Id = 0;
+            model.DateOfContract = null;
+            model.Observation = "";
             return model;
-            */
-            return new ContractResignViewModel { FullName = "" };
         }
 
         public async Task<ContractResignViewModel> GetResignationModel(ContractResignViewModel model)
         {
-            var contractStates = GroupItems(Groups.CONTRACT_STATE, OrderType.Alphabetic, GroupTypesConstants.ItemFromGroup.ContractStates.CONTRACTED);
-            var resignationReasons = GroupItems(Groups.RESIGNATION_REASONS, OrderType.Alphabetic);
 
-            model.ContractStates = contractStates;
-            model.ResignationReasons = resignationReasons;
-            return model;
-        }
-
-        public async Task Save(ContractResignViewModel model)
-        {
-            var entity = mapper.Map<ContractEntity>(model);
-            entity.EditorId = GetCurrentUserId();
-
-            await AddAsync(entity);
-        }
-
-
-        public async Task<List<ContractViewModel>> GetAllContracts(int personalInformationId)
-        {
-            /*
             var result = await context.ContractEntity
                 .Include(d => d.PersonalInformationEntity)
                 .Include(d => d.ContractStateGroupItemEntity)
                 .Include(d => d.ResignationReasonGroupItemEntity)
+                .Include(d => d.ContractGroupItemEntity)
+                .Where(item => item.PersonalInformationId == model.PersonaInformationId)
+                .OrderByDescending(item => item.Id)
+                .FirstOrDefaultAsync();
+
+            var current = mapper.Map<ContractResignViewModel>(result);
+
+            var contractStates = GroupItems(Groups.CONTRACT_STATE, OrderType.Alphabetic, GroupTypesConstants.ItemFromGroup.ContractStates.CONTRACTED);
+            var resignationReasons = GroupItems(Groups.RESIGNATION_REASONS, OrderType.Alphabetic);
+
+            current.ContractStates = contractStates;
+            current.ResignationReasons = resignationReasons;
+            current.Id = 0;
+            current.DateOfContract = model.DateOfContract;
+            current.Observation = model.Observation;
+            current.ContractId = model.ContractId;
+            current.ContractStateId = model.ContractStateId;
+            current.ResignationReasonsId = model.ResignationReasonsId;
+            return model;
+        }
+
+        public async Task<ContractHistoryViewModel> GetAllContracts(int personalInformationId)
+        {
+            
+            var result = await context.ContractEntity
+                            .Include(d => d.PersonalInformationEntity)
+                            .Include(d => d.ContractStateGroupItemEntity)
+                            .Include(d => d.ResignationReasonGroupItemEntity)
+                            .Include(d => d.ContractGroupItemEntity)
                 .Where(item => item.PersonalInformationId == personalInformationId)
                 .OrderByDescending(item => item.Id)
                 .ToListAsync();
 
             var model = mapper.Map<List<ContractViewModel>>(result);
-            return model;
-            */
-            return new List<ContractViewModel> ();
+
+            var current = new List<ContractViewModel>();
+            current.Add(model.First());
+
+            var history = new List<ContractViewModel>();
+
+            if (model.Count - 1 > 0)
+            {
+                history = model.GetRange(1, model.Count - 1);
+            }
+
+            return new ContractHistoryViewModel
+            {
+                Current = current,
+                History = history
+            };
+
         }
 
         public async Task<ContractDashboardViewModel> GetDashboard(int id)
         {
-            /*
+            
             var query = from personal in context.PersonalInformationEntity
 
                         join ctc in
@@ -308,9 +298,6 @@ namespace PortalEquador.Data.Contract.Repository
                 result.Contract = mapper.Map<GroupItemViewModel>(contractModel);
             }
             return result;
-            */
-
-            return new ContractDashboardViewModel { FullName = "" , ProfileImagePath = ""};
         }
 
         public async Task<ContractCreate__ViewModel> GetCreateModel(int personalInformationId, string fullName)
@@ -333,6 +320,30 @@ namespace PortalEquador.Data.Contract.Repository
             model.Contracts = contracts;
             return model;
         }
+
+        public async Task<ContractsViewModel> GetAll(int filter)
+        {
+
+            var contractStates = GroupItems(Groups.CONTRACT_STATE, OrderType.Alphabetic, -1, StringConstants.ContractStatus.UNASSIGNED);
+
+            if (filter == -1)
+            {
+                var models = await NoFilter();
+                models.ContractStates = contractStates;
+                models.ContractStatesId = filter;
+                return models;
+            }
+            else
+            {
+                var models = await Filter(filter);
+                models.ContractStates = contractStates;
+                models.ContractStatesId = filter;
+                return models;
+            }
+        }
+
+
+
 
 
 

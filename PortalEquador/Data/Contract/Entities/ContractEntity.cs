@@ -29,5 +29,7 @@ namespace PortalEquador.Data.Contract.Entities
         public GroupItemEntity ContractStateGroupItemEntity { get; set; }
 
         public string? Observation { get; set; }
+
+        public DateTime? DateOfContract { get; set; }
     }
 }

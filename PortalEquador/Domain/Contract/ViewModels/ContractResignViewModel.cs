@@ -23,7 +23,10 @@ namespace PortalEquador.Domain.Contract.ViewModels
 
 
         [Display(Name = StringConstants.Display.CONTRACT)]
-        public GroupItemViewModel Contract { get; set; }
+        public int ContractId { get; set; }
+
+        [Display(Name = StringConstants.Display.CONTRACT_IN_USE)]
+        public GroupItemViewModel? Contract { get; set; }
 
 
         [Display(Name = StringConstants.Display.STATE_OF_HIRED)]
@@ -38,6 +41,8 @@ namespace PortalEquador.Domain.Contract.ViewModels
 
         [Display(Name = StringConstants.Display.OBSERVATION)]
         public string? Observation { get; set; }
+
+        public string Origin { get; set; }
 
     }
 }

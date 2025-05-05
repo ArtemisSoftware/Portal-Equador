@@ -77,18 +77,27 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.Nature, opt => opt.MapFrom(src => src.Decision))
                 .ReverseMap();
 
-            CreateMap<ContractEntity, ContractCreateViewModel>()
+            CreateMap<ContractEntity, ContractCreate__ViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.ContractId, opt => opt.MapFrom(src => src.ContractStateId))
+                .ReverseMap();
+
+            CreateMap<ContractEntity, ContractResignViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 .ForMember(dest => dest.ContractStateId, opt => opt.MapFrom(src => src.ContractStateId))
                 .ForMember(dest => dest.ResignationReasonsId, opt => opt.MapFrom(src => src.ResignationReasonId))
-
+                .ForMember(dest => dest.ContractId, opt => opt.MapFrom(src => src.ContractId))
+                .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity))
                 .ReverseMap();
+
 
             CreateMap<ContractEntity, ContractViewModel>()
                  //.ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                  .ForMember(dest => dest.ContractState, opt => opt.MapFrom(src => src.ContractStateGroupItemEntity))
                 .ForMember(dest => dest.ResignationReasons, opt => opt.MapFrom(src => src.ResignationReasonGroupItemEntity))
+                .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity))
                 //.ForMember(dest => dest.PersonalInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 //                .ForMember(dest => dest.ContractStatesId, opt => opt.MapFrom(src => src.ContractStateId))
                 //                .ForMember(dest => dest.ResignationReasonsId, opt => opt.MapFrom(src => src.ResignationReasonId))
@@ -96,7 +105,7 @@ namespace PortalEquador.Data.Mappers
 
             CreateMap<ContractEntity, CurrentContractViewModel>()
              .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.PersonalInformationEntity.FirstName + " " + src.PersonalInformationEntity.LastName))
-                .ForMember(dest => dest.ContractState, opt => opt.MapFrom(src => src.ContractStateGroupItemEntity))
+             
               .ReverseMap();
         }
     }

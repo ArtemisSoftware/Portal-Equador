@@ -5,16 +5,29 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Editar Contrato</h1>
+<h1>Dispensar</h1>
+<h4> @Model.FullName</h4>
 <hr />
 <br />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Resign">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <input type="hidden" asp-for="PersonaInformationId" />
+            <input type="hidden" asp-for="Origin" />
+            <input type="hidden" asp-for="FullName" />
+            <input type="hidden" asp-for="ContractId" />
 
+            <dl class="row">
+                <dt class="col-sm-6">
+                    @Html.DisplayNameFor(model => model.Contract)
+                </dt>
+                <dd class="col-sm-6">
+                    @Html.DisplayFor(model => model.Contract.Description)
+                </dd>
+             </dl>
+            <br />
 
             <div class="form-group">
                 <label asp-for="ContractStateId" class="control-label"></label>
@@ -27,6 +40,14 @@
                 <label asp-for="ResignationReasonsId" class="control-label"></label>
                 <select asp-for="ResignationReasonsId" class="form-control form-select" asp-items="@Model.ResignationReasons"></select>
             </div>
+            <br />
+
+            <div class="form-group">
+                <label asp-for="DateOfContract" class="control-label"></label>
+                <input asp-for="DateOfContract" class="form-control" />
+                <span asp-validation-for="DateOfContract" class="text-danger"></span>
+            </div>
+
             <br />
 
             <div class="mb-3">

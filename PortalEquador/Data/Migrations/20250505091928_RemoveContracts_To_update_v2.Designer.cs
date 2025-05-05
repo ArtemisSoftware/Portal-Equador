@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PortalEquador.Data;
 
@@ -11,9 +12,11 @@ using PortalEquador.Data;
 namespace PortalEquador.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250505091928_RemoveContracts_To_update_v2")]
+    partial class RemoveContracts_To_update_v2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -306,58 +309,6 @@ namespace PortalEquador.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("PortalEquador.Data.Contract.Entities.ContractEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ContractId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ContractStateId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateOfContract")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EditorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Observation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PersonalInformationId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ResignationReasonId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContractId");
-
-                    b.HasIndex("ContractStateId");
-
-                    b.HasIndex("EditorId");
-
-                    b.HasIndex("PersonalInformationId");
-
-                    b.HasIndex("ResignationReasonId");
-
-                    b.ToTable("ContractEntity");
                 });
 
             modelBuilder.Entity("PortalEquador.Data.Curriculum.Entities.CurriculumEntity", b =>
@@ -712,7 +663,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "408aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4c4ac688-2cd3-4058-ada4-b7e34383dcd6",
+                            ConcurrencyStamp = "f5ff3369-2fcd-472a-baf6-c29d4d8ba5e8",
                             Email = "adminEquador@teste.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
@@ -720,9 +671,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFPb8muvPjA+lvYfc/kmRQdRMh8qHsBgkqGpE/7eomUyUPSS6wUyZ00C12gX5ZXjiQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDzQd+o5DWkSNkfLH3wyvQT+Av6GHClwcpR+/YwwJIaKAJwKl9KKoOgmtilqLtvKDg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c17d6810-b197-42a9-9c78-b29c8ede9107",
+                            SecurityStamp = "a7cad895-a63a-4b57-a5f6-71b8e5ec541f",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         },
@@ -730,7 +681,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "418aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "92e3e6b8-efc0-46ed-a982-4c79815ae049",
+                            ConcurrencyStamp = "d09d60dc-23f1-4f6e-aa64-427845ef9eac",
                             Email = "aguiar@teste.com",
                             EmailConfirmed = true,
                             FirstName = "António",
@@ -738,9 +689,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "AGUIAR@EQUADOR.COM",
                             NormalizedUserName = "AGUIAR@EQUADOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJd4WQN3DNK4U9VoWVaDUyBFZTo+oVoTU3I2EcJlu7mBvujgC49K8uuFgmwPLEaWrw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHbsRDTjqvwr2OAO1KC3bbZ0G636Zmjg+GkT/iqlulDIm+kORpXEeH95OdOS9dinfg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bed66187-9bfd-49ae-96dd-f0e5258d6408",
+                            SecurityStamp = "4243a182-56ad-42a1-9f31-725ea63045da",
                             TwoFactorEnabled = false,
                             UserName = "aguiar@equador.com"
                         },
@@ -748,7 +699,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "428aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d0962b44-0245-4288-8e75-49f321e5ebe5",
+                            ConcurrencyStamp = "cab84814-9c5a-4abc-8b33-9419c5c184c7",
                             Email = "dovictor@equador.com",
                             EmailConfirmed = true,
                             FirstName = "Domingos",
@@ -756,9 +707,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "DOVICTOR@EQUADOR.COM",
                             NormalizedUserName = "DOVICTOR@EQUADOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEH+ps6jX3j/Wl7GiH2KRcP5Vk02L87hx4EXpwUvgLl1q7tsj3cDXFNizeLQL+BME6g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELqK8O9AIkW/uIvODbJO7BxsNcxay/Cj+2JxetXrJuLmxw8Z/vdPSRNuW+QuB+sy7A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "16358de5-c5b6-446d-b16e-956455edaaf6",
+                            SecurityStamp = "7105220d-439f-48ac-8413-674ae44837cc",
                             TwoFactorEnabled = false,
                             UserName = "dovictor@equador.com"
                         },
@@ -766,7 +717,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "438aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "21087740-8c75-4736-95eb-ef4cbaab8d95",
+                            ConcurrencyStamp = "bd8cf7ad-a2e1-4158-86f0-2dc62e39374a",
                             Email = "manioca@equador.com",
                             EmailConfirmed = true,
                             FirstName = "Mateus",
@@ -774,9 +725,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MANIOCA@EQUADOR.COM",
                             NormalizedUserName = "MANIOCA@EQUADOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDAHNXit/Sw5ViOVZ3+ZLMVeokN0BBNTCkPpzQBpsYy04AjmfRqSDgPOWF4iQm6XlQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENZFDP713vxCoanK2pJgxKYueSzZB1R0RhXIILHJJGQ/bbVE1dsD7yySHoh/QnfvpQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ee1b2bd3-78dc-4dea-9cc0-557bb96707b6",
+                            SecurityStamp = "88022043-78c8-49f8-9aeb-6534080259b0",
                             TwoFactorEnabled = false,
                             UserName = "manioca@equador.com"
                         },
@@ -784,7 +735,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "448aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "16c92e43-df74-4542-b442-86b5226dd9b9",
+                            ConcurrencyStamp = "9c180d62-2944-4201-b5f1-ad0c96784a7c",
                             Email = "lumira@equador.com",
                             EmailConfirmed = true,
                             FirstName = "Luís",
@@ -792,9 +743,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "LUMIRA@EQUADOR.COM",
                             NormalizedUserName = "LUMIRA@EQUADOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAENmJqr6Mto+3X91zXQFLy4qhD/ybmYQgdrlUtBTNMzr7wQkq/QKdpNMbasqQoRy84w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEH/Ou6t9n8Ak1f58anDLrA+2aqpndVMVUyx/Gcr3X4ovzw7jVM+9Et/FhQMVCDKV5w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e3f89539-8034-44f9-9c4e-3dfca2989c14",
+                            SecurityStamp = "6f940ba5-dcef-4453-a876-6ec236577bd8",
                             TwoFactorEnabled = false,
                             UserName = "lumira@equador.com"
                         },
@@ -802,7 +753,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "1a2b3c4d-0001-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "67c2061c-dcb1-4b5a-a7f0-4596f87ee22e",
+                            ConcurrencyStamp = "6d8865cd-4754-471c-a974-6bc596ee8ae0",
                             Email = "supervisor.cvx@equador.co.ao",
                             EmailConfirmed = true,
                             FirstName = "Lazáro",
@@ -810,9 +761,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SUPERVISOR.CVX@EQUADOR.CO.AO",
                             NormalizedUserName = "SUPERVISOR.CVX@EQUADOR.CO.AO",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFNT05hiMnUerFwmTBNbyR4ZEKYeeOuZsMAtBvalvJNvv/LfwvJAVb8YIl8IUU6wwA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPja+Hbj0sU7FwVI2v/YEpc21nz0mjrSzenefoXGKkDGnRRfkkkrIdqThVNr9EfDpw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6fc48e69-7b39-4774-87f3-d49192940c86",
+                            SecurityStamp = "73a0613e-c36c-471f-a054-aa0b426ad497",
                             TwoFactorEnabled = false,
                             UserName = "supervisor.cvx@equador.co.ao"
                         },
@@ -820,7 +771,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "2a2b3c4d-0002-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0a78a50f-9c76-40dd-a77a-092dd4a6715c",
+                            ConcurrencyStamp = "599598ad-2baf-4468-b843-a08803478a87",
                             Email = "benedito.equador@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Benedito",
@@ -828,9 +779,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "BENEDITO.EQUADOR@GMAIL.COM",
                             NormalizedUserName = "BENEDITO.EQUADOR@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAENMpDar0cgWV0tfHaqagdPiK8NnAm4FiQBgATEHBjFz8ZznMYmjZ9OCmyHeNYW1hLA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJW89p6WrnFgsIw8oo6Pk4BD0Ij9VyGJ5SdW8Dcd+MFY1FO6GNt4XCoPdPSbpt4LrA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7323b300-e506-4090-8be5-e340af960984",
+                            SecurityStamp = "6d13811e-a0c6-4954-bf61-de42ddc72551",
                             TwoFactorEnabled = false,
                             UserName = "benedito.equador@gmail.com"
                         },
@@ -838,7 +789,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "3a2b3c4d-0003-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e72bf569-de82-4440-b4b6-7ac07fbf5679",
+                            ConcurrencyStamp = "252ae99e-0859-415f-8fbe-8900ecb393ed",
                             Email = "pascoaljose79@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Pascoal",
@@ -846,9 +797,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "PASCOALJOSE79@GMAIL.COM",
                             NormalizedUserName = "PASCOALJOSE79@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBByRbJCGEtszBOE8nH4ajNZM6yxPRZFdrAj+XmucUzmKTpVTdvsKmVUtXQbH4cFlw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBTXvRgpLlyyj28NSte4Tmz3nb6+yCcdssZb1hYSSkZlSVXyfC/EASaKNoSoNzismQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a2d90062-61dc-4841-ae71-2c8a703d93ba",
+                            SecurityStamp = "ea542512-d14e-4cc9-b90f-cf00f219dcb2",
                             TwoFactorEnabled = false,
                             UserName = "pascoaljose79@gmail.com"
                         },
@@ -856,7 +807,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "4a2b3c4d-0004-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "253005bb-dbe0-4d63-ac93-8360aa8a099c",
+                            ConcurrencyStamp = "ddb6f584-13c5-4629-a2d6-fff78ff64a53",
                             Email = "manuellima171@hotmail.com",
                             EmailConfirmed = true,
                             FirstName = "Manuel",
@@ -864,9 +815,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MANUELLIMA171@HOTMAIL.COM",
                             NormalizedUserName = "MANUELLIMA171@HOTMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHy/Pc92RuJ+b0RTQrlUMj2cY9I3q+de8QiIZIGKNbxCq4/2q33p4daSnT4fYPIj8w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMy+12OpFovo4iXi42Pz0k1PScm6csmGjrS+RKE1qpOlDxmX2zk5tmVsvqhOrTJE4g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ea0579a1-16f5-46e6-b41e-59a3c27fea84",
+                            SecurityStamp = "8cc4e8dc-f956-41e7-9aa0-f3cd9123b823",
                             TwoFactorEnabled = false,
                             UserName = "manuellima171@hotmail.com"
                         },
@@ -874,7 +825,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "5a2b3c4d-0005-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ba4f05a1-b288-4fdd-8d1a-8d4851fec1e9",
+                            ConcurrencyStamp = "a3a7fbdd-8690-4d86-bdb9-bf58ad63e85f",
                             Email = "GANT@equinor.com",
                             EmailConfirmed = true,
                             FirstName = "Gabriel",
@@ -882,9 +833,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "GANT@EQUINOR.COM",
                             NormalizedUserName = "GANT@EQUINOR.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOEJ0ARZVkz4W+IZwp3nTuAKHK6xPU066DXPP1ggnpPKZYL/O7CnIH65wmJJWS6rpw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPoE/IFKGatLlp9Vy4y26o4APPjt1noXjh4glGO0J2lljjeJYCg+aAqiw32vwpVyBA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a76add0d-736c-406c-854e-8566039aa18e",
+                            SecurityStamp = "9d134af8-1ec8-4eeb-bafd-b503a22ee429",
                             TwoFactorEnabled = false,
                             UserName = "GANT@equinor.com"
                         },
@@ -892,7 +843,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "6a2b3c4d-0006-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5b84758f-01a1-4ecf-8cc0-60bce63b5213",
+                            ConcurrencyStamp = "6a622e59-b8ef-4493-a6e3-e2c183342d03",
                             Email = "Trindadeluis60@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Trindade",
@@ -900,9 +851,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "TRINDADELUIS60@GMAIL.COM",
                             NormalizedUserName = "TRINDADELUIS60@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAECNRqm13RVl3kmr5ykfGr5hW+blVBuZo/22D2do8Oa8tSf1O+4ZnVSwFfq9DAbSfrg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEG3IgiT+j8+KfKMnptUkNkip//5d1ofzx064hhJD9/AX+CSHj1n1fBNwc2h4pDVPUg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c9c8c7e4-db44-4968-9d0b-64d8ca9cf9e1",
+                            SecurityStamp = "39f45637-01be-47d7-a39c-507afd8ad6f7",
                             TwoFactorEnabled = false,
                             UserName = "Trindadeluis60@gmail.com"
                         },
@@ -910,7 +861,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "7a2b3c4d-0007-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d54a9f85-ebb1-4945-b1c9-21a2ccfafa9f",
+                            ConcurrencyStamp = "497d24dd-2fe1-49ae-b297-aa0664ba11ff",
                             Email = "fleetbp.one@equador.co.ao",
                             EmailConfirmed = true,
                             FirstName = "Almeida",
@@ -918,9 +869,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "FLEETBP.ONE@EQUADOR.CO.AO",
                             NormalizedUserName = "FLEETBP.ONE@EQUADOR.CO.AO",
-                            PasswordHash = "AQAAAAIAAYagAAAAELvY1Y8OXGrKnVvQfTjYl51kHWpJkZfTkcii217oEWflGdH6EkP0IeP7Ns3zPNEFZQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHwnlx8ufFYpB5b7NYyhlUDyiNEpgpHNTmTLh11KXaKLHXgoGfTkgsnk5pbtuZuCWQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4f100558-6cb9-49fb-ae4a-ebbb272bda40",
+                            SecurityStamp = "c37d17b0-c49e-4172-8dbe-1784957bcc86",
                             TwoFactorEnabled = false,
                             UserName = "fleetbp.one@equador.co.ao"
                         },
@@ -928,7 +879,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "8a2b3c4d-0008-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "861d0aa8-ece3-4e01-8541-9ffbb8665685",
+                            ConcurrencyStamp = "c9a316d3-fde0-45c0-9074-7fa097eb6bf9",
                             Email = "fleetbp.two@equador.co.ao",
                             EmailConfirmed = true,
                             FirstName = "Alfredo",
@@ -936,9 +887,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "FLEETBP.TWO@EQUADOR.CO.AO",
                             NormalizedUserName = "FLEETBP.TWO@EQUADOR.CO.AO",
-                            PasswordHash = "AQAAAAIAAYagAAAAELbnq4sPwZFJvPEqj7xB9kUgv0j/DAwujojLGf3ifdo1IHtVLAYGFGLu00Hs6HSRsA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDLyK6JzYA/cjpjJ87NVHl/KLTyG5VOJZIlIqoWEMWu/GaBWFpZs7KPxUidODuspWA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "cb74240a-2901-4354-b014-85bd2dcd3961",
+                            SecurityStamp = "f3fa88ec-6e01-458b-bcf4-7cb9d6c7675d",
                             TwoFactorEnabled = false,
                             UserName = "fleetbp.two@equador.co.ao"
                         },
@@ -946,7 +897,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "9a2b3c4d-0009-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e9d333b9-5dad-46ed-ae76-d571921d635b",
+                            ConcurrencyStamp = "052b2112-fa09-4b47-a46c-838554d21ca3",
                             Email = "fleetbp.three@equador.co.ao",
                             EmailConfirmed = true,
                             FirstName = "Ilisio",
@@ -954,9 +905,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "FLEETBP.THREE@EQUADOR.CO.AO",
                             NormalizedUserName = "FLEETBP.THREE@EQUADOR.CO.AO",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIuobUAlR+GOAK7h0OierTwTkKVnUJ5hk/FD3FgHiOHOtQ7cl6khwkp2mmSvoDrmhw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECw8ZEgWpGrkIA9jaeQMwIFPSpG9mC+7bDXk2HrV/NpbjVosUyQ5D/uTyBKapBy4ww==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0fe2cc41-7299-4156-b79f-d6ec21898b11",
+                            SecurityStamp = "3aba4220-c0ec-4dbc-953a-fe6e18356d46",
                             TwoFactorEnabled = false,
                             UserName = "fleetbp.three@equador.co.ao"
                         },
@@ -964,7 +915,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "1b2b3c4d-0010-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "fa4964ec-f403-4192-b3be-5280f46112fa",
+                            ConcurrencyStamp = "5dc17b5b-9c93-4f52-97c6-8766d6a17184",
                             Email = "armandosuca@etuenergias.co.ao",
                             EmailConfirmed = true,
                             FirstName = "Armando",
@@ -972,9 +923,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ARMANDOSUCA@ETUENERGIAS.CO.AO",
                             NormalizedUserName = "ARMANDOSUCA@ETUENERGIAS.CO.AO",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEYprjOqs0NxgVAxNFyv6Rud9gDrUcK4kJ5KmcUMq9Cml5GvD8tWCI4wBQ55EpLqtg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGP1MPeW8tLq+d6Gnp3WNj4c+gHqNw0zQg7OYKICw5HJWpOdwVsow4rlZD3bcx7ynA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8b1d1d8d-4163-4686-9b3e-2306ded92e2b",
+                            SecurityStamp = "d8d9ae93-b912-4e78-ac93-a112cc6bcb55",
                             TwoFactorEnabled = false,
                             UserName = "armandosuca@etuenergias.co.ao"
                         },
@@ -982,7 +933,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "2b2b3c4d-0011-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3e362a6b-f036-4505-91ad-79351d3916c8",
+                            ConcurrencyStamp = "885022e3-b455-4960-9727-c645159e33d5",
                             Email = "magalhaes.equador@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "João",
@@ -990,9 +941,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MAGALHAES.EQUADOR@GMAIL.COM",
                             NormalizedUserName = "MAGALHAES.EQUADOR@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEYMJMtq3qaocOEptu5o3FE7wbnSa7WefSph2fF/DaobymWXQpac7RtupNZnll8mlw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEM0iU+ZFDCh3IwdpkDL+JepJtcyFClYPA+PXq8Tcp9osum6yeGpiDjhXBjC7Tp++vg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c70e6ef9-47f9-46ac-922c-848434f84f88",
+                            SecurityStamp = "194817e9-0b97-408e-949b-536f186fdccb",
                             TwoFactorEnabled = false,
                             UserName = "magalhaes.equador@gmail.com"
                         },
@@ -1000,7 +951,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "1a2b3c4d-0002-4821-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "832d12b9-dacb-46c6-aaf2-6e09670904d6",
+                            ConcurrencyStamp = "781316cd-307c-4dbf-8c01-41326660d3a8",
                             Email = "bmml@alngopco.com",
                             EmailConfirmed = true,
                             FirstName = "Manuel",
@@ -1008,9 +959,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "BMML@ALNGOPCO.COM",
                             NormalizedUserName = "BMML@ALNGOPCO.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFFJeFLlvhZZ+ikTCrpQcZypybANfG8jcm/8MXZD7k6nfdeoVR2bJOYNhTSpQCbBtA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENa0gTxj6oYMCVIXCwukQVNetHS5y1Ke5BOdyQFUwjW7IEdxKJ9ejwQYNF27ZkLSlw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "60767085-e7e8-4825-9eb3-7b1048e5c2d6",
+                            SecurityStamp = "cdc4f526-6bef-416b-98da-8b81682c5d3a",
                             TwoFactorEnabled = false,
                             UserName = "bmml@alngopco.com"
                         },
@@ -1018,7 +969,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "1a2b3c4d-0003-4821-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "da80fa66-1c57-43b3-a52f-065271058f97",
+                            ConcurrencyStamp = "3cbf1a16-dc37-4cde-8885-235e9e0ec729",
                             Email = "orlando.equador@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Orlando",
@@ -1026,9 +977,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ORLANDO.EQUADOR@GMAIL.COM",
                             NormalizedUserName = "ORLANDO.EQUADOR@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOxyTYDcjgg4CjI+aGkNuf18LIvaWdNIQSg1ISoVLcanIFh/1XkOIUp9FcPmspJlKQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEATdTQDfkLFaeb44kVVnGWK8Z5Gw6rB2ZxEo1/zfi+6t30ljcRoyjKdXykamD6bG5w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8d55a29b-d181-498a-bbac-775c0c93c020",
+                            SecurityStamp = "14a20c89-8309-44cd-8d2a-daf8fbfd02f4",
                             TwoFactorEnabled = false,
                             UserName = "orlando.equador@gmail.com"
                         },
@@ -1036,7 +987,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "1b2b3c4d-0002-4821-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9bf9f0ea-13be-48ad-9a4e-cf72e8f9296d",
+                            ConcurrencyStamp = "069d7e98-6b48-458f-8cb8-ac389b8ac21a",
                             Email = "matosequador@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Matos",
@@ -1044,9 +995,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MATOSEQUADOR@GMAIL.COM",
                             NormalizedUserName = "MATOSEQUADOR@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPzp6HfK0tHpVvS3+MBZ7cSIBcPKea+j19gXFJGrXsRdvqfMFAtaiKLp9r5055tszA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPjWm6kRpUtRQYz3yYznUZCXpFNe3sLvXd+CTfvghrIFo2/rEiwXty6q0a7cyZsrBg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a1657273-cd7d-4e81-86f7-c37468b539e4",
+                            SecurityStamp = "f49bee63-07be-4aa7-b280-77df78076df0",
                             TwoFactorEnabled = false,
                             UserName = "matosequador@gmail.com"
                         },
@@ -1054,7 +1005,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "1b2b3c4d-0003-4821-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "84ec895e-dd7a-4b3b-938b-c9de9676693c",
+                            ConcurrencyStamp = "178bc9b6-b70b-4148-a856-89eba1f2b52d",
                             Email = "lazaro.equador@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Lazaro",
@@ -1062,9 +1013,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "LAZARO.EQUADOR@GMAIL.COM",
                             NormalizedUserName = "LAZARO.EQUADOR@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBr+zcuamDO+j1AC1GUHMvFUm3rbCTTkUxytQ31iodQ2nYUTgPeAg7ExlLuNP/CamQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGsktwqFp0WYeKaWeOl0zgMBbm/b7PvQZO3Cpix3MHcvT5PCnv4r0DaMbF6lar3qkQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d31b3475-c76b-47e7-aea4-5ba46227d8c8",
+                            SecurityStamp = "7986d0d0-00f9-438f-aef4-d5e08c633936",
                             TwoFactorEnabled = false,
                             UserName = "lazaro.equador@gmail.com"
                         },
@@ -1072,7 +1023,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "1b2b3c4d-0004-4821-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "463c7b5f-2ae2-4935-8030-2936c16f79a0",
+                            ConcurrencyStamp = "b6307741-eb07-4fc0-b562-905f97e89e01",
                             Email = "Armando.suca@etunergia.co.ao",
                             EmailConfirmed = true,
                             FirstName = "Armando",
@@ -1080,9 +1031,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ARMANDO.SUCA@ETUNERGIA.CO.AO",
                             NormalizedUserName = "ARMANDO.SUCA@ETUNERGIA.CO.AO",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMoLcWIBJ7jSQXMtIetaHbtJAHJTjGIU4pLAxn4ha47ERSqIOlVKrOOTM3kLMzD/Ww==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHnGr3EZcZpTMWM+Yi5wDOiEMiy4UiLXiC8g4h1unJ8YxKzJ8TgbVeMZchVw+OEzOA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0375f343-d560-4045-a596-3d9a2daf2327",
+                            SecurityStamp = "ced75753-2a1f-45d7-8cf9-e263d834abdb",
                             TwoFactorEnabled = false,
                             UserName = "Armando.suca@etunergia.co.ao"
                         },
@@ -1090,7 +1041,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "1b2b3c4d-0008-4821-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "09f94cdf-cc58-43f7-ae3a-023721e934cb",
+                            ConcurrencyStamp = "012e64d9-2584-41cb-b024-25884f0afa4a",
                             Email = "pv.equador@gmail.com",
                             EmailConfirmed = true,
                             FirstName = "Paulo",
@@ -1098,9 +1049,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "PV.EQUADOR@GMAIL.COM",
                             NormalizedUserName = "PV.EQUADOR@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEE0AflzIX7YvDa6gcdN490UkKbpF18r8IiT5ORlFbwp8l/OPTxnIK5Y7+oS5r1w9Lg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEA83Xg4WtEM5a155kWe6yjLV9rpl0RODyoxacMOCWbpZ1xggDctoEw9I1NGFPkz0Qw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c07a8962-9e14-4f9f-bdb2-3bd948108aad",
+                            SecurityStamp = "2c0a1921-cbc5-4efe-ab13-2442690b1d64",
                             TwoFactorEnabled = false,
                             UserName = "pv.equador@gmail.com"
                         },
@@ -1108,7 +1059,7 @@ namespace PortalEquador.Data.Migrations
                         {
                             Id = "1b2b3c4d-0009-4821-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bed8891c-a083-497d-aa77-61d086b08347",
+                            ConcurrencyStamp = "55caaae4-62ed-42fe-a9fa-e061e5156c4f",
                             Email = "supervisor.geral@equador.co.ao",
                             EmailConfirmed = true,
                             FirstName = "Pina",
@@ -1116,9 +1067,9 @@ namespace PortalEquador.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SUPERVISOR.GERAL@EQUADOR.CO.AO",
                             NormalizedUserName = "SUPERVISOR.GERAL@EQUADOR.CO.AO",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPuYwc6kPriTV5eyvHJzEgHpgeP39xkyWW6tDMQxbVIjeNTeoQtBDBkcv4DCuTZJSA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEO6VJ3wnWNRmzgDgE2qfGMdGGNDfwmYVbuIsUuxSuyII/rzehqAcvZ6thjbopNMswA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "f38f378c-a11c-43cf-b9c3-f2275d3ad973",
+                            SecurityStamp = "6fb54e87-c7be-4d73-9d38-6e6d3acadbaf",
                             TwoFactorEnabled = false,
                             UserName = "supervisor.geral@equador.co.ao"
                         });
@@ -1742,45 +1693,6 @@ namespace PortalEquador.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("PortalEquador.Data.Contract.Entities.ContractEntity", b =>
-                {
-                    b.HasOne("PortalEquador.Data.GroupTypes.entities.GroupItemEntity", "ContractGroupItemEntity")
-                        .WithMany()
-                        .HasForeignKey("ContractId");
-
-                    b.HasOne("PortalEquador.Data.GroupTypes.entities.GroupItemEntity", "ContractStateGroupItemEntity")
-                        .WithMany()
-                        .HasForeignKey("ContractStateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PortalEquador.Data.Generic.ApplicationUser", "ApplicationUserEntity")
-                        .WithMany()
-                        .HasForeignKey("EditorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PortalEquador.Data.PersonalInformation.Entity.PersonalInformationEntity", "PersonalInformationEntity")
-                        .WithMany()
-                        .HasForeignKey("PersonalInformationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PortalEquador.Data.GroupTypes.entities.GroupItemEntity", "ResignationReasonGroupItemEntity")
-                        .WithMany()
-                        .HasForeignKey("ResignationReasonId");
-
-                    b.Navigation("ApplicationUserEntity");
-
-                    b.Navigation("ContractGroupItemEntity");
-
-                    b.Navigation("ContractStateGroupItemEntity");
-
-                    b.Navigation("PersonalInformationEntity");
-
-                    b.Navigation("ResignationReasonGroupItemEntity");
                 });
 
             modelBuilder.Entity("PortalEquador.Data.Curriculum.Entities.CurriculumEntity", b =>

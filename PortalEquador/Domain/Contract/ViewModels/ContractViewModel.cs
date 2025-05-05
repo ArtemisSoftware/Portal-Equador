@@ -10,6 +10,14 @@ namespace PortalEquador.Domain.Contract.ViewModels
         [Display(Name = StringConstants.Display.STATE_OF_HIRED)]
         public GroupItemViewModel ContractState { get; set; }
 
+        [Display(Name = StringConstants.Display.CONTRACT)]
+        public GroupItemViewModel? Contract { get; set; }
+
+        [Display(Name = StringConstants.Display.DATE_OF_CONTRACT_CREATION)]
+        [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
+        [DataType(DataType.Date)]
+        public DateTime? DateOfContract { get; set; }
+
         [Display(Name = StringConstants.Display.REASON_TO_BE_FIRED)]
         public GroupItemViewModel? ResignationReasons{ get; set; }
 

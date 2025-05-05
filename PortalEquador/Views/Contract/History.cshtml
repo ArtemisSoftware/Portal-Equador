@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PortalEquador.Domain.Contract.ViewModels.ContractViewModel>
+﻿@model PortalEquador.Domain.Contract.ViewModels.ContractHistoryViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -16,31 +16,42 @@
 <hr />
 <br />
 
+
+<h3>Estado Atual</h3>
+<br />
+@if (Model.Current.Count > 0)
+{
+    
+
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
+                    @Html.DisplayNameFor(model => model.Current[0].DateOfContract)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ContractState)
+                    @Html.DisplayNameFor(model => model.Current[0].ContractState)
+            </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Current[0].Contract)
+                </th>
+            <th>
+                    @Html.DisplayNameFor(model => model.Current[0].ResignationReasons)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ResignationReasons)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Observation)
+                    @Html.DisplayNameFor(model => model.Current[0].Observation)
             </th>
             
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.Current)
         {
             <tr>
                 <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.DateCreated)
+                        @Html.DisplayFor(modelItem => item.DateOfContract)
                 </td>
                 <td class="align-middle">
                     @switch (item.ContractStateDescription())
@@ -62,6 +73,11 @@
                             break;
                     }
                 </td>
+
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Contract.Description)
+                    </td>
+                
                 <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.ResignationReasons.Description)
                 </td>
@@ -77,8 +93,86 @@
     </tbody>
 </table>
 
+}
 
 
+@if (Model.History.Count > 0)
+{
+
+    <br />
+    <br />
+
+
+    <h3>Histórico</h3>
+    <br />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.History[0].DateOfContract)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.History[0].ContractState)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.History[0].Contract)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.History[0].ResignationReasons)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.History[0].Observation)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.History)
+            {
+                <tr>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.DateOfContract)
+                    </td>
+                    <td class="align-middle">
+                        @switch (item.ContractStateDescription())
+                        {
+                            case PortalEquador.Domain.Contract.ContractState.Unassigned:
+                                <span class="badge bg-secondary">@PortalEquador.Util.Constants.StringConstants.ContractStatus.UNASSIGNED </span>
+                                break;
+
+                            case PortalEquador.Domain.Contract.ContractState.Contracted:
+                                <span class="badge bg-success">@Html.DisplayFor(modelItem => item.ContractState.Description) </span>
+                                break;
+
+                            case PortalEquador.Domain.Contract.ContractState.Fired:
+                                <span class="badge bg-danger">@Html.DisplayFor(modelItem => item.ContractState.Description)</span>
+                                break;
+
+                            default:
+                                <span class="badge bg-primary">@Html.DisplayFor(modelItem => item.ContractState.Description)</span>
+                                break;
+                        }
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Contract.Description)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.ResignationReasons.Description)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Observation)
+                    </td>
+
+                    <td>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
 
 @section Scripts {
     <script>

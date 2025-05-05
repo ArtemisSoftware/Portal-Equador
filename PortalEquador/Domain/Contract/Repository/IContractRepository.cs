@@ -8,12 +8,10 @@ namespace PortalEquador.Domain.Contract.Repository
 {
     public interface IContractRepository : IGenericRepository<ContractEntity>
     {
-        Task Contract(int id);
+
         Task<ContractsViewModel> GetAll(int filter = -1);
         Task<ContractDashboardViewModel> GetDashboard(int id);
-        Task<ContractCreateViewModel> GetContract(int personalInformationId);
-        Task Save(ContractCreateViewModel model);
-        Task<List<ContractViewModel>> GetAllContracts(int personalInformationId);
+        Task<ContractHistoryViewModel> GetAllContracts(int personalInformationId);
 
         Task<ContractCreate__ViewModel> GetCreateModel(int personalInformationId, string fullName);
         Task<ContractCreate__ViewModel> GetCreateModel(ContractCreate__ViewModel model);

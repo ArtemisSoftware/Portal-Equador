@@ -60,35 +60,34 @@
                     {
                         case PortalEquador.Domain.Contract.ContractState.Unassigned:
 
-                                        <a asp-controller="Contract"
-                                            asp-action="Create"
-                                            asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success">Contratar**</a>
-
+                            <a asp-controller="Contract"
+                               asp-action="Create"
+                               asp-route-identifier="@Model.Id" asp-route-origin="cv" asp-route-fullName="@Model.FullName" class="btn btn-success">Contratar</a>
 
                             break;
 
                         case PortalEquador.Domain.Contract.ContractState.Contracted:
 
-                            <a asp-controller="Contract" 
-                                asp-action="Resign" asp-route-identifier="@Model.Id" asp-route-origin="ct" class="btn btn-warning">Dispensar</a>
+                            <a asp-controller="Contract"
+                               asp-action="Create"
+                               asp-route-identifier="@Model.Id" asp-route-origin="cv" asp-route-fullName="@Model.FullName" class="btn btn-success">Alterar Contrato</a>
 
                             <a asp-controller="Contract"
-                                asp-action="Create"
-                                asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success">Alterar Contrato</a>
+                               asp-action="Resign"
+                               asp-route-identifier="@Model.Id" asp-route-origin="cv" asp-route-fullName="@Model.FullName" class="btn btn-warning">Dispensar</a>
 
                             break;
 
                         default:
 
-
-                                <a asp-controller="Contract"
-                                    asp-action="Create"
-                                    asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-success">Contratar**</a>
+                            <a asp-controller="Contract"
+                               asp-action="Create"
+                               asp-route-identifier="@Model.Id" asp-route-origin="cv" asp-route-fullName="@Model.FullName" class="btn btn-success">Re-Contratar</a>
 
                             break;
                     }
 
-                    @if (Model.TotalContracts > 1)
+                    @if (Model.TotalContracts > 0)
                     {
                         <a asp-controller="Contract" asp-action="History" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
                     }

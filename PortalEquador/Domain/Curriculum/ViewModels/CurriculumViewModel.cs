@@ -1,19 +1,16 @@
-﻿using PortalEquador.Domain.Generic;
-using PortalEquador.Domain.GroupTypes.ViewModels;
+﻿using PortalEquador.Domain.Contract;
+using PortalEquador.Domain.Generic;
 using PortalEquador.Util.Constants;
-using System.Diagnostics.Contracts;
 
-namespace PortalEquador.Domain.Contract.ViewModels
+namespace PortalEquador.Domain.Curriculum.ViewModels
 {
-    public class CurrentContractViewModel : ViewModel
+    public class CurriculumViewModel : ViewModel
     {
-        public int PersonalInformationId { get; set; }
+        public int Id { get; set; }
 
-        public string FullName { get; set; }
+        public required string FullName { get; set; }
 
-        public string ProfileImagePath { get; set; }
-
-
+        public required string ProfileImagePath { get; set; }
 
         public required int? ContractId { get; set; }
         public required string? ContractDescription { get; set; }

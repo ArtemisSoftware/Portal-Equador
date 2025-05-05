@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PortalEquador.Domain.PersonalInformation.ViewModels.PersonalInformationViewModel>
+﻿@model IEnumerable<PortalEquador.Domain.Curriculum.ViewModels.CurriculumViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -18,6 +18,7 @@
                 @Html.DisplayNameFor(model => model.FullName)
             </th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -29,6 +30,27 @@
                 </td>
                 <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.FullName)
+                </td>
+                <td class="align-middle">
+                    @switch (item.ContractStateDescription())
+                    {
+                        case PortalEquador.Domain.Contract.ContractState.Unassigned:
+                            <span class="badge bg-secondary">@PortalEquador.Util.Constants.StringConstants.ContractStatus.UNASSIGNED </span>
+                            break;
+
+                        case PortalEquador.Domain.Contract.ContractState.Contracted:
+                            <span class="badge bg-success">@item.ContractDescription</span>
+                            break;
+
+                        case PortalEquador.Domain.Contract.ContractState.Fired:
+                            <span class="badge bg-danger">@item.ContractDescription</span>
+                            break;
+
+                        default:
+                            <span class="badge bg-primary">@item.ContractDescription</span>
+                            break;
+                    }
+
                 </td>
                 <td class="align-middle">
                     <a asp-action="Dashboard" asp-route-identifier="@item.Id" class="btn btn-success"> <i class="fas fa-info-circle" title="Ver items "></i> Painel</a>
