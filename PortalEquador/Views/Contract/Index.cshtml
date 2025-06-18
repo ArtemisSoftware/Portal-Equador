@@ -94,32 +94,44 @@
 
 </div>
 
+
 @section Scripts {
 
-    <!-- Include jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Include Select2 library -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
-    <script>
-        $(document).ready(function () {
-            
-            // Attach the change event listener after initializing Select2
-            $('#State').on('change', function () {
-                var stateId = $(this).val();
-                handleState(stateId);
+        <!-- Include jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Include Select2 library -->
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+            <!-- Include DataTables (required for $('.table').DataTable()) -->
+        <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+        <script src="https://cdn.datatables.net/2.1.5/js/dataTables.bootstrap5.js"></script>
+        <script src="https://cdn.datatables.net/2.1.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/2.1.5/js/dataTables.bootstrap5.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+
+                // Initialize DataTables
+                $('.table').DataTable();
+
+                // Attach the change event listener after initializing Select2
+                $('#State').on('change', function () {
+                    var stateId = $(this).val();
+                    handleState(stateId);
+                });
+
             });
+        </script>
 
-        });
-    </script>
+        <script>
 
-    <script>
+            function handleState(stateId) {
+                window.location.href = `/Contract/Index?stateId=${stateId}`;
+            }
 
-        function handleState(stateId) {
-            window.location.href = `/Contract/Index?stateId=${stateId}`;
-        }
-
-    </script>
+        </script>
 
 }
+
+

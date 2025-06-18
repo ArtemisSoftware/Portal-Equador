@@ -1,6 +1,7 @@
 ﻿using PortalEquador.Domain.Contract;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Util.Constants;
+using System.ComponentModel.DataAnnotations;
 
 namespace PortalEquador.Domain.Curriculum.ViewModels
 {
@@ -8,6 +9,7 @@ namespace PortalEquador.Domain.Curriculum.ViewModels
     {
         public int Id { get; set; }
 
+        [Display(Name = StringConstants.Display.FULL_NAME)]
         public required string FullName { get; set; }
 
         public required string ProfileImagePath { get; set; }
