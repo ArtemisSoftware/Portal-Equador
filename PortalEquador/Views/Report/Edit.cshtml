@@ -1,0 +1,69 @@
+﻿@model PortalEquador.Data.Contract.Entities.ContractEntity
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>ContractEntity</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="PersonalInformationId" class="control-label"></label>
+                <select asp-for="PersonalInformationId" class="form-control" asp-items="ViewBag.PersonalInformationId"></select>
+                <span asp-validation-for="PersonalInformationId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContractId" class="control-label"></label>
+                <select asp-for="ContractId" class="form-control" asp-items="ViewBag.ContractId"></select>
+                <span asp-validation-for="ContractId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ResignationReasonId" class="control-label"></label>
+                <select asp-for="ResignationReasonId" class="form-control" asp-items="ViewBag.ResignationReasonId"></select>
+                <span asp-validation-for="ResignationReasonId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContractStateId" class="control-label"></label>
+                <select asp-for="ContractStateId" class="form-control" asp-items="ViewBag.ContractStateId"></select>
+                <span asp-validation-for="ContractStateId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Observation" class="control-label"></label>
+                <input asp-for="Observation" class="form-control" />
+                <span asp-validation-for="Observation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfContract" class="control-label"></label>
+                <input asp-for="DateOfContract" class="form-control" />
+                <span asp-validation-for="DateOfContract" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="EditorId" class="control-label"></label>
+                <select asp-for="EditorId" class="form-control" asp-items="ViewBag.EditorId"></select>
+                <span asp-validation-for="EditorId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateModified" class="control-label"></label>
+                <input asp-for="DateModified" class="form-control" />
+                <span asp-validation-for="DateModified" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

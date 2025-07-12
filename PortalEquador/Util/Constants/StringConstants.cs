@@ -13,6 +13,7 @@
             public const string ADRESS = "Endereço";
             public const string ACCIDENT_LEVEL = "Nível do acidente";
             public const string ADMIN = "Administradores";
+            public const string AGE = "Idade";
 
             //B
             public const string BULLETIN_NUMBER = "Buletim nº";
@@ -26,6 +27,7 @@
             public const string COMPANY = "Empresa";
             public const string CONTACTS = "Contactos";
             public const string COURSE = "Curso";
+            public const string CURRENT_WORKSTATION_IN_CONTRACT = "Posto actual (Contrato)";
 
             // D
             public const string DEGREE = "Grau";
@@ -43,6 +45,7 @@
             public const string EXAM = "Exame";
             public const string EMAIL = "Email";
             public const string EXPIRATION_DATE = "Data de expiração";
+            public const string EMISSION = "Emissão";
             //F
 
             public const string FULL_NAME = "Nome completo";
@@ -67,6 +70,7 @@
             public const string MOTHER = "Mãe";
 
             //N
+            public const string NAME = "Nome";
             public const string NOTIFICATION = "Notificação";
 
 
@@ -121,7 +125,7 @@
             public const string REGISTER_CREATION_DATE = "Registo criado a ";
             public const string REGISTER_LAST_UPDATE_DATE = "Última atualização a ";
             public const string IDENTITY_CARD_NUMBER = "Nº Bilhete de identidade";
-            public const string NAME = "Nome";
+
             public const string FATHER = "Pai";
             public const string FINANTIAL_IDENTITY = "Nif";
             public const string FILE = "Ficheiro";
@@ -131,6 +135,11 @@
 
 
 
+        }
+
+        public static class Report
+        {
+            public const string AGE = "Relatório de idades";
         }
 
         public static class Error

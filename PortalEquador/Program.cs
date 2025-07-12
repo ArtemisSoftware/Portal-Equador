@@ -19,6 +19,7 @@ using PortalEquador.Data.MedicalExam.Repository;
 using PortalEquador.Data.PersonalInformation.Repository;
 using PortalEquador.Data.Profession.Competence.Repository;
 using PortalEquador.Data.Profession.Experience.Repository;
+using PortalEquador.Data.Report.Repository;
 using PortalEquador.Data.Trainning.Repository;
 using PortalEquador.Domain.Contract.Repository;
 using PortalEquador.Domain.Curriculum.Repository;
@@ -43,6 +44,7 @@ using PortalEquador.Domain.MedicalExam.UseCases;
 using PortalEquador.Domain.PersonalInformation.Repository;
 using PortalEquador.Domain.Profession.Competence.Repository;
 using PortalEquador.Domain.Profession.Experience.Repository;
+using PortalEquador.Domain.Report.Repository;
 using PortalEquador.Domain.Trainning.Repository;
 using PortalEquador.Domain.Trainning.UseCases;
 using System.Reflection;
@@ -109,6 +111,9 @@ builder.Services.AddScoped<SaveDisciplinaryNotificationUseCase>();
 builder.Services.AddScoped<DeleteMedicalExamUseCase>();
 builder.Services.AddScoped<DeleteTrainningUseCase>();
 builder.Services.AddScoped<DeleteDisciplinaryNotificationUseCase>();
+
+// Report
+builder.Services.AddScoped<IReportRepository, ReportRepositoryImpl>();
 
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
