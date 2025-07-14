@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PortalEquador.Domain.Report.ViewModels;
+﻿using ClosedXML.Excel;
+using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Util.Constants;
 using System.Data;
+using System.Diagnostics;
 
 namespace PortalEquador.Util
 {
@@ -13,22 +14,39 @@ namespace PortalEquador.Util
             return fileName + "_ " + DateTime.Now.ToString() +  ReportConstants.EXTENSION;
         }
 
-        public static FileResult GenerateExcel(DataTable dataTable, string fileName)
+        public static FileContentResult GenerateExcel(DataTable dataTable, string fileName)
         {
-            using (XLWorkbook wb = new XLWorkbook())
+            using (var wb = new XLWorkbook())
             {
                 wb.Worksheets.Add(dataTable);
-                using (MemoryStream stream = new MemoryStream())
+
+                using (var stream = new MemoryStream())
                 {
                     wb.SaveAs(stream);
+                    var content = stream.ToArray();
 
-                    return File(stream.ToArray(),
-                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                       GetFileName(fileName)
-                       );
+                    return new FileContentResult(content,
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    {
+                        FileDownloadName = GetFileName(fileName)
+                    };
                 }
             }
+        }
 
+
+        public static FileContentResult GenerateExcel(XLWorkbook wb, string fileName)
+        {
+            using (var stream = new MemoryStream())
+            {
+                wb.SaveAs(stream);
+                return new FileContentResult(
+                    stream.ToArray(),
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                {
+                    FileDownloadName = GetFileName(fileName)
+                };
+            }
         }
 
     }

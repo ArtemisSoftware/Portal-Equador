@@ -12,6 +12,7 @@ using PortalEquador.Domain.Report.Repository;
 using PortalEquador.Domain.Report.ViewModels;
 using PortalEquador.Domain.Trainning.Repository;
 using PortalEquador.Domain.Trainning.UseCases;
+using PortalEquador.Util;
 
 namespace PortalEquador.Controllers.Report
 {
@@ -27,15 +28,16 @@ namespace PortalEquador.Controllers.Report
             return View();
         }
 
-        /*
+
 
         [HttpGet]
         public async Task<FileResult> ExportAgeReportInExcel()
         {
             var result = await repository.GetAgeReport();
-            return GenerateExcel(result);
+            return ReportUtil.GenerateReport(result);
         }
 
+        /*
         private void FileResult GenerateExcel(AgeReportViewModel viewModel)
         {
             DataTable dataTable = new DataTable("People");
