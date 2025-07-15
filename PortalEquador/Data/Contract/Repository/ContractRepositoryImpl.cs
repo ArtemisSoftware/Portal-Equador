@@ -48,7 +48,7 @@ namespace PortalEquador.Data.Contract.Repository
 
                         join contract in (
                             from c in context.ContractEntity
-                            orderby c.Id descending
+                            orderby c.DateOfContract descending
                             select new
                             {
                                 c.Id,
@@ -88,7 +88,7 @@ namespace PortalEquador.Data.Contract.Repository
 
                         join contract in (
                             from c in context.ContractEntity
-                            orderby c.Id descending
+                            orderby c.DateOfContract descending
                             select new
                             {
                                 c.Id,
@@ -183,7 +183,7 @@ namespace PortalEquador.Data.Contract.Repository
                             .Include(d => d.ResignationReasonGroupItemEntity)
                             .Include(d => d.ContractGroupItemEntity)
                 .Where(item => item.PersonalInformationId == personalInformationId)
-                .OrderByDescending(item => item.Id)
+                .OrderByDescending(item => item.DateOfContract)
                 .ToListAsync();
 
             var model = mapper.Map<List<ContractViewModel>>(result);
@@ -214,7 +214,7 @@ namespace PortalEquador.Data.Contract.Repository
                         join ctc in
                             (from contract in context.ContractEntity
                              where contract.PersonalInformationId == id
-                             orderby contract.Id descending
+                             orderby contract.DateOfContract descending
                              select contract).Take(1)
                             .Select(grouped => new
                             {

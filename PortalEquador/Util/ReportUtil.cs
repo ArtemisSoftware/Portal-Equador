@@ -42,7 +42,7 @@ namespace PortalEquador.Util
                     ws.Cell(row, 3).Value = item.Age();
                     ws.Cell(row, 4).Value = item.WorkStation;
                     // Set font size for the entire table data
-                    ws.Range("A3:D" + (row - 1)).Style.Font.FontSize = 14; 
+                    ws.Range("A3:D" + (row)).Style.Font.FontSize = 14; 
                     row++;
                 }
 

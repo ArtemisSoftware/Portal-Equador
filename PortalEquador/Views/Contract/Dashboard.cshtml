@@ -62,7 +62,7 @@
 
                             <a asp-controller="Contract"
                                asp-action="Create"
-                               asp-route-identifier="@Model.Id" asp-route-origin="cv" asp-route-fullName="@Model.FullName" class="btn btn-success">Contratar</a>
+                               asp-route-identifier="@Model.PersonaInformationId" asp-route-origin="cv" asp-route-fullName="@Model.FullName" class="btn btn-success">Contratar</a>
 
                             break;
 
@@ -70,11 +70,11 @@
 
                             <a asp-controller="Contract"
                                asp-action="Create"
-                               asp-route-identifier="@Model.Id" asp-route-origin="cv" asp-route-fullName="@Model.FullName" class="btn btn-success">Alterar Contrato</a>
+                               asp-route-identifier="@Model.PersonaInformationId" asp-route-origin="cv" asp-route-fullName="@Model.FullName" class="btn btn-success">Alterar Contrato</a>
 
                             <a asp-controller="Contract"
                                asp-action="Resign"
-                               asp-route-identifier="@Model.Id" asp-route-origin="cv" asp-route-fullName="@Model.FullName" class="btn btn-warning">Dispensar</a>
+                               asp-route-identifier="@Model.PersonaInformationId" asp-route-origin="cv" asp-route-fullName="@Model.FullName" class="btn btn-warning">Dispensar</a>
 
                             break;
 
@@ -82,14 +82,16 @@
 
                             <a asp-controller="Contract"
                                asp-action="Create"
-                               asp-route-identifier="@Model.Id" asp-route-origin="cv" asp-route-fullName="@Model.FullName" class="btn btn-success">Re-Contratar</a>
+                               asp-route-identifier="@Model.PersonaInformationId" asp-route-origin="cv" asp-route-fullName="@Model.FullName" class="btn btn-success">Re-Contratar</a>
 
                             break;
                     }
 
                     @if (Model.TotalContracts > 0)
                     {
-                        <a asp-controller="Contract" asp-action="History" asp-route-identifier="@Model.Id" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                        <a asp-controller="Contract" 
+                            asp-action="History"
+                           asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
                     }
 
                 </div>

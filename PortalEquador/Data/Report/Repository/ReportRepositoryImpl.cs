@@ -26,8 +26,6 @@ namespace PortalEquador.Data.Report.Repository
                     .FirstOrDefault()
                 );
 
-
-
             var query = from contract in context.ContractEntity
                         where latestContractIds.Contains(contract.Id)
 
@@ -49,6 +47,7 @@ namespace PortalEquador.Data.Report.Repository
                         from groupItem in groupItemGroup.DefaultIfEmpty()
 
                         where contract.ContractStateId == GroupTypesConstants.ItemFromGroup.ContractStates.CONTRACTED
+                        orderby contractResult.DateOfBirth
 
                         select new AgeReportItemViewModel
                         {
