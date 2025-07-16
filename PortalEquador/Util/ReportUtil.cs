@@ -38,13 +38,17 @@ namespace PortalEquador.Util
                 foreach (var item in viewModel.report)
                 {
                     ws.Cell(row, 1).Value = item.FullName;
-                    ws.Cell(row, 2).Value = item.DateOfBirth.ToShortDateString();
+                    ws.Cell(row, 2).Value = item.DateOfBirth;
                     ws.Cell(row, 3).Value = item.Age();
                     ws.Cell(row, 4).Value = item.WorkStation;
                     // Set font size for the entire table data
                     ws.Range("A3:D" + (row)).Style.Font.FontSize = 14; 
                     row++;
                 }
+
+                // Format the DateOfBirth column as dd-MM-yyyy
+                ws.Column(2).Style.DateFormat.Format = "dd-MM-yyyy";
+                ws.Column(2).Style.NumberFormat.Format = "dd-MM-yyyy"; // Extra safety
 
                 // --- Create table from the data range (includes headers) ---
                 var tableRange = ws.Range(2, 1, row - 1, 4); // from header row 2 to last data row

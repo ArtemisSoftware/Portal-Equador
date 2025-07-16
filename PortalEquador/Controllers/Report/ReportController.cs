@@ -24,7 +24,7 @@ namespace PortalEquador.Controllers.Report
         // GET: Report
         public async Task<IActionResult> Index()
         {
-            var result = await repository.GetAgeReport();
+            var result = await repository.GetAlchoolTestReport();
             return View();
         }
 

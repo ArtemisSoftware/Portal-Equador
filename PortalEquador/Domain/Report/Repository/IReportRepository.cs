@@ -6,5 +6,7 @@ namespace PortalEquador.Domain.Report.Repository
     public interface IReportRepository
     {
         Task<AgeReportViewModel> GetAgeReport();
+
+        Task<AlchoolTestReportViewModel> GetAlchoolTestReport();
     }
 }

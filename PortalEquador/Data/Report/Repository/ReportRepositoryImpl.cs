@@ -5,6 +5,7 @@ using PortalEquador.Data.Profession.Experience.Entity;
 using PortalEquador.Domain.Report.Repository;
 using PortalEquador.Domain.Report.ViewModels;
 using PortalEquador.Util.Constants;
+using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Data.Report.Repository
 {
@@ -14,10 +15,23 @@ namespace PortalEquador.Data.Report.Repository
         IHttpContextAccessor httpContextAccessor
         ) : GenericRepository<ProfessionalExperienceEntity>(context, httpContextAccessor), IReportRepository
     {
+
+        private IQueryable<int> GetLatestContracts()
+        {
+            return context.ContractEntity
+                .Where(c => c.DateOfContract != null)
+                .GroupBy(c => c.PersonalInformationId)
+                .Select(g => g
+                    .OrderByDescending(c => c.DateOfContract)
+                    .Select(c => c.Id)
+                    .FirstOrDefault()
+                );
+        }
+
         public async Task<AgeReportViewModel> GetAgeReport()
         {
 
-            var latestContractIds = context.ContractEntity
+            IQueryable<int> latestContractIds = context.ContractEntity
                 .Where(c => c.DateOfContract != null)
                 .GroupBy(c => c.PersonalInformationId)
                 .Select(g => g
@@ -59,6 +73,38 @@ namespace PortalEquador.Data.Report.Repository
             var result = await query.ToListAsync();
 
             return new AgeReportViewModel
+            {
+                report = result,
+            };
+        }
+
+        public async Task<AlchoolTestReportViewModel> GetAlchoolTestReport()
+        {
+            var latestContractIds = GetLatestContracts();
+
+            var query = from contract in context.ContractEntity
+                        where latestContractIds.Contains(contract.Id)
+                        where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED
+
+                        let personal = contract.PersonalInformationEntity
+
+                        select new AlchoolTestReportItemViewModel
+                        {
+                            FullName = personal.FirstName + " " + personal.LastName,
+                            AlcoholTests = context.DisciplinaryNotificationEntity
+                                .Where(d => d.PersonalInformationId == personal.Id && d.NotificationId == ItemFromGroup.DisciplinaryNotification.ALCOOL)
+                                .Select(d => new AlcoholTestResultViewModel
+                                {
+                                        Date = d.Date,
+                                        Result = d.AlcoolTestResultGroupItemEntity.Id,
+                                    }
+                                )
+                                .ToList()
+                        };
+
+            var result = await query.ToListAsync();
+
+            return new AlchoolTestReportViewModel
             {
                 report = result,
             };
