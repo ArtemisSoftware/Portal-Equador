@@ -1,5 +1,6 @@
 ﻿using PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels;
 using PortalEquador.Domain.Report.ViewModels;
+using PortalEquador.Domain.Report.ViewModels.AlchoolTest;
 
 namespace PortalEquador.Domain.Report.Repository
 {
@@ -7,6 +8,7 @@ namespace PortalEquador.Domain.Report.Repository
     {
         Task<AgeReportViewModel> GetAgeReport();
 
-        Task<AlchoolTestReportViewModel> GetAlchoolTestReport();
+        Task<AlchoolTestViewModel> GetAlchoolTestForm();
+        Task<AlchoolTestReportViewModel> GetAlchoolTestReport(DateTime date, int contractId);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Globalization;
 
 namespace PortalEquador.Util
 {
@@ -41,6 +42,14 @@ namespace PortalEquador.Util
             }
 
             return age;
+        }
+
+
+        public static string GetFirstLetterOfWeekdayInPortuguese(DateTime date)
+        {
+            var culture = new CultureInfo("pt-PT");
+            string dayName = culture.DateTimeFormat.GetDayName(date.DayOfWeek); // e.g., "segunda-feira"
+            return dayName.Substring(0, 1).ToUpper(); // "S"
         }
     }
 }

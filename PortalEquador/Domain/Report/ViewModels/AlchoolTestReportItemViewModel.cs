@@ -5,8 +5,7 @@ namespace PortalEquador.Domain.Report.ViewModels
     public class AlchoolTestReportItemViewModel : ViewModel
     {
         public string FullName { get; set; }
-        public List<AlcoholTestResultViewModel> AlcoholTests { get; set; }
 
-        public string FileName { get; set; } = "relatorio_testes_de_alcool";
+        public List<AlcoholTestResultViewModel> AlcoholTests { get; set; }
     }
 }

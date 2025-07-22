@@ -93,12 +93,15 @@
             public const string STATE = "Estado";
             public const string SURNAME = "Apelido";
             public const string STATE_OF_HIRED = "Estado da contratação";
+            public const string STEP = "Intervalo";
 
             //  T
             public const string TELEPHONE = "Telefone";
             public const string TEST_RESULT = "Resultado do teste";
             public const string TRAINNING = "Formação";
             public const string TRAINNING_NATURE = "Natureza da formação";
+            public const string TOTAL_TESTS = "Total Testes";
+            public const string TOTAL_TESTS_PERCENTAGE = "%T/D";
 
             //  V
             public const string VEHICLE = "Veículo";
@@ -140,6 +143,7 @@
         public static class Report
         {
             public const string AGE = "Relatório de idades";
+            public const string ALCHOOL_TEST = "Relatório de testes de alcool";
         }
 
         public static class Error

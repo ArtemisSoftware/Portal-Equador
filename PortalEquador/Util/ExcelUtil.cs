@@ -1,18 +1,26 @@
 ﻿using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
+using OfficeOpenXml;
 using PortalEquador.Util.Constants;
 using System.Data;
-using System.Diagnostics;
+using System.Drawing;
 
 namespace PortalEquador.Util
 {
     public static class ExcelUtil
     {
+        public static Color DeepBlueHexCode = ColorTranslator.FromHtml("#254061");
+
 
         private static string GetFileName(string fileName)
         {
             return fileName + "_ " + DateTime.Now.ToString() +  ReportConstants.EXTENSION;
         }
+
+
+
+
+
 
         public static FileContentResult GenerateExcel(DataTable dataTable, string fileName)
         {

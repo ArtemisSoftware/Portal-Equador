@@ -73,7 +73,7 @@ namespace PortalEquador.Data.Generic
             await context.SaveChangesAsync();
         }
 
-        public SelectList GroupItems(int groupId, OrderType orderType = OrderType.No_order, int idToExclude = -1, string extraOption = "")
+        public SelectList GroupItems(int groupId, OrderType orderType = OrderType.No_order, int idToExclude = -1, string extraOption = "", bool addExtraOptionOnTop = false)
         {
             var result = context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true & x.Id != idToExclude);
 
@@ -94,8 +94,7 @@ namespace PortalEquador.Data.Generic
             {
                 var items = result.ToList();
 
-                // Add a new register
-                items.Add(new GroupItemEntity
+                var item = new GroupItemEntity
                 {
                     ApplicationUserEntity = new ApplicationUser(),
                     EditorId = "",
@@ -107,7 +106,16 @@ namespace PortalEquador.Data.Generic
                         EditorId = "",
                         Description = "New Register"
                     }
-                });
+                };
+
+                // Add a new register
+                if (addExtraOptionOnTop)
+                {
+                    items.Insert(0, item);
+                } else
+                {
+                    items.Add(item);
+                }
 
                 return new SelectList(items, "Id", "Description");
             }
