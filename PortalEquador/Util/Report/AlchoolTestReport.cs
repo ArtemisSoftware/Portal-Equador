@@ -85,11 +85,13 @@ namespace PortalEquador.Util.Report
             ws.Cells[row, nextColumn].Value = Display.TOTAL_TESTS;
             ws.Cells[row, nextColumn].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             ws.Cells[row, nextColumn].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            ws.Cells[row, nextColumn, row + 2, nextColumn].Merge = true;
 
             ++nextColumn;
             ws.Cells[row, nextColumn].Value = Display.TOTAL_TESTS_PERCENTAGE;
             ws.Cells[row, nextColumn].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             ws.Cells[row, nextColumn].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            ws.Cells[row, nextColumn, row + 2, nextColumn].Merge = true;
 
             return row + 3;
         }
