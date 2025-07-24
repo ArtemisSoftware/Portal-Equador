@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.Math;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
+using PortalEquador.Data.MechanicalWorkshop;
 using PortalEquador.Data.Profession.Experience.Entity;
 using PortalEquador.Domain.Education.University.ViewModels;
 using PortalEquador.Domain.Report.Repository;
@@ -90,8 +91,9 @@ namespace PortalEquador.Data.Report.Repository
 
         public async Task<AlchoolTestViewModel> GetAlchoolTestForm()
         {
-           
-            var contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic, -1, "Todos os contractos", true);
+
+            var userId = GetCurrentUserId();
+            var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
 
             var monthlyDates = context.DisciplinaryNotificationEntity
                 .GroupBy(d => new { d.Date.Year, d.Date.Month })
@@ -107,6 +109,25 @@ namespace PortalEquador.Data.Report.Repository
                 "Value",
                 "Text"
             );
+
+            SelectList? contracts;
+
+            if (hasFullAccess)
+            {
+                contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic, -1, "Todos os contractos", true);
+            }
+            else
+            {
+                var result =
+                   from item in context.GroupItemEntity 
+                   join contract in context.AdminMechanicalWorkShopContractEntity on item.Id equals contract.ContractId
+                   where item.Active &&
+                                   contract.UserId == userId 
+                   orderby item.Description
+                   select item;
+
+                contracts = GroupItems(result, OrderType.Alphabetic, "Todos os contractos", true);
+            }
 
             var model = new AlchoolTestViewModel
             {

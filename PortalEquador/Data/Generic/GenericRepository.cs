@@ -75,7 +75,7 @@ namespace PortalEquador.Data.Generic
 
         public SelectList GroupItems(int groupId, OrderType orderType = OrderType.No_order, int idToExclude = -1, string extraOption = "", bool addExtraOptionOnTop = false)
         {
-            var result = context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true & x.Id != idToExclude);
+            IQueryable<GroupItemEntity> result = context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true & x.Id != idToExclude);
 
             switch (orderType)
             {
@@ -113,6 +113,58 @@ namespace PortalEquador.Data.Generic
                 {
                     items.Insert(0, item);
                 } else
+                {
+                    items.Add(item);
+                }
+
+                return new SelectList(items, "Id", "Description");
+            }
+            else
+            {
+                return (new SelectList(result, "Id", "Description"));
+            }
+        }
+
+        public SelectList GroupItems(IQueryable<GroupItemEntity> result, OrderType orderType = OrderType.No_order,  string extraOption = "", bool addExtraOptionOnTop = false)
+        {
+
+            switch (orderType)
+            {
+                case OrderType.No_order:
+                    break;
+
+                case OrderType.Alphabetic:
+                    result = result.OrderBy(x => x.Description);
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (extraOption != "")
+            {
+                var items = result.ToList();
+
+                var item = new GroupItemEntity
+                {
+                    ApplicationUserEntity = new ApplicationUser(),
+                    EditorId = "",
+                    Id = -1,
+                    Description = extraOption,
+                    GroupEntity = new GroupEntity
+                    {
+                        ApplicationUserEntity = new ApplicationUser(),
+                        EditorId = "",
+                        Description = "New Register"
+                    }
+                };
+
+                // Add a new register
+                if (addExtraOptionOnTop)
+                {
+                    items.Insert(0, item);
+                }
+                else
                 {
                     items.Add(item);
                 }
