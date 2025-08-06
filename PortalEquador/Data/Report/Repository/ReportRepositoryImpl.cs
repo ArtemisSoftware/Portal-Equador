@@ -13,6 +13,7 @@ using PortalEquador.Domain.Report.ViewModels.AlchoolTest;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 using System.Globalization;
+using System.Linq;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 using static PortalEquador.Util.Constants.StringConstants;
 
@@ -115,7 +116,13 @@ namespace PortalEquador.Data.Report.Repository
 
             if (hasFullAccess)
             {
-                contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic, -1, "Todos os contractos", true);
+                contracts = GroupItems(
+                    Groups.MECHANICAL_SHOP_CONTRACTS,
+                    OrderType.Alphabetic, 
+                    StringConstants.Report.ALL_CONTRACTS_ID, 
+                    StringConstants.Report.ALL_CONTRACTS, 
+                    true
+                 );
             }
             else
             {
@@ -127,7 +134,7 @@ namespace PortalEquador.Data.Report.Repository
                    orderby item.Description
                    select item;
 
-                contracts = GroupItems(result, OrderType.Alphabetic, "Todos os contractos", true);
+                contracts = GroupItems(result, OrderType.Alphabetic, StringConstants.Report.ALL_CONTRACTS, true);
             }
 
             var model = new AlchoolTestViewModel
@@ -139,28 +146,23 @@ namespace PortalEquador.Data.Report.Repository
             return model;
         }
 
-        public async Task<AlchoolTestReportViewModel> GetAlchoolTestReport(DateTime date, int contractId)
+        public async Task<AlchoolTestReportViewModel> GetAlchoolTestReport(DateTime date, List<int> accessibleContracts)
         {
-
             var contractDescription = "";
 
-            if (contractId != -1)
+            if (accessibleContracts.First() == StringConstants.Report.ALL_CONTRACTS_ID)
             {
-                contractDescription = (await GroupItem(contractId))?.Description;
+                contractDescription = (await GroupItem(accessibleContracts.First()))?.Description;
             }
 
             var startOfMonth = new DateTime(date.Year, date.Month, 1);
             var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
-            var userId = GetCurrentUserId();
-            var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
-            List<int> accessibleContracts = await  GetAccessibleContractsForUser(userId);
-
             var latestContractIds = GetLatestContracts();
 
                 var query = from contract in context.ContractEntity
                             where latestContractIds.Contains(contract.Id)
-                            where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED && (contractId == -1 || contract.ContractId == contractId)
+                            where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED && accessibleContracts.Contains((int)contract.ContractId)
 
                             let personal = contract.PersonalInformationEntity
 

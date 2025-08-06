@@ -45,6 +45,7 @@ using PortalEquador.Domain.PersonalInformation.Repository;
 using PortalEquador.Domain.Profession.Competence.Repository;
 using PortalEquador.Domain.Profession.Experience.Repository;
 using PortalEquador.Domain.Report.Repository;
+using PortalEquador.Domain.Report.UseCases;
 using PortalEquador.Domain.Trainning.Repository;
 using PortalEquador.Domain.Trainning.UseCases;
 using System.Reflection;
@@ -114,7 +115,7 @@ builder.Services.AddScoped<DeleteDisciplinaryNotificationUseCase>();
 
 // Report
 builder.Services.AddScoped<IReportRepository, ReportRepositoryImpl>();
-
+builder.Services.AddScoped<GetAlchoolTestReportUseCase>();
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

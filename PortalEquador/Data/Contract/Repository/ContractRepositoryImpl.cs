@@ -355,9 +355,7 @@ namespace PortalEquador.Data.Contract.Repository
             if (hasFullAccess)
             {
                 var query = from item in context.GroupItemEntity
-                            join contract in context.AdminMechanicalWorkShopContractEntity
-                            on item.Id equals contract.ContractId
-                            where item.Active
+                            where item.Active && item.GroupEntityId == GroupTypesConstants.Groups.MECHANICAL_SHOP_CONTRACTS
                             select item.Id;
 
                 return await query.ToListAsync();

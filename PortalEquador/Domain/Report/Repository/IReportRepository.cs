@@ -9,6 +9,6 @@ namespace PortalEquador.Domain.Report.Repository
         Task<AgeReportViewModel> GetAgeReport();
 
         Task<AlchoolTestViewModel> GetAlchoolTestForm();
-        Task<AlchoolTestReportViewModel> GetAlchoolTestReport(DateTime date, int contractId);
+        Task<AlchoolTestReportViewModel> GetAlchoolTestReport(DateTime date, List<int> accessibleContracts);
     }
 }

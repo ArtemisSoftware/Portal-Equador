@@ -144,6 +144,10 @@
         {
             public const string AGE = "Relatório de idades";
             public const string ALCHOOL_TEST = "Relatório de testes de alcool";
+
+
+            public const string ALL_CONTRACTS = "Todos os contractos";
+            public const int ALL_CONTRACTS_ID = -1;
         }
 
         public static class Error
