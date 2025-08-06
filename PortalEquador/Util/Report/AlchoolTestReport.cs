@@ -43,7 +43,7 @@ namespace PortalEquador.Util.Report
             ws.Cells["A1:K1"].Merge = true;
             ws.Cells["L1:L1"].Value = StringConstants.Display.EMISSION;
             ws.Cells["L1:P1"].Merge = true;
-            ws.Cells["Q1:S1"].Value = emissionDate.ToString("dd-MM-yyyy HH:mm:ss");
+            ws.Cells["Q1:S1"].Value = emissionDate.ToString(TimeUtil.dd_MM_yyyy__HH_mm_ss);
             ws.Cells["Q1:S1"].Merge = true;
            
             return 2;
@@ -109,14 +109,14 @@ namespace PortalEquador.Util.Report
             ws.Cells[row, baseColumn, row, tempColumn].Merge = true;
             baseColumn = tempColumn + 1;
 
-            ws.Cells[row, baseColumn].Value = daysOfMonth[0].ToString("dd-MMMM-yy");
+            ws.Cells[row, baseColumn].Value = daysOfMonth[0].ToString(TimeUtil.dd_MMMM_yy);
             ws.Cells[row, baseColumn].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             ws.Cells[row, baseColumn].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             tempColumn = baseColumn + 2;
             ws.Cells[row, baseColumn, row, tempColumn].Merge = true;
             baseColumn = tempColumn + 1;
 
-            ws.Cells[row, baseColumn].Value = daysOfMonth.Last().ToString("dd-MMMM-yy");
+            ws.Cells[row, baseColumn].Value = daysOfMonth.Last().ToString(TimeUtil.dd_MMMM_yy);
             ws.Cells[row, baseColumn].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             ws.Cells[row, baseColumn].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             tempColumn = baseColumn + 2;

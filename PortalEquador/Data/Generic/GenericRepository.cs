@@ -73,7 +73,13 @@ namespace PortalEquador.Data.Generic
             await context.SaveChangesAsync();
         }
 
-        public SelectList GroupItems(int groupId, OrderType orderType = OrderType.No_order, int idToExclude = -1, string extraOption = "", bool addExtraOptionOnTop = false)
+        public SelectList GroupItems(
+            int groupId, 
+            OrderType orderType = OrderType.No_order, 
+            int idToExclude = -1, 
+            string extraOption = "", 
+            bool addExtraOptionOnTop = false
+            )
         {
             IQueryable<GroupItemEntity> result = context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true & x.Id != idToExclude);
 
@@ -125,7 +131,40 @@ namespace PortalEquador.Data.Generic
             }
         }
 
-        public SelectList GroupItems(IQueryable<GroupItemEntity> result, OrderType orderType = OrderType.No_order,  string extraOption = "", bool addExtraOptionOnTop = false)
+        public SelectList GroupItems(
+            int groupId,
+            List<int> idsToInclude,
+            OrderType orderType = OrderType.No_order
+    )
+        {
+            IQueryable<GroupItemEntity> result = context.GroupItemEntity.Where(x => 
+                x.GroupEntityId == groupId 
+                & x.Active == true 
+                & idsToInclude.Contains(x.Id)
+             );
+
+            switch (orderType)
+            {
+                case OrderType.No_order:
+                    break;
+
+                case OrderType.Alphabetic:
+                    result = result.OrderBy(x => x.Description);
+                    break;
+
+                default:
+                    break;
+            }
+
+            return (new SelectList(result, "Id", "Description"));
+        }
+
+        public SelectList GroupItems(
+            IQueryable<GroupItemEntity> result, 
+            OrderType orderType = OrderType.No_order,  
+            string extraOption = "", 
+            bool addExtraOptionOnTop = false
+            )
         {
 
             switch (orderType)

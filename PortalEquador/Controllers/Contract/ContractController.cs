@@ -9,7 +9,7 @@ namespace PortalEquador.Controllers.Contract
     {
 
         // GET: Contract
-        public async Task<IActionResult> Index(int stateId = -1)
+        public async Task<IActionResult> Index(int stateId = StringConstants.ContractStatus.UNASSIGNED_ID)
         {
             var result = await repository.GetAll(stateId);
             return View(result);

@@ -10,6 +10,7 @@ using PortalEquador.Domain.Education.University.ViewModels;
 using PortalEquador.Domain.Report.Repository;
 using PortalEquador.Domain.Report.ViewModels;
 using PortalEquador.Domain.Report.ViewModels.AlchoolTest;
+using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 using System.Globalization;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
@@ -102,12 +103,12 @@ namespace PortalEquador.Data.Report.Repository
 
 
             var dates = new SelectList(
-                monthlyDates.Select(d => new {
-                    Value = d.ToString("yyyy-MM-dd"), // or just d if you're binding to a DateTime
-                    Text = d.ToString("MMMM yyyy", new CultureInfo("pt-PT")) // e.g., "julho 2025"
-                }),
-                "Value",
-                "Text"
+                monthlyDates.Select(
+                    d => new {
+                                            Value = d.ToString(TimeUtil.yyyy_MM_dd), // or just d if you're binding to a DateTime
+                                            Text = d.ToString(TimeUtil.MMMM_yyyy, new CultureInfo("pt-PT")) // e.g., "julho 2025"
+                                        }
+                  ), "Value",  "Text"
             );
 
             SelectList? contracts;
@@ -151,40 +152,57 @@ namespace PortalEquador.Data.Report.Repository
             var startOfMonth = new DateTime(date.Year, date.Month, 1);
             var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
+            var userId = GetCurrentUserId();
+            var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
+            List<int> accessibleContracts = await  GetAccessibleContractsForUser(userId);
+
             var latestContractIds = GetLatestContracts();
 
-            var query = from contract in context.ContractEntity
-                        where latestContractIds.Contains(contract.Id)
-                        where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED && (contractId == -1 || contract.ContractId == contractId)
+                var query = from contract in context.ContractEntity
+                            where latestContractIds.Contains(contract.Id)
+                            where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED && (contractId == -1 || contract.ContractId == contractId)
 
-                        let personal = contract.PersonalInformationEntity
+                            let personal = contract.PersonalInformationEntity
 
-                        select new AlchoolTestReportItemViewModel
-                        {
-                            FullName = personal.FirstName + " " + personal.LastName,
-                            AlcoholTests = context.DisciplinaryNotificationEntity
-                                .Where(d =>
-                                        d.PersonalInformationId == personal.Id &&
-                                        d.NotificationId == ItemFromGroup.DisciplinaryNotification.ALCOOL &&
-                                        d.Date >= startOfMonth && d.Date <= endOfMonth
-                                 )
-                                .Select(d => new AlcoholTestResultViewModel
-                                {
+                            select new AlchoolTestReportItemViewModel
+                            {
+                                FullName = personal.FirstName + " " + personal.LastName,
+                                AlcoholTests = context.DisciplinaryNotificationEntity
+                                    .Where(d =>
+                                            d.PersonalInformationId == personal.Id &&
+                                            d.NotificationId == ItemFromGroup.DisciplinaryNotification.ALCOOL &&
+                                            d.Date >= startOfMonth && d.Date <= endOfMonth
+                                     )
+                                    .Select(d => new AlcoholTestResultViewModel
+                                    {
                                         Date = d.Date,
                                         Result = d.AlcoolTestResultGroupItemEntity.Id,
                                     }
-                                )
-                                .ToList()
-                        };
+                                    )
+                                    .ToList()
+                            };
 
-            var result = await query.ToListAsync();
+                var result = await query.ToListAsync();
 
-            return new AlchoolTestReportViewModel
-            {
-                ReferenceDate = date,
-                report = result,
-                WorkStation = contractDescription
-            };
+                return new AlchoolTestReportViewModel
+                {
+                    ReferenceDate = date,
+                    report = result,
+                    WorkStation = contractDescription
+                };
+            }
+
+        private async Task<List<int>> GetAccessibleContractsForUser(string userId)
+        {
+
+            var query = from item in context.GroupItemEntity
+                        join contract in context.AdminMechanicalWorkShopContractEntity
+                        on item.Id equals contract.ContractId
+                        where item.Active &&
+                              contract.UserId == userId
+                        select item.Id;
+
+            return await query.ToListAsync();
         }
     }
 }

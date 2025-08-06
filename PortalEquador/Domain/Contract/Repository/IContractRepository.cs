@@ -20,5 +20,7 @@ namespace PortalEquador.Domain.Contract.Repository
         Task<ContractResignViewModel> GetResignationModel(int personalInformationId);
         Task<ContractResignViewModel> GetResignationModel(ContractResignViewModel model);
         Task Save(ContractResignViewModel model);
+
+        Task<List<int>> GetAccessibleContractsForUser();
     }
 }

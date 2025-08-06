@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.Curriculum.ViewModels;
+using PortalEquador.Data.MechanicalWorkshop;
+using System.Linq;
 
 namespace PortalEquador.Data.Contract.Repository
 {
@@ -45,7 +47,6 @@ namespace PortalEquador.Data.Contract.Repository
         {
 
             var query = from personal in context.PersonalInformationEntity
-
                         join contract in (
                             from c in context.ContractEntity
                             orderby c.DateOfContract descending
@@ -83,9 +84,9 @@ namespace PortalEquador.Data.Contract.Repository
 
       private async Task<ContractsViewModel> Filter(int filter)
         {
+            List<int> accessibleContracts = await GetAccessibleContractsForUser();
 
             var query = from personal in context.PersonalInformationEntity
-
                         join contract in (
                             from c in context.ContractEntity
                             orderby c.DateOfContract descending
@@ -93,7 +94,9 @@ namespace PortalEquador.Data.Contract.Repository
                             {
                                 c.Id,
                                 c.PersonalInformationId,
-                                c.ContractStateId
+                                c.ContractStateId,
+                                c.ContractGroupItemEntity.Description,
+                                c.ContractId,
                             }
                         ) on personal.Id equals contract.PersonalInformationId into contractJoin
                         from contract in contractJoin.Take(1).DefaultIfEmpty()
@@ -102,7 +105,7 @@ namespace PortalEquador.Data.Contract.Repository
                                            on contract.ContractStateId equals groupItem.Id into groupItemGroup
                         from groupItem in groupItemGroup.DefaultIfEmpty()
 
-                        where contract.ContractStateId == filter
+                        where contract.ContractStateId == filter && accessibleContracts.Contains((int)contract.ContractId)
 
                         select new CurrentContractViewModel
                         {
@@ -111,6 +114,7 @@ namespace PortalEquador.Data.Contract.Repository
                             ProfileImagePath = ImagesUtil.GetProfileImagePath(hostEnvironment, personal.Id),
                             ContractDescription = groupItem != null ? groupItem.Description : "",
                             ContractId = groupItem != null ? groupItem.Id : null,
+                            ContractName = contract.Description
                         };
 
             var result = await query.ToListAsync();
@@ -302,8 +306,8 @@ namespace PortalEquador.Data.Contract.Repository
 
         public async Task<ContractCreate__ViewModel> GetCreateModel(int personalInformationId, string fullName)
         {
-            var contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
-
+            List<int> accessibleContracts = await GetAccessibleContractsForUser();
+            var contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, accessibleContracts, OrderType.Alphabetic);
 
             return new ContractCreate__ViewModel
             {
@@ -324,9 +328,9 @@ namespace PortalEquador.Data.Contract.Repository
         public async Task<ContractsViewModel> GetAll(int filter)
         {
 
-            var contractStates = GroupItems(Groups.CONTRACT_STATE, OrderType.Alphabetic, -1, StringConstants.ContractStatus.UNASSIGNED);
+            var contractStates = GroupItems(Groups.CONTRACT_STATE, OrderType.Alphabetic, StringConstants.ContractStatus.UNASSIGNED_ID, StringConstants.ContractStatus.UNASSIGNED);
 
-            if (filter == -1)
+            if (filter == StringConstants.ContractStatus.UNASSIGNED_ID)
             {
                 var models = await NoFilter();
                 models.ContractStates = contractStates;
@@ -343,7 +347,34 @@ namespace PortalEquador.Data.Contract.Repository
         }
 
 
+        public async Task<List<int>> GetAccessibleContractsForUser()
+        {
+            var userId = GetCurrentUserId();
+            var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
 
+            if (hasFullAccess)
+            {
+                var query = from item in context.GroupItemEntity
+                            join contract in context.AdminMechanicalWorkShopContractEntity
+                            on item.Id equals contract.ContractId
+                            where item.Active
+                            select item.Id;
+
+                return await query.ToListAsync();
+            } else
+            {
+                var query = from item in context.GroupItemEntity
+                            join contract in context.AdminMechanicalWorkShopContractEntity
+                            on item.Id equals contract.ContractId
+                            where item.Active &&
+                                  contract.UserId == userId
+                            select item.Id;
+
+                return await query.ToListAsync();
+            }
+
+
+        }
 
 
 

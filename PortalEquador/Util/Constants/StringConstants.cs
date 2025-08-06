@@ -208,6 +208,7 @@
             public const string CANCELED = "Cancelado";
             public const string VALID = "Em Vigor";
             public const string UNASSIGNED = "Não contratado";
+            public const int UNASSIGNED_ID = -1;
             public const string CONTRACTED = "Contratado";
             public const string FIRED = "Dispensado";
         }
