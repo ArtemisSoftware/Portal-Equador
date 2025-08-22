@@ -7,6 +7,11 @@
             public const string Id = "OrderId";
         }
 
+        public static class Exception
+        {
+            public const string PROFILE_WITH_NO_CONTRACTS = "O seu perfil não possui contratos para gerar um relatório";
+        }
+
         public static class Display
         {
             // A
@@ -82,10 +87,12 @@
             // P
             public const string PROFESSIONAL_EXPERIENCE = "Experiência profissional";
             public const string PROFESSIONAL_COMPETENCE = "Habilitações profissionais";
+            public const string PROVISIONAL_DRIVERS_LICENCE = "Verbete";
 
             //R
             public const string ROLE = "Tipo de administrador";
             public const string REASON_TO_BE_FIRED = "Razão da dispensa";
+            public const string REMAINING_TIME = "Tempo remanescente";
 
             // S
             public const string SERVICE = "Serviço";

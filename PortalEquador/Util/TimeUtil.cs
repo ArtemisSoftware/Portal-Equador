@@ -8,6 +8,7 @@ namespace PortalEquador.Util
         public const string dd_MM_yyyy__HH_mm_ss = "dd-MM-yyyy HH:mm:ss";
         public const string yyyy_MM_dd = "yyyy-MM-dd";
         public const string MMMM_yyyy = "MMMM yyyy";
+        public const string dd_MM_yyyy = "dd-MM-yyyy";
 
 
         public static DateTime ToDateTime(DateOnly dateOnly)

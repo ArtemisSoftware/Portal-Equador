@@ -10,8 +10,10 @@ using PortalEquador.Domain.Education.University.ViewModels;
 using PortalEquador.Domain.Report.Repository;
 using PortalEquador.Domain.Report.ViewModels;
 using PortalEquador.Domain.Report.ViewModels.AlchoolTest;
+using PortalEquador.Domain.Report.ViewModels.DriversLicence;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
@@ -146,15 +148,8 @@ namespace PortalEquador.Data.Report.Repository
             return model;
         }
 
-        public async Task<AlchoolTestReportViewModel> GetAlchoolTestReport(DateTime date, List<int> accessibleContracts)
+        public async Task<AlchoolTestReportViewModel> GetAlchoolTestReport(string contractDescription, DateTime date, List<int> accessibleContracts)
         {
-            var contractDescription = "";
-
-            if (accessibleContracts.First() == StringConstants.Report.ALL_CONTRACTS_ID)
-            {
-                contractDescription = (await GroupItem(accessibleContracts.First()))?.Description;
-            }
-
             var startOfMonth = new DateTime(date.Year, date.Month, 1);
             var endOfMonth = startOfMonth.AddMonths(1).AddDays(-1);
 
@@ -194,17 +189,102 @@ namespace PortalEquador.Data.Report.Repository
                 };
             }
 
-        private async Task<List<int>> GetAccessibleContractsForUser(string userId)
+
+        /*..............DRIVERS LICENCE....................*/
+
+
+        public async Task<DriversLicenceReportFormViewModel> GetDriversLicenceForm()
         {
+            var userId = GetCurrentUserId();
+            var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
 
-            var query = from item in context.GroupItemEntity
-                        join contract in context.AdminMechanicalWorkShopContractEntity
-                        on item.Id equals contract.ContractId
-                        where item.Active &&
-                              contract.UserId == userId
-                        select item.Id;
+            SelectList? contracts;
 
-            return await query.ToListAsync();
+            if (hasFullAccess)
+            {
+                contracts = GroupItems(
+                    Groups.MECHANICAL_SHOP_CONTRACTS,
+                    OrderType.Alphabetic,
+                    StringConstants.Report.ALL_CONTRACTS_ID,
+                    StringConstants.Report.ALL_CONTRACTS,
+                    true
+                 );
+            }
+            else
+            {
+                var result =
+                   from item in context.GroupItemEntity
+                   join contract in context.AdminMechanicalWorkShopContractEntity on item.Id equals contract.ContractId
+                   where item.Active &&
+                                   contract.UserId == userId
+                   orderby item.Description
+                   select item;
+
+                contracts = GroupItems(result, OrderType.Alphabetic, StringConstants.Report.ALL_CONTRACTS, true);
+            }
+
+            var model = new DriversLicenceReportFormViewModel
+            {
+                Contracts = contracts,
+            };
+
+            return model;
         }
+
+
+        public async Task<DriversLicenceReportViewModel> GetDriversLicenceReport(List<int> accessibleContracts)
+        {
+            var latestContractIds = GetLatestContracts();
+
+            var query = from contract in context.ContractEntity
+                        where latestContractIds.Contains(contract.Id)
+                        where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED && accessibleContracts.Contains((int)contract.ContractId)
+
+                        let personal = contract.PersonalInformationEntity
+
+                        join licence in (
+                            from licenceInfo in context.DriversLicenceEntity
+                            select new
+                            {
+                                licenceInfo.PersonalInformationId,
+                                licenceInfo.ProvisionalExpirationDate,
+                                licenceInfo.ExpirationDate,
+                                licenceInfo.LicenceTypeId,
+                            }
+                        )
+                        on contract.PersonalInformationEntity.Id equals licence.PersonalInformationId into contractJoin
+                        from contractResult in contractJoin/*.Take(1)*/.DefaultIfEmpty()
+                        where contractResult.PersonalInformationId != null
+
+                        join workStationItem in context.GroupItemEntity
+                        on contract.ContractId equals workStationItem.Id into workStationItemGroup
+                        from workStationItem in workStationItemGroup.DefaultIfEmpty()
+
+                        join licenceTypeItem in context.GroupItemEntity
+                        on contractResult.LicenceTypeId equals licenceTypeItem.Id into licenceTypeItemGroup
+                        from licenceTypeItem in licenceTypeItemGroup.DefaultIfEmpty()
+
+
+                        select new DriversLicenceReportItemViewModel
+                        {
+                            FullName = personal.FirstName + " " + personal.LastName,
+                            LicenceExpirationDate = contractResult.ExpirationDate,
+                            ProvisionalExpirationDate = contractResult.ProvisionalExpirationDate,
+                            WorkStation = workStationItem.Description,
+                            Licence = licenceTypeItem.Description
+                        };
+
+            var result = await query.ToListAsync();
+
+            return new DriversLicenceReportViewModel
+            {
+                report = result,
+            };
+        }
+
+
+
+
+
     }
 }

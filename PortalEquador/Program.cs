@@ -116,6 +116,12 @@ builder.Services.AddScoped<DeleteDisciplinaryNotificationUseCase>();
 // Report
 builder.Services.AddScoped<IReportRepository, ReportRepositoryImpl>();
 builder.Services.AddScoped<GetAlchoolTestReportUseCase>();
+builder.Services.AddScoped<GetDriversLicenceReportUseCase>();
+
+
+
+
+
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

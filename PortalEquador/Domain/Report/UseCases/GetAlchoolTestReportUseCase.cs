@@ -1,4 +1,5 @@
-﻿using PortalEquador.Domain.Contract.Repository;
+﻿using Microsoft.IdentityModel.Tokens;
+using PortalEquador.Domain.Contract.Repository;
 using PortalEquador.Domain.DisciplinaryNotification.Repository;
 using PortalEquador.Domain.DisciplinaryNotification.ViewModels;
 using PortalEquador.Domain.Document.Repository;
@@ -16,18 +17,11 @@ namespace PortalEquador.Domain.Report.UseCases
     {
         public async Task<AlchoolTestReportViewModel> Invoke(DateTime date, int contractId)
         {
-            List<int> accessibleContracts = new List<int>();
+            List<int> accessibleContracts = await contractRepository.GetAccessibleContractsForUser(contractId);
 
-            if (contractId == StringConstants.Report.ALL_CONTRACTS_ID)
-            {
-                accessibleContracts = await contractRepository.GetAccessibleContractsForUser();
-            }
-            else
-            {
-                accessibleContracts.Add(contractId);
-            }
+            var description = await contractRepository.GetContractDescription(accessibleContracts);
 
-            return await reportRepository.GetAlchoolTestReport(date, accessibleContracts);
+            return await reportRepository.GetAlchoolTestReport(description, date, accessibleContracts);
         }
     }
 }

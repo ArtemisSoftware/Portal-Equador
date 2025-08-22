@@ -22,5 +22,7 @@ namespace PortalEquador.Domain.Contract.Repository
         Task Save(ContractResignViewModel model);
 
         Task<List<int>> GetAccessibleContractsForUser();
+        Task<List<int>> GetAccessibleContractsForUser(int contractId);
+        Task<string> GetContractDescription(List<int> accessibleContracts);
     }
 }
