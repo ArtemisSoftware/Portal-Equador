@@ -3,20 +3,10 @@ using PortalEquador.Domain.Generic;
 using PortalEquador.Util.Constants;
 using System.ComponentModel.DataAnnotations;
 
-namespace PortalEquador.Domain.Report.ViewModels.AlchoolTest
+namespace PortalEquador.Domain.Report.ViewModels.DriversLicence
 {
-    public class AlchoolTestViewModel : ViewModel
-    { 
-
-        [Display(Name = StringConstants.Display.DATE)]
-        [Required]
-        public DateTime Date { get; set; }
-
-        [Display(Name = StringConstants.Display.DATE)]
-        [Required]
-        public SelectList? Dates { get; set; }
-    
-
+    public class DriversLicenceReportFormViewModel : ViewModel
+    {
         [Display(Name = StringConstants.Display.CONTRACT)]
         [Required]
         public int ContractId { get; set; }
@@ -24,6 +14,5 @@ namespace PortalEquador.Domain.Report.ViewModels.AlchoolTest
         public SelectList? Contracts { get; set; }
 
         public List<int> ContractIds { get; set; } = new List<int>();
-
     }
 }

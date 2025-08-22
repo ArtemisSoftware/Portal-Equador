@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using PortalEquador.Domain.Report.Repository;
 using PortalEquador.Domain.Report.UseCases;
 using PortalEquador.Domain.Report.ViewModels.AlchoolTest;
+using PortalEquador.Domain.Report.ViewModels.DriversLicence;
 using PortalEquador.Util;
 using PortalEquador.Util.Report;
 
@@ -9,7 +11,8 @@ namespace PortalEquador.Controllers.Report
 {
     public class ReportController(
         IReportRepository repository,
-        GetAlchoolTestReportUseCase getAlchoolTestReportUseCase
+        GetAlchoolTestReportUseCase getAlchoolTestReportUseCase,
+        GetDriversLicenceReportUseCase getDriversLicenceReportUseCase
         ) : Controller
     {
 
@@ -32,9 +35,13 @@ namespace PortalEquador.Controllers.Report
         /*--------------AlchoolTestReport---------------*/
 
 
-        public async Task<IActionResult> AlchoolTestReportForm()
+        public async Task<IActionResult> AlchoolTestReportForm(string? error)
         {
             var model = await repository.GetAlchoolTestForm();
+            if(error != null)
+            {
+                model.Error = error;
+            }
             return View(model);
         }
 
@@ -42,7 +49,14 @@ namespace PortalEquador.Controllers.Report
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AlchoolTestReportForm(AlchoolTestViewModel viewmodel)
         {
-            return await ExportAlchoolTestReportInExcel(viewmodel.Date, viewmodel.ContractId);
+            try
+            {
+                return await ExportAlchoolTestReportInExcel(viewmodel.Date, viewmodel.ContractId);
+            }
+            catch (Exception ex)
+            {
+                return await AlchoolTestReportForm(ex.Message.ToString());
+            }
         }
 
          [HttpGet]
@@ -53,6 +67,38 @@ namespace PortalEquador.Controllers.Report
             return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
         }
 
+        /*--------------DriversLicenceReport---------------*/
 
+        public async Task<IActionResult> DriversLicenceReportForm(string? error)
+        {
+            var model = await repository.GetDriversLicenceForm();
+            if (error != null)
+            {
+                model.Error = error;
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DriversLicenceReportForm(DriversLicenceReportFormViewModel viewmodel)
+        {
+            try
+            {
+                return await ExportDriversLicenceReportInExcel(viewmodel.ContractId);
+            }
+            catch (Exception ex)
+            {
+                return await DriversLicenceReportForm(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        public async Task<FileResult> ExportDriversLicenceReportInExcel(int contractId)
+        {
+            var result = await getDriversLicenceReportUseCase.Invoke(contractId);
+            var report = DriversLicenceReport.GenerateReport(result);
+            return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
+        }
     }
 }

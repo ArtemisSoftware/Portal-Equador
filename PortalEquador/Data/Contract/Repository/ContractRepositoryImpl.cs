@@ -351,7 +351,6 @@ namespace PortalEquador.Data.Contract.Repository
         {
             var userId = GetCurrentUserId();
             var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
-
             if (hasFullAccess)
             {
                 var query = from item in context.GroupItemEntity
@@ -368,12 +367,44 @@ namespace PortalEquador.Data.Contract.Repository
                                   contract.UserId == userId
                             select item.Id;
 
-                return await query.ToListAsync();
+                var results = await query.ToListAsync();
+
+                if(results.Count == 0)
+                {
+                    throw new Exception(StringConstants.Exception.PROFILE_WITH_NO_CONTRACTS);
+                }
+                return results;
             }
 
 
         }
 
+        public async Task<List<int>> GetAccessibleContractsForUser(int contractId)
+        {
+            List<int> accessibleContracts = new List<int>();
+
+            if (contractId == StringConstants.Report.ALL_CONTRACTS_ID)
+            {
+                accessibleContracts = await GetAccessibleContractsForUser();
+            }
+            else
+            {
+                accessibleContracts.Add(contractId);
+            }
+            return accessibleContracts;
+        }
+
+        public async Task<string> GetContractDescription(List<int> accessibleContracts)
+        {
+            var description = "";
+
+            if (accessibleContracts.First() != StringConstants.Report.ALL_CONTRACTS_ID)
+            {
+                description = (await GroupItem(accessibleContracts.First()))?.Description ?? string.Empty;
+            }
+
+            return description;
+        }
 
 
     }
