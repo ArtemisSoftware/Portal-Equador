@@ -31,6 +31,6 @@ namespace PortalEquador.Domain.Trainning.ViewModels
         public GroupItemViewModel? Trainning { get; set; }
 
 
-        public string PicturePath => ImagesUtil.GetFilePath(PersonaInformationId, Trainning.Id, Extension + "?v=123456");
+        public string PicturePath => ImagesUtil.GetFilePath(PersonaInformationId, Trainning.Id, Extension, true);
     }
 }

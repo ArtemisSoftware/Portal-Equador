@@ -30,7 +30,7 @@ namespace PortalEquador.Domain.MedicalExam.ViewModels
 
 
         //public string PicturePath => ImagesUtil.GetFilePath(this);
-        public string PicturePath => ImagesUtil.GetFilePath(PersonaInformationId, Exam.Id, Extension + "?v=123456");
+        public string PicturePath => ImagesUtil.GetFilePath(PersonaInformationId, Exam.Id, Extension, true);
 
     }
 }

@@ -197,7 +197,7 @@ namespace PortalEquador.Util
 
         public static string GetFilePath(FolderType folder, int personalInformationId, int imageId, string extension)
         {
-            return "~" + folder.GetFullPath() + "/" + personalInformationId + "/" + imageId + extension + "?v=123456";
+            return "~" + folder.GetFullPath() + "/" + personalInformationId + "/" + imageId + extension + CacheBustingValue();
         }
 
         private static string GetFilePath(DocumentViewModel model)
@@ -208,19 +208,19 @@ namespace PortalEquador.Util
         public static string GetFileFullPath(DocumentViewModel model)
         {
             var path = "~" + GetFolder(model).GetFullPath() + "/" + model.PersonaInformationId + "/" + GetImageId(model) + model.Extension;
-            return path + "?v=123456";
+            return path + CacheBustingValue();
         }
 
         private static string GetFileFullPath(FolderType folder, int directory, string fileName, string extension)
         {
             var path = "~" + folder.GetFullPath() + "/" + directory + "/" + fileName + extension;
-            return path + "?v=123456";
+            return path + CacheBustingValue();
         }
 
         private static string GetFileFullPath(FolderType folder, string fileName)
         {
             var path = "~" + folder.GetFullPath()  + "/" + fileName;
-            return path + "?v=123456";
+            return path + CacheBustingValue();
         }
 
         public static DocumentViewModel ValidateDocument(IWebHostEnvironment hostEnvironment, DocumentViewModel model)
@@ -437,11 +437,22 @@ namespace PortalEquador.Util
             return operationType;
         }
 
-        public static string GetFilePath(int curriculumId, int documentTypeId, string extension)
+        public static string GetFilePath(int curriculumId, int documentTypeId, string extension, bool cacheBusting = false)
         {
-            return "~/" + FoldersConstants.Folder.CURRICULUM + "/" + curriculumId + "/" + documentTypeId + extension;
+            var url = "~/" + FoldersConstants.Folder.CURRICULUM + "/" + curriculumId + "/" + documentTypeId;
+
+            if (cacheBusting)
+            {
+                url += CacheBustingValue();
+            }
+
+            return url;
         }
 
+        private static string CacheBustingValue()
+        {
+            return $"?v={DateTime.UtcNow.Ticks}";
+        }
 
 
         public static string GetFilePath(int curriculumId, int imageName)
