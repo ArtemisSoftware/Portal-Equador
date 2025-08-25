@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Math;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
@@ -57,6 +58,7 @@ namespace PortalEquador.Data.Report.Repository
 
                         join personal in (
                             from personalInfo in context.PersonalInformationEntity
+                            orderby personalInfo.FirstName
                             select new
                             {
                                 personalInfo.Id,
@@ -66,7 +68,9 @@ namespace PortalEquador.Data.Report.Repository
                             }
                         ) 
                         on contract.PersonalInformationEntity.Id equals personal.Id into contractJoin
+                        
                         from contractResult in contractJoin/*.Take(1)*/.DefaultIfEmpty()
+                       
 
                         join groupItem in context.GroupItemEntity
                             on contract.ContractId equals groupItem.Id into groupItemGroup
@@ -160,6 +164,7 @@ namespace PortalEquador.Data.Report.Repository
                             where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED && accessibleContracts.Contains((int)contract.ContractId)
 
                             let personal = contract.PersonalInformationEntity
+                            orderby personal.FirstName
 
                             select new AlchoolTestReportItemViewModel
                             {
@@ -178,6 +183,7 @@ namespace PortalEquador.Data.Report.Repository
                                     )
                                     .ToList()
                             };
+
 
                 var result = await query.ToListAsync();
 
@@ -241,6 +247,7 @@ namespace PortalEquador.Data.Report.Repository
                         where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED && accessibleContracts.Contains((int)contract.ContractId)
 
                         let personal = contract.PersonalInformationEntity
+                        orderby personal.FirstName
 
                         join licence in (
                             from licenceInfo in context.DriversLicenceEntity
