@@ -1,1 +1,68 @@
-﻿
+﻿@model PortalEquador.Domain.MedicalExam.ViewModels.MedicalExamCreateViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Editar Exame</h1>
+<hr />
+<br />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="PersonaInformationId" />
+            <input type="hidden" asp-for="FullName" />
+            <input type="hidden" asp-for="ExamId" />
+            <input type="hidden" asp-for="Date" />
+            <input type="hidden" asp-for="DateCreated" />
+
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label asp-for="Date" class="control-label"></label>
+                    <input asp-for="Date" class="form-control" disabled />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+                <br />
+            </div>
+
+            <div class="form-group" id="Exam">
+                <label asp-for="ExamId" class="control-label"></label>
+                <select asp-for="ExamId" class="form-select" asp-items="Model.Exams" disabled></select>
+            </div>
+            <br />
+            
+            <div class="form-group" id="Result">
+                <label asp-for="ResultId" class="control-label"></label>
+                <select asp-for="ResultId" class="form-select" asp-items="Model.Results"></select>
+            </div>
+            <br />
+            <br />
+            <div>
+                <a asp-action="Index" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <input type="submit" value="Guardar Alterações" class="btn btn-warning" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+
+        function MaternalSelect() {
+
+            var response = document.getElementById('Maternal').checked;
+            var oral = document.getElementById('Oral');
+            var written = document.getElementById('Written');
+            oral.hidden = response;
+            written.hidden = response;
+        }
+
+        window.onload = function () {
+            MaternalSelect()
+        };
+    </script>
+}
+

@@ -11,40 +11,40 @@
     <br />
     <div class="row">
 
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title">Idade</h3>
-                        <p class="card-text">Relatório de idades</p>
-                        <div class="d-grid gap-2 col-6 mx-auto">
-                            <a asp-controller="Report" asp-action="ExportAgeReportInExcel" class="btn btn-primary">Download</a>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Idade</h3>
+                            <p class="card-text">Relatório de idades</p>
+                            <div class="d-grid gap-2 col-6 mx-auto">
+                            <a asp-controller="Report" asp-action="AgeReportForm" class="btn btn-primary">Relatório</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title">Testes de Alcool</h3>
-                        <p class="card-text">Relatório de testes de Alcool</p>
-                        <div class="d-grid gap-2 col-6 mx-auto">
-                            <a asp-controller="Report" asp-action="AlchoolTestReportForm" class="btn btn-primary">Relatório</a>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="card-title">Testes de Alcool</h3>
+                            <p class="card-text">Relatório de testes de Alcool</p>
+                            <div class="d-grid gap-2 col-6 mx-auto">
+                                <a asp-controller="Report" asp-action="AlchoolTestReportForm" class="btn btn-primary">Relatório</a>
+                            </div>
                         </div>
                     </div>
+
+
                 </div>
-
-
             </div>
-        </div>
-
-
-
-
 
     </div>
+
+
     <br />
     <br />
+
+
     <div class="row">
         <div class="col-sm-6">
             <div class="card">
@@ -52,13 +52,26 @@
                     <h3 class="card-title">Cartas de condução</h3>
                     <p class="card-text">Relatório de cartas de condução</p>
                     <div class="d-grid gap-2 col-6 mx-auto">
-                        <a asp-controller="Report" asp-action="DriversLicenceReportForm" class="btn btn-primary">Download</a>
+                        <a asp-controller="Report" asp-action="DriversLicenceReportForm" class="btn btn-primary">Relatório</a>
                     </div>
                 </div>
             </div>
         </div>
-
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Exames médicos</h3>
+                        <p class="card-text">Relatório de exames médicos realizados</p>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                        <a asp-controller="Report" asp-action="MedicalExamReportForm" class="btn btn-primary">Relatório</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
 </div>
 
 @section Scripts {

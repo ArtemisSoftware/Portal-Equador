@@ -2,8 +2,10 @@
 using Microsoft.IdentityModel.Tokens;
 using PortalEquador.Domain.Report.Repository;
 using PortalEquador.Domain.Report.UseCases;
+using PortalEquador.Domain.Report.ViewModels.Age;
 using PortalEquador.Domain.Report.ViewModels.AlchoolTest;
 using PortalEquador.Domain.Report.ViewModels.DriversLicence;
+using PortalEquador.Domain.Report.ViewModels.MedicalExam;
 using PortalEquador.Util;
 using PortalEquador.Util.Report;
 
@@ -12,7 +14,9 @@ namespace PortalEquador.Controllers.Report
     public class ReportController(
         IReportRepository repository,
         GetAlchoolTestReportUseCase getAlchoolTestReportUseCase,
-        GetDriversLicenceReportUseCase getDriversLicenceReportUseCase
+        GetDriversLicenceReportUseCase getDriversLicenceReportUseCase,
+        GetAgeReportUseCase getAgeReportUseCase,
+        GetMedicalExamReportUseCase getMedicalExamReportUseCase
         ) : Controller
     {
 
@@ -23,12 +27,39 @@ namespace PortalEquador.Controllers.Report
         }
 
 
+        /*--------------AgeReport---------------*/
+
+
+        public async Task<IActionResult> AgeReportForm(string? error)
+        {
+            var model = await repository.GetAgeForm();
+            if (error != null)
+            {
+                model.Error = error;
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AgeReportForm(AgeReportFormViewModel viewmodel)
+        {
+            try
+            {
+                return await ExportAgeReportInExcel(viewmodel.ContractId);
+            }
+            catch (Exception ex)
+            {
+                return await AgeReportForm(ex.Message.ToString());
+            }
+        }
 
         [HttpGet]
-        public async Task<FileResult> ExportAgeReportInExcel()
+        public async Task<FileResult> ExportAgeReportInExcel(int contractId)
         {
-            var result = await repository.GetAgeReport();
-            return ReportUtil.GenerateReport(result);
+            var result = await getAgeReportUseCase.Invoke(contractId);
+            var report = AgeReport.GenerateReport(result);
+            return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
         }
 
 
@@ -100,5 +131,40 @@ namespace PortalEquador.Controllers.Report
             var report = DriversLicenceReport.GenerateReport(result);
             return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
         }
+
+        /*--------------MedicalExam---------------*/
+
+        public async Task<IActionResult> MedicalExamReportForm(string? error)
+        {
+            var model = await repository.GetMedicalExamForm();
+            if (error != null)
+            {
+                model.Error = error;
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MedicalExamReportForm(MedicalExamReportFormViewModel viewmodel)
+        {
+            try
+            {
+                return await ExportMedicalExamReportInExcel(viewmodel.Date, viewmodel.ContractId);
+            }
+            catch (Exception ex)
+            {
+                return await MedicalExamReportForm(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        public async Task<FileResult> ExportMedicalExamReportInExcel(string year, int contractId)
+        {
+            var result = await getMedicalExamReportUseCase.Invoke(year, contractId);
+            var report = MedicalExamReport.GenerateReport(result);
+            return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
+        }
+
     }
 }

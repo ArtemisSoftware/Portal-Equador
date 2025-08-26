@@ -117,6 +117,8 @@ builder.Services.AddScoped<DeleteDisciplinaryNotificationUseCase>();
 builder.Services.AddScoped<IReportRepository, ReportRepositoryImpl>();
 builder.Services.AddScoped<GetAlchoolTestReportUseCase>();
 builder.Services.AddScoped<GetDriversLicenceReportUseCase>();
+builder.Services.AddScoped<GetAgeReportUseCase>();
+builder.Services.AddScoped<GetMedicalExamReportUseCase>();
 
 
 

@@ -26,6 +26,7 @@ namespace PortalEquador.Data.PersonalInformation.Repository
             var nationalities =  GroupItems(GroupTypesConstants.Groups.NATIONALITY, OrderType.Alphabetic);
             var neighbourhoods = GroupItems(GroupTypesConstants.Groups.NEIGHBOURHOOD, OrderType.Alphabetic);
             var provinces = GroupItems(GroupTypesConstants.Groups.PROVINCE, OrderType.Alphabetic);
+            var agencies = GroupItems(GroupTypesConstants.Groups.AGENCY, OrderType.Alphabetic);
 
             if (model == null)
             {
@@ -33,7 +34,8 @@ namespace PortalEquador.Data.PersonalInformation.Repository
                 {
                     Neighbourhoods = neighbourhoods,
                     Nationalities = nationalities,
-                    Provinces = provinces
+                    Provinces = provinces,
+                    Agencies = agencies
                 };
             }
             else
@@ -41,6 +43,7 @@ namespace PortalEquador.Data.PersonalInformation.Repository
                 model.Neighbourhoods = neighbourhoods;
                 model.Nationalities = nationalities;
                 model.Provinces = provinces;
+                model.Agencies = agencies;
                 return model;
             }
         }
@@ -79,6 +82,7 @@ namespace PortalEquador.Data.PersonalInformation.Repository
                .Include(item => item.NationalityGroupItemEntity)
                 .Include(item => item.ProvinceGroupItemEntity)
                .Include(item => item.NeighbourhoodGroupItemEntity)
+               .Include(item => item.AgencyGroupItemEntity)
                .FirstOrDefaultAsync(m => m.Id == id);
 
             return mapper.Map<PersonalInformationViewModel>(result);
@@ -90,6 +94,7 @@ namespace PortalEquador.Data.PersonalInformation.Repository
                .Include(item => item.NationalityGroupItemEntity)
                 .Include(item => item.ProvinceGroupItemEntity)
                .Include(item => item.NeighbourhoodGroupItemEntity)
+               .Include(item => item.AgencyGroupItemEntity)
                .FirstOrDefaultAsync(m => m.IdentityCard == IdentityCard);
 
             return mapper.Map<PersonalInformationViewModel>(result);
@@ -125,6 +130,7 @@ namespace PortalEquador.Data.PersonalInformation.Repository
                .Include(item => item.NationalityGroupItemEntity)
                 .Include(item => item.ProvinceGroupItemEntity)
                .Include(item => item.NeighbourhoodGroupItemEntity)
+               .Include(item => item.AgencyGroupItemEntity)
                .Include(item => item.ApplicationUserEntity)
                .FirstOrDefaultAsync(m => m.Id == id);
 

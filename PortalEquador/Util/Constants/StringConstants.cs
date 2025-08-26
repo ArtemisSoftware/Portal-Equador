@@ -19,6 +19,7 @@
             public const string ACCIDENT_LEVEL = "Nível do acidente";
             public const string ADMIN = "Administradores";
             public const string AGE = "Idade";
+            public const string AGENCY = "Agência";
 
             //B
             public const string BULLETIN_NUMBER = "Buletim nº";
@@ -51,6 +52,7 @@
             public const string EMAIL = "Email";
             public const string EXPIRATION_DATE = "Data de expiração";
             public const string EMISSION = "Emissão";
+            public const string EXERCISE = "Exercício de ";
             //F
 
             public const string FULL_NAME = "Nome completo";
@@ -93,6 +95,7 @@
             public const string ROLE = "Tipo de administrador";
             public const string REASON_TO_BE_FIRED = "Razão da dispensa";
             public const string REMAINING_TIME = "Tempo remanescente";
+            public const string RESULT = "Resultado";
 
             // S
             public const string SERVICE = "Serviço";
@@ -118,6 +121,7 @@
             public const string WORKSTATION = "Posto";
 
             //  Y
+            public const string YEAR = "Ano";
             public const string YEARS = "Anos";
 
 
@@ -151,6 +155,7 @@
         {
             public const string AGE = "Relatório de idades";
             public const string ALCHOOL_TEST = "Relatório de testes de alcool";
+            public const string MEDICAL_EXAM = "Relatório dos exames médicos realizados";
 
 
             public const string ALL_CONTRACTS = "Todos os contractos";

@@ -28,6 +28,9 @@
                 @Html.DisplayNameFor(model => model.Exam)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.Result)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.PicturePath)
             </th>
             <th></th>
@@ -44,6 +47,9 @@
                     @Html.DisplayFor(modelItem => item.Exam.Description)
                 </td>
                 <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Result.Description)
+                </td>
+                <td class="align-middle">
                     @if(item.PicturePath != null)
                     {
                          <a class="link-offset-1" href="@Url.Content(@item.PicturePath)" target="_blank">
@@ -53,7 +59,8 @@
                    
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-identifier="@item.Id" asp-route-fullName="@ViewBag.username" class="btn btn-info"><i class="fas fa-eye" title="Editar"></i></a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" asp-route-identifier="@item.Id" asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                    <a asp-action="Details" asp-route-id="@item.Id" asp-route-identifier="@item.Id" asp-route-fullName="@ViewBag.username" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
                     <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username"><i class="fas fa-trash-alt" title="Eliminar"></i></button>
 
                 </td>

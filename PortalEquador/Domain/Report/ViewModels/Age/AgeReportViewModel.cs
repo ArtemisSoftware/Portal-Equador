@@ -1,6 +1,6 @@
 ﻿using PortalEquador.Domain.Generic;
 
-namespace PortalEquador.Domain.Report.ViewModels
+namespace PortalEquador.Domain.Report.ViewModels.Age
 {
     public class AgeReportViewModel : ViewModel
     {
