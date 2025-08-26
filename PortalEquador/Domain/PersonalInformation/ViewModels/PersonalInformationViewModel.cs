@@ -74,6 +74,10 @@ namespace PortalEquador.Domain.PersonalInformation.ViewModels
 
         public SelectList? Provinces { get; set; }
 
+        [Display(Name = StringConstants.Display.AGENCY)]
+        public int? AgencyId { get; set; }
+
+        public SelectList? Agencies { get; set; }
 
         [NotMapped]
         public bool ValidatedIdentityCard { get; set; } = false;

@@ -23,6 +23,8 @@ namespace PortalEquador.Domain.MedicalExam.ViewModels
         [Display(Name = StringConstants.Display.EXAM)]
         public GroupItemViewModel? Exam { get; set; }
 
+        [Display(Name = StringConstants.Display.RESULT)]
+        public GroupItemViewModel? Result { get; set; }
 
         [Display(Name = StringConstants.Display.OBSERVATION)]
         public string? Observation { get; set; }

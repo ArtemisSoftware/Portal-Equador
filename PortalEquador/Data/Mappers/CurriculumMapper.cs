@@ -32,6 +32,7 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.Nationality, opt => opt.MapFrom(src => src.NationalityGroupItemEntity))
                 .ForMember(dest => dest.Neighbourhood, opt => opt.MapFrom(src => src.NeighbourhoodGroupItemEntity))
                 .ForMember(dest => dest.Province, opt => opt.MapFrom(src => src.ProvinceGroupItemEntity))
+                .ForMember(dest => dest.Agency, opt => opt.MapFrom(src => src.AgencyGroupItemEntity))
                 .ReverseMap();
 
             CreateMap<DocumentEntity, DocumentViewModel>()

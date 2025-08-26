@@ -41,6 +41,12 @@
                 <br />
 
                 <div class="form-group">
+                    <label asp-for="AgencyId" class="control-label"></label>
+                    <select asp-for="AgencyId" class="form-control form-select" asp-items="@Model.Agencies"></select>
+                </div>
+                <br />
+
+                <div class="form-group">
                     <label asp-for="BeneficiaryNumber" class="control-label"></label>
                     <input asp-for="BeneficiaryNumber" class="form-control" />
                     <span asp-validation-for="BeneficiaryNumber" class="text-danger"></span>

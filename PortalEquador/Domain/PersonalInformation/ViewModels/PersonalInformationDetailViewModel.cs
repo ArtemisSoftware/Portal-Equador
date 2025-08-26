@@ -59,7 +59,8 @@ namespace PortalEquador.Domain.PersonalInformation.ViewModels
         [Display(Name = StringConstants.Display.NATIONALITY)]
         public GroupItemViewModel Nationality { get; set; }
 
-
+        [Display(Name = StringConstants.Display.AGENCY)]
+        public GroupItemViewModel? Agency { get; set; }
 
 
         [NotMapped]

@@ -18,18 +18,21 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 .ForMember(dest => dest.Exam, opt => opt.MapFrom(src => src.ExamGroupItemEntity))
+                .ForMember(dest => dest.Result, opt => opt.MapFrom(src => src.ResultGroupItemEntity))
                 .ReverseMap();
 
             CreateMap<MedicalExamEntity, MedicalExamCreateViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 .ForMember(dest => dest.ExamId, opt => opt.MapFrom(src => src.ExamId))
+                .ForMember(dest => dest.ResultId, opt => opt.MapFrom(src => src.ResultId))
                 .ReverseMap();
 
             CreateMap<MedicalExamEntity, MedicalExamDetailViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 .ForMember(dest => dest.Exam, opt => opt.MapFrom(src => src.ExamGroupItemEntity))
+                .ForMember(dest => dest.Result, opt => opt.MapFrom(src => src.ResultGroupItemEntity))
                 .ReverseMap();
 
             CreateMap<TrainningEntity, TrainningViewModel>()

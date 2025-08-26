@@ -29,7 +29,15 @@ namespace PortalEquador.Data.Document.Repository
 
             var models = new List<DocumentViewModel>();
             mapper.Map<List<DocumentViewModel>>(result).ForEach(document => models.Add(ImagesUtil.ValidateDocument(hostEnvironment, document)));
-            return models;
+
+            var formated = models
+            .OrderBy(x =>
+            {
+                int index = Documents.GetGeneralDocuments().IndexOf(x.DocumentTypeId);
+                return index == -1 ? int.MaxValue : index; // put non-guided items at the end
+            })
+            .ToList();
+            return formated;
         }
 
 
