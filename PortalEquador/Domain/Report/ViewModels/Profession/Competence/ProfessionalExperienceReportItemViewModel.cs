@@ -10,6 +10,10 @@ namespace PortalEquador.Domain.Report.ViewModels.Profession.Competence
 
         public string Experience { get; set; }
 
+        public string Workstation { get; set; }
+
+        public string Agency { get; set; }
+
         public int Months { get; set; }
     }
 }

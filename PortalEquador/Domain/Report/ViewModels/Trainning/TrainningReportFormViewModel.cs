@@ -10,7 +10,7 @@ namespace PortalEquador.Domain.Report.ViewModels.Trainning
 
         [Display(Name = StringConstants.Display.YEAR)]
         [Required]
-        public string Date { get; set; }
+        public string Year { get; set; }
 
         [Display(Name = StringConstants.Display.DATE)]
         [Required]

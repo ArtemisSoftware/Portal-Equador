@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.MechanicalWorkshop;
 using PortalEquador.Data.Profession.Experience.Entity;
@@ -497,15 +498,30 @@ namespace PortalEquador.Data.Report.Repository
                         on contractResult.WorkstationId equals experienceItem.Id into experienceItemGroup
                         from experienceItem in experienceItemGroup.DefaultIfEmpty()
 
+                        join workStationItem in context.GroupItemEntity
+                       on contract.ContractId equals workStationItem.Id into workStationItemGroup
+                        from workStationItem in workStationItemGroup.DefaultIfEmpty()
+
+                        join agencyItem in context.GroupItemEntity
+                       on personal.AgencyId equals agencyItem.Id into agencyItemGroup
+                        from agencyItem in agencyItemGroup.DefaultIfEmpty()
+
                         select new ProfessionalExperienceReportItemViewModel
                         {
                             FullName = personal.FirstName + " " + personal.LastName,
                             Company = companyItem.Description,
                             Experience = experienceItem.Description,
                             Months = contractResult.Months,
+                            Workstation = workStationItem.Description,
+                            Agency = agencyItem.Description
                         };
 
             var result = await query.ToListAsync();
+
+            if (result.IsNullOrEmpty())
+            {
+                throw new Exception(StringConstants.Exception.REPORT_WITH_NO_DATA);
+            }
 
             return new ProfessionalExperienceReportViewModel
             {
@@ -579,10 +595,10 @@ namespace PortalEquador.Data.Report.Repository
 
                         let personal = contract.PersonalInformationEntity
                         orderby personal.FirstName
-
+                        
                         join trainning in (
                             from trainningInfo in context.TrainningEntity
-                            where trainningInfo.Date.Year == year && trainningInfo.TrainningId == trainningId
+                            where trainningInfo.Date.Year == year /*&& trainningInfo.TrainningId == trainningId*/
                             select new
                             {
                                 trainningInfo.PersonalInformationId,
@@ -591,16 +607,17 @@ namespace PortalEquador.Data.Report.Repository
                             }
                         )
                         on contract.PersonalInformationEntity.Id equals trainning.PersonalInformationId into contractJoin
-                        from contractResult in contractJoin/*.Take(1)*/.DefaultIfEmpty()
+                        from contractResult in contractJoin.DefaultIfEmpty()
+                        where contractResult.PersonalInformationId != null
 
                         join workStationItem in context.GroupItemEntity
                         on contract.ContractId equals workStationItem.Id into workStationItemGroup
                         from workStationItem in workStationItemGroup.DefaultIfEmpty()
-
+                        
                         join trainningItem in context.GroupItemEntity
                         on contractResult.TrainningId equals trainningItem.Id into trainningItemGroup
                         from trainningItem in trainningItemGroup.DefaultIfEmpty()
-
+                        
                         select new TrainningReportItemViewModel
                         {
                             FullName = personal.FirstName + " " + personal.LastName,

@@ -6,7 +6,10 @@ using PortalEquador.Domain.Report.ViewModels.Age;
 using PortalEquador.Domain.Report.ViewModels.AlchoolTest;
 using PortalEquador.Domain.Report.ViewModels.DriversLicence;
 using PortalEquador.Domain.Report.ViewModels.MedicalExam;
+using PortalEquador.Domain.Report.ViewModels.Profession.Competence;
+using PortalEquador.Domain.Report.ViewModels.Trainning;
 using PortalEquador.Util;
+using PortalEquador.Util.Constants;
 using PortalEquador.Util.Report;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 
@@ -181,6 +184,28 @@ namespace PortalEquador.Controllers.Report
             return View(model);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ProfessionalExperienceReportForm(ProfessionalExperienceReportFormViewModel viewmodel)
+        {
+            try
+            {
+                return await ExportProfessionalExperienceReportInExcel(viewmodel.ExperienceId, viewmodel.ContractId);
+            }
+            catch (Exception ex)
+            {
+                return await ProfessionalExperienceReportForm(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        public async Task<FileResult> ExportProfessionalExperienceReportInExcel(int experienceId, int contractId)
+        {
+            var result = await getProfessionalExperienceReportUseCase.Invoke(experienceId, contractId);
+            var report = ProfessionalExperienceReport.GenerateReport(result);
+            return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
+        }
+
         /*--------------DefensiveDrivingReport---------------*/
 
         public async Task<IActionResult> DefensiveDrivingReportForm(string? error)
@@ -191,6 +216,28 @@ namespace PortalEquador.Controllers.Report
                 model.Error = error;
             }
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DefensiveDrivingReportForm(TrainningReportFormViewModel viewmodel)
+        {
+            try
+            {
+                return await ExportDefensiveDrivingReportInExcel(viewmodel.Year, viewmodel.ContractId);
+            }
+            catch (Exception ex)
+            {
+                return await DefensiveDrivingReportForm(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        public async Task<FileResult> ExportDefensiveDrivingReportInExcel(string year, int contractId)
+        {
+            var result = await getTrainningReportUseCase.Invoke(year, contractId, GroupTypesConstants.ItemFromGroup.Trainning.DEFENSIVE_DRIVING);
+            var report = DefensiveDriveReport.GenerateReport(result);
+            return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
         }
     }
 }

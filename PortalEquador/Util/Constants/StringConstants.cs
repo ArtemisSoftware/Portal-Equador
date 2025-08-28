@@ -10,6 +10,7 @@
         public static class Exception
         {
             public const string PROFILE_WITH_NO_CONTRACTS = "O seu perfil não possui contratos para gerar um relatório";
+            public const string REPORT_WITH_NO_DATA = "Não existem dados para preencher o relatório";
         }
 
         public static class Display
@@ -26,6 +27,7 @@
 
             // C
             public const string CONTRACT = "Contrato";
+            public const string SUB_CONTRACT = "Subcontratada";
             public const string CONTRACTS = "Contratos";
             public const string CONTRACT_IN_USE = "Contrato associado";
             public const string COMPETENCE = "Habilitação";
@@ -53,6 +55,7 @@
             public const string EXPIRATION_DATE = "Data de expiração";
             public const string EMISSION = "Emissão";
             public const string EXERCISE = "Exercício de ";
+            public const string ENTITY = "Entidade";
             //F
 
             public const string FULL_NAME = "Nome completo";
@@ -90,6 +93,7 @@
             public const string PROFESSIONAL_EXPERIENCE = "Experiência profissional";
             public const string PROFESSIONAL_COMPETENCE = "Habilitações profissionais";
             public const string PROVISIONAL_DRIVERS_LICENCE = "Verbete";
+            public const string PERIOD = "Periodo";
 
             //R
             public const string ROLE = "Tipo de administrador";
@@ -156,6 +160,7 @@
             public const string AGE = "Relatório de idades";
             public const string ALCHOOL_TEST = "Relatório de testes de alcool";
             public const string MEDICAL_EXAM = "Relatório dos exames médicos realizados";
+            public const string DEFENSIVE_DRIVE = "Relatório da formação condução defensiva";
 
 
             public const string ALL_CONTRACTS = "Todos os contractos";

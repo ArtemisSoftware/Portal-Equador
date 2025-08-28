@@ -76,7 +76,7 @@
         {
             public static class Trainning
             {
-                public static readonly int DEFENSIVE_DRIVING = (new Item { Debug = 3, Production = 1 }).Value;
+                public static readonly int DEFENSIVE_DRIVING = (new Item { Debug = 59, Production = 1 }).Value; //--299 356
             }
 
             public static class Nationality
