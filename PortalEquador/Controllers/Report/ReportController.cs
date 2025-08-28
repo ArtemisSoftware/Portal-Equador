@@ -8,6 +8,7 @@ using PortalEquador.Domain.Report.ViewModels.DriversLicence;
 using PortalEquador.Domain.Report.ViewModels.MedicalExam;
 using PortalEquador.Util;
 using PortalEquador.Util.Report;
+using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Controllers.Report
 {
@@ -16,7 +17,9 @@ namespace PortalEquador.Controllers.Report
         GetAlchoolTestReportUseCase getAlchoolTestReportUseCase,
         GetDriversLicenceReportUseCase getDriversLicenceReportUseCase,
         GetAgeReportUseCase getAgeReportUseCase,
-        GetMedicalExamReportUseCase getMedicalExamReportUseCase
+        GetMedicalExamReportUseCase getMedicalExamReportUseCase,
+        GetProfessionalExperienceReportUseCase getProfessionalExperienceReportUseCase,
+        GetTrainningReportUseCase getTrainningReportUseCase
         ) : Controller
     {
 
@@ -166,5 +169,28 @@ namespace PortalEquador.Controllers.Report
             return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
         }
 
+        /*--------------ProfessionalExperienceReport---------------*/
+
+        public async Task<IActionResult> ProfessionalExperienceReportForm(string? error)
+        {
+            var model = await repository.GetProfessionalExperienceForm();
+            if (error != null)
+            {
+                model.Error = error;
+            }
+            return View(model);
+        }
+
+        /*--------------DefensiveDrivingReport---------------*/
+
+        public async Task<IActionResult> DefensiveDrivingReportForm(string? error)
+        {
+            var model = await repository.GetTrainningForm(ItemFromGroup.Trainning.DEFENSIVE_DRIVING);
+            if (error != null)
+            {
+                model.Error = error;
+            }
+            return View(model);
+        }
     }
 }

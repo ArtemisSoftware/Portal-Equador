@@ -160,6 +160,9 @@
 
             public const string ALL_CONTRACTS = "Todos os contractos";
             public const int ALL_CONTRACTS_ID = -1;
+
+            public const string ALL_WORK_EXPERIENCE = "Todas as profissões";
+            public const int ALL_WORK_EXPERIENCE_ID = -1;
         }
 
         public static class Error

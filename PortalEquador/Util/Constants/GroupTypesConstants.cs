@@ -74,6 +74,10 @@
 
         public static class ItemFromGroup
         {
+            public static class Trainning
+            {
+                public static readonly int DEFENSIVE_DRIVING = (new Item { Debug = 3, Production = 1 }).Value;
+            }
 
             public static class Nationality
             {

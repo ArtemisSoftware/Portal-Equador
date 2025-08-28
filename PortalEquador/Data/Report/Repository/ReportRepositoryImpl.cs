@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
@@ -10,6 +11,8 @@ using PortalEquador.Domain.Report.ViewModels.Age;
 using PortalEquador.Domain.Report.ViewModels.AlchoolTest;
 using PortalEquador.Domain.Report.ViewModels.DriversLicence;
 using PortalEquador.Domain.Report.ViewModels.MedicalExam;
+using PortalEquador.Domain.Report.ViewModels.Profession.Competence;
+using PortalEquador.Domain.Report.ViewModels.Trainning;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 using System.Globalization;
@@ -409,6 +412,206 @@ namespace PortalEquador.Data.Report.Repository
             var result = await query.ToListAsync();
 
             return new MedicalExamReportViewModel
+            {
+                report = result,
+                Date = year
+            };
+        }
+
+
+        /*..............PROFESSION + EXPERIENCE....................*/
+
+        public async Task<ProfessionalExperienceReportFormViewModel> GetProfessionalExperienceForm()
+        {
+            var userId = GetCurrentUserId();
+            var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
+
+            SelectList? contracts;
+            SelectList? professions;
+
+            if (hasFullAccess)
+            {
+                contracts = GroupItems(
+                    Groups.MECHANICAL_SHOP_CONTRACTS,
+                    OrderType.Alphabetic,
+                    StringConstants.Report.ALL_CONTRACTS_ID,
+                    StringConstants.Report.ALL_CONTRACTS,
+                    true
+                 );
+            }
+            else
+            {
+                var result =
+                   from item in context.GroupItemEntity
+                   join contract in context.AdminMechanicalWorkShopContractEntity on item.Id equals contract.ContractId
+                   where item.Active &&
+                                   contract.UserId == userId
+                   orderby item.Description
+                   select item;
+
+                contracts = GroupItems(result, OrderType.Alphabetic, StringConstants.Report.ALL_CONTRACTS, true);
+            }
+
+            var experience = GroupItems(Groups.WORKSTATIONS, OrderType.Alphabetic, -1, StringConstants.Report.ALL_WORK_EXPERIENCE, true);
+
+            var model = new ProfessionalExperienceReportFormViewModel
+            {
+                Experiences = experience,
+                Contracts = contracts,
+            };
+
+            return model;
+        }
+
+        public async Task<ProfessionalExperienceReportViewModel> GetProfessionalExperienceReport(int experienceId, List<int> accessibleContracts)
+        {
+            var latestContractIds = GetLatestContracts();
+
+            var query = from contract in context.ContractEntity
+                        where latestContractIds.Contains(contract.Id)
+                        where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED && accessibleContracts.Contains((int)contract.ContractId)
+
+                        let personal = contract.PersonalInformationEntity
+                        orderby personal.FirstName
+
+                        join experience in (
+                            from experienceInfo in context.ProfessionalExperienceEntity
+                            where experienceId == StringConstants.Report.ALL_WORK_EXPERIENCE_ID || experienceInfo.WorkstationId == experienceId
+                            select new
+                            {
+                                experienceInfo.PersonalInformationId,
+                                experienceInfo.CompanyId,
+                                experienceInfo.Months,
+                                experienceInfo.WorkstationId,
+                            }
+                        )
+                        on contract.PersonalInformationEntity.Id equals experience.PersonalInformationId into contractJoin
+                        from contractResult in contractJoin.DefaultIfEmpty()
+                        where contractResult.PersonalInformationId != null
+
+                        join companyItem in context.GroupItemEntity
+                        on contractResult.CompanyId equals companyItem.Id into companyItemGroup
+                        from companyItem in companyItemGroup.DefaultIfEmpty()
+
+                        join experienceItem in context.GroupItemEntity
+                        on contractResult.WorkstationId equals experienceItem.Id into experienceItemGroup
+                        from experienceItem in experienceItemGroup.DefaultIfEmpty()
+
+                        select new ProfessionalExperienceReportItemViewModel
+                        {
+                            FullName = personal.FirstName + " " + personal.LastName,
+                            Company = companyItem.Description,
+                            Experience = experienceItem.Description,
+                            Months = contractResult.Months,
+                        };
+
+            var result = await query.ToListAsync();
+
+            return new ProfessionalExperienceReportViewModel
+            {
+                report = result,
+            };
+        }
+
+        /*..............MEDICAL EXAM....................*/
+
+        public async Task<TrainningReportFormViewModel> GetTrainningForm(int trainningId)
+        {
+            var userId = GetCurrentUserId();
+            var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
+
+            var yearDates = context.TrainningEntity
+                .Where(item => item.TrainningId == trainningId)
+                .GroupBy(d => new { d.Date.Year })
+                .Select(g => g.OrderBy(x => x.Date).First().Date)
+                .OrderBy(x => x.Date)
+                .ToList();
+
+            var dates = new SelectList(
+                yearDates.Select(
+                    d => new {
+                        Value = d.ToString(TimeUtil.yyyy), // or just d if you're binding to a DateTime
+                        Text = d.ToString(TimeUtil.yyyy, new CultureInfo("pt-PT")) // e.g., "julho 2025"
+                    }
+                  ), "Value", "Text"
+            );
+
+            SelectList? contracts;
+
+            if (hasFullAccess)
+            {
+                contracts = GroupItems(
+                    Groups.MECHANICAL_SHOP_CONTRACTS,
+                    OrderType.Alphabetic,
+                    StringConstants.Report.ALL_CONTRACTS_ID,
+                    StringConstants.Report.ALL_CONTRACTS,
+                    true
+                 );
+            }
+            else
+            {
+                var result =
+                   from item in context.GroupItemEntity
+                   join contract in context.AdminMechanicalWorkShopContractEntity on item.Id equals contract.ContractId
+                   where item.Active &&
+                                   contract.UserId == userId
+                   orderby item.Description
+                   select item;
+
+                contracts = GroupItems(result, OrderType.Alphabetic, StringConstants.Report.ALL_CONTRACTS, true);
+            }
+
+            var model = new TrainningReportFormViewModel
+            {
+                Dates = dates,
+                Contracts = contracts,
+            };
+
+            return model;
+        }
+        public async Task<TrainningReportViewModel> GetTrainningReport(int year, List<int> accessibleContracts, int trainningId)
+        {
+            var latestContractIds = GetLatestContracts();
+
+            var query = from contract in context.ContractEntity
+                        where latestContractIds.Contains(contract.Id)
+                        where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED && accessibleContracts.Contains((int)contract.ContractId)
+
+                        let personal = contract.PersonalInformationEntity
+                        orderby personal.FirstName
+
+                        join trainning in (
+                            from trainningInfo in context.TrainningEntity
+                            where trainningInfo.Date.Year == year && trainningInfo.TrainningId == trainningId
+                            select new
+                            {
+                                trainningInfo.PersonalInformationId,
+                                trainningInfo.TrainningId,
+                                trainningInfo.Date,
+                            }
+                        )
+                        on contract.PersonalInformationEntity.Id equals trainning.PersonalInformationId into contractJoin
+                        from contractResult in contractJoin/*.Take(1)*/.DefaultIfEmpty()
+
+                        join workStationItem in context.GroupItemEntity
+                        on contract.ContractId equals workStationItem.Id into workStationItemGroup
+                        from workStationItem in workStationItemGroup.DefaultIfEmpty()
+
+                        join trainningItem in context.GroupItemEntity
+                        on contractResult.TrainningId equals trainningItem.Id into trainningItemGroup
+                        from trainningItem in trainningItemGroup.DefaultIfEmpty()
+
+                        select new TrainningReportItemViewModel
+                        {
+                            FullName = personal.FirstName + " " + personal.LastName,
+                            Date = contractResult.Date,
+                            WorkStation = workStationItem.Description,
+                            Trainning = trainningItem.Description,
+                        };
+
+            var result = await query.ToListAsync();
+
+            return new TrainningReportViewModel
             {
                 report = result,
                 Date = year

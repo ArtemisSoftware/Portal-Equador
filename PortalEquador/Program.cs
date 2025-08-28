@@ -90,6 +90,7 @@ builder.Services.AddScoped<GetDriversLicenceProvisionalUseCase>();
 builder.Services.AddScoped<GetDriversLicenceProvisionalRenewUseCase> ();
 builder.Services.AddScoped<GetDriversLicenceUseCase> ();
 builder.Services.AddScoped<DeleteDriversLicenceUseCase>();
+builder.Services.AddScoped<GetDriversLicenceCreateModelUseCase> ();
 
 //MechanicalWorkshop
 builder.Services.AddScoped<IMechanicalWorkshopVehicleRepository, MechanicalWorkshopVehicleRepositoryImpl>();
@@ -119,7 +120,8 @@ builder.Services.AddScoped<GetAlchoolTestReportUseCase>();
 builder.Services.AddScoped<GetDriversLicenceReportUseCase>();
 builder.Services.AddScoped<GetAgeReportUseCase>();
 builder.Services.AddScoped<GetMedicalExamReportUseCase>();
-
+builder.Services.AddScoped<GetProfessionalExperienceReportUseCase>();
+builder.Services.AddScoped<GetTrainningReportUseCase> ();
 
 
 
