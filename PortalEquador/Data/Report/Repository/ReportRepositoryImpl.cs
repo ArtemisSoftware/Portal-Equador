@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PortalEquador.Data.Generic;
+using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.MechanicalWorkshop;
 using PortalEquador.Data.Profession.Experience.Entity;
 using PortalEquador.Domain.Report.Repository;
@@ -11,6 +13,7 @@ using PortalEquador.Domain.Report.ViewModels;
 using PortalEquador.Domain.Report.ViewModels.Age;
 using PortalEquador.Domain.Report.ViewModels.AlchoolTest;
 using PortalEquador.Domain.Report.ViewModels.DriversLicence;
+using PortalEquador.Domain.Report.ViewModels.Education;
 using PortalEquador.Domain.Report.ViewModels.MedicalExam;
 using PortalEquador.Domain.Report.ViewModels.Profession.Competence;
 using PortalEquador.Domain.Report.ViewModels.Trainning;
@@ -281,7 +284,7 @@ namespace PortalEquador.Data.Report.Repository
                         )
                         on contract.PersonalInformationEntity.Id equals licence.PersonalInformationId into contractJoin
                         from contractResult in contractJoin/*.Take(1)*/.DefaultIfEmpty()
-                        where contractResult.PersonalInformationId != null
+                        //where contractResult.PersonalInformationId != null
 
                         join workStationItem in context.GroupItemEntity
                         on contract.ContractId equals workStationItem.Id into workStationItemGroup
@@ -635,5 +638,62 @@ namespace PortalEquador.Data.Report.Repository
             };
         }
 
+        /*..............EDUCATION....................*/
+
+        public async Task<EducationReportFormViewModel> GetEducationForm()
+        {
+
+            IQueryable<GroupItemEntity> resultSchool = context.GroupItemEntity.Where(x => x.GroupEntityId == Groups.SCHOOL_COURSES & x.Active == true);
+            IQueryable<GroupItemEntity> resultUniversity = context.GroupItemEntity.Where(x => x.GroupEntityId == Groups.UNIVERSITY_COURSES & x.Active == true);
+
+            IQueryable<GroupItemEntity> result = resultSchool.Concat(resultUniversity);
+
+            SelectList educations = GroupItems(
+                    result,
+                    OrderType.Alphabetic,
+                    StringConstants.Report.ALL_EDUCATION,
+                    true
+             );
+            
+
+            var model = new EducationReportFormViewModel
+            {
+                Educations = educations,
+            };
+
+            return model;
+        }
+
+        public async Task<EducationReportViewModel> GetEducationReport(int educationId)
+        {
+            var schoolQuery = context.SchoolEntity
+                .Where(s => educationId == StringConstants.Report.ALL_ID || s.MajorId == educationId)
+                .Select(s => new EducationReportItemViewModel
+                {
+                    FullName = s.PersonalInformationEntity.FirstName + " " + s.PersonalInformationEntity.LastName,
+                    Institution = s.InstitutionGroupItemEntity.Description,
+                    Degree = s.DegreeGroupItemEntity.Description,
+                    Major = s.MajorGroupItemEntity != null ? s.MajorGroupItemEntity.Description : null
+                });
+
+            var universityQuery = context.UniversityEntity
+                .Where(s => educationId == StringConstants.Report.ALL_ID || s.MajorId == educationId)
+                .Select(u => new EducationReportItemViewModel
+                {
+                    FullName = u.PersonalInformationEntity.FirstName + " " + u.PersonalInformationEntity.LastName,
+                    Institution = u.InstitutionGroupItemEntity.Description,
+                    Degree = u.DegreeGroupItemEntity.Description,
+                    Major = u.MajorGroupItemEntity.Description
+                });
+
+            var result = await schoolQuery
+                .Union(universityQuery) // or Concat() if you don’t want EF to deduplicate
+                .ToListAsync();
+
+            return new EducationReportViewModel
+            {
+                report = result
+            };
+        }
     }
 }

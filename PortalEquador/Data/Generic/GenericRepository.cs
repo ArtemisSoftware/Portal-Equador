@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.ViewModels;
+using PortalEquador.Util.Constants;
 using System.Security.Claims;
 
 namespace PortalEquador.Data.Generic
@@ -188,7 +189,7 @@ namespace PortalEquador.Data.Generic
                 {
                     ApplicationUserEntity = new ApplicationUser(),
                     EditorId = "",
-                    Id = -1,
+                    Id = StringConstants.Report.ALL_ID,
                     Description = extraOption,
                     GroupEntity = new GroupEntity
                     {

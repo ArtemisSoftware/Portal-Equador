@@ -21,6 +21,7 @@
             public const string ADMIN = "Administradores";
             public const string AGE = "Idade";
             public const string AGENCY = "Agência";
+            public const string ACADEMIC_HABILITATION = " Habilitações académicas";
 
             //B
             public const string BULLETIN_NUMBER = "Buletim nº";
@@ -71,6 +72,7 @@
             public const string LOCAL = "Local";
 
             // M
+            public const string MAJOR = "Curso";
             public const string MAJOR_UNVAILABLE = "Curso não disponível";
             public const string MATERNAL_LANGUANGE = "Língua materna";
             public const string MECHANIC = "Mecânico";
@@ -162,12 +164,14 @@
             public const string MEDICAL_EXAM = "Relatório dos exames médicos realizados";
             public const string DEFENSIVE_DRIVE = "Relatório da formação condução defensiva";
 
-
+            public const int ALL_ID = -1;
             public const string ALL_CONTRACTS = "Todos os contractos";
             public const int ALL_CONTRACTS_ID = -1;
 
             public const string ALL_WORK_EXPERIENCE = "Todas as profissões";
             public const int ALL_WORK_EXPERIENCE_ID = -1;
+
+            public const string ALL_EDUCATION = "Todas as habilitações académicas";
         }
 
         public static class Error

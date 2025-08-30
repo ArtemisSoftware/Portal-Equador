@@ -5,6 +5,7 @@ using PortalEquador.Domain.Report.UseCases;
 using PortalEquador.Domain.Report.ViewModels.Age;
 using PortalEquador.Domain.Report.ViewModels.AlchoolTest;
 using PortalEquador.Domain.Report.ViewModels.DriversLicence;
+using PortalEquador.Domain.Report.ViewModels.Education;
 using PortalEquador.Domain.Report.ViewModels.MedicalExam;
 using PortalEquador.Domain.Report.ViewModels.Profession.Competence;
 using PortalEquador.Domain.Report.ViewModels.Trainning;
@@ -237,6 +238,42 @@ namespace PortalEquador.Controllers.Report
         {
             var result = await getTrainningReportUseCase.Invoke(year, contractId, GroupTypesConstants.ItemFromGroup.Trainning.DEFENSIVE_DRIVING);
             var report = DefensiveDriveReport.GenerateReport(result);
+            return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
+        }
+
+
+
+        /*--------------EducationReport---------------*/
+
+        public async Task<IActionResult> EducationReportForm(string? error)
+        {
+            var model = await repository.GetEducationForm();
+            if (error != null)
+            {
+                model.Error = error;
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EducationReportForm(EducationReportFormViewModel viewmodel)
+        {
+            try
+            {
+                return await ExportEducationReportInExcel(viewmodel.EducationId);
+            }
+            catch (Exception ex)
+            {
+                return await EducationReportForm(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        public async Task<FileResult> ExportEducationReportInExcel( int educationId)
+        {
+            var result = await repository.GetEducationReport(educationId);
+            var report = EducationReport.GenerateReport(result);
             return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
         }
     }
