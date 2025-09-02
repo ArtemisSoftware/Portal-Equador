@@ -1,11 +1,17 @@
-﻿using PortalEquador.Data.GroupTypes.entities;
+﻿using PortalEquador.Data.Generic;
+using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity;
+using PortalEquador.Data.PersonalInformation.Entity;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PortalEquador.Data.Accident.Entities
 {
-    public class AccidentEntity
+    public class AccidentEntity: BaseEntity
     {
+        public int PersonalInformationId { get; set; }
+
+        [ForeignKey("PersonalInformationId")]
+        public PersonalInformationEntity PersonalInformationEntity { get; set; }
 
         public int Number { get; set; }
 
@@ -16,6 +22,10 @@ namespace PortalEquador.Data.Accident.Entities
         [ForeignKey("VehicleId")]
         public MechanicalWorkshopVehicleEntity VehicleEntity { get; set; }
 
+        public int ContractId { get; set; }
+
+        [ForeignKey("ContractId")]
+        public GroupItemEntity ContractGroupItemEntity { get; set; }
 
         public string Address { get; set; }
 
@@ -25,15 +35,15 @@ namespace PortalEquador.Data.Accident.Entities
         public GroupItemEntity CityGroupItemEntity { get; set; }
 
 
-        public int CauseId { get; set; }
+        public List<AccidentCauseEntity> Accidents { get; set; } = new();
 
-        [ForeignKey("CauseId")]
-        public GroupItemEntity CauseGroupItemEntity { get; set; }
 
         public int EstimatedValueId { get; set; }
 
         [ForeignKey("EstimatedValueId")]
         public GroupItemEntity EstimatedValueGroupItemEntity { get; set; }
+
+
 
         public int HumanDamage { get; set; } = 0;
 

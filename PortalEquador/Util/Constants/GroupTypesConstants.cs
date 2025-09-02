@@ -70,6 +70,11 @@
 
             public static readonly int AGENCY = (new Item { Debug = 29, Production = 35 }).Value;
             public static readonly int EXAM_RESULT = (new Item { Debug = 30, Production = 36 }).Value;
+
+            public static readonly int CITIES = (new Item { Debug = 30, Production = 36 }).Value;
+            public static readonly int ESTIMATED_VALUE = (new Item { Debug = 30, Production = 36 }).Value;
+            public static readonly int EXAM_RESULT = (new Item { Debug = 30, Production = 36 }).Value;
+            public static readonly int EXAM_RESULT = (new Item { Debug = 30, Production = 36 }).Value;
         }
 
         public static class ItemFromGroup

@@ -51,7 +51,7 @@ namespace PortalEquador.Domain.PersonalInformation.ViewModels
         [DataType(DataType.EmailAddress)]
         public string? Email { get; set; }
 
-        [Display(Name = StringConstants.Display.ADRESS)]
+        [Display(Name = StringConstants.Display.ADDRESS)]
         [Required(ErrorMessage = StringConstants.Error.MANDATORY_FIELD)]
         public string Address { get; set; }
 

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using PortalEquador.Data.Accident.Entities;
 using PortalEquador.Data.Contract.Entities;
 using PortalEquador.Data.DisciplinaryNotification.Entity;
 using PortalEquador.Data.MedicalExam.Entity;
 using PortalEquador.Data.Trainning.Entity;
+using PortalEquador.Domain.Accident.ViewModels;
 using PortalEquador.Domain.Contract.ViewModels;
 using PortalEquador.Domain.DisciplinaryNotification.ViewModels;
 using PortalEquador.Domain.MedicalExam.ViewModels;
@@ -108,8 +110,20 @@ namespace PortalEquador.Data.Mappers
 
             CreateMap<ContractEntity, CurrentContractViewModel>()
              .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.PersonalInformationEntity.FirstName + " " + src.PersonalInformationEntity.LastName))
-             
               .ReverseMap();
+
+            CreateMap<AccidentEntity, AccidentDetailViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.PersonalInformationEntity.FirstName + " " + src.PersonalInformationEntity.LastName))
+                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.CityGroupItemEntity))
+                .ForMember(dest => dest.Level, opt => opt.MapFrom(src => src.LevelGroupItemEntity))
+                .ForMember(dest => dest.EstimatedValue, opt => opt.MapFrom(src => src.EstimatedValueGroupItemEntity))
+                .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity))
+                .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.VehicleEntity))
+                .ForMember(dest => dest.HumanDamage, opt => opt.MapFrom(src => src.HumanDamage))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
+                .ReverseMap();
+
         }
     }
 }

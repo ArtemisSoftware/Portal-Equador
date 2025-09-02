@@ -16,7 +16,7 @@
         public static class Display
         {
             // A
-            public const string ADRESS = "Endereço";
+            public const string ADDRESS = "Endereço";
             public const string ACCIDENT_LEVEL = "Nível do acidente";
             public const string ADMIN = "Administradores";
             public const string AGE = "Idade";
@@ -29,6 +29,7 @@
             // C
             public const string CONTRACT = "Contrato";
             public const string SUB_CONTRACT = "Subcontratada";
+            public const string CITY = "Cidade";
             public const string CONTRACTS = "Contratos";
             public const string CONTRACT_IN_USE = "Contrato associado";
             public const string COMPETENCE = "Habilitação";
@@ -57,11 +58,15 @@
             public const string EMISSION = "Emissão";
             public const string EXERCISE = "Exercício de ";
             public const string ENTITY = "Entidade";
+            public const string ESTIMATED_VALUE = "Valor estimado";
             //F
 
             public const string FULL_NAME = "Nome completo";
             public const string FILTER = "Filtro";
 
+            //H
+            public const string HUMAN_DAMAGE = "Danos humandos";
+            public const string HOUR = "Hora";
             // I
             public const string INSTITUTION = "Instituição";
 
@@ -202,6 +207,8 @@
             public const string DD_MM_YYYY = "{0:dd-MM-yyyy}";
 
             public const string DD_MM_YYYY__HH_MM = "{0:dd-MM-yyyy HH:mm}";
+
+            public const string HH_MM = "{0:HH\\:mm}";
         }
 
         public static class Lenght

@@ -29,7 +29,7 @@ namespace PortalEquador.Data.Languages.Repository
 
         public async Task<LanguageViewModel> GetCreateModel(int personalInformationId, string fullName)
         {
-            var languages = GroupItems(Groups.LANGUAGES);
+            var languages = GroupItems(Groups.LANGUAGES, OrderType.Alphabetic);
             var languageLevel = GroupItems(Groups.LANGUAGE_LEVEL);
 
             var model = new LanguageViewModel
@@ -46,7 +46,7 @@ namespace PortalEquador.Data.Languages.Repository
 
         public async Task<LanguageViewModel> GetCreateModel(LanguageViewModel model)
         {
-            var languages = GroupItems(Groups.LANGUAGES);
+            var languages = GroupItems(Groups.LANGUAGES, OrderType.Alphabetic);
             var languageLevel = GroupItems(Groups.LANGUAGE_LEVEL);
 
             model.OralLevels = languageLevel;
