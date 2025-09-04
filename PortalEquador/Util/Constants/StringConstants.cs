@@ -65,7 +65,7 @@
             public const string FILTER = "Filtro";
 
             //H
-            public const string HUMAN_DAMAGE = "Danos humandos";
+            public const string HUMAN_DAMAGE = "Danos humanos";
             public const string HOUR = "Hora";
             // I
             public const string INSTITUTION = "Instituição";
@@ -89,6 +89,7 @@
             //N
             public const string NAME = "Nome";
             public const string NOTIFICATION = "Notificação";
+            public const string NUMBER = "Número";
 
 
             // O
@@ -199,6 +200,8 @@
             public const string UNDECLARED_ERROR = "Ocorreu um erro ao preencher o formulário.";
             public const string EXISTING_DRIVERS_LICENCE = "A carta de condução já se encontra registada";
             public const string INVALID_IMAGE_EXTENSION = "A imagem possui uma extensão inválida";
+            public const string EXISTING_ACCIDENT_NUMBER = "A número de acidente já se encontra registado";
+            public const string NO_ACCIDENT_CAUSES = "Não foram selecionadas causas para o acidente";
         }
 
         public static class Dates
@@ -208,7 +211,7 @@
 
             public const string DD_MM_YYYY__HH_MM = "{0:dd-MM-yyyy HH:mm}";
 
-            public const string HH_MM = "{0:HH\\:mm}";
+            public const string HH_MM = "{0:hh\\:mm}";
         }
 
         public static class Lenght

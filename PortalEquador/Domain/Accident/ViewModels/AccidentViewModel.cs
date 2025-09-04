@@ -11,7 +11,7 @@ namespace PortalEquador.Domain.Accident.ViewModels
     {
         public int Id { get; set; }
 
-        [Display(Name = StringConstants.Display.CITY)]
+        [Display(Name = StringConstants.Display.NUMBER)]
         [Required(ErrorMessage = StringConstants.Error.MANDATORY_FIELD)]
         public int Number { get; set; }
 
@@ -31,12 +31,27 @@ namespace PortalEquador.Domain.Accident.ViewModels
         public TimeSpan? Time { get; set; }
 
 
-
         [Display(Name = StringConstants.Display.CONTRACT)]
         [Required]
         public int ContractId { get; set; }
 
         public SelectList? Contracts { get; set; }
+
+
+        [Display(Name = StringConstants.Display.LICENCE_PLATE)]
+        [NotMapped]
+        public string? LicencePlate { get; set; }
+
+        [Display(Name = StringConstants.Display.VEHICLE)]
+        [Required]
+        public int VehicleId { get; set; }
+
+        [Display(Name = StringConstants.Display.MODEL)]
+        public string? Model { get; set; }
+
+
+        [Display(Name = StringConstants.Display.VEHICLE)]
+        public SelectList? Vehicles { get; set; }
 
 
 
@@ -53,6 +68,26 @@ namespace PortalEquador.Domain.Accident.ViewModels
 
         public List<GroupItemViewModel> Causes { get; set; } = new List<GroupItemViewModel>();
         public List<bool> SelectedCauses { get; set; } = new List<bool>();
+
+        public bool HasSelectedCauses()
+        {
+            return SelectedCauses.Contains(true);
+        }
+
+        public List<GroupItemViewModel> GetCurrentCauses()
+        {
+            List<GroupItemViewModel> result = new List<GroupItemViewModel>();
+
+            for (int i = 0; i < Causes.Count; ++i)
+            {
+                if (SelectedCauses[i] == true)
+                {
+                    result.Add(Causes[i]);
+                }
+            }
+
+            return result;
+        }
 
 
         [Display(Name = StringConstants.Display.ESTIMATED_VALUE)]

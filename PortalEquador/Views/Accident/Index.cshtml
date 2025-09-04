@@ -1,0 +1,85 @@
+﻿@model IEnumerable<PortalEquador.Domain.Accident.ViewModels.AccidentDetailViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>@ViewBag.username</h1>
+        <h3>Acidentes</h3>
+        <p>
+            <a asp-controller="Accident" asp-action="Create" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success">
+                <i class="fas fa-plus"></i> Criar Novo Registo
+             </a>
+        </p>
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="Curriculum" asp-action="Dashboard" asp-route-identifier="@ViewBag.identifier" class="btn btn-success"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
+</div>
+<hr />
+<br />
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Number)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vehicle)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Number)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.Vehicle.LicencePlate)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                    <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username"><i class="fas fa-trash-alt" title="Editar"></i></button>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@section Scripts {
+    <script>
+        $(function () {
+
+            $('.table').DataTable();
+        });
+        
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -151,6 +151,24 @@
         
     </div>
 
+    <div class="row">
+
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Acidentes</h5>
+                    <span class="badge bg-success">@Model.TotalExams Registo(s)</span>
+                    <p class="card-text">Formulário para o registo de acidentes.</p>
+                    @if (Model.TotalAccidents != 0)
+                    {
+                        <a asp-controller="Accident" asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                    }
+                    <a asp-controller="Accident" asp-action="Create" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
     <br />
 
 
