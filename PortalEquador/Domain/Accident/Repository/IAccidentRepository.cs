@@ -17,6 +17,6 @@ namespace PortalEquador.Domain.Accident.Repository
 
         Task<bool> AccidentNumberExists(int numberId);
 
-        Task<AccidentViewModel> GetAccident(int id);
+        Task<AccidentDetailViewModel> GetAccident(int id);
     }
 }

@@ -16,7 +16,7 @@ namespace PortalEquador.Domain.Accident.UseCases
         {
             var accidentId = await accidentRepository.Save(model);
 
-            accidentCauseRepository.Save(accidentId, model.GetCurrentCauses());
+            //--accidentCauseRepository.Save(accidentId, model.GetCurrentCauses());
         }
     }
 }

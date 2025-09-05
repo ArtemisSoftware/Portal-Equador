@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.InkML;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Accident.Entities;
 using PortalEquador.Data.Generic;
+using PortalEquador.Data.Migrations;
 using PortalEquador.Domain.Accident.Repository;
 using PortalEquador.Domain.Accident.ViewModels;
+using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.ViewModels;
+using PortalEquador.Domain.Languages.ViewModels;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Data.Accident.Repository
@@ -21,9 +25,20 @@ namespace PortalEquador.Data.Accident.Repository
             return await context.AccidentEntity.AnyAsync(item => item.Number == numberId);
         }
 
-        public Task<AccidentViewModel> GetAccident(int id)
+        public async Task<AccidentDetailViewModel> GetAccident(int id)
         {
-            throw new NotImplementedException();
+            var result = await context.AccidentEntity
+                .Include(a => a.PersonalInformationEntity)
+                .Include(a => a.VehicleEntity)
+                .Include(a => a.ContractGroupItemEntity)
+                .Include(a => a.CityGroupItemEntity)
+                .Include(a => a.EstimatedValueGroupItemEntity)
+                .Include(a => a.LevelGroupItemEntity)
+                .Include(a => a.Accidents) // causes
+                    .ThenInclude(c => c.CauseGroupItemEntity) // cause details
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            return mapper.Map<AccidentDetailViewModel>(result);
         }
 
         public async Task<List<AccidentDetailViewModel>> GetAll(int personalInformationId)
@@ -46,7 +61,8 @@ namespace PortalEquador.Data.Accident.Repository
             var contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
 
             var accidents = await GroupItemsList(Groups.ACCIDENT_CAUSES, OrderType.Alphabetic);
-            var accidentsList = mapper.Map<List<GroupItemViewModel>>(accidents);
+            var accidentsList = mapper.Map<List<AccidentCauseViewModel>>(accidents);
+            accidentsList.ForEach(vm => vm.Id = 0);
 
             var estimatedValue = GroupItems(Groups.ESTIMATED_VALUE);
             var accidentLevel = GroupItems(Groups.OCORRED_ACCIDENT_LEVEL, OrderType.Alphabetic);
@@ -72,7 +88,8 @@ namespace PortalEquador.Data.Accident.Repository
             var contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
 
             var accidents = await GroupItemsList(Groups.ACCIDENT_CAUSES, OrderType.Alphabetic);
-            var accidentsList = mapper.Map<List<GroupItemViewModel>>(accidents);
+            var accidentsList = mapper.Map<List<AccidentCauseViewModel>>(accidents);
+            accidentsList.ForEach(vm => vm.Id = 0);
 
             var estimatedValue = GroupItems(Groups.ESTIMATED_VALUE);
             var accidentLevel = GroupItems(Groups.OCORRED_ACCIDENT_LEVEL, OrderType.Alphabetic);
@@ -88,11 +105,20 @@ namespace PortalEquador.Data.Accident.Repository
 
         public async Task<int> Save(AccidentViewModel model)
         {
+            var editorId = GetCurrentUserId();
             var entity = mapper.Map<AccidentEntity>(model);
-            entity.EditorId = GetCurrentUserId();
+            entity.EditorId = editorId;
+            
+            var entities = mapper.Map<List<AccidentCauseEntity>>(model.GetCurrentCauses());
+            entities.ForEach(vm => vm.Id = 0);
+            entities.ForEach(vm => vm.EditorId = editorId);
 
+            entity.Accidents = entities;
             var id = 0;
 
+
+            id = (await AddAsync(entity)).Id;
+            /*
             if (model.Id == 0)
             {
                 id = (await AddAsync(entity)).Id;
@@ -103,7 +129,7 @@ namespace PortalEquador.Data.Accident.Repository
                 await UpdateAsync(entity);
                 id = entity.Id;
             }
-
+            */
             return id;
         }
 

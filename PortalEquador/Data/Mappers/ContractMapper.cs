@@ -2,6 +2,7 @@
 using PortalEquador.Data.Accident.Entities;
 using PortalEquador.Data.Contract.Entities;
 using PortalEquador.Data.DisciplinaryNotification.Entity;
+using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.MedicalExam.Entity;
 using PortalEquador.Data.Trainning.Entity;
 using PortalEquador.Domain.Accident.ViewModels;
@@ -123,6 +124,7 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.VehicleEntity))
                 .ForMember(dest => dest.HumanDamage, opt => opt.MapFrom(src => src.HumanDamage))
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
+                .ForMember(dest => dest.Causes, opt => opt.MapFrom(src => src.Accidents))
                 .ReverseMap();
 
             CreateMap<AccidentEntity, AccidentViewModel>()
@@ -145,10 +147,17 @@ namespace PortalEquador.Data.Mappers
                         : DateTime.MinValue   // or make AccidentEntity.Date nullable if you want
                 ));
 
-            CreateMap<AccidentCauseEntity, GroupItemViewModel>()
-                        .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
-                        .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.CauseId))
-                        .ReverseMap();
+            CreateMap<GroupItemEntity, AccidentCauseViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.CauseId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+
+            CreateMap<AccidentCauseEntity, AccidentCauseViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.CauseId, opt => opt.MapFrom(src => src.CauseId))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Cause, opt => opt.MapFrom(src => src.CauseGroupItemEntity))
+                .ReverseMap();
         }
     }
 }

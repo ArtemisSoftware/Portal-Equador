@@ -1,5 +1,6 @@
 ﻿using PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels;
 using PortalEquador.Domain.Report.ViewModels;
+using PortalEquador.Domain.Report.ViewModels.Accident;
 using PortalEquador.Domain.Report.ViewModels.Age;
 using PortalEquador.Domain.Report.ViewModels.AlchoolTest;
 using PortalEquador.Domain.Report.ViewModels.DriversLicence;
@@ -32,5 +33,8 @@ namespace PortalEquador.Domain.Report.Repository
 
         Task<EducationReportFormViewModel> GetEducationForm();
         Task<EducationReportViewModel> GetEducationReport(int educationId);
+
+        Task<AccidentReportFormViewModel> GetAccidentsForm();
+        Task<AccidentReportViewModel> GetAccidentReport(List<int> accessibleContracts);
     }
 }

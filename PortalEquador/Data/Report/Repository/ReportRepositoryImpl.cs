@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DocumentFormat.OpenXml.Bibliography;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -8,8 +9,11 @@ using PortalEquador.Data.Generic;
 using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.MechanicalWorkshop;
 using PortalEquador.Data.Profession.Experience.Entity;
+using PortalEquador.Domain.Accident.ViewModels;
+using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.Report.Repository;
 using PortalEquador.Domain.Report.ViewModels;
+using PortalEquador.Domain.Report.ViewModels.Accident;
 using PortalEquador.Domain.Report.ViewModels.Age;
 using PortalEquador.Domain.Report.ViewModels.AlchoolTest;
 using PortalEquador.Domain.Report.ViewModels.DriversLicence;
@@ -21,6 +25,7 @@ using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 using System.Globalization;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PortalEquador.Data.Report.Repository
 {
@@ -695,5 +700,105 @@ namespace PortalEquador.Data.Report.Repository
                 report = result
             };
         }
+
+        /*..............ACCIDENTS....................*/
+
+
+        public async Task<AccidentReportFormViewModel> GetAccidentsForm()
+        {
+            var userId = GetCurrentUserId();
+            var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
+
+            SelectList? contracts;
+
+            if (hasFullAccess)
+            {
+                contracts = GroupItems(
+                    Groups.MECHANICAL_SHOP_CONTRACTS,
+                    OrderType.Alphabetic,
+                    StringConstants.Report.ALL_CONTRACTS_ID,
+                    StringConstants.Report.ALL_CONTRACTS,
+                    true
+                 );
+            }
+            else
+            {
+                var result =
+                   from item in context.GroupItemEntity
+                   join contract in context.AdminMechanicalWorkShopContractEntity on item.Id equals contract.ContractId
+                   where item.Active &&
+                                   contract.UserId == userId
+                   orderby item.Description
+                   select item;
+
+                contracts = GroupItems(result, OrderType.Alphabetic, StringConstants.Report.ALL_CONTRACTS, true);
+            }
+
+            var model = new AccidentReportFormViewModel
+            {
+                Contracts = contracts,
+            };
+
+            return model;
+        }
+
+        public async Task<AccidentReportViewModel> GetAccidentReport(List<int> accessibleContracts)
+        {
+
+            var causes = await GroupItemsList(Groups.ACCIDENT_CAUSES, OrderType.Alphabetic);
+            var causesList = mapper.Map<List<GroupItemViewModel>>(causes);
+
+            var levels = await GroupItemsList(Groups.ESTIMATED_VALUE);
+            var levelsList = mapper.Map<List<GroupItemViewModel>>(levels);
+
+            var latestContractIds = GetLatestContracts();
+
+            var query =
+                from contract in context.ContractEntity
+                where latestContractIds.Contains(contract.Id)
+                      && contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED
+                      && accessibleContracts.Contains((int)contract.ContractId)
+
+                let personal = contract.PersonalInformationEntity
+                orderby personal.FirstName
+
+                select new AccidentReportItemViewModel
+                {
+                    FullName = personal.FirstName + " " + personal.LastName,
+                    // ✅ get all accidents for this person
+                    Accidents = context.AccidentEntity
+                        .Where(a => a.PersonalInformationId == personal.Id)
+                        .Select(a => new AccidentResultViewModel
+                        {
+                            Id = a.Id,
+                            Date = a.Date,
+                            Address = a.Address,
+                            Level = a.LevelGroupItemEntity.Description,
+                            EstimatedValueId = a.EstimatedValueId,
+                            HumanDamage = a.HumanDamage,
+
+                            // ✅ include causes
+                            Causes = a.Accidents
+                                .Select(c => new AccidentCauseResultViewModel
+                                {
+                                    Id = c.CauseId,
+                                    Description = c.CauseGroupItemEntity.Description,
+                                })
+                                .ToList()
+                        })
+                        .ToList()
+                };
+
+            var result = await query.ToListAsync();
+
+            return new AccidentReportViewModel
+            {
+                Report = result,
+                Causes = causesList,
+                EstimatedValues = levelsList,
+                //WorkStation = "Contract Description here"
+            };
+        }
+
     }
 }

@@ -96,6 +96,27 @@ namespace PortalEquador.Controllers.Accident
             return result;
         }
 
+
+        public async Task<IActionResult> Details(int id, int identifier, string fullName)
+        {
+            ViewData[ViewBagConstants.ID] = id;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+
+            var model = await repository.GetAccident(id);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(model);
+            }
+        }
+
+
+
         /*
                 // GET: Accident/Details/5
                 public async Task<IActionResult> Details(int? id)

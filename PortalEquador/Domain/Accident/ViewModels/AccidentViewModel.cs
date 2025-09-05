@@ -66,7 +66,7 @@ namespace PortalEquador.Domain.Accident.ViewModels
         public SelectList? Cities { get; set; }
 
 
-        public List<GroupItemViewModel> Causes { get; set; } = new List<GroupItemViewModel>();
+        public List<AccidentCauseViewModel> Causes { get; set; } = new List<AccidentCauseViewModel>();
         public List<bool> SelectedCauses { get; set; } = new List<bool>();
 
         public bool HasSelectedCauses()
@@ -74,9 +74,9 @@ namespace PortalEquador.Domain.Accident.ViewModels
             return SelectedCauses.Contains(true);
         }
 
-        public List<GroupItemViewModel> GetCurrentCauses()
+        public List<AccidentCauseViewModel> GetCurrentCauses()
         {
-            List<GroupItemViewModel> result = new List<GroupItemViewModel>();
+            List<AccidentCauseViewModel> result = new List<AccidentCauseViewModel>();
 
             for (int i = 0; i < Causes.Count; ++i)
             {

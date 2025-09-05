@@ -10,14 +10,16 @@ namespace PortalEquador.Domain.Accident.ViewModels
     {
         public int Id { get; set; }
 
+        [Display(Name = StringConstants.Display.NUMBER)]
         public int Number { get; set; }
 
         public required string FullName { get; set; }
 
         [Display(Name = StringConstants.Display.DATE)]
+        [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY__HH_MM, ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
 
-        [Display(Name = StringConstants.Display.CONTRACT)]
+        [Display(Name = StringConstants.Display.LICENCE_PLATE)]
         public VehicleDetailViewModel Vehicle { get; set; }
 
         [Display(Name = StringConstants.Display.CONTRACT)]
@@ -36,5 +38,7 @@ namespace PortalEquador.Domain.Accident.ViewModels
 
         [Display(Name = StringConstants.Display.ACCIDENT_LEVEL)]
         public GroupItemViewModel Level { get; set; }
+
+        public List<AccidentCauseViewModel> Causes { get; set; } = new List<AccidentCauseViewModel>();
     }
 }
