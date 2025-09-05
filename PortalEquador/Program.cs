@@ -128,6 +128,7 @@ builder.Services.AddScoped<GetAgeReportUseCase>();
 builder.Services.AddScoped<GetMedicalExamReportUseCase>();
 builder.Services.AddScoped<GetProfessionalExperienceReportUseCase>();
 builder.Services.AddScoped<GetTrainningReportUseCase> ();
+builder.Services.AddScoped<GetAccidentReportUseCase> ();
 
 
 builder.Services.AddScoped<IAccidentRepository, AccidentRepositoryImpl>();

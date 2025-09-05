@@ -1,0 +1,43 @@
+﻿@model PortalEquador.Domain.Report.ViewModels.Accident.AccidentReportFormViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<br />
+<h1>Relatório de acidentes</h1>
+<hr />
+
+<div class="d-flex justify-content-center mt-5">
+    <div style="width: 40%;">
+        <form asp-action="AccidentReportForm">
+           
+
+            <div class="mb-3">
+                <label asp-for="ContractId" class="form-label"></label>
+                <select asp-for="ContractId" class="form-select" asp-items="Model.Contracts"></select>
+            </div>
+
+            @if (Model.Error != null)
+            {
+                <br />
+                <div class="text-center">
+                    <div class="alert alert-warning" role="alert">
+                        @Html.DisplayFor(modelItem => Model.Error)
+                    </div>
+                </div>
+                <br />
+            }
+
+            <div class="text-center">
+                <input type="submit" value="Gerar Relatório" class="btn btn-primary btn-block" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -35,6 +35,6 @@ namespace PortalEquador.Domain.Report.Repository
         Task<EducationReportViewModel> GetEducationReport(int educationId);
 
         Task<AccidentReportFormViewModel> GetAccidentsForm();
-        Task<AccidentReportViewModel> GetAccidentReport(List<int> accessibleContracts);
+        Task<AccidentReportViewModel> GetAccidentReport(string description, List<int> accessibleContracts);
     }
 }

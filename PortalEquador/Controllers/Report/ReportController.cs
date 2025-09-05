@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using PortalEquador.Domain.Report.Repository;
 using PortalEquador.Domain.Report.UseCases;
+using PortalEquador.Domain.Report.ViewModels.Accident;
 using PortalEquador.Domain.Report.ViewModels.Age;
 using PortalEquador.Domain.Report.ViewModels.AlchoolTest;
 using PortalEquador.Domain.Report.ViewModels.DriversLicence;
@@ -23,7 +24,8 @@ namespace PortalEquador.Controllers.Report
         GetAgeReportUseCase getAgeReportUseCase,
         GetMedicalExamReportUseCase getMedicalExamReportUseCase,
         GetProfessionalExperienceReportUseCase getProfessionalExperienceReportUseCase,
-        GetTrainningReportUseCase getTrainningReportUseCase
+        GetTrainningReportUseCase getTrainningReportUseCase,
+        GetAccidentReportUseCase getAccidentReportUseCase
         ) : Controller
     {
 
@@ -276,5 +278,42 @@ namespace PortalEquador.Controllers.Report
             var report = EducationReport.GenerateReport(result);
             return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
         }
+
+
+
+        /*--------------Accident---------------*/
+
+        public async Task<IActionResult> AccidentReportForm(string? error)
+        {
+            var model = await repository.GetAccidentsForm();
+            if (error != null)
+            {
+                model.Error = error;
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AccidentReportForm(AccidentReportFormViewModel viewmodel)
+        {
+            try
+            {
+                return await ExportAccidentReportInExcel(viewmodel.ContractId);
+            }
+            catch (Exception ex)
+            {
+                return await AccidentReportForm(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        public async Task<FileResult> ExportAccidentReportInExcel(int contractId)
+        {
+            var result = await getAccidentReportUseCase.Invoke(contractId);
+            var report = AccidentReport.GenerateReport(result);
+            return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
+        }
+
     }
 }

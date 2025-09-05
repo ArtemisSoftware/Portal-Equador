@@ -17,23 +17,8 @@ namespace PortalEquador.Data.Accident.Repository
         UserManager<ApplicationUser> userManager
         ) : GenericRepository<AccidentCauseEntity>(context, httpContextAccessor), IAccidentCauseRepository
     {
-        public async Task Save(int accidentId, List<GroupItemViewModel> causes)
-        {
-            var entities = mapper.Map<List<AccidentCauseEntity>>(causes);
-            var editorId = GetCurrentUserId();
-            await DeleteCauses(accidentId);
 
-            foreach (var entity in entities)
-            {
-                entity.Id = 0;
-                entity.EditorId = editorId;
-                entity.AccidentId = accidentId;
-                var dd = await AddAsync(entity);
-                var ddd = dd + " w";
-            }
-        }
-
-        private async Task DeleteCauses(int accidentId)
+        public async Task DeleteCauses(int accidentId)
         {
             await context.AccidentCauseEntity
                 .Where(item => item.AccidentId == accidentId)

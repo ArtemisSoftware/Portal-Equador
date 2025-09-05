@@ -742,7 +742,7 @@ namespace PortalEquador.Data.Report.Repository
             return model;
         }
 
-        public async Task<AccidentReportViewModel> GetAccidentReport(List<int> accessibleContracts)
+        public async Task<AccidentReportViewModel> GetAccidentReport(string description, List<int> accessibleContracts)
         {
 
             var causes = await GroupItemsList(Groups.ACCIDENT_CAUSES, OrderType.Alphabetic);
@@ -765,6 +765,7 @@ namespace PortalEquador.Data.Report.Repository
                 select new AccidentReportItemViewModel
                 {
                     FullName = personal.FirstName + " " + personal.LastName,
+                    WorkStation = description,
                     // ✅ get all accidents for this person
                     Accidents = context.AccidentEntity
                         .Where(a => a.PersonalInformationId == personal.Id)
@@ -776,6 +777,7 @@ namespace PortalEquador.Data.Report.Repository
                             Level = a.LevelGroupItemEntity.Description,
                             EstimatedValueId = a.EstimatedValueId,
                             HumanDamage = a.HumanDamage,
+                            LicencePlate = a.VehicleEntity.LicencePlate,
 
                             // ✅ include causes
                             Causes = a.Accidents
@@ -796,7 +798,6 @@ namespace PortalEquador.Data.Report.Repository
                 Report = result,
                 Causes = causesList,
                 EstimatedValues = levelsList,
-                //WorkStation = "Contract Description here"
             };
         }
 

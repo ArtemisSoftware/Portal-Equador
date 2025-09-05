@@ -14,9 +14,10 @@ namespace PortalEquador.Domain.Accident.UseCases
 
         public async Task Invoke(AccidentViewModel model)
         {
+            await accidentCauseRepository.DeleteCauses(model.Id);
             var accidentId = await accidentRepository.Save(model);
 
-            //--accidentCauseRepository.Save(accidentId, model.GetCurrentCauses());
+           
         }
     }
 }

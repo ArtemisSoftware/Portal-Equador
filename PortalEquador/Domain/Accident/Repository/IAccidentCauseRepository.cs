@@ -7,6 +7,6 @@ namespace PortalEquador.Domain.Accident.Repository
 {
     public interface IAccidentCauseRepository
     {
-        Task Save(int accidentId, List<GroupItemViewModel> causes);
+        Task DeleteCauses(int accidentId);
     }
 }
