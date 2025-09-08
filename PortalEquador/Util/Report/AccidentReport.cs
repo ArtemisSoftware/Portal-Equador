@@ -166,8 +166,11 @@ namespace PortalEquador.Util.Report
                         {
                             if (accidentIndex < accident.Causes.Count && causes[index].Id == accident.Causes[accidentIndex].Id)
                             {
-                                ws.Cells[row, column].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                                ws.Cells[row, column].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGreen);
+                                ws.Cells[row, column].Value = "✓";
+                                ws.Cells[row, column].Style.Font.Color.SetColor(System.Drawing.Color.Green);
+                                ws.Cells[row, column].Style.Font.Bold = true;
+                                ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                                 ++accidentIndex;
                             }
                             ++column;
@@ -177,8 +180,11 @@ namespace PortalEquador.Util.Report
                         {
                             if (estimatedValues[index].Id == accident.EstimatedValueId)
                             {
-                                ws.Cells[row, column].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                                ws.Cells[row, column].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGreen);
+                                ws.Cells[row, column].Value = "✓";
+                                ws.Cells[row, column].Style.Font.Color.SetColor(System.Drawing.Color.LightBlue);
+                                ws.Cells[row, column].Style.Font.Bold = true;
+                                ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                                ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                                 ++levelIndex;
                             }
                             ++column;

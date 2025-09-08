@@ -98,6 +98,20 @@
             </div>
         </div>
 
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Curriculo</h5>
+                    <p class="card-text">Curriculo associado</p>
+
+                    <a asp-controller="Curriculum" asp-action="Dashboard" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-success">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <br />

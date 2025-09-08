@@ -35,6 +35,7 @@ namespace PortalEquador.Data.Accident.Repository
         public async Task<AccidentDetailViewModel> GetAccident(int id)
         {
             var result = await context.AccidentEntity
+                .Include(a => a.ApplicationUserEntity)
                 .Include(a => a.PersonalInformationEntity)
                 .Include(a => a.VehicleEntity)
                 .Include(a => a.ContractGroupItemEntity)
