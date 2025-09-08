@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DocumentFormat.OpenXml.InkML;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Accident.Entities;
 using PortalEquador.Data.Generic;
@@ -25,6 +26,12 @@ namespace PortalEquador.Data.Accident.Repository
             return await context.AccidentEntity.AnyAsync(item => item.Number == numberId);
         }
 
+        private async Task<int> GetLatestAccidentNumber()
+        {
+            var index = await context.AccidentEntity.MaxAsync(item => item.Number);
+            return ++index;
+        }
+
         public async Task<AccidentDetailViewModel> GetAccident(int id)
         {
             var result = await context.AccidentEntity
@@ -39,6 +46,70 @@ namespace PortalEquador.Data.Accident.Repository
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             return mapper.Map<AccidentDetailViewModel>(result);
+        }
+
+        public async Task<AccidentEditViewModel> GetAccidentForEdition(int id)
+        {
+            var result = await context.AccidentEntity
+                .Include(a => a.PersonalInformationEntity)
+                .Include(a => a.VehicleEntity)
+                .Include(a => a.Accidents) // causes
+                    .ThenInclude(c => c.CauseGroupItemEntity) // cause details
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            var model = mapper.Map<AccidentEditViewModel>(result);
+
+            var cities = GroupItems(Groups.CITIES, OrderType.Alphabetic);
+            var contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
+
+            var accidents = await GroupItemsList(Groups.ACCIDENT_CAUSES, OrderType.Alphabetic);
+            var accidentsList = mapper.Map<List<AccidentCauseViewModel>>(accidents);
+            accidentsList.ForEach(vm => vm.Id = 0);
+
+            var estimatedValue = GroupItems(Groups.ESTIMATED_VALUE);
+            var accidentLevel = GroupItems(Groups.OCORRED_ACCIDENT_LEVEL, OrderType.Alphabetic);
+
+            model.Cities = cities;
+            model.EstimatedValues = estimatedValue;
+            model.Levels = accidentLevel;
+            model.Contracts = contracts;
+            model.AllCauses = accidentsList;
+            model.SelectedCauses = new List<bool>(new bool[accidentsList.Count]);
+            model.UpdateCurrentCauses();
+            return model;
+        }
+
+        public async Task<AccidentEditViewModel> GetAccidentForEdition(int id, AccidentEditViewModel model)
+        {
+
+            var cities = GroupItems(Groups.CITIES, OrderType.Alphabetic);
+            var contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
+
+            var accidents = await GroupItemsList(Groups.ACCIDENT_CAUSES, OrderType.Alphabetic);
+            var accidentsList = mapper.Map<List<AccidentCauseViewModel>>(accidents);
+            accidentsList.ForEach(vm => vm.Id = 0);
+
+            var estimatedValue = GroupItems(Groups.ESTIMATED_VALUE);
+            var accidentLevel = GroupItems(Groups.OCORRED_ACCIDENT_LEVEL, OrderType.Alphabetic);
+
+            var result = await context.AccidentEntity
+                .Include(a => a.PersonalInformationEntity)
+                .Include(a => a.VehicleEntity)
+                .Include(a => a.Accidents) // causes
+                    .ThenInclude(c => c.CauseGroupItemEntity) // cause details
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            var helperModel = mapper.Map<AccidentEditViewModel>(result);
+
+            model.Vehicle = helperModel.Vehicle;
+            model.Cities = cities;
+            model.EstimatedValues = estimatedValue;
+            model.Levels = accidentLevel;
+            model.Contracts = contracts;
+            model.AllCauses = accidentsList;
+            model.UpdateCurrentCauses();
+
+            return model;
         }
 
         public async Task<List<AccidentDetailViewModel>> GetAll(int personalInformationId)
@@ -67,8 +138,11 @@ namespace PortalEquador.Data.Accident.Repository
             var estimatedValue = GroupItems(Groups.ESTIMATED_VALUE);
             var accidentLevel = GroupItems(Groups.OCORRED_ACCIDENT_LEVEL, OrderType.Alphabetic);
 
+            var number = await GetLatestAccidentNumber();
+
             var model = new AccidentViewModel
             {
+                Number = number,
                 PersonaInformationId = personalInformationId,
                 FullName = fullName,
                 Cities = cities,
@@ -94,6 +168,9 @@ namespace PortalEquador.Data.Accident.Repository
             var estimatedValue = GroupItems(Groups.ESTIMATED_VALUE);
             var accidentLevel = GroupItems(Groups.OCORRED_ACCIDENT_LEVEL, OrderType.Alphabetic);
 
+            var number = await GetLatestAccidentNumber();
+
+            model.Number = number;
             model.Cities = cities;
             model.EstimatedValues = estimatedValue;
             model.Levels = accidentLevel;
@@ -105,6 +182,16 @@ namespace PortalEquador.Data.Accident.Repository
 
         public async Task<int> Save(AccidentViewModel model)
         {
+
+            var tracked = context.ChangeTracker.Entries<AccidentEntity>()
+                     .FirstOrDefault(e => e.Entity.Id == model.Id);
+
+            if (tracked != null)
+            {
+                context.Entry(tracked.Entity).State = EntityState.Detached;
+            }
+
+
             var editorId = GetCurrentUserId();
             var entity = mapper.Map<AccidentEntity>(model);
             entity.EditorId = editorId;
@@ -116,9 +203,6 @@ namespace PortalEquador.Data.Accident.Repository
             entity.Accidents = entities;
             var id = 0;
 
-
-            id = (await AddAsync(entity)).Id;
-            /*
             if (model.Id == 0)
             {
                 id = (await AddAsync(entity)).Id;
@@ -129,10 +213,22 @@ namespace PortalEquador.Data.Accident.Repository
                 await UpdateAsync(entity);
                 id = entity.Id;
             }
-            */
+            
             return id;
         }
 
-        
+        public async Task DeleteAccident(int accidentId)
+        {
+
+            var accident = await context.AccidentEntity
+                .Include(a => a.Accidents) // make sure causes are loaded if no cascade
+                .FirstOrDefaultAsync(a => a.Id == accidentId);
+
+            if (accident != null)
+            {
+                context.AccidentEntity.Remove(accident);
+                await context.SaveChangesAsync();
+            }
+        }
     }
 }

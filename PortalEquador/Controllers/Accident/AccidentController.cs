@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using AutoMapper;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,8 +14,11 @@ using PortalEquador.Domain.Accident.Repository;
 using PortalEquador.Domain.Accident.UseCases;
 using PortalEquador.Domain.Accident.ViewModels;
 using PortalEquador.Domain.Contract.Repository;
+using PortalEquador.Domain.GroupTypes.Repository;
+using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.Languages.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.UseCases;
+using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.Accident
@@ -21,7 +27,8 @@ namespace PortalEquador.Controllers.Accident
         IAccidentRepository repository,
         GetVehiclesUseCase getVehiclesUseCase,
         GetVehicleUseCase getVehicleUse,
-        SaveAccidentUseCase saveAccidentUseCase
+        SaveAccidentUseCase saveAccidentUseCase,
+         IMapper mapper
 ) : Controller { 
 
         // GET: Accident
@@ -115,179 +122,59 @@ namespace PortalEquador.Controllers.Accident
             }
         }
 
+        public async Task<IActionResult> Edit(int id, int identifier, string fullName)
+        {
+            ViewData[ViewBagConstants.ID] = id;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
 
+            var model = await repository.GetAccidentForEdition(id);
 
-        /*
-                // GET: Accident/Details/5
-                public async Task<IActionResult> Details(int? id)
+            if (model == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(AccidentEditViewModel model)
+        {
+            ViewData[ViewBagConstants.ID] = model.Id;
+            ViewData[ViewBagConstants.FULL_NAME] = model.FullName;
+            ViewData[ViewBagConstants.PERSONAL_ID] = model.PersonaInformationId;
+
+            if (model.HasSelectedCauses() == false)
+            {
+                ModelState.AddModelError(nameof(model.Error), StringConstants.Error.NO_ACCIDENT_CAUSES);
+                model.Error = StringConstants.Error.NO_ACCIDENT_CAUSES;
+            }
+            else
+            {
+                if (ModelState.IsValid)
                 {
-                    if (id == null)
-                    {
-                        return NotFound();
-                    }
-
-                    var accidentEntity = await _context.AccidentEntity
-                        .Include(a => a.ApplicationUserEntity)
-                        .Include(a => a.CityGroupItemEntity)
-                        .Include(a => a.ContractGroupItemEntity)
-                        .Include(a => a.EstimatedValueGroupItemEntity)
-                        .Include(a => a.LevelGroupItemEntity)
-                        .Include(a => a.PersonalInformationEntity)
-                        .Include(a => a.VehicleEntity)
-                        .FirstOrDefaultAsync(m => m.Id == id);
-                    if (accidentEntity == null)
-                    {
-                        return NotFound();
-                    }
-
-                    return View(accidentEntity);
+                    model = await repository.GetAccidentForEdition(model.Id, model);
+                    var newModel = mapper.Map<AccidentViewModel>(model);
+                    await saveAccidentUseCase.Invoke(newModel);
+                    return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
                 }
+            }
 
-                // GET: Accident/Create
-                public IActionResult Create()
-                {
-                    ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id");
-                    ViewData["CityId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
-                    ViewData["ContractId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
-                    ViewData["EstimatedValueId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
-                    ViewData["LevelId"] = new SelectList(_context.GroupItemEntity, "Id", "Id");
-                    ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id");
-                    ViewData["VehicleId"] = new SelectList(_context.MechanicalWorkshopVehicleEntity, "Id", "Id");
-                    return View();
-                }
+            model = await repository.GetAccidentForEdition(model.Id, model);
+            return View(model);
 
-                // POST: Accident/Create
-                // To protect from overposting attacks, enable the specific properties you want to bind to.
-                // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-                [HttpPost]
-                [ValidateAntiForgeryToken]
-                public async Task<IActionResult> Create([Bind("PersonalInformationId,Number,Date,VehicleId,ContractId,Address,CityId,EstimatedValueId,HumanDamage,LevelId,Id,EditorId,DateCreated,DateModified")] AccidentEntity accidentEntity)
-                {
-                    if (ModelState.IsValid)
-                    {
-                        _context.Add(accidentEntity);
-                        await _context.SaveChangesAsync();
-                        return RedirectToAction(nameof(Index));
-                    }
-                    ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", accidentEntity.EditorId);
-                    ViewData["CityId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", accidentEntity.CityId);
-                    ViewData["ContractId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", accidentEntity.ContractId);
-                    ViewData["EstimatedValueId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", accidentEntity.EstimatedValueId);
-                    ViewData["LevelId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", accidentEntity.LevelId);
-                    ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", accidentEntity.PersonalInformationId);
-                    ViewData["VehicleId"] = new SelectList(_context.MechanicalWorkshopVehicleEntity, "Id", "Id", accidentEntity.VehicleId);
-                    return View(accidentEntity);
-                }
+        }
 
-                // GET: Accident/Edit/5
-                public async Task<IActionResult> Edit(int? id)
-                {
-                    if (id == null)
-                    {
-                        return NotFound();
-                    }
-
-                    var accidentEntity = await _context.AccidentEntity.FindAsync(id);
-                    if (accidentEntity == null)
-                    {
-                        return NotFound();
-                    }
-                    ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", accidentEntity.EditorId);
-                    ViewData["CityId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", accidentEntity.CityId);
-                    ViewData["ContractId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", accidentEntity.ContractId);
-                    ViewData["EstimatedValueId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", accidentEntity.EstimatedValueId);
-                    ViewData["LevelId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", accidentEntity.LevelId);
-                    ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", accidentEntity.PersonalInformationId);
-                    ViewData["VehicleId"] = new SelectList(_context.MechanicalWorkshopVehicleEntity, "Id", "Id", accidentEntity.VehicleId);
-                    return View(accidentEntity);
-                }
-
-                // POST: Accident/Edit/5
-                // To protect from overposting attacks, enable the specific properties you want to bind to.
-                // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-                [HttpPost]
-                [ValidateAntiForgeryToken]
-                public async Task<IActionResult> Edit(int id, [Bind("PersonalInformationId,Number,Date,VehicleId,ContractId,Address,CityId,EstimatedValueId,HumanDamage,LevelId,Id,EditorId,DateCreated,DateModified")] AccidentEntity accidentEntity)
-                {
-                    if (id != accidentEntity.Id)
-                    {
-                        return NotFound();
-                    }
-
-                    if (ModelState.IsValid)
-                    {
-                        try
-                        {
-                            _context.Update(accidentEntity);
-                            await _context.SaveChangesAsync();
-                        }
-                        catch (DbUpdateConcurrencyException)
-                        {
-                            if (!AccidentEntityExists(accidentEntity.Id))
-                            {
-                                return NotFound();
-                            }
-                            else
-                            {
-                                throw;
-                            }
-                        }
-                        return RedirectToAction(nameof(Index));
-                    }
-                    ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", accidentEntity.EditorId);
-                    ViewData["CityId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", accidentEntity.CityId);
-                    ViewData["ContractId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", accidentEntity.ContractId);
-                    ViewData["EstimatedValueId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", accidentEntity.EstimatedValueId);
-                    ViewData["LevelId"] = new SelectList(_context.GroupItemEntity, "Id", "Id", accidentEntity.LevelId);
-                    ViewData["PersonalInformationId"] = new SelectList(_context.PersonalInformationEntity, "Id", "Id", accidentEntity.PersonalInformationId);
-                    ViewData["VehicleId"] = new SelectList(_context.MechanicalWorkshopVehicleEntity, "Id", "Id", accidentEntity.VehicleId);
-                    return View(accidentEntity);
-                }
-
-                // GET: Accident/Delete/5
-                public async Task<IActionResult> Delete(int? id)
-                {
-                    if (id == null)
-                    {
-                        return NotFound();
-                    }
-
-                    var accidentEntity = await _context.AccidentEntity
-                        .Include(a => a.ApplicationUserEntity)
-                        .Include(a => a.CityGroupItemEntity)
-                        .Include(a => a.ContractGroupItemEntity)
-                        .Include(a => a.EstimatedValueGroupItemEntity)
-                        .Include(a => a.LevelGroupItemEntity)
-                        .Include(a => a.PersonalInformationEntity)
-                        .Include(a => a.VehicleEntity)
-                        .FirstOrDefaultAsync(m => m.Id == id);
-                    if (accidentEntity == null)
-                    {
-                        return NotFound();
-                    }
-
-                    return View(accidentEntity);
-                }
-
-                // POST: Accident/Delete/5
-                [HttpPost, ActionName("Delete")]
-                [ValidateAntiForgeryToken]
-                public async Task<IActionResult> DeleteConfirmed(int id)
-                {
-                    var accidentEntity = await _context.AccidentEntity.FindAsync(id);
-                    if (accidentEntity != null)
-                    {
-                        _context.AccidentEntity.Remove(accidentEntity);
-                    }
-
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
-                }
-
-                private bool AccidentEntityExists(int id)
-                {
-                    return _context.AccidentEntity.Any(e => e.Id == id);
-                }
-        */
+        [HttpPost, ActionName("DeleteAccident")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAccident(int id, int identifier, string username)
+        {
+            await repository.DeleteAccident(id);
+            return RedirectToAction(nameof(Index), new { identifier = identifier, fullName = username });
+        }
     }
 }

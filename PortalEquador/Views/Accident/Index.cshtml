@@ -73,14 +73,42 @@
     </tbody>
 </table>
 
+<form id="deleteAccident" asp-action="DeleteAccident">
+    <input type="hidden" id="accidentId" name="Id" />
+    <input type="hidden" id="identifier" name="identifier" />
+    <input type="hidden" id="username" name="username" />
+</form>
 
 @section Scripts {
+
     <script>
         $(function () {
 
             $('.table').DataTable();
+
+            $('.deleteBtn').click(function (e) {
+                swal({
+                    title: "Eliminar acidente",
+                    text: "Tem a certeza que pretende eliminar o acidente?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var btn = $(this);
+                        var id = btn.data("id");
+                        var identifier = btn.data("identifier");
+                        var username = btn.data("username");
+                        $('#accidentId').val(id);
+                        $('#identifier').val(identifier);
+                        $('#username').val(username);
+                        $('#deleteAccident').submit();
+
+                    }
+                });
+            });
         });
-        
+
     </script>
 }
 

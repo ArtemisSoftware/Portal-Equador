@@ -147,6 +147,27 @@ namespace PortalEquador.Data.Mappers
                         : DateTime.MinValue   // or make AccidentEntity.Date nullable if you want
                 ));
 
+            CreateMap<AccidentEntity, AccidentEditViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.PersonalInformationEntity.FirstName + " " + src.PersonalInformationEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.VehicleEntity))
+                .ForMember(dest => dest.CityId, opt => opt.MapFrom(src => src.CityId))
+                .ForMember(dest => dest.LevelId, opt => opt.MapFrom(src => src.LevelId))
+                .ForMember(dest => dest.Causes, opt => opt.MapFrom(src => src.Accidents))
+                .ForMember(dest => dest.EstimatedValueId, opt => opt.MapFrom(src => src.EstimatedValueId))
+                .ForMember(dest => dest.ContractId, opt => opt.MapFrom(src => src.ContractId))
+                .ForMember(dest => dest.HumanDamage, opt => opt.MapFrom(src => src.HumanDamage))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.Date))
+                .ForMember(dest => dest.Time, opt => opt.MapFrom(src => src.Date.TimeOfDay))
+                .ReverseMap()
+                // recombine Date and Time back into one DateTime
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src =>
+                    src.Date.HasValue
+                        ? src.Date.Value.Date + (src.Time ?? TimeSpan.Zero)
+                        : DateTime.MinValue   // or make AccidentEntity.Date nullable if you want
+                ));
+
             CreateMap<GroupItemEntity, AccidentCauseViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.CauseId, opt => opt.MapFrom(src => src.Id))
@@ -158,6 +179,27 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Cause, opt => opt.MapFrom(src => src.CauseGroupItemEntity))
                 .ReverseMap();
+
+            CreateMap<AccidentEditViewModel, AccidentViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.Editor))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonaInformationId))
+                .ForMember(dest => dest.CityId, opt => opt.MapFrom(src => src.CityId))
+                .ForMember(dest => dest.LevelId, opt => opt.MapFrom(src => src.LevelId))
+                .ForMember(dest => dest.EstimatedValueId, opt => opt.MapFrom(src => src.EstimatedValueId))
+                .ForMember(dest => dest.ContractId, opt => opt.MapFrom(src => src.ContractId))
+                .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.Vehicle.Id))
+                .ForMember(dest => dest.Causes, opt => opt.MapFrom(src => src.AllCauses))
+                .ForMember(dest => dest.HumanDamage, opt => opt.MapFrom(src => src.HumanDamage))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
+                .ForMember(dest => dest.Time, opt => opt.MapFrom(src => src.Time))
+                .ReverseMap()
+                // recombine Date and Time back into one DateTime
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src =>
+                    src.Date.HasValue
+                        ? src.Date.Value.Date + (src.Time ?? TimeSpan.Zero)
+                        : DateTime.MinValue   // or make AccidentEntity.Date nullable if you want
+                ));
         }
     }
 }
