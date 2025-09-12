@@ -18,7 +18,8 @@ namespace PortalEquador.Controllers.DriversLicence
         GetDriversLicenceProvisionalUseCase getDriversLicenceProvisionalUseCase,
         GetDriversLicenceProvisionalRenewUseCase getDriversLicenceProvisionalRenewUseCase,
         GetDriversLicenceUseCase getDriversLicenceUseCase,
-        DeleteDriversLicenceUseCase deleteDriversLicenceUseCase
+        DeleteDriversLicenceUseCase deleteDriversLicenceUseCase,
+        GetDriversLicenceCreateModelUseCase getDriversLicenceCreateModelUseCase
      ) : Controller
     {
 
@@ -37,7 +38,7 @@ namespace PortalEquador.Controllers.DriversLicence
         // GET: DriversLicence/Create
         public async Task<IActionResult> Create(int identifier, string fullName)
         {
-            var model = await repository.GetCreateModel(identifier, fullName);
+            var model = await getDriversLicenceCreateModelUseCase.Invoke(identifier, fullName);
             return View(model);
         }
         

@@ -90,13 +90,17 @@ namespace PortalEquador.Util.Report
             {
                 ws.Cells[nextRow, 1].Value = item.FullName;
                 ws.Cells[nextRow, 2].Value = item.WorkStation;
-                ws.Cells[nextRow, 3].Value = item.Licence;
-
-                ws.Cells[nextRow, 4].Value = item.LicenceExpirationDate?.ToString(TimeUtil.dd_MM_yyyy);
-                ws.Cells[nextRow, 5].Value = item.GetLicenceExpirationRemainingTime();
-                ws.Cells[nextRow, 6].Value = item.ProvisionalExpirationDate?.ToString(TimeUtil.dd_MM_yyyy);
-                ws.Cells[nextRow, 7].Value = item.GetProvisionalExpirationRemainingTime();
                 
+                if(item.LicenceExpirationDate != null || item.ProvisionalExpirationDate != null)
+                {
+                    ws.Cells[nextRow, 3].Value = item.Licence;
+
+                    ws.Cells[nextRow, 4].Value = item.LicenceExpirationDate?.ToString(TimeUtil.dd_MM_yyyy);
+                    ws.Cells[nextRow, 5].Value = item.GetLicenceExpirationRemainingTime();
+                    ws.Cells[nextRow, 6].Value = item.ProvisionalExpirationDate?.ToString(TimeUtil.dd_MM_yyyy);
+                    ws.Cells[nextRow, 7].Value = item.GetProvisionalExpirationRemainingTime();
+                }
+
                 ++nextRow;
             }
         }

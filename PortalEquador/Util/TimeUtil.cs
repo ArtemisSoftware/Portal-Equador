@@ -11,6 +11,7 @@ namespace PortalEquador.Util
         public const string dd_MM_yyyy = "dd-MM-yyyy";
         public const string dd_MMM_yyyy = "dd-MMM-yyyy";
         public const string yyyy = "yyyy";
+        public const string HH_mm = "HH:mm";
 
 
         public static DateTime ToDateTime(DateOnly dateOnly)
@@ -58,6 +59,41 @@ namespace PortalEquador.Util
             var culture = new CultureInfo("pt-PT");
             string dayName = culture.DateTimeFormat.GetDayName(date.DayOfWeek); // e.g., "segunda-feira"
             return dayName.Substring(0, 1).ToUpper(); // "S"
+        }
+
+        public static string GetYearsAndMonthsFromMonths(int months)
+        {
+                int years = months / 12;
+                int remainingMonths = months % 12;
+                var result = "";
+
+                if (years == 1)
+                {
+                    result = $"{years} ano ";
+                }
+                else if (years > 1)
+                {
+                    result = $"{years} anos ";
+                }
+                else { }
+
+                if (remainingMonths == 1 && years == 0)
+                {
+                    result += $" {remainingMonths} mes";
+                }
+                else if (remainingMonths > 1 && years == 0)
+                {
+                    result += $"{remainingMonths} meses ";
+                }
+                else if (remainingMonths == 1)
+                {
+                    result += $" e {remainingMonths} mes";
+                }
+                else if (remainingMonths > 1)
+                {
+                    result += $" e {remainingMonths} meses ";
+                }
+                return result;
         }
     }
 }

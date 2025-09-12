@@ -279,6 +279,19 @@ namespace PortalEquador.Data.Contract.Repository
                         from resultDisciplinaryNotifications in resultDN.DefaultIfEmpty()
 
 
+                        join accidentsCount in
+                            (from accidents in context.AccidentEntity
+                             where accidents.PersonalInformationId == id
+                             select accidents).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                AccidentsCount = grouped.Count()
+                            })
+                        on personal.Id equals accidentsCount.PersonalInformationId into resultAccidents
+                        from resultAccidentsValues in resultAccidents.DefaultIfEmpty()
+
+
                         where personal.Id == id
 
                         select new  ContractDashboardViewModel
@@ -292,6 +305,7 @@ namespace PortalEquador.Data.Contract.Repository
                             TotalTrainning = resultTrainnings.OrderDetailCount == null ? 0 : resultTrainnings.OrderDetailCount,
                             ContractId = resultContract.ContractStateId == null ? 0 : resultContract.ContractStateId,
                             TotalContracts = resultContracts.ContractCount == null ? 0 : resultContracts.ContractCount,
+                            TotalAccidents = resultAccidentsValues.AccidentsCount == null ? 0 : resultAccidentsValues.AccidentsCount,
                         };
 
             var result = await query.FirstOrDefaultAsync();

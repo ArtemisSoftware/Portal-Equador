@@ -44,7 +44,7 @@ namespace PortalEquador.Domain.PersonalInformation.ViewModels
         [Display(Name = StringConstants.Display.EMAIL)]
         public string? Email { get; set; }
 
-        [Display(Name = StringConstants.Display.ADRESS)]
+        [Display(Name = StringConstants.Display.ADDRESS)]
         public string Address { get; set; }
 
 

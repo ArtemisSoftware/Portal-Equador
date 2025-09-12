@@ -10,22 +10,26 @@
         public static class Exception
         {
             public const string PROFILE_WITH_NO_CONTRACTS = "O seu perfil não possui contratos para gerar um relatório";
+            public const string REPORT_WITH_NO_DATA = "Não existem dados para preencher o relatório";
         }
 
         public static class Display
         {
             // A
-            public const string ADRESS = "Endereço";
+            public const string ADDRESS = "Endereço";
             public const string ACCIDENT_LEVEL = "Nível do acidente";
             public const string ADMIN = "Administradores";
             public const string AGE = "Idade";
             public const string AGENCY = "Agência";
+            public const string ACADEMIC_HABILITATION = " Habilitações académicas";
 
             //B
             public const string BULLETIN_NUMBER = "Buletim nº";
 
             // C
             public const string CONTRACT = "Contrato";
+            public const string SUB_CONTRACT = "Subcontratada";
+            public const string CITY = "Cidade";
             public const string CONTRACTS = "Contratos";
             public const string CONTRACT_IN_USE = "Contrato associado";
             public const string COMPETENCE = "Habilitação";
@@ -34,6 +38,7 @@
             public const string CONTACTS = "Contactos";
             public const string COURSE = "Curso";
             public const string CURRENT_WORKSTATION_IN_CONTRACT = "Posto actual (Contrato)";
+            public const string CAUSES = "Causas";
 
             // D
             public const string DEGREE = "Grau";
@@ -53,11 +58,16 @@
             public const string EXPIRATION_DATE = "Data de expiração";
             public const string EMISSION = "Emissão";
             public const string EXERCISE = "Exercício de ";
+            public const string ENTITY = "Entidade";
+            public const string ESTIMATED_VALUE = "Valor estimado";
             //F
 
             public const string FULL_NAME = "Nome completo";
             public const string FILTER = "Filtro";
 
+            //H
+            public const string HUMAN_DAMAGE = "Danos humanos";
+            public const string HOUR = "Hora";
             // I
             public const string INSTITUTION = "Instituição";
 
@@ -68,6 +78,7 @@
             public const string LOCAL = "Local";
 
             // M
+            public const string MAJOR = "Curso";
             public const string MAJOR_UNVAILABLE = "Curso não disponível";
             public const string MATERNAL_LANGUANGE = "Língua materna";
             public const string MECHANIC = "Mecânico";
@@ -79,6 +90,7 @@
             //N
             public const string NAME = "Nome";
             public const string NOTIFICATION = "Notificação";
+            public const string NUMBER = "Número";
 
 
             // O
@@ -90,6 +102,7 @@
             public const string PROFESSIONAL_EXPERIENCE = "Experiência profissional";
             public const string PROFESSIONAL_COMPETENCE = "Habilitações profissionais";
             public const string PROVISIONAL_DRIVERS_LICENCE = "Verbete";
+            public const string PERIOD = "Periodo";
 
             //R
             public const string ROLE = "Tipo de administrador";
@@ -115,6 +128,7 @@
 
             //  V
             public const string VEHICLE = "Veículo";
+            public const string VALUE = "Valor";
 
             //  W
             public const string WRITTEN_LEVEL = "Nível escrito";
@@ -156,10 +170,17 @@
             public const string AGE = "Relatório de idades";
             public const string ALCHOOL_TEST = "Relatório de testes de alcool";
             public const string MEDICAL_EXAM = "Relatório dos exames médicos realizados";
+            public const string DEFENSIVE_DRIVE = "Relatório da formação condução defensiva";
+            public const string ACCIDENT = "Relatório de acidents";
 
-
+            public const int ALL_ID = -1;
             public const string ALL_CONTRACTS = "Todos os contractos";
             public const int ALL_CONTRACTS_ID = -1;
+
+            public const string ALL_WORK_EXPERIENCE = "Todas as profissões";
+            public const int ALL_WORK_EXPERIENCE_ID = -1;
+
+            public const string ALL_EDUCATION = "Todas as habilitações académicas";
         }
 
         public static class Error
@@ -182,6 +203,8 @@
             public const string UNDECLARED_ERROR = "Ocorreu um erro ao preencher o formulário.";
             public const string EXISTING_DRIVERS_LICENCE = "A carta de condução já se encontra registada";
             public const string INVALID_IMAGE_EXTENSION = "A imagem possui uma extensão inválida";
+            public const string EXISTING_ACCIDENT_NUMBER = "A número de acidente já se encontra registado";
+            public const string NO_ACCIDENT_CAUSES = "Não foram selecionadas causas para o acidente";
         }
 
         public static class Dates
@@ -190,6 +213,8 @@
             public const string DD_MM_YYYY = "{0:dd-MM-yyyy}";
 
             public const string DD_MM_YYYY__HH_MM = "{0:dd-MM-yyyy HH:mm}";
+
+            public const string HH_MM = "{0:hh\\:mm}";
         }
 
         public static class Lenght

@@ -1,0 +1,159 @@
+﻿@model PortalEquador.Domain.Accident.ViewModels.AccidentDetailViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detalhes do acidente</h1>
+<h4>Número: @Model.Number</h4>
+
+<hr />
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <dl class="row">
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Date)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Date)
+            </dd>
+
+        </dl>
+
+
+        <div class="row">
+            <div class="col-md-8">
+                <h6>Veículo</h6>
+                <hr />
+            </div>
+        </div>
+
+
+        <dl class="row">
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Vehicle)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Vehicle.LicencePlate)
+            </dd>
+
+            <dt class="col-sm-4">
+                Marca
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Vehicle.Model)
+            </dd>
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Contract)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Contract.Description)
+            </dd>
+
+        </dl>
+
+        <br/>
+
+        <dl class="row">
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.City)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.City.Description)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Address)
+            </dd>
+
+         </dl>
+
+        <div class="row">
+            <div class="col-md-8">
+                <h6>Causas</h6>
+                <hr />
+            </div>
+            
+            <ul class="align-middle list-unstyled">
+                <ul>
+                    @foreach (var cause in Model.Causes)
+                    {
+                        <li>
+                            @Html.DisplayFor(modelItem => cause.Cause.Description)
+                        </li>
+                    }
+                </ul>
+                
+            </ul>
+            
+        </div>
+
+
+        <dl class="row">
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.EstimatedValue)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.EstimatedValue.Description)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.HumanDamage)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.HumanDamage)
+            </dd>
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Level)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Level.Description)
+            </dd>
+        </dl>
+
+
+
+        <dl class="row">
+        @if (@Model.DateModified != null)
+        {
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.DateModified)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.DateModified)
+            </dd>
+        }
+        else
+        {
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.DateCreated)
+            </dd>
+        }
+
+
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Editor)
+        </dt>
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Editor)
+        </dd>
+        </dl>
+    </div>
+
+
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-dark" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username">Regressar ao index</a> &nbsp;
+</div>
