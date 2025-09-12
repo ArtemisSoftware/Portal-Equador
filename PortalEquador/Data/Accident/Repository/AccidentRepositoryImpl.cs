@@ -60,7 +60,7 @@ namespace PortalEquador.Data.Accident.Repository
 
             var model = mapper.Map<AccidentEditViewModel>(result);
 
-            var cities = GroupItems(Groups.CITIES, OrderType.Alphabetic);
+            var cities = GroupItems(Groups.PROVINCE, OrderType.Alphabetic);
             var contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
 
             var accidents = await GroupItemsList(Groups.ACCIDENT_CAUSES, OrderType.Alphabetic);
@@ -83,7 +83,7 @@ namespace PortalEquador.Data.Accident.Repository
         public async Task<AccidentEditViewModel> GetAccidentForEdition(int id, AccidentEditViewModel model)
         {
 
-            var cities = GroupItems(Groups.CITIES, OrderType.Alphabetic);
+            var cities = GroupItems(Groups.PROVINCE, OrderType.Alphabetic);
             var contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
 
             var accidents = await GroupItemsList(Groups.ACCIDENT_CAUSES, OrderType.Alphabetic);
@@ -129,7 +129,7 @@ namespace PortalEquador.Data.Accident.Repository
 
         public async Task<AccidentViewModel> GetCreateModel(int personalInformationId, string fullName)
         {
-            var cities = GroupItems(Groups.CITIES, OrderType.Alphabetic);
+            var cities = GroupItems(Groups.PROVINCE, OrderType.Alphabetic);
             var contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
 
             var accidents = await GroupItemsList(Groups.ACCIDENT_CAUSES, OrderType.Alphabetic);
@@ -159,7 +159,7 @@ namespace PortalEquador.Data.Accident.Repository
 
         public async Task<AccidentViewModel> GetCreateModel(AccidentViewModel model)
         {
-            var cities = GroupItems(Groups.CITIES, OrderType.Alphabetic);
+            var cities = GroupItems(Groups.PROVINCE, OrderType.Alphabetic);
             var contracts = GroupItems(Groups.MECHANICAL_SHOP_CONTRACTS, OrderType.Alphabetic);
 
             var accidents = await GroupItemsList(Groups.ACCIDENT_CAUSES, OrderType.Alphabetic);

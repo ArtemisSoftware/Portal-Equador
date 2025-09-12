@@ -71,10 +71,9 @@
             public static readonly int AGENCY = (new Item { Debug = 29, Production = 35 }).Value;
             public static readonly int EXAM_RESULT = (new Item { Debug = 30, Production = 36 }).Value;
 
-            public static readonly int CITIES = (new Item { Debug = 31, Production = 36 }).Value;
-            public static readonly int ACCIDENT_CAUSES = (new Item { Debug = 32, Production = 36 }).Value;
-            public static readonly int ESTIMATED_VALUE = (new Item { Debug = 33, Production = 36 }).Value;
-            public static readonly int OCORRED_ACCIDENT_LEVEL = (new Item { Debug = 34, Production = 36 }).Value;
+            public static readonly int ACCIDENT_CAUSES = (new Item { Debug = 32, Production = 38 }).Value;
+            public static readonly int ESTIMATED_VALUE = (new Item { Debug = 33, Production = 39 }).Value;
+            public static readonly int OCORRED_ACCIDENT_LEVEL = (new Item { Debug = 34, Production = 40 }).Value;
         }
 
         public static class ItemFromGroup

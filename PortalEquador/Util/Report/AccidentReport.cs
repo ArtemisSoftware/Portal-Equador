@@ -181,7 +181,7 @@ namespace PortalEquador.Util.Report
                             if (estimatedValues[index].Id == accident.EstimatedValueId)
                             {
                                 ws.Cells[row, column].Value = "✓";
-                                ws.Cells[row, column].Style.Font.Color.SetColor(System.Drawing.Color.LightBlue);
+                                ws.Cells[row, column].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
                                 ws.Cells[row, column].Style.Font.Bold = true;
                                 ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                                 ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
