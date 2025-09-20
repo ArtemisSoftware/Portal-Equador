@@ -3,13 +3,14 @@ using PortalEquador.Domain.Contract.ViewModels;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.MechanicalWorkshop;
 using PortalEquador.Domain.PersonalInformation.ViewModels;
+using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Domain.Contract.Repository
 {
     public interface IContractRepository : IGenericRepository<ContractEntity>
     {
 
-        Task<ContractsViewModel> GetAll(int filter = -1);
+        Task<ContractsViewModel> GetAll(int filter = StringConstants.ContractStatus.UNASSIGNED_ID);
         Task<ContractDashboardViewModel> GetDashboard(int id);
         Task<ContractHistoryViewModel> GetAllContracts(int personalInformationId);
 

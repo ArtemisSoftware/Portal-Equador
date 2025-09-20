@@ -79,7 +79,8 @@ namespace PortalEquador.Data.Generic
             OrderType orderType = OrderType.No_order, 
             int idToExclude = -1, 
             string extraOption = "", 
-            bool addExtraOptionOnTop = false
+            bool addExtraOptionOnTop = false,
+            int? selectedId = null
             )
         {
             IQueryable<GroupItemEntity> result = context.GroupItemEntity.Where(x => x.GroupEntityId == groupId & x.Active == true & x.Id != idToExclude);
@@ -124,11 +125,11 @@ namespace PortalEquador.Data.Generic
                     items.Add(item);
                 }
 
-                return new SelectList(items, "Id", "Description");
+                return new SelectList(items, "Id", "Description", selectedId);
             }
             else
             {
-                return (new SelectList(result, "Id", "Description"));
+                return (new SelectList(result, "Id", "Description", selectedId));
             }
         }
 

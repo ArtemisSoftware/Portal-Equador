@@ -342,7 +342,12 @@ namespace PortalEquador.Data.Contract.Repository
         public async Task<ContractsViewModel> GetAll(int filter)
         {
 
-            var contractStates = GroupItems(Groups.CONTRACT_STATE, OrderType.Alphabetic, StringConstants.ContractStatus.UNASSIGNED_ID, StringConstants.ContractStatus.UNASSIGNED);
+            var contractStates = GroupItems(
+                Groups.CONTRACT_STATE, 
+                OrderType.Alphabetic, 
+                StringConstants.ContractStatus.UNASSIGNED_ID, 
+                StringConstants.ContractStatus.UNASSIGNED
+             );
 
             if (filter == StringConstants.ContractStatus.UNASSIGNED_ID)
             {
