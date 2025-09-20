@@ -1,24 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using AutoMapper;
-using DocumentFormat.OpenXml.Office2010.Excel;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using PortalEquador.Data;
-using PortalEquador.Data.Accident.Entities;
 using PortalEquador.Domain.Accident.Repository;
 using PortalEquador.Domain.Accident.UseCases;
 using PortalEquador.Domain.Accident.ViewModels;
-using PortalEquador.Domain.Contract.Repository;
-using PortalEquador.Domain.GroupTypes.Repository;
-using PortalEquador.Domain.GroupTypes.ViewModels;
-using PortalEquador.Domain.Languages.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.UseCases;
-using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.Accident

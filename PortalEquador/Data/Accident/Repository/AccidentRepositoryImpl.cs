@@ -28,8 +28,11 @@ namespace PortalEquador.Data.Accident.Repository
 
         private async Task<int> GetLatestAccidentNumber()
         {
+            if (!await context.AccidentEntity.AnyAsync())
+                return 1;
+
             var index = await context.AccidentEntity.MaxAsync(item => item.Number);
-            return ++index;
+            return index + 1;
         }
 
         public async Task<AccidentDetailViewModel> GetAccident(int id)
@@ -169,9 +172,6 @@ namespace PortalEquador.Data.Accident.Repository
             var estimatedValue = GroupItems(Groups.ESTIMATED_VALUE);
             var accidentLevel = GroupItems(Groups.OCORRED_ACCIDENT_LEVEL, OrderType.Alphabetic);
 
-            var number = await GetLatestAccidentNumber();
-
-            model.Number = number;
             model.Cities = cities;
             model.EstimatedValues = estimatedValue;
             model.Levels = accidentLevel;
@@ -183,7 +183,6 @@ namespace PortalEquador.Data.Accident.Repository
 
         public async Task<int> Save(AccidentViewModel model)
         {
-
             var tracked = context.ChangeTracker.Entries<AccidentEntity>()
                      .FirstOrDefault(e => e.Entity.Id == model.Id);
 
@@ -191,7 +190,6 @@ namespace PortalEquador.Data.Accident.Repository
             {
                 context.Entry(tracked.Entity).State = EntityState.Detached;
             }
-
 
             var editorId = GetCurrentUserId();
             var entity = mapper.Map<AccidentEntity>(model);

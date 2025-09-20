@@ -12,6 +12,7 @@ namespace PortalEquador.Domain.Accident.ViewModels
         public int Id { get; set; }
 
         [Display(Name = StringConstants.Display.NUMBER)]
+        [Range(1, int.MaxValue)]
         [Required(ErrorMessage = StringConstants.Error.MANDATORY_FIELD)]
         public int Number { get; set; }
 
@@ -96,6 +97,7 @@ namespace PortalEquador.Domain.Accident.ViewModels
         public SelectList? EstimatedValues { get; set; }
 
         [Display(Name = StringConstants.Display.HUMAN_DAMAGE)]
+        [Range(0, int.MaxValue)]
         [Required]
         public int HumanDamage { get; set; }
 
