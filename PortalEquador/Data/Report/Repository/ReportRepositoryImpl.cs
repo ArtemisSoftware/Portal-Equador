@@ -136,6 +136,7 @@ namespace PortalEquador.Data.Report.Repository
             var monthlyDates = context.DisciplinaryNotificationEntity
                 .GroupBy(d => new { d.Date.Year, d.Date.Month })
                 .Select(g => g.OrderBy(x => x.Date).First().Date)
+                .OrderByDescending(d => d)
                 .ToList();
 
 
@@ -327,6 +328,7 @@ namespace PortalEquador.Data.Report.Repository
             var yearDates = context.MedicalExamEntity
                 .GroupBy(d => new { d.Date.Year })
                 .Select(g => g.OrderBy(x => x.Date).First().Date)
+                                .OrderByDescending(d => d)
                 .ToList();
 
             var dates = new SelectList(
@@ -537,7 +539,7 @@ namespace PortalEquador.Data.Report.Repository
             };
         }
 
-        /*..............MEDICAL EXAM....................*/
+        /*..............TRAINNING....................*/
 
         public async Task<TrainningReportFormViewModel> GetTrainningForm(int trainningId)
         {
