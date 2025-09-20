@@ -70,13 +70,20 @@
     <input type="hidden" id="username" name="username" />
 </form>
 
-
 @section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.13.7/sorting/datetime-moment.js"></script>
     <script>
         $(function () {
+            // Register moment parser for dd-MM-yyyy
+            $.fn.dataTable.moment('DD-MM-YYYY');
 
-            $('.table').DataTable();
+            // Initialize DataTable
+            $('.table').DataTable({
+                order: [[0, 'desc']] // sort first column (date) descending (newest → oldest)
+            });
 
+            // Delete button logic
             $('.deleteBtn').click(function (e) {
                 swal({
                     title: "Eliminar formação",
@@ -94,11 +101,9 @@
                         $('#identifier').val(identifier);
                         $('#username').val(username);
                         $('#deleteTrainning').submit();
-
                     }
                 });
             });
         });
-
     </script>
 }
