@@ -9,34 +9,136 @@
     <h1 class="display-4">Relatórios</h1>
     <br />
     <br />
-    <div class="row">
 
-        <div class="row">
-            <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Idade</h5>
+                            <p class="card-text">Relatório de idades</p>
+                            <div class="d-grid gap-2 col-6 mx-auto">
+                            <a asp-controller="Report" asp-action="AgeReportForm" class="btn btn-primary">Relatório</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="col-sm-4">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="card-title">Idade</h3>
-                        <p class="card-text">Relatório de idades</p>
+                        <h5 class="card-title">Experiência profissional</h5>
+                        <p class="card-text">Relatório de experiência profissional</p>
                         <div class="d-grid gap-2 col-6 mx-auto">
-                            <a asp-controller="Report" asp-action="ExportAgeReportInExcel" class="btn btn-primary">Download</a>
+                            <a asp-controller="Report" asp-action="ProfessionalExperienceReportForm" class="btn btn-primary">Relatório</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
+
+            <div class="col-sm-4">
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="card-title">Testes de Alcool</h3>
-                        <p class="card-text">Relatório de testes de Alcool</p>
+                        <h5 class="card-title">Habilitações académicas</h5>
+                        <p class="card-text">Relatório de habilitações académicas</p>
                         <div class="d-grid gap-2 col-6 mx-auto">
-                            <a asp-controller="Report" asp-action="AlchoolTestReportForm" class="btn btn-primary">Relatório</a>
+                            <a asp-controller="Report" asp-action="EducationReportForm" class="btn btn-primary">Relatório</a>
                         </div>
                     </div>
                 </div>
+            </div>
 
 
+    </div>
+
+
+    <br />
+    <br />
+
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Cartas de condução</h5>
+                    <p class="card-text">Relatório de cartas de condução</p>
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <a asp-controller="Report" asp-action="DriversLicenceReportForm" class="btn btn-primary">Relatório</a>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Testes de Alcool</h5>
+                    <p class="card-text">Relatório de testes de Alcool</p>
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <a asp-controller="Report" asp-action="AlchoolTestReportForm" class="btn btn-primary">Relatório</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Condução defensiva</h5>
+                    <p class="card-text">Relatório de formação de condução defensiva</p>
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <a asp-controller="Report" asp-action="DefensiveDrivingReportForm" class="btn btn-primary">Relatório</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    <br />
+    <br />
+
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Acidentes</h5>
+                    <p class="card-text">Relatório de acidentes</p>
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <a asp-controller="Report" asp-action="AccidentReportForm" class="btn btn-primary">Relatório</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <br />
+
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Exames médicos</h5>
+                    <p class="card-text">Relatório de exames médicos realizados</p>
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <a asp-controller="Report" asp-action="MedicalExamReportForm" class="btn btn-primary">Relatório</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+    <br />
+    <br />
+
+
+
+
 
     </div>
 

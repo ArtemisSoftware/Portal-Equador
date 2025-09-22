@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.Education.School.ViewModels;
+using PortalEquador.Domain.Languages.ViewModels;
 using PortalEquador.Domain.MedicalExam.Repository;
 using PortalEquador.Domain.MedicalExam.UseCases;
 using PortalEquador.Domain.MedicalExam.ViewModels;
@@ -70,6 +71,50 @@ namespace PortalEquador.Controllers.MedicalExam
         {
             return await repository.GetCreateModel(model);
         }
+
+
+
+
+        // GET: GroupItems/Edit/5
+        public async Task<IActionResult> Edit(int id, int identifier, string fullName)
+        {
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
+
+            var model = await repository.GetMedicalExam((int)id);
+            model = await RecoverModel(model);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(model);
+            }
+        }
+
+        // POST: GroupItems/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int identifier, string fullName, MedicalExamCreateViewModel model)
+        {
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
+
+            if (ModelState.IsValid)
+            {
+                await repository.Save(model);
+                return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+            }
+            return View(model);
+        }
+
+
+
+
 
         /*
 

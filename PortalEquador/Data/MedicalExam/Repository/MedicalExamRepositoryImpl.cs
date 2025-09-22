@@ -24,6 +24,7 @@ namespace PortalEquador.Data.MedicalExam.Repository
             var result = await context.MedicalExamEntity
                 .Include(d => d.ExamGroupItemEntity)
                 .Include(d => d.PersonalInformationEntity)
+                .Include(d => d.ResultGroupItemEntity)
                 .Where(item => item.PersonalInformationId == personalInformationId)
                 .OrderByDescending(item => item.Date)
                 .ToListAsync();
@@ -36,12 +37,14 @@ namespace PortalEquador.Data.MedicalExam.Repository
         public async Task<MedicalExamCreateViewModel> GetCreateModel(int personalInformationId, string fullName)
         {
             var exams = GroupItems(Groups.EXAM, OrderType.Alphabetic);
+            var results = GroupItems(Groups.EXAM_RESULT, OrderType.Alphabetic);
 
             var model = new MedicalExamCreateViewModel
             {
                 PersonaInformationId = personalInformationId,
                 FullName = fullName,
-                Exams = exams
+                Exams = exams,
+                Results = results
             };
 
             return model;
@@ -50,7 +53,9 @@ namespace PortalEquador.Data.MedicalExam.Repository
         public async Task<MedicalExamCreateViewModel> GetCreateModel(MedicalExamCreateViewModel model)
         {
             var exams = GroupItems(Groups.EXAM, OrderType.Alphabetic);
+            var results = GroupItems(Groups.EXAM_RESULT, OrderType.Alphabetic);
             model.Exams = exams;
+            model.Results = results;
             return model;
         }
 
@@ -58,6 +63,7 @@ namespace PortalEquador.Data.MedicalExam.Repository
         {
             var result = await context.MedicalExamEntity
                .Include(d => d.ExamGroupItemEntity)
+                .Include(d => d.ResultGroupItemEntity)
                .Include(d => d.PersonalInformationEntity)
                 .Include(d => d.ApplicationUserEntity)
                .Where(item => item.Id == id)
@@ -71,16 +77,19 @@ namespace PortalEquador.Data.MedicalExam.Repository
         public async Task<MedicalExamCreateViewModel> GetMedicalExam(int id)
         {
             var exams = GroupItems(Groups.EXAM, OrderType.Alphabetic);
+            var results = GroupItems(Groups.EXAM_RESULT, OrderType.Alphabetic);
 
-            var model = new MedicalExamCreateViewModel
-            {
-                Id = 1,
-                Date = DateTime.Now,
-                PersonaInformationId = 1,
-                FullName = "The guy",
-                ExamId = 1,
-                Exams = exams
-            };
+            var result = await context.MedicalExamEntity
+               .Include(d => d.ExamGroupItemEntity)
+                .Include(d => d.ResultGroupItemEntity)
+               .Include(d => d.PersonalInformationEntity)
+                .Include(d => d.ApplicationUserEntity)
+               .Where(item => item.Id == id)
+               .FirstAsync();
+
+            var model = mapper.Map<MedicalExamCreateViewModel>(result);
+            model.Results = results;
+            model.Exams = exams;
 
             return model;
         }

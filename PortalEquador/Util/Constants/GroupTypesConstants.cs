@@ -66,10 +66,22 @@
 
             public static readonly int CONTRACT_STATE = (new Item { Debug = 27, Production = 30 }).Value;
             public static readonly int RESIGNATION_REASONS = (new Item { Debug = 28, Production = 31 }).Value;
+
+
+            public static readonly int AGENCY = (new Item { Debug = 29, Production = 35 }).Value;
+            public static readonly int EXAM_RESULT = (new Item { Debug = 30, Production = 36 }).Value;
+
+            public static readonly int ACCIDENT_CAUSES = (new Item { Debug = 32, Production = 38 }).Value;
+            public static readonly int ESTIMATED_VALUE = (new Item { Debug = 33, Production = 39 }).Value;
+            public static readonly int OCORRED_ACCIDENT_LEVEL = (new Item { Debug = 34, Production = 40 }).Value;
         }
 
         public static class ItemFromGroup
         {
+            public static class Trainning
+            {
+                public static readonly int DEFENSIVE_DRIVING = (new Item { Debug = 59, Production = 1 }).Value; //--299 356
+            }
 
             public static class Nationality
             {
@@ -96,6 +108,7 @@
             public static class Documents
             {
                 public static readonly int PROFILE_PICTURE = (new Item { Debug = 7, Production = 2 }).Value;
+                public static readonly int IDENTIFICATION = (new Item { Debug = 7, Production = 38 }).Value;
                 public static readonly int DRIVERS_LICENCE = (new Item { Debug = 43, Production = 39 }).Value;
                 public static readonly int DRIVERS_LICENCE_PROVISIONAL = (new Item { Debug = 44, Production = 69 }).Value;
                 public static readonly int MEDICAL_EXAM = (new Item { Debug = 65, Production = 296 }).Value;
@@ -106,9 +119,15 @@
 
                 private static List<int> driversLicenceDocuments = new List<int>();
                 private static List<int> contractDocuments = new List<int>();
+                private static List<int> generalDocuments = new List<int>();
 
                 static Documents()
                 {
+                    generalDocuments.Add(PROFILE_PICTURE);
+                    generalDocuments.Add(IDENTIFICATION);
+                    generalDocuments.Add(DRIVERS_LICENCE);
+                    generalDocuments.Add(DRIVERS_LICENCE_PROVISIONAL);
+
                     driversLicenceDocuments.Add(DRIVERS_LICENCE);
                     driversLicenceDocuments.Add(DRIVERS_LICENCE_PROVISIONAL);
 
@@ -125,6 +144,11 @@
                 public static List<int> GetContractDocuments()
                 {
                     return contractDocuments;
+                }
+
+                public static List<int> GetGeneralDocuments()
+                {
+                    return generalDocuments;
                 }
             }
 

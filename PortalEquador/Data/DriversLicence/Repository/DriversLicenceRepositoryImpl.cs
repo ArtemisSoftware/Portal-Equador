@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using PortalEquador.Data.DriversLicence.Entity;
 using PortalEquador.Data.Education.School.Entity;
 using PortalEquador.Data.Generic;
@@ -11,7 +12,11 @@ using static PortalEquador.Util.Constants.GroupTypesConstants.ItemFromGroup;
 
 namespace PortalEquador.Data.DriversLicence.Repository
 {
-    public class DriversLicenceRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+    public class DriversLicenceRepositoryImpl(
+        ApplicationDbContext context, 
+        IMapper mapper, 
+        IHttpContextAccessor httpContextAccessor
+        )
         : GenericRepository<DriversLicenceEntity>(context, httpContextAccessor), 
         IDriversLicenceRepository
     {
@@ -28,7 +33,8 @@ namespace PortalEquador.Data.DriversLicence.Repository
 
         public async Task<DriversLicenceViewModel> GetCreateModel(int personalInformationId, string fullName)
         {
-            List<int> documentsId = Documents.GetDriversLicenceDocuments(); 
+
+            
 
             var licenceTypes = GroupItems(Groups.DRIVERS_LICENCE);
 
@@ -36,9 +42,7 @@ namespace PortalEquador.Data.DriversLicence.Repository
             {
                 LicenceTypes = licenceTypes,
                 PersonaInformationId = personalInformationId,
-                FullName = fullName,
-                //Documents = documents,
-                //DriverLicenceDocumentId = driverLicenceDocumentId
+                FullName = fullName
             };
         }
 

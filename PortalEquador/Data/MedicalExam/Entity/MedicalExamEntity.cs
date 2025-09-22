@@ -19,6 +19,11 @@ namespace PortalEquador.Data.MedicalExam.Entity
         [ForeignKey("ExamId")]
         public GroupItemEntity ExamGroupItemEntity { get; set; }
 
+        public int? ResultId { get; set; }
+
+        [ForeignKey("ResultId")]
+        public GroupItemEntity ResultGroupItemEntity { get; set; }
+
         public string? Observation { get; set; }
     }
 }

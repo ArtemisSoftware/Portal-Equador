@@ -20,8 +20,11 @@ namespace PortalEquador.Domain.MedicalExam.ViewModels
 
         public required string Extension { get; set; }
 
-        [Display(Name = StringConstants.Display.DOCUMENT)]
+        [Display(Name = StringConstants.Display.EXAM)]
         public GroupItemViewModel Exam { get; set; }
+
+        [Display(Name = StringConstants.Display.RESULT)]
+        public GroupItemViewModel Result { get; set; }
 
         [Display(Name = StringConstants.Display.DATE)]
         [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
@@ -30,7 +33,7 @@ namespace PortalEquador.Domain.MedicalExam.ViewModels
 
 
         //public string PicturePath => ImagesUtil.GetFilePath(this);
-        public string PicturePath => ImagesUtil.GetFilePath(PersonaInformationId, Exam.Id, Extension + "?v=123456");
+        public string PicturePath => ImagesUtil.GetFilePath(PersonaInformationId, Exam.Id, Extension, true);
 
     }
 }

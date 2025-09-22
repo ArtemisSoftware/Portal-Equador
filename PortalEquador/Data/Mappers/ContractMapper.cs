@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
+using PortalEquador.Data.Accident.Entities;
 using PortalEquador.Data.Contract.Entities;
 using PortalEquador.Data.DisciplinaryNotification.Entity;
+using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.MedicalExam.Entity;
 using PortalEquador.Data.Trainning.Entity;
+using PortalEquador.Domain.Accident.ViewModels;
 using PortalEquador.Domain.Contract.ViewModels;
 using PortalEquador.Domain.DisciplinaryNotification.ViewModels;
+using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.MedicalExam.ViewModels;
 using PortalEquador.Domain.Trainning.ViewModels;
 
@@ -18,18 +22,21 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 .ForMember(dest => dest.Exam, opt => opt.MapFrom(src => src.ExamGroupItemEntity))
+                .ForMember(dest => dest.Result, opt => opt.MapFrom(src => src.ResultGroupItemEntity))
                 .ReverseMap();
 
             CreateMap<MedicalExamEntity, MedicalExamCreateViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 .ForMember(dest => dest.ExamId, opt => opt.MapFrom(src => src.ExamId))
+                .ForMember(dest => dest.ResultId, opt => opt.MapFrom(src => src.ResultId))
                 .ReverseMap();
 
             CreateMap<MedicalExamEntity, MedicalExamDetailViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 .ForMember(dest => dest.Exam, opt => opt.MapFrom(src => src.ExamGroupItemEntity))
+                .ForMember(dest => dest.Result, opt => opt.MapFrom(src => src.ResultGroupItemEntity))
                 .ReverseMap();
 
             CreateMap<TrainningEntity, TrainningViewModel>()
@@ -105,8 +112,94 @@ namespace PortalEquador.Data.Mappers
 
             CreateMap<ContractEntity, CurrentContractViewModel>()
              .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.PersonalInformationEntity.FirstName + " " + src.PersonalInformationEntity.LastName))
-             
               .ReverseMap();
+
+            CreateMap<AccidentEntity, AccidentDetailViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.PersonalInformationEntity.FirstName + " " + src.PersonalInformationEntity.LastName))
+                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.CityGroupItemEntity))
+                .ForMember(dest => dest.Level, opt => opt.MapFrom(src => src.LevelGroupItemEntity))
+                .ForMember(dest => dest.EstimatedValue, opt => opt.MapFrom(src => src.EstimatedValueGroupItemEntity))
+                .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity))
+                .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.VehicleEntity))
+                .ForMember(dest => dest.HumanDamage, opt => opt.MapFrom(src => src.HumanDamage))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
+                .ForMember(dest => dest.Causes, opt => opt.MapFrom(src => src.Accidents))
+                .ReverseMap();
+
+            CreateMap<AccidentEntity, AccidentViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.PersonalInformationEntity.FirstName + " " + src.PersonalInformationEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.CityId, opt => opt.MapFrom(src => src.CityId))
+                .ForMember(dest => dest.LevelId, opt => opt.MapFrom(src => src.LevelId))
+                .ForMember(dest => dest.EstimatedValueId, opt => opt.MapFrom(src => src.EstimatedValueId))
+                .ForMember(dest => dest.ContractId, opt => opt.MapFrom(src => src.ContractId))
+                .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.VehicleId))
+                .ForMember(dest => dest.HumanDamage, opt => opt.MapFrom(src => src.HumanDamage))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.Date))
+                .ForMember(dest => dest.Time, opt => opt.MapFrom(src => src.Date.TimeOfDay))
+                .ReverseMap()
+                // recombine Date and Time back into one DateTime
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src =>
+                    src.Date.HasValue
+                        ? src.Date.Value.Date + (src.Time ?? TimeSpan.Zero)
+                        : DateTime.MinValue   // or make AccidentEntity.Date nullable if you want
+                ));
+
+            CreateMap<AccidentEntity, AccidentEditViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.PersonalInformationEntity.FirstName + " " + src.PersonalInformationEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.VehicleEntity))
+                .ForMember(dest => dest.CityId, opt => opt.MapFrom(src => src.CityId))
+                .ForMember(dest => dest.LevelId, opt => opt.MapFrom(src => src.LevelId))
+                .ForMember(dest => dest.Causes, opt => opt.MapFrom(src => src.Accidents))
+                .ForMember(dest => dest.EstimatedValueId, opt => opt.MapFrom(src => src.EstimatedValueId))
+                .ForMember(dest => dest.ContractId, opt => opt.MapFrom(src => src.ContractId))
+                .ForMember(dest => dest.HumanDamage, opt => opt.MapFrom(src => src.HumanDamage))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date.Date))
+                .ForMember(dest => dest.Time, opt => opt.MapFrom(src => src.Date.TimeOfDay))
+                .ReverseMap()
+                // recombine Date and Time back into one DateTime
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src =>
+                    src.Date.HasValue
+                        ? src.Date.Value.Date + (src.Time ?? TimeSpan.Zero)
+                        : DateTime.MinValue   // or make AccidentEntity.Date nullable if you want
+                ));
+
+            CreateMap<GroupItemEntity, AccidentCauseViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.CauseId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
+
+            CreateMap<AccidentCauseEntity, AccidentCauseViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.CauseId, opt => opt.MapFrom(src => src.CauseId))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Cause, opt => opt.MapFrom(src => src.CauseGroupItemEntity))
+                .ReverseMap();
+
+            CreateMap<AccidentEditViewModel, AccidentViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.Editor))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonaInformationId))
+                .ForMember(dest => dest.CityId, opt => opt.MapFrom(src => src.CityId))
+                .ForMember(dest => dest.LevelId, opt => opt.MapFrom(src => src.LevelId))
+                .ForMember(dest => dest.EstimatedValueId, opt => opt.MapFrom(src => src.EstimatedValueId))
+                .ForMember(dest => dest.ContractId, opt => opt.MapFrom(src => src.ContractId))
+                .ForMember(dest => dest.VehicleId, opt => opt.MapFrom(src => src.Vehicle.Id))
+                .ForMember(dest => dest.Causes, opt => opt.MapFrom(src => src.AllCauses))
+                .ForMember(dest => dest.HumanDamage, opt => opt.MapFrom(src => src.HumanDamage))
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
+                .ForMember(dest => dest.Time, opt => opt.MapFrom(src => src.Time))
+                .ReverseMap()
+                // recombine Date and Time back into one DateTime
+                .ForMember(dest => dest.Date, opt => opt.MapFrom(src =>
+                    src.Date.HasValue
+                        ? src.Date.Value.Date + (src.Time ?? TimeSpan.Zero)
+                        : DateTime.MinValue   // or make AccidentEntity.Date nullable if you want
+                ));
         }
     }
 }

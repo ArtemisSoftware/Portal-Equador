@@ -28,7 +28,7 @@ namespace PortalEquador.Domain.Document.ViewModels
         public int? ParentId { get; set; }
 
         //public string PicturePath => ImagesUtil.GetFilePath(this);
-        public string PicturePath => ImagesUtil.GetFilePath(PersonaInformationId, Document.Id, Extension + "?v=123456");
+        public string PicturePath => ImagesUtil.GetFilePath(PersonaInformationId, Document.Id, Extension, true);
 
     }
 }

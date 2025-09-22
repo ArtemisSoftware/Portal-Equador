@@ -1,0 +1,148 @@
+﻿@model PortalEquador.Domain.Accident.ViewModels.AccidentEditViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Editar acidente</h1>
+<h4>Para: @Model.FullName</h4>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" asp-route-groupName="@ViewBag.groupName">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="PersonaInformationId" />
+            <input type="hidden" asp-for="FullName" />
+            <input type="hidden" asp-for="Number" />
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="DateCreated" />
+
+            <div class="form-group col-sm-6">
+                <label asp-for="Number" class="control-label"></label>
+                <input asp-for="Number" class="form-control" disabled />
+                <span asp-validation-for="Number" class="text-danger"></span>
+            </div>
+            <br />
+
+            <dl class="row">
+                <dd class="col-sm-6">
+                    <div class="form-group">
+                        <label asp-for="Date" class="control-label"></label>
+                        <input asp-for="Date" class="form-control" />
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+                </dd>
+                <dd class="col-sm-6">
+                    <div class="form-group">
+                        <label asp-for="Time" class="control-label"></label>
+                        <input asp-for="Time" class="form-control" />
+                        <span asp-validation-for="Time" class="text-danger"></span>
+                    </div>
+                </dd>
+            </dl>
+            <br />
+
+            <h6>Viatura</h6>
+            <hr />
+
+            <dl class="row">
+                <dd class="col-sm-6">
+                    <div class="form-group">
+                        <label asp-for="Vehicle.LicencePlate" class="control-label"></label>
+                        <input asp-for="Vehicle.LicencePlate" class="form-control" disabled />
+                        <span asp-validation-for="Vehicle.LicencePlate" class="text-danger"></span>
+                    </div>
+                </dd>
+                <dd class="col-sm-6">
+                    <div class="form-group">
+                        <label asp-for="Vehicle.Model" class="control-label"></label>
+                        <input asp-for="Vehicle.Model" class="form-control" disabled />
+                        <span asp-validation-for="Vehicle.Model" class="text-danger"></span>
+                    </div>
+                </dd>
+            </dl>
+            <br />
+
+            <div class="form-group">
+                <label asp-for="ContractId" class="control-label"></label>
+                <select asp-for="ContractId" class="form-select" asp-items="Model.Contracts"></select>
+            </div>
+            <br />
+
+            <dl class="row">
+
+                <dd class="col-sm-5">
+                    <div class="form-group">
+                        <label asp-for="CityId" class="control-label"></label>
+                        <select asp-for="CityId" class="form-select" asp-items="Model.Cities"></select>
+                    </div>
+                </dd>
+                <dd class="col-sm-7">
+                    <div class="form-group">
+                        <label asp-for="Address" class="control-label"></label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                </dd>
+            </dl>
+            <br />
+
+
+
+            <h6>Causas</h6>
+            <hr />
+
+            @for (int index = 0; index < Model.AllCauses.Count; index++)
+            {
+                <div class="form-check">
+                    <input asp-for="@Model.SelectedCauses[index]" class="form-check-input" type="checkbox" id="@Model.AllCauses[index].Id" />
+                    <label asp-for="@Model.SelectedCauses[index]" class="form-check-label">
+                        @Html.DisplayFor(modelItem => @Model.AllCauses[index].Description)
+                    </label>
+                </div>
+            }
+            <br />
+
+
+            <div class="form-group">
+                <label asp-for="EstimatedValueId" class="control-label"></label>
+                <select asp-for="EstimatedValueId" class="form-select" asp-items="Model.EstimatedValues"></select>
+            </div>
+            <br />
+
+            <div class="form-group col-sm-4">
+                <label asp-for="HumanDamage" class="control-label"></label>
+                <input asp-for="HumanDamage" class="form-control" />
+                <span asp-validation-for="HumanDamage" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group  col-sm-4">
+                <label asp-for="LevelId" class="control-label"></label>
+                <select asp-for="LevelId" class="form-select" asp-items="Model.Levels"></select>
+            </div>
+            <br />
+
+            @if (Model.Error != null)
+            {
+                <div class="form-group">
+                    <div class="alert alert-danger" role="alert">
+                        <span asp-validation-for="Error"></span>
+                    </div>
+                </div>
+            }
+
+
+
+            <br />
+            <br />
+            <div>
+                <a asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <input type="submit" value="Guardar Alterações" class="btn btn-warning" />
+            </div>
+        </form>
+    </div>
+</div>

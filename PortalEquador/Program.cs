@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data;
+using PortalEquador.Data.Accident.Repository;
 using PortalEquador.Data.Contract.Repository;
 using PortalEquador.Data.Curriculum.Repository;
 using PortalEquador.Data.DisciplinaryNotification.Repository;
@@ -21,6 +22,8 @@ using PortalEquador.Data.Profession.Competence.Repository;
 using PortalEquador.Data.Profession.Experience.Repository;
 using PortalEquador.Data.Report.Repository;
 using PortalEquador.Data.Trainning.Repository;
+using PortalEquador.Domain.Accident.Repository;
+using PortalEquador.Domain.Accident.UseCases;
 using PortalEquador.Domain.Contract.Repository;
 using PortalEquador.Domain.Curriculum.Repository;
 using PortalEquador.Domain.DisciplinaryNotification.Repository;
@@ -39,12 +42,14 @@ using PortalEquador.Domain.MechanicalWorkshop.CarWash.UseCase;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.UseCase;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
+using PortalEquador.Domain.MechanicalWorkshop.Vehicle.UseCases;
 using PortalEquador.Domain.MedicalExam.Repository;
 using PortalEquador.Domain.MedicalExam.UseCases;
 using PortalEquador.Domain.PersonalInformation.Repository;
 using PortalEquador.Domain.Profession.Competence.Repository;
 using PortalEquador.Domain.Profession.Experience.Repository;
 using PortalEquador.Domain.Report.Repository;
+using PortalEquador.Domain.Report.UseCases;
 using PortalEquador.Domain.Trainning.Repository;
 using PortalEquador.Domain.Trainning.UseCases;
 using System.Reflection;
@@ -89,6 +94,7 @@ builder.Services.AddScoped<GetDriversLicenceProvisionalUseCase>();
 builder.Services.AddScoped<GetDriversLicenceProvisionalRenewUseCase> ();
 builder.Services.AddScoped<GetDriversLicenceUseCase> ();
 builder.Services.AddScoped<DeleteDriversLicenceUseCase>();
+builder.Services.AddScoped<GetDriversLicenceCreateModelUseCase> ();
 
 //MechanicalWorkshop
 builder.Services.AddScoped<IMechanicalWorkshopVehicleRepository, MechanicalWorkshopVehicleRepositoryImpl>();
@@ -99,6 +105,8 @@ builder.Services.AddScoped<GetCarWashDayPlanUseCase>();
 builder.Services.AddScoped<SearchCarWashDayPlanUseCase>();
 builder.Services.AddScoped<GetDayPlanUseCase>();
 builder.Services.AddScoped<SearchDayPlanUseCase>();
+builder.Services.AddScoped<GetVehiclesUseCase> ();
+builder.Services.AddScoped<GetVehicleUseCase> ();
 
 //Contract
 builder.Services.AddScoped<IContractRepository, ContractRepositoryImpl>();
@@ -114,6 +122,20 @@ builder.Services.AddScoped<DeleteDisciplinaryNotificationUseCase>();
 
 // Report
 builder.Services.AddScoped<IReportRepository, ReportRepositoryImpl>();
+builder.Services.AddScoped<GetAlchoolTestReportUseCase>();
+builder.Services.AddScoped<GetDriversLicenceReportUseCase>();
+builder.Services.AddScoped<GetAgeReportUseCase>();
+builder.Services.AddScoped<GetMedicalExamReportUseCase>();
+builder.Services.AddScoped<GetProfessionalExperienceReportUseCase>();
+builder.Services.AddScoped<GetTrainningReportUseCase> ();
+builder.Services.AddScoped<GetAccidentReportUseCase> ();
+
+
+builder.Services.AddScoped<IAccidentRepository, AccidentRepositoryImpl>();
+builder.Services.AddScoped<IAccidentCauseRepository, AccidentCauseRepositoryImpl>();
+builder.Services.AddScoped <SaveAccidentUseCase>();
+
+
 
 
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());

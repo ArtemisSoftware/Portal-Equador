@@ -51,7 +51,7 @@ namespace PortalEquador.Domain.PersonalInformation.ViewModels
         [DataType(DataType.EmailAddress)]
         public string? Email { get; set; }
 
-        [Display(Name = StringConstants.Display.ADRESS)]
+        [Display(Name = StringConstants.Display.ADDRESS)]
         [Required(ErrorMessage = StringConstants.Error.MANDATORY_FIELD)]
         public string Address { get; set; }
 
@@ -74,6 +74,10 @@ namespace PortalEquador.Domain.PersonalInformation.ViewModels
 
         public SelectList? Provinces { get; set; }
 
+        [Display(Name = StringConstants.Display.AGENCY)]
+        public int? AgencyId { get; set; }
+
+        public SelectList? Agencies { get; set; }
 
         [NotMapped]
         public bool ValidatedIdentityCard { get; set; } = false;

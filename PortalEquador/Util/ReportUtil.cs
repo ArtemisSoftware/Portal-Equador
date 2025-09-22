@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.Report.ViewModels;
+using PortalEquador.Domain.Report.ViewModels.Age;
 using PortalEquador.Util.Constants;
 using System.Data;
 using System.Drawing;

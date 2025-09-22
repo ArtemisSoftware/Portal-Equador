@@ -22,6 +22,7 @@ using PortalEquador.Data.Contract.Entities;
 using PortalEquador.Data.MedicalExam.Entity;
 using PortalEquador.Data.Trainning.Entity;
 using PortalEquador.Data.DisciplinaryNotification.Entity;
+using PortalEquador.Data.Accident.Entities;
 
 namespace PortalEquador.Data
 {
@@ -442,5 +443,7 @@ namespace PortalEquador.Data
         public DbSet<TrainningEntity> TrainningEntity { get; set; } = default!;
         public DbSet<DisciplinaryNotificationEntity> DisciplinaryNotificationEntity { get; set; } = default!;
         public DbSet<ContractEntity> ContractEntity { get; set; }
+        public DbSet<AccidentEntity> AccidentEntity { get; set; }
+        public DbSet<AccidentCauseEntity> AccidentCauseEntity { get; set; }
     }
 }

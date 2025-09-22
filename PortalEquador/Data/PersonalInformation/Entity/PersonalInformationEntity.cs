@@ -55,5 +55,9 @@ namespace PortalEquador.Data.PersonalInformation.Entity
         [ForeignKey("MaritalStatusId")]
         public GroupItemEntity MaritalStatusIdGroupItemEntity { get; set; }
 
+        public int? AgencyId { get; set; }
+
+        [ForeignKey("AgencyId")]
+        public GroupItemEntity AgencyGroupItemEntity { get; set; }
     }
 }

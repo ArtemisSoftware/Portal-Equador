@@ -27,6 +27,7 @@ namespace PortalEquador.Domain.DriversLicence.ViewModels
         [DataType(DataType.Date)]
         public DateTime? ProvisionalExpirationDate { get; set; }
 
+        public bool ExpirationDateSelection { get; set; } = false;
 
         public bool ExpirationDateAvailable { get { return DriverLicenceUtil.ExpirationDateAvailable(ExpirationDate); } }
 

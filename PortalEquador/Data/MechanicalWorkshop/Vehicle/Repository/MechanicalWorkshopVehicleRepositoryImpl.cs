@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity;
@@ -89,6 +90,23 @@ namespace PortalEquador.Data.MechanicalWorkshop.Vehicle.Repository
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             return mapper.Map<VehicleDetailViewModel>(result);
+        }
+
+        public SelectList GetVehiclesSelectList()
+        {
+            var vehicles = (from vehicle in context.MechanicalWorkshopVehicleEntity
+                            where vehicle.Active
+                            orderby vehicle.LicencePlate
+                            select new
+                            {
+                                Id = vehicle.Id,
+                                LicencePlate = vehicle.LicencePlate
+                            }).ToList();
+
+            // Add a placeholder item
+            vehicles.Insert(0, new { Id = 0, LicencePlate = "" });
+
+            return new SelectList(vehicles, "Id", "LicencePlate");
         }
 
         public async Task UpdateState(int vehicleId, bool isActive)

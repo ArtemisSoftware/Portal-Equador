@@ -29,7 +29,11 @@ namespace PortalEquador.Domain.MedicalExam.ViewModels
 
         public SelectList? Exams { get; set; }
 
+        [Display(Name = StringConstants.Display.RESULT)]
+        [Required]
+        public int ResultId { get; set; }
 
+        public SelectList? Results { get; set; }
 
 
 

@@ -31,6 +31,12 @@ namespace PortalEquador.Util.Report
             AddContent(worksheet, nextRow, daysOfMonth.Count, viewModel.report);
 
             worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+            
+            foreach (var (item, index) in daysOfMonth.Select((value, i) => (value, i)))
+            {
+                worksheet.Column(2 + index).Width = 4;
+            }
+            
             worksheet.Row(2).Height = 40;
 
             return package;
@@ -43,7 +49,7 @@ namespace PortalEquador.Util.Report
             ws.Cells["A1:K1"].Merge = true;
             ws.Cells["L1:L1"].Value = StringConstants.Display.EMISSION;
             ws.Cells["L1:P1"].Merge = true;
-            ws.Cells["Q1:S1"].Value = emissionDate.ToString("dd-MM-yyyy HH:mm:ss");
+            ws.Cells["Q1:S1"].Value = emissionDate.ToString(TimeUtil.dd_MM_yyyy__HH_mm_ss);
             ws.Cells["Q1:S1"].Merge = true;
            
             return 2;
@@ -86,6 +92,8 @@ namespace PortalEquador.Util.Report
             ws.Cells[row, nextColumn].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             ws.Cells[row, nextColumn].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             ws.Cells[row, nextColumn, row + 2, nextColumn].Merge = true;
+            ws.Cells[row, nextColumn].Style.WrapText = true;
+
 
             ++nextColumn;
             ws.Cells[row, nextColumn].Value = Display.TOTAL_TESTS_PERCENTAGE;
@@ -109,14 +117,14 @@ namespace PortalEquador.Util.Report
             ws.Cells[row, baseColumn, row, tempColumn].Merge = true;
             baseColumn = tempColumn + 1;
 
-            ws.Cells[row, baseColumn].Value = daysOfMonth[0].ToString("dd-MMMM-yy");
+            ws.Cells[row, baseColumn].Value = daysOfMonth[0].ToString(TimeUtil.dd_MMM_yyyy);
             ws.Cells[row, baseColumn].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             ws.Cells[row, baseColumn].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             tempColumn = baseColumn + 2;
             ws.Cells[row, baseColumn, row, tempColumn].Merge = true;
             baseColumn = tempColumn + 1;
 
-            ws.Cells[row, baseColumn].Value = daysOfMonth.Last().ToString("dd-MMMM-yy");
+            ws.Cells[row, baseColumn].Value = daysOfMonth.Last().ToString(TimeUtil.dd_MMM_yyyy);
             ws.Cells[row, baseColumn].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             ws.Cells[row, baseColumn].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             tempColumn = baseColumn + 2;
@@ -135,6 +143,7 @@ namespace PortalEquador.Util.Report
             ws.Cells[row, baseColumn].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             tempColumn = baseColumn + 4;
             ws.Cells[row, baseColumn, row, tempColumn].Merge = true;
+            ws.Cells[row, baseColumn].Style.WrapText = true;
             baseColumn = tempColumn + 1;
 
 
@@ -143,6 +152,7 @@ namespace PortalEquador.Util.Report
             ws.Cells[row, baseColumn].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             tempColumn = baseColumn + (daysOfMonth.Count - (baseColumn - 1));
             ws.Cells[row, baseColumn, row, tempColumn].Merge = true;
+            ws.Cells[row, baseColumn].Style.WrapText = true;
 
         }
 

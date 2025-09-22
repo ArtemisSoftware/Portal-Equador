@@ -22,5 +22,8 @@ namespace PortalEquador.Domain.Report.ViewModels.AlchoolTest
         public int ContractId { get; set; }
 
         public SelectList? Contracts { get; set; }
+
+        public List<int> ContractIds { get; set; } = new List<int>();
+
     }
 }

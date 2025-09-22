@@ -29,7 +29,7 @@ namespace PortalEquador.Data.Curriculum.Repository
                         join ctc in
                             (from contract in context.ContractEntity
                              where contract.PersonalInformationId == id
-                             orderby contract.Id descending
+                             orderby contract.DateOfContract descending
                              select contract).Take(1)
                             .Select(grouped => new
                             {
@@ -173,7 +173,7 @@ namespace PortalEquador.Data.Curriculum.Repository
 
                         join contract in (
                             from c in context.ContractEntity
-                            orderby c.Id descending
+                            orderby c.DateOfContract descending
                             select new
                             {
                                 c.Id,

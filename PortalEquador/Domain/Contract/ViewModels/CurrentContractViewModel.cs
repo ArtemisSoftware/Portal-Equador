@@ -18,6 +18,8 @@ namespace PortalEquador.Domain.Contract.ViewModels
         public required int? ContractId { get; set; }
         public required string? ContractDescription { get; set; }
 
+        public string? ContractName { get; set; }
+
         public int ContractStateDescription()
         {
             if (ContractId == null)

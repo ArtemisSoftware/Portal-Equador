@@ -39,6 +39,6 @@ namespace PortalEquador.Domain.DisciplinaryNotification.ViewModels
         public GroupItemViewModel? AlcoolTestResult { get; set; }
 
 
-        public string PicturePath => ImagesUtil.GetFilePath(PersonaInformationId, Notification.Id, Extension + "?v=123456");
+        public string PicturePath => ImagesUtil.GetFilePath(PersonaInformationId, Notification.Id, Extension, true);
     }
 }
