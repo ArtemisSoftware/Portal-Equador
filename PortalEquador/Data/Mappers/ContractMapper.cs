@@ -5,12 +5,14 @@ using PortalEquador.Data.DisciplinaryNotification.Entity;
 using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.MedicalExam.Entity;
 using PortalEquador.Data.Trainning.Entity;
+using PortalEquador.Data.Uniforms.Entities;
 using PortalEquador.Domain.Accident.ViewModels;
 using PortalEquador.Domain.Contract.ViewModels;
 using PortalEquador.Domain.DisciplinaryNotification.ViewModels;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.MedicalExam.ViewModels;
 using PortalEquador.Domain.Trainning.ViewModels;
+using PortalEquador.Domain.Uniforms.ViewModels;
 
 namespace PortalEquador.Data.Mappers
 {
@@ -200,6 +202,15 @@ namespace PortalEquador.Data.Mappers
                         ? src.Date.Value.Date + (src.Time ?? TimeSpan.Zero)
                         : DateTime.MinValue   // or make AccidentEntity.Date nullable if you want
                 ));
+
+            CreateMap<UniformEntity, UniformViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ReverseMap();
+
+            CreateMap<WorkerUniformEntity, WorkerUniformViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ReverseMap();
         }
     }
 }

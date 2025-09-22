@@ -104,6 +104,10 @@
             public const string PROVISIONAL_DRIVERS_LICENCE = "Verbete";
             public const string PERIOD = "Periodo";
 
+            // Q
+            public const string QUANTITY = "Quantidade";
+
+
             //R
             public const string ROLE = "Tipo de administrador";
             public const string REASON_TO_BE_FIRED = "Razão da dispensa";
@@ -117,6 +121,8 @@
             public const string SURNAME = "Apelido";
             public const string STATE_OF_HIRED = "Estado da contratação";
             public const string STEP = "Intervalo";
+            public const string SIZE_IS_NUMERIC = "Medida numérica?";
+            public const string SIZE = "Medida";
 
             //  T
             public const string TELEPHONE = "Telefone";
@@ -125,6 +131,9 @@
             public const string TRAINNING_NATURE = "Natureza da formação";
             public const string TOTAL_TESTS = "Total Testes";
             public const string TOTAL_TESTS_PERCENTAGE = "%T/D";
+
+            // U
+            public const string UNIFORM = "Uniforme";
 
             //  V
             public const string VEHICLE = "Veículo";

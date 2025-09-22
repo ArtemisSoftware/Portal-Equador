@@ -15,7 +15,7 @@ namespace PortalEquador.Data.Uniforms.Entities
         public int UniformId { get; set; }
 
         [ForeignKey("UniformId")]
-        public GroupItemEntity UniformGroupItemEntity { get; set; }
+        public UniformEntity UniformItemEntity { get; set; }
 
 
         public int Quantity { get; set; }
