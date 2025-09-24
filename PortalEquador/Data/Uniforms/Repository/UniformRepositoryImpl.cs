@@ -22,20 +22,16 @@ namespace PortalEquador.Data.Uniforms.Repository
     {
         public async Task<List<UniformViewModel>> GetAll()
         {
-            throw new NotImplementedException();
-            /*
             var result = await context.UniformEntity
                 .Include(item => item.ApplicationUserEntity)
+                .OrderBy(item => item.Description)
                 .ToListAsync();
 
             return mapper.Map<List<UniformViewModel>>(result);
-            */
         }
 
-        public Task Save(UniformViewModel model)
+        public async Task Save(UniformViewModel model)
         {
-            throw new NotImplementedException();
-            /*
             var entity = mapper.Map<UniformEntity>(model);
             entity.EditorId = GetCurrentUserId();
 
@@ -48,14 +44,24 @@ namespace PortalEquador.Data.Uniforms.Repository
                 entity.DateModified = DateTime.UtcNow;
                 await UpdateAsync(entity);
             }
-            */
+            
         }
 
-        public Task<bool> UniformExists(string description)
+        public async Task<bool> UniformExists(string description)
         {
-            throw new NotImplementedException();
-            //--return await context.UniformEntity.AnyAsync(item => item.Description == description);
+            return await context.UniformEntity.AnyAsync(item => item.Description == description);
         }
+
+        public async Task<UniformViewModel?> GetUniform(int id)
+        {
+            var result = await context.UniformEntity
+                .Include(item => item.ApplicationUserEntity)
+                .Where(item => item.Id == id)
+                .FirstOrDefaultAsync();
+
+            return mapper.Map<UniformViewModel>(result);
+        }
+
 
         public async Task UpdateState(int id, bool active)
         {

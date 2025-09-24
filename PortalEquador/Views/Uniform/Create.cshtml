@@ -1,0 +1,56 @@
+﻿@model PortalEquador.Domain.Uniforms.ViewModels.UniformViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<br />
+<h1>Criar Novo Item</h1>
+<h4>Farda</h4>
+<hr />
+<br />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <br />
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="isSizeNumeric" /> @Html.DisplayNameFor(model => model.isSizeNumeric)
+                </label>
+            </div>
+            <br />
+
+            <div class="mb-3">
+                <label asp-for="Observation" class="control-label"></label>
+                <textarea asp-for="Observation" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Observation" class="text-danger"></span>
+            </div>
+           
+            @if (Model != null)
+            {
+                <div class="form-group">
+                    <div class="alert alert-danger" role="alert">
+                        <span asp-validation-for="Error"></span>
+                    </div>
+                </div>
+            }
+
+            <br />
+            <br />
+
+            <div class="form-group">
+                <a asp-action="Index" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <input type="submit" value="Criar registo" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+

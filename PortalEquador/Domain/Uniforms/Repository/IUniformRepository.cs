@@ -12,6 +12,8 @@ namespace PortalEquador.Domain.Uniforms.Repository
         Task<List<UniformViewModel>> GetAll();
 
         Task Save(UniformViewModel model);
+
+        Task<UniformViewModel?> GetUniform(int id);
         Task UpdateState(int id, bool active);
 
         Task<bool> UniformExists(string description);

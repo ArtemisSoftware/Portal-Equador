@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Uniforms\" />
     <Folder Include="wwwroot\images\curriculum\" />
     <Folder Include="wwwroot\images\driverslicence\" />
   </ItemGroup>

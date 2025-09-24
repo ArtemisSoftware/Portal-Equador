@@ -203,6 +203,7 @@
             public const string EXISTING_GROUP_DESCRIPTION = "A descrição já existe para o grupo especificado";
             public const string EXISTING_IDENTITY_CARD = "O numero do bilhete de identidade já se encontra registado";
             public const string EXISTING_DOCUMENT = "O tipo de documento já se encontra registado";
+            public const string EXISTING_DESCRIPTION = "A descrição já existe";
             public const string MANDATORY_FILE = "A escolha de um ficheiro é obrigatória";
             public const string MANDATORY_CONTRACT_SELECTION = "A escolha de um contracto é obrigatória";
             public const string EXISTING_REGISTER = "O item já se encontra registado";
