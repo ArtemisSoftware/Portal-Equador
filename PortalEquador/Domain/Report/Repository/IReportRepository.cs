@@ -8,6 +8,7 @@ using PortalEquador.Domain.Report.ViewModels.Education;
 using PortalEquador.Domain.Report.ViewModels.MedicalExam;
 using PortalEquador.Domain.Report.ViewModels.Profession.Competence;
 using PortalEquador.Domain.Report.ViewModels.Trainning;
+using PortalEquador.Domain.Report.ViewModels.Uniforms;
 
 namespace PortalEquador.Domain.Report.Repository
 {
@@ -36,5 +37,8 @@ namespace PortalEquador.Domain.Report.Repository
 
         Task<AccidentReportFormViewModel> GetAccidentsForm();
         Task<AccidentReportViewModel> GetAccidentReport(string description, List<int> accessibleContracts);
+
+        Task<UniformsReportFormViewModel> GetUniformsForm();
+        Task<UniformsReportViewModel> GetUniformsReport(string description, List<int> accessibleContracts);
     }
 }

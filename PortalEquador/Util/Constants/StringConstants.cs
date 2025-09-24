@@ -190,6 +190,9 @@
             public const int ALL_WORK_EXPERIENCE_ID = -1;
 
             public const string ALL_EDUCATION = "Todas as habilitações académicas";
+
+            public const string ALL_UNIFORMS = "Todas os uniformes";
+            public const int ALL_UNIFORMS_ID = -1;
         }
 
         public static class Error

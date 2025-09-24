@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.MedicalExam.Entity;
 using PortalEquador.Data.Uniforms.Entities;
+using PortalEquador.Domain.Languages.ViewModels;
 using PortalEquador.Domain.MedicalExam.ViewModels;
 using PortalEquador.Domain.Trainning.ViewModels;
 using PortalEquador.Domain.Uniforms.Repository;
@@ -37,11 +40,29 @@ namespace PortalEquador.Data.Uniforms.Repository
         public Task<WorkerUniformCreateViewModel> GetCreateModel(int personalInformationId, string fullName)
         {
             throw new NotImplementedException();
+            /*
+            var uniforms = GetUniforms(OrderType.Alphabetic);
+
+            var model = new WorkerUniformCreateViewModel
+            {
+                PersonaInformationId = personalInformationId,
+                FullName = fullName,
+                Uniforms = uniforms,
+            };
+
+            return model;
+            */
         }
 
         public Task<WorkerUniformCreateViewModel> GetCreateModel(TrainningCreateViewModel model)
         {
             throw new NotImplementedException();
+            /*
+            var uniforms = GetUniforms(OrderType.Alphabetic);
+
+            model.Uniforms = uniforms;
+            return model;
+            */
         }
 
         public Task<int> Save(WorkerUniformCreateViewModel model)
@@ -64,5 +85,6 @@ namespace PortalEquador.Data.Uniforms.Repository
             }
             */
         }
+
     }
 }
