@@ -1,7 +1,5 @@
 ﻿using OfficeOpenXml.Style;
 using OfficeOpenXml;
-using PortalEquador.Domain.GroupTypes.ViewModels;
-using PortalEquador.Domain.Report.ViewModels.Accident;
 using PortalEquador.Util.Constants;
 using PortalEquador.Domain.Report.ViewModels.Uniforms;
 using PortalEquador.Domain.Uniforms.ViewModels;
