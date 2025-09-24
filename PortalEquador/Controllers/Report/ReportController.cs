@@ -10,6 +10,7 @@ using PortalEquador.Domain.Report.ViewModels.Education;
 using PortalEquador.Domain.Report.ViewModels.MedicalExam;
 using PortalEquador.Domain.Report.ViewModels.Profession.Competence;
 using PortalEquador.Domain.Report.ViewModels.Trainning;
+using PortalEquador.Domain.Report.ViewModels.Uniforms;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 using PortalEquador.Util.Report;
@@ -25,7 +26,9 @@ namespace PortalEquador.Controllers.Report
         GetMedicalExamReportUseCase getMedicalExamReportUseCase,
         GetProfessionalExperienceReportUseCase getProfessionalExperienceReportUseCase,
         GetTrainningReportUseCase getTrainningReportUseCase,
-        GetAccidentReportUseCase getAccidentReportUseCase
+        GetAccidentReportUseCase getAccidentReportUseCase,
+        GetUniformsReportUseCase getUniformsReportUseCase,
+        GetUniformsReportFormUseCase getUniformsReportFormUseCase
         ) : Controller
     {
 
@@ -312,6 +315,41 @@ namespace PortalEquador.Controllers.Report
         {
             var result = await getAccidentReportUseCase.Invoke(contractId);
             var report = AccidentReport.GenerateReport(result);
+            return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
+        }
+
+        /*--------------Uniforms---------------*/
+
+        public async Task<IActionResult> UniformsReportForm(string? error)
+        {
+            var model = await getUniformsReportFormUseCase.Invoke();
+            if (error != null)
+            {
+                model.Error = error;
+            }
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UniformsReportForm(UniformsReportFormViewModel viewmodel)
+        {
+            try
+            {
+                return await ExportUniformsReportInExcel(viewmodel.ContractId);
+            }
+            catch (Exception ex)
+            {
+                return await UniformsReportForm(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        public async Task<FileResult> ExportUniformsReportInExcel(int contractId)
+        {
+            var result = await getUniformsReportUseCase.Invoke(contractId);
+            var report = UniformsReport.GenerateReport(result);
             return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
         }
 

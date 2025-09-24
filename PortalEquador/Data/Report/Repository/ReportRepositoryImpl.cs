@@ -851,39 +851,40 @@ namespace PortalEquador.Data.Report.Repository
             /*
             var latestContractIds = GetLatestContracts();
 
-            var query = (
+            var query =
                 from contract in context.ContractEntity
                 where latestContractIds.Contains(contract.Id)
                       && contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED
                       && accessibleContracts.Contains((int)contract.ContractId)
 
                 let personal = contract.PersonalInformationEntity
+                orderby personal.FirstName
+
+                join workStationItem in context.GroupItemEntity
+                        on contract.ContractId equals workStationItem.Id into workStationItemGroup
+                        from workStationItem in workStationItemGroup.DefaultIfEmpty()
 
                 join workerUniform in context.WorkerUniformEntity
                     on personal.Id equals workerUniform.PersonalInformationId into workerUniformsGroup
+                from workerUniform in workerUniformsGroup.DefaultIfEmpty()
 
-                select new UniformResultViewModel
+                join uniform in context.UniformEntity
+                    on workerUniform.UniformId equals uniform.Id into uniformGroup
+                from uniform in uniformGroup.DefaultIfEmpty()
+
+                select new UniformsReportItemViewModel
                 {
                     FullName = personal.FirstName + " " + personal.LastName,
-                    WorkStation = description,
-                    Uniforms = workerUniformsGroup
-                        .Select(wu => new UniformItemResultViewModel
-                        {
-                            Id = wu.UniformId,
-                            Description = wu.UniformItemEntity.Description,
-                            /*
-                            wu.Quantity,
-                            wu.Size,
-                            wu.Date,
-                            wu.Observation
-                            */
-                        })
-                        .ToList()
-                }
-            )
-            .OrderBy(x => x.FullName);
+                    WorkStation = workStationItem.Description,
+                    UniformId = uniform.Id,
+                    Uniform = uniform.Description,
+                    Quantity = workerUniform.Quantity,
+                    Size = workerUniform.Size,
+                    Date = workerUniform.Date,
+                    //Observation = workerUniform.Observation
+                };
 
-            var result = await query.ToListAsync();
+            var result = await query.OrderBy(x => x.FullName).ToListAsync();
 
             return new UniformsReportViewModel
             {

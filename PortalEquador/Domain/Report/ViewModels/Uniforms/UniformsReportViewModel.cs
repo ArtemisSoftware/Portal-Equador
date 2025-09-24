@@ -6,7 +6,7 @@ namespace PortalEquador.Domain.Report.ViewModels.Uniforms
 {
     public class UniformsReportViewModel : ViewModel
     {
-        public List<UniformResultViewModel> report { get; set; } = new List<UniformResultViewModel>();
+        public List<UniformsReportItemViewModel> Report { get; set; } = new List<UniformsReportItemViewModel>();
         public DateTime EmissionDate { get; set; } = DateTime.Now;
 
         public string FileName { get; set; } = "relatorio_uniformes";

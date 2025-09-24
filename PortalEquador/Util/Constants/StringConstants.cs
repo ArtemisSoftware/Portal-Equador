@@ -82,6 +82,7 @@
             public const string MAJOR_UNVAILABLE = "Curso não disponível";
             public const string MATERNAL_LANGUANGE = "Língua materna";
             public const string MECHANIC = "Mecânico";
+            public const string MEASURE = "Medida";
             public const string MODEL = "Modelo";
             public const string MODIFIED_BY = "Alterado por";
             public const string MONTHS = "Meses";
