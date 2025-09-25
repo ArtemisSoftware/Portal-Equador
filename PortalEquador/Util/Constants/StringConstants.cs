@@ -219,6 +219,7 @@
             public const string INVALID_IMAGE_EXTENSION = "A imagem possui uma extensão inválida";
             public const string EXISTING_ACCIDENT_NUMBER = "A número de acidente já se encontra registado";
             public const string NO_ACCIDENT_CAUSES = "Não foram selecionadas causas para o acidente";
+            public const string NON_EXISTING_UNIFORM = "A farda não existe";
         }
 
         public static class Dates

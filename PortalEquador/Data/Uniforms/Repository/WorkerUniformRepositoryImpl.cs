@@ -10,6 +10,7 @@ using PortalEquador.Domain.MedicalExam.ViewModels;
 using PortalEquador.Domain.Trainning.ViewModels;
 using PortalEquador.Domain.Uniforms.Repository;
 using PortalEquador.Domain.Uniforms.ViewModels;
+using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Data.Uniforms.Repository
 {
@@ -21,10 +22,8 @@ namespace PortalEquador.Data.Uniforms.Repository
     )
         : GenericRepository<WorkerUniformEntity>(context, httpContextAccessor), IWorkerUniformRepository
     {
-        public Task<List<WorkerUniformViewModel>> GetAll(int personalInformationId)
+        public async Task<List<WorkerUniformViewModel>> GetAll(int personalInformationId)
         {
-            throw new NotImplementedException();
-            /*
             var result = await context.WorkerUniformEntity
                 .Include(d => d.UniformItemEntity)
                 .Include(d => d.PersonalInformationEntity)
@@ -34,41 +33,31 @@ namespace PortalEquador.Data.Uniforms.Repository
 
             var models = mapper.Map<List<WorkerUniformViewModel>>(result);
             return models;
-            */
         }
 
-        public Task<WorkerUniformCreateViewModel> GetCreateModel(int personalInformationId, string fullName)
+        public async Task<WorkerUniformCreateViewModel> GetCreateModel(int personalInformationId, string fullName)
         {
-            throw new NotImplementedException();
-            /*
-            var uniforms = GetUniforms(OrderType.Alphabetic);
+            var labelSizes = GroupItems(Groups.CLOTHES_SIZES, OrderType.Alphabetic);
 
             var model = new WorkerUniformCreateViewModel
             {
+                LabelSizes = labelSizes,
                 PersonaInformationId = personalInformationId,
                 FullName = fullName,
-                Uniforms = uniforms,
             };
 
             return model;
-            */
         }
 
-        public Task<WorkerUniformCreateViewModel> GetCreateModel(TrainningCreateViewModel model)
+        public async Task<WorkerUniformCreateViewModel> GetCreateModel(WorkerUniformCreateViewModel model)
         {
-            throw new NotImplementedException();
-            /*
-            var uniforms = GetUniforms(OrderType.Alphabetic);
-
-            model.Uniforms = uniforms;
+            var labelSizes = GroupItems(Groups.CLOTHES_SIZES, OrderType.Alphabetic);
+            model.LabelSizes = labelSizes;
             return model;
-            */
         }
 
-        public Task<int> Save(WorkerUniformCreateViewModel model)
+        public async Task<int> Save(WorkerUniformCreateViewModel model)
         {
-            throw new NotImplementedException();
-            /*
             var entity = mapper.Map<WorkerUniformEntity>(model);
             entity.EditorId = GetCurrentUserId();
 
@@ -83,7 +72,6 @@ namespace PortalEquador.Data.Uniforms.Repository
                 await UpdateAsync(entity);
                 return entity.Id;
             }
-            */
         }
 
     }

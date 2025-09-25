@@ -125,9 +125,9 @@
 
                     @if (Model.TotalUniforms != 0)
                     {
-                        <a asp-controller="WorkerUniforms" asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                        <a asp-controller="WorkerUniform" asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
                     }
-                    <a asp-controller="WorkerUniforms" asp-action="Create" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+                    <a asp-controller="WorkerUniform" asp-action="Create" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
 
                 </div>
             </div>

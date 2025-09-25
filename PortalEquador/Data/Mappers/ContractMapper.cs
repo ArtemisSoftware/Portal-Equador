@@ -103,13 +103,9 @@ namespace PortalEquador.Data.Mappers
 
 
             CreateMap<ContractEntity, ContractViewModel>()
-                 //.ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
-                 .ForMember(dest => dest.ContractState, opt => opt.MapFrom(src => src.ContractStateGroupItemEntity))
+                  .ForMember(dest => dest.ContractState, opt => opt.MapFrom(src => src.ContractStateGroupItemEntity))
                 .ForMember(dest => dest.ResignationReasons, opt => opt.MapFrom(src => src.ResignationReasonGroupItemEntity))
                 .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity))
-                //.ForMember(dest => dest.PersonalInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
-                //                .ForMember(dest => dest.ContractStatesId, opt => opt.MapFrom(src => src.ContractStateId))
-                //                .ForMember(dest => dest.ResignationReasonsId, opt => opt.MapFrom(src => src.ResignationReasonId))
                 .ReverseMap();
 
             CreateMap<ContractEntity, CurrentContractViewModel>()
@@ -205,11 +201,22 @@ namespace PortalEquador.Data.Mappers
 
             CreateMap<UniformEntity, UniformViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.isSizeNumeric, opt => opt.MapFrom(src => src.isSizeNumeric))
                 .ReverseMap();
+
+            CreateMap<WorkerUniformEntity, WorkerUniformCreateViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ReverseMap()
+                .ForMember(dest => dest.Size, opt => opt.MapFrom(src =>
+                    src.IsNumericSize
+                        ? src.Size : src.LabelSizeId.ToString()
+                ));
 
             CreateMap<WorkerUniformEntity, WorkerUniformViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.Uniform, opt => opt.MapFrom(src => src.UniformItemEntity))
                 .ReverseMap();
         }
     }

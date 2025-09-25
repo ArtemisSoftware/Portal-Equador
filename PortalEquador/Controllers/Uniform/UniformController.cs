@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using PortalEquador.Data;
-using PortalEquador.Data.Uniforms.Entities;
-using PortalEquador.Domain.GroupTypes.Repository;
-using PortalEquador.Domain.GroupTypes.ViewModels;
+﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.Uniforms.Repository;
 using PortalEquador.Domain.Uniforms.ViewModels;
 using PortalEquador.Util.Constants;

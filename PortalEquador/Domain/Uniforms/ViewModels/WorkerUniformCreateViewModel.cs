@@ -25,15 +25,14 @@ namespace PortalEquador.Domain.Uniforms.ViewModels
         public SelectList? Uniforms { get; set; }
 
 
-        [Display(Name = StringConstants.Display.UNIFORM)]
+        [Display(Name = StringConstants.Display.MEASURE)]
         [Required]
-        public int LabelSizeId { get; set; }
+        public int? LabelSizeId { get; set; }
 
         public SelectList? LabelSizes { get; set; }
 
-        [Display(Name = StringConstants.Display.UNIFORM)]
-        [Required]
-        public string Size { get; set; }
+        [Display(Name = StringConstants.Display.MEASURE)]
+        public string? Size { get; set; }
 
 
         [Display(Name = StringConstants.Display.QUANTITY)]
@@ -44,6 +43,8 @@ namespace PortalEquador.Domain.Uniforms.ViewModels
 
         [Display(Name = StringConstants.Display.OBSERVATION)]
         public string? Observation { get; set; }
+
+        public bool IsNumericSize { get; set; } = false;
 
     }
 }

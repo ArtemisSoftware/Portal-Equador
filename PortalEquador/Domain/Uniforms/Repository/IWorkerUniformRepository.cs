@@ -10,7 +10,7 @@ namespace PortalEquador.Domain.Uniforms.Repository
     {
         Task<List<WorkerUniformViewModel>> GetAll(int personalInformationId);
         Task<WorkerUniformCreateViewModel> GetCreateModel(int personalInformationId, string fullName);
-        Task<WorkerUniformCreateViewModel> GetCreateModel(TrainningCreateViewModel model);
+        Task<WorkerUniformCreateViewModel> GetCreateModel(WorkerUniformCreateViewModel model);
         Task<int> Save(WorkerUniformCreateViewModel model);
         //Task<TrainningViewModel> GetDetail(int id);
     }

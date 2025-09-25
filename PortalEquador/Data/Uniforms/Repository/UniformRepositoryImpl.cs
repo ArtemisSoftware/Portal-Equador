@@ -85,10 +85,8 @@ namespace PortalEquador.Data.Uniforms.Repository
             bool addExtraOptionOnTop = false
             )
         {
-            throw new NotImplementedException();
-            /*
             IQueryable<UniformEntity> result = context.UniformEntity.Where(x =>
-                & x.Active == true
+                 x.Active == true
              );
 
             switch (orderType)
@@ -125,10 +123,8 @@ namespace PortalEquador.Data.Uniforms.Repository
                 {
                     items.Add(item);
                 }
-
-
-                return (new SelectList(result, "Id", "Description"));
-            */
+            }
+            return (new SelectList(result, "Id", "Description"));
         }
 
         public Task<List<UniformViewModel>> GetAllUniforms(OrderType orderType = OrderType.No_order)
