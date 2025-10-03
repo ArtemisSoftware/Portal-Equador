@@ -65,8 +65,6 @@ namespace PortalEquador.Data.Uniforms.Repository
 
         public async Task UpdateState(int id, bool active)
         {
-            throw new NotImplementedException();
-            /*
             UniformEntity? entity = await GetAsync(id);
 
             if (entity != null)
@@ -76,7 +74,6 @@ namespace PortalEquador.Data.Uniforms.Repository
                 entity.DateModified = DateTime.UtcNow;
                 await UpdateAsync(entity);
             }
-            */
         }
 
         public SelectList GetUniforms(
@@ -123,14 +120,15 @@ namespace PortalEquador.Data.Uniforms.Repository
                 {
                     items.Add(item);
                 }
+
+                return new SelectList(items, "Id", "Description");
             }
             return (new SelectList(result, "Id", "Description"));
         }
 
-        public Task<List<UniformViewModel>> GetAllUniforms(OrderType orderType = OrderType.No_order)
+        public async Task<List<UniformViewModel>> GetAllUniforms(OrderType orderType = OrderType.No_order)
         {
-            throw new NotImplementedException();
-            /*
+
             var result = context.UniformEntity.Where(x => x.Active == true);
             switch (orderType)
             {
@@ -146,9 +144,7 @@ namespace PortalEquador.Data.Uniforms.Repository
             }
 
             var model = await result.ToListAsync();
-            var result = mapper.Map<UniformViewModel>(model);
-            return result;
-            */
+            return mapper.Map<List<UniformViewModel>>(model);
         }
     }
 }

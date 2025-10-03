@@ -12,6 +12,8 @@ namespace PortalEquador.Domain.Uniforms.Repository
         Task<WorkerUniformCreateViewModel> GetCreateModel(int personalInformationId, string fullName);
         Task<WorkerUniformCreateViewModel> GetCreateModel(WorkerUniformCreateViewModel model);
         Task<int> Save(WorkerUniformCreateViewModel model);
-        //Task<TrainningViewModel> GetDetail(int id);
+        Task<int> Save(WorkerUniformEditViewModel model);
+        Task<WorkerUniformEditViewModel> GetEdit(int id);
+        Task<WorkerUniformEditViewModel> RecoverForEdit(WorkerUniformEditViewModel model);
     }
 }

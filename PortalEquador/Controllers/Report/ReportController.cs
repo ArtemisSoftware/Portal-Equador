@@ -320,7 +320,7 @@ namespace PortalEquador.Controllers.Report
 
         /*--------------Uniforms---------------*/
 
-        public async Task<IActionResult> UniformsReportForm(string? error)
+        public async Task<IActionResult> UniformReportForm(string? error)
         {
             var model = await getUniformsReportFormUseCase.Invoke();
             if (error != null)
@@ -333,20 +333,20 @@ namespace PortalEquador.Controllers.Report
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UniformsReportForm(UniformsReportFormViewModel viewmodel)
+        public async Task<IActionResult> UniformReportForm(UniformsReportFormViewModel viewmodel)
         {
             try
             {
-                return await ExportUniformsReportInExcel(viewmodel.ContractId);
+                return await ExportUniformReportInExcel(viewmodel.ContractId);
             }
             catch (Exception ex)
             {
-                return await UniformsReportForm(ex.Message.ToString());
+                return await UniformReportForm(ex.Message.ToString());
             }
         }
 
         [HttpGet]
-        public async Task<FileResult> ExportUniformsReportInExcel(int contractId)
+        public async Task<FileResult> ExportUniformReportInExcel(int contractId)
         {
             var result = await getUniformsReportUseCase.Invoke(contractId);
             var report = UniformsReport.GenerateReport(result);

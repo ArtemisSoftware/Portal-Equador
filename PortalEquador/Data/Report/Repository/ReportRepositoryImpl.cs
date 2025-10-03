@@ -847,42 +847,47 @@ namespace PortalEquador.Data.Report.Repository
 
         public async Task<UniformsReportViewModel> GetUniformsReport(string description, List<int> accessibleContracts)
         {
-            throw new NotImplementedException();
-            /*
+
             var latestContractIds = GetLatestContracts();
 
-            var query =
-                from contract in context.ContractEntity
-                where latestContractIds.Contains(contract.Id)
-                      && contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED
-                      && accessibleContracts.Contains((int)contract.ContractId)
+            var query = from contract in context.ContractEntity
+                        where latestContractIds.Contains(contract.Id)
+                        where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED && accessibleContracts.Contains((int)contract.ContractId)
+                        let personal = contract.PersonalInformationEntity
+                        orderby personal.FirstName 
+                        
+                        // WorkStation
+                        join workStationItem in context.GroupItemEntity 
+                        on contract.ContractId equals workStationItem.Id into workStationItemGroup 
+                        from workStationItem in workStationItemGroup.DefaultIfEmpty() 
+                        
+                        // UNIFORMS (one line per uniform)
+                        join uniform in context.WorkerUniformEntity
+                        on personal.Id equals uniform.PersonalInformationId 
+                        
+                        join uniformItem in context.UniformEntity 
+                        on uniform.UniformId equals uniformItem.Id
 
-                let personal = contract.PersonalInformationEntity
-                orderby personal.FirstName
+                        join sizeItem in context.GroupItemEntity 
+                        on new { Size = uniform.Size, GroupId = Groups.CLOTHES_SIZES } 
+                            equals new { Size = sizeItem.Id.ToString(), GroupId = sizeItem.GroupEntityId } 
+                            into sizeItemGroup
+                        from sizeItem in sizeItemGroup.DefaultIfEmpty()
 
-                join workStationItem in context.GroupItemEntity
-                        on contract.ContractId equals workStationItem.Id into workStationItemGroup
-                        from workStationItem in workStationItemGroup.DefaultIfEmpty()
+                        select new UniformsReportItemViewModel
+                        {
+                            FullName = personal.FirstName + " " + personal.LastName,
 
-                join workerUniform in context.WorkerUniformEntity
-                    on personal.Id equals workerUniform.PersonalInformationId into workerUniformsGroup
-                from workerUniform in workerUniformsGroup.DefaultIfEmpty()
+                            WorkStation = workStationItem.Description,
 
-                join uniform in context.UniformEntity
-                    on workerUniform.UniformId equals uniform.Id into uniformGroup
-                from uniform in uniformGroup.DefaultIfEmpty()
+                            Quantity = uniform.Quantity,
+                            Size = sizeItem.Description ?? uniform.Size,
+                            Date = uniform.Date,
 
-                select new UniformsReportItemViewModel
-                {
-                    FullName = personal.FirstName + " " + personal.LastName,
-                    WorkStation = workStationItem.Description,
-                    UniformId = uniform.Id,
-                    Uniform = uniform.Description,
-                    Quantity = workerUniform.Quantity,
-                    Size = workerUniform.Size,
-                    Date = workerUniform.Date,
-                    //Observation = workerUniform.Observation
-                };
+                            UniformId = uniform.Id,
+                            Uniform = uniformItem.Description,
+                            //Observation = workerUniform.Observation
+                        };
 
             var result = await query.OrderBy(x => x.FullName).ToListAsync();
 
@@ -890,7 +895,6 @@ namespace PortalEquador.Data.Report.Repository
             {
                 Report = result,
             };
-            */
         }
     }
 }

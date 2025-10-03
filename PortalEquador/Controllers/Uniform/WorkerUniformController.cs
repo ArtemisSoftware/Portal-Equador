@@ -1,19 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using PortalEquador.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Data.Generic;
-using PortalEquador.Data.Uniforms.Entities;
-using PortalEquador.Domain.Accident.UseCases;
-using PortalEquador.Domain.Accident.ViewModels;
-using PortalEquador.Domain.Generic;
-using PortalEquador.Domain.MechanicalWorkshop.Vehicle.UseCases;
-using PortalEquador.Domain.MedicalExam.UseCases;
-using PortalEquador.Domain.MedicalExam.ViewModels;
+using PortalEquador.Domain.Education.School.ViewModels;
 using PortalEquador.Domain.Uniforms.Repository;
 using PortalEquador.Domain.Uniforms.ViewModels;
 using PortalEquador.Util.Constants;
@@ -97,6 +84,55 @@ namespace PortalEquador.Controllers.Uniform
 
             return Json(sizeDetails);
         }
+
+
+
+
+        public async Task<IActionResult> Edit(int id, int identifier, string fullName)
+        {
+            ViewData[ViewBagConstants.PERSONAL_ID] = identifier;
+            ViewData[ViewBagConstants.FULL_NAME] = fullName;
+
+            var model = await repository.GetEdit(id);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(model);
+            }
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(WorkerUniformEditViewModel model)
+        {
+            ViewData[ViewBagConstants.PERSONAL_ID] = model.PersonaInformationId;
+            ViewData[ViewBagConstants.FULL_NAME] = model.FullName;
+
+            model = await repository.RecoverForEdit(model);
+
+            if (ModelState.IsValid && model.Uniform.isSizeNumeric && model.Size != null)
+            {
+                await repository.Save(model);
+                return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+            }
+            else if (ModelState.IsValid && model.Uniform.isSizeNumeric == false && model.LabelSizeId != null)
+            {
+                await repository.Save(model);
+                return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+            }
+            else
+            {
+                return View(model);
+            }
+        }
+
+
+
 
 
         /*

@@ -1,69 +1,104 @@
-﻿@model PortalEquador.Data.Uniforms.Entities.WorkerUniformEntity
+﻿@model PortalEquador.Domain.Uniforms.ViewModels.WorkerUniformEditViewModel
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>WorkerUniformEntity</h4>
+<h1>Editar Farda</h1>
+<h4>Para: @Model.FullName</h4>
 <hr />
+<br />
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="PersonalInformationId" class="control-label"></label>
-                <select asp-for="PersonalInformationId" class="form-control" asp-items="ViewBag.PersonalInformationId"></select>
-                <span asp-validation-for="PersonalInformationId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UniformId" class="control-label"></label>
-                <select asp-for="UniformId" class="form-control" asp-items="ViewBag.UniformId"></select>
-                <span asp-validation-for="UniformId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quantity" class="control-label"></label>
-                <input asp-for="Quantity" class="form-control" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Size" class="control-label"></label>
-                <input asp-for="Size" class="form-control" />
-                <span asp-validation-for="Size" class="text-danger"></span>
-            </div>
+
+            <input type="hidden" asp-for="PersonaInformationId" />
+            <input type="hidden" asp-for="FullName" />
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="DateCreated" />
+
+
+            <dl class="row" id="Major">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Uniform)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Uniform.Description)
+                </dd>
+            </dl>
+
             <div class="form-group">
                 <label asp-for="Date" class="control-label"></label>
                 <input asp-for="Date" class="form-control" />
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
+            <br />
+            
             <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" min="1" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <br />
+
+            @if (Model.Uniform.isSizeNumeric)
+            {
+                <div class="form-group">
+                    <label asp-for="Size" class="control-label"></label>
+                    <input asp-for="Size" class="form-control" min="1" />
+                    <span asp-validation-for="Size" class="text-danger"></span>
+                </div>
+            
+            } else
+            {
+                <div class="form-group">
+                    <label asp-for="LabelSizeId" class="control-label"></label>
+                    <select asp-for="LabelSizeId" class="form-select" asp-items="Model.LabelSizes"></select>
+                </div>
+               
+            }
+
+            <br />
+
+            <div class="mb-3">
                 <label asp-for="Observation" class="control-label"></label>
-                <input asp-for="Observation" class="form-control" />
+                <textarea asp-for="Observation" class="form-control" rows="3"></textarea>
                 <span asp-validation-for="Observation" class="text-danger"></span>
             </div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="EditorId" class="control-label"></label>
-                <select asp-for="EditorId" class="form-control" asp-items="ViewBag.EditorId"></select>
-                <span asp-validation-for="EditorId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateModified" class="control-label"></label>
-                <input asp-for="DateModified" class="form-control" />
-                <span asp-validation-for="DateModified" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            
+
+            @if (Model.Error != null)
+            {
+                <div class="form-group">
+                    <div class="alert alert-danger" role="alert">
+                        <span asp-validation-for="Error"></span>
+                    </div>
+                </div>
+            }
+
+            <br />
+            <div>
+                <a asp-action="Index" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <input type="submit" value="Guardar Alterações" class="btn btn-warning" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+        function MajorSelect() {
+
+            var response = document.getElementById('MajorNotDeclaredId').checked;
+            var major = document.getElementById('Major');
+            major.hidden = response;
+        }
+
+        window.onload = function () {
+            MajorSelect()
+        };
+    </script>
 }

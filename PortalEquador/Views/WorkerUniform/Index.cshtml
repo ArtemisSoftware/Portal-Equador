@@ -55,8 +55,9 @@
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+                    <!--
                     <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username"><i class="fas fa-trash-alt" title="Editar"></i></button>
-
+                    -->
                 </td>
             </tr>
         }
@@ -78,8 +79,8 @@
 
             $('.deleteBtn').click(function (e) {
                 swal({
-                    title: "Eliminar lingua",
-                    text: "Tem a certeza que pretende eliminar a lingua?",
+                    title: "Eliminar farda",
+                    text: "Tem a certeza que pretende eliminar a farda?",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true

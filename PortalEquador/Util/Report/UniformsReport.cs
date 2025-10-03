@@ -113,6 +113,7 @@ namespace PortalEquador.Util.Report
                 ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
+                ++row;
             }
         }
     }

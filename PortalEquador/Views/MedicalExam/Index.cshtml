@@ -83,7 +83,7 @@
 
             $('.table').DataTable();
 
-            $('.deleteBtn').click(function (e) {
+            $('.table').on('click', '.deleteBtn').click(function (e) {
                 swal({
                     title: "Eliminar o exame",
                     text: "Tem a certeza que pretende eliminar o exame?",
