@@ -5,12 +5,14 @@ using PortalEquador.Data.DisciplinaryNotification.Entity;
 using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.MedicalExam.Entity;
 using PortalEquador.Data.Trainning.Entity;
+using PortalEquador.Data.Uniforms.Entities;
 using PortalEquador.Domain.Accident.ViewModels;
 using PortalEquador.Domain.Contract.ViewModels;
 using PortalEquador.Domain.DisciplinaryNotification.ViewModels;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.MedicalExam.ViewModels;
 using PortalEquador.Domain.Trainning.ViewModels;
+using PortalEquador.Domain.Uniforms.ViewModels;
 
 namespace PortalEquador.Data.Mappers
 {
@@ -101,13 +103,9 @@ namespace PortalEquador.Data.Mappers
 
 
             CreateMap<ContractEntity, ContractViewModel>()
-                 //.ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
-                 .ForMember(dest => dest.ContractState, opt => opt.MapFrom(src => src.ContractStateGroupItemEntity))
+                  .ForMember(dest => dest.ContractState, opt => opt.MapFrom(src => src.ContractStateGroupItemEntity))
                 .ForMember(dest => dest.ResignationReasons, opt => opt.MapFrom(src => src.ResignationReasonGroupItemEntity))
                 .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity))
-                //.ForMember(dest => dest.PersonalInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
-                //                .ForMember(dest => dest.ContractStatesId, opt => opt.MapFrom(src => src.ContractStateId))
-                //                .ForMember(dest => dest.ResignationReasonsId, opt => opt.MapFrom(src => src.ResignationReasonId))
                 .ReverseMap();
 
             CreateMap<ContractEntity, CurrentContractViewModel>()
@@ -199,6 +197,45 @@ namespace PortalEquador.Data.Mappers
                     src.Date.HasValue
                         ? src.Date.Value.Date + (src.Time ?? TimeSpan.Zero)
                         : DateTime.MinValue   // or make AccidentEntity.Date nullable if you want
+                ));
+
+            CreateMap<UniformEntity, UniformViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.isSizeNumeric, opt => opt.MapFrom(src => src.isSizeNumeric))
+                .ReverseMap();
+
+            CreateMap<WorkerUniformEntity, WorkerUniformCreateViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ReverseMap()
+                .ForMember(dest => dest.Size, opt => opt.MapFrom(src =>
+                    src.IsNumericSize
+                        ? src.Size : src.LabelSizeId.ToString()
+                ));
+
+            CreateMap<WorkerUniformEntity, WorkerUniformViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.Uniform, opt => opt.MapFrom(src => src.UniformItemEntity))
+                .ReverseMap();
+            
+            CreateMap<WorkerUniformEditViewModel, WorkerUniformCreateViewModel>()
+                  .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.Editor))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonaInformationId))
+                .ForMember(dest => dest.UniformId, opt => opt.MapFrom(src => src.Uniform.Id))
+                .ReverseMap();
+            
+
+            CreateMap<WorkerUniformEntity, WorkerUniformEditViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => (src.PersonalInformationEntity.FirstName + " " + src.PersonalInformationEntity.LastName)))
+               .ForMember(dest => dest.Uniform, opt => opt.MapFrom(src => src.UniformItemEntity))
+                .ReverseMap()
+                .ForMember(dest => dest.Size, opt => opt.MapFrom(src =>
+                    src.Uniform.isSizeNumeric
+                        ? src.Size : src.LabelSizeId.ToString()
                 ));
         }
     }

@@ -22,6 +22,7 @@ using PortalEquador.Data.Profession.Competence.Repository;
 using PortalEquador.Data.Profession.Experience.Repository;
 using PortalEquador.Data.Report.Repository;
 using PortalEquador.Data.Trainning.Repository;
+using PortalEquador.Data.Uniforms.Repository;
 using PortalEquador.Domain.Accident.Repository;
 using PortalEquador.Domain.Accident.UseCases;
 using PortalEquador.Domain.Contract.Repository;
@@ -52,6 +53,7 @@ using PortalEquador.Domain.Report.Repository;
 using PortalEquador.Domain.Report.UseCases;
 using PortalEquador.Domain.Trainning.Repository;
 using PortalEquador.Domain.Trainning.UseCases;
+using PortalEquador.Domain.Uniforms.Repository;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -129,11 +131,16 @@ builder.Services.AddScoped<GetMedicalExamReportUseCase>();
 builder.Services.AddScoped<GetProfessionalExperienceReportUseCase>();
 builder.Services.AddScoped<GetTrainningReportUseCase> ();
 builder.Services.AddScoped<GetAccidentReportUseCase> ();
+builder.Services.AddScoped<GetUniformsReportFormUseCase>();
+builder.Services.AddScoped<GetUniformsReportUseCase>();
 
 
 builder.Services.AddScoped<IAccidentRepository, AccidentRepositoryImpl>();
 builder.Services.AddScoped<IAccidentCauseRepository, AccidentCauseRepositoryImpl>();
 builder.Services.AddScoped <SaveAccidentUseCase>();
+
+builder.Services.AddScoped<IUniformRepository, UniformRepositoryImpl>();
+builder.Services.AddScoped<IWorkerUniformRepository, WorkerUniformRepositoryImpl>();
 
 
 

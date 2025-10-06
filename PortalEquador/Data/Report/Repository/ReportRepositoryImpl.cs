@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ using PortalEquador.Domain.Report.ViewModels.Education;
 using PortalEquador.Domain.Report.ViewModels.MedicalExam;
 using PortalEquador.Domain.Report.ViewModels.Profession.Competence;
 using PortalEquador.Domain.Report.ViewModels.Trainning;
+using PortalEquador.Domain.Report.ViewModels.Uniforms;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 using System.Globalization;
@@ -803,5 +805,96 @@ namespace PortalEquador.Data.Report.Repository
             };
         }
 
+        /*..............UNIFORMS....................*/
+
+        public async Task<UniformsReportFormViewModel> GetUniformsForm()
+        {
+            var userId = GetCurrentUserId();
+            var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
+
+            SelectList? contracts;
+
+            if (hasFullAccess)
+            {
+                contracts = GroupItems(
+                    Groups.MECHANICAL_SHOP_CONTRACTS,
+                    OrderType.Alphabetic,
+                    StringConstants.Report.ALL_CONTRACTS_ID,
+                    StringConstants.Report.ALL_CONTRACTS,
+                    true
+                 );
+            }
+            else
+            {
+                var result =
+                   from item in context.GroupItemEntity
+                   join contract in context.AdminMechanicalWorkShopContractEntity on item.Id equals contract.ContractId
+                   where item.Active &&
+                                   contract.UserId == userId
+                   orderby item.Description
+                   select item;
+
+                contracts = GroupItems(result, OrderType.Alphabetic, StringConstants.Report.ALL_CONTRACTS, true);
+            }
+
+            var model = new UniformsReportFormViewModel
+            {
+                Contracts = contracts,
+            };
+
+            return model;
+        }
+
+        public async Task<UniformsReportViewModel> GetUniformsReport(string description, List<int> accessibleContracts)
+        {
+
+            var latestContractIds = GetLatestContracts();
+
+            var query = from contract in context.ContractEntity
+                        where latestContractIds.Contains(contract.Id)
+                        where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED && accessibleContracts.Contains((int)contract.ContractId)
+                        let personal = contract.PersonalInformationEntity
+                        orderby personal.FirstName 
+                        
+                        // WorkStation
+                        join workStationItem in context.GroupItemEntity 
+                        on contract.ContractId equals workStationItem.Id into workStationItemGroup 
+                        from workStationItem in workStationItemGroup.DefaultIfEmpty() 
+                        
+                        // UNIFORMS (one line per uniform)
+                        join uniform in context.WorkerUniformEntity
+                        on personal.Id equals uniform.PersonalInformationId 
+                        
+                        join uniformItem in context.UniformEntity 
+                        on uniform.UniformId equals uniformItem.Id
+
+                        join sizeItem in context.GroupItemEntity 
+                        on new { Size = uniform.Size, GroupId = Groups.CLOTHES_SIZES } 
+                            equals new { Size = sizeItem.Id.ToString(), GroupId = sizeItem.GroupEntityId } 
+                            into sizeItemGroup
+                        from sizeItem in sizeItemGroup.DefaultIfEmpty()
+
+                        select new UniformsReportItemViewModel
+                        {
+                            FullName = personal.FirstName + " " + personal.LastName,
+
+                            WorkStation = workStationItem.Description,
+
+                            Quantity = uniform.Quantity,
+                            Size = sizeItem.Description ?? uniform.Size,
+                            Date = uniform.Date,
+
+                            UniformId = uniform.Id,
+                            Uniform = uniformItem.Description,
+                            //Observation = workerUniform.Observation
+                        };
+
+            var result = await query.OrderBy(x => x.FullName).ToListAsync();
+
+            return new UniformsReportViewModel
+            {
+                Report = result,
+            };
+        }
     }
 }

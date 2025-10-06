@@ -15,6 +15,7 @@ namespace PortalEquador.Domain.Contract.ViewModels
         public int TotalTrainning { get; set; }
         public int TotalDisciplinaryNotification { get; set; }
         public int TotalAccidents { get; set; }
+        public int TotalUniforms { get; set; }
 
         public required string ProfileImagePath { get; set; }
 
