@@ -75,7 +75,7 @@
             public static readonly int ESTIMATED_VALUE = (new Item { Debug = 33, Production = 39 }).Value;
             public static readonly int OCORRED_ACCIDENT_LEVEL = (new Item { Debug = 34, Production = 40 }).Value;
 
-            public static readonly int CLOTHES_SIZES = (new Item { Debug = 35, Production = 40 }).Value;
+            public static readonly int CLOTHES_SIZES = (new Item { Debug = 35, Production = 41 }).Value;
         }
 
         public static class ItemFromGroup
