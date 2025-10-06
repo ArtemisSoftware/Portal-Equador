@@ -37,7 +37,13 @@ namespace PortalEquador.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
+            /*
+            var hasher = new PasswordHasher<ApplicationUser>(); 
+            string password = "Admin123"; 
+            string hash = hasher.HashPassword(null, password); 
+            Console.WriteLine("Hashed password:");
+            Console.WriteLine(hash);
+            */
         }
 
         public DbSet<GroupEntity> GroupEntity { get; set; }
