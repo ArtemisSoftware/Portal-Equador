@@ -1,4 +1,9 @@
 ﻿@model IEnumerable<PortalEquador.Domain.Uniforms.ViewModels.WorkerUniformViewModel>
+@using Microsoft.AspNetCore.Identity
+@using PortalEquador.Data.Generic
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using PortalEquador.Util
 
 @{
     ViewData["Title"] = "Index";
@@ -55,17 +60,26 @@
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
-                    <!--
-                    <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username"><i class="fas fa-trash-alt" title="Editar"></i></button>
-                    -->
+
+                    @if (@item.ReturnDate == null)
+                    {
+                        <a asp-action="ReturnDate" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning">
+                           Registar devolução
+                         </a>
+                    }
+
+                    @if (User.IsInRole(Roles.Administrator) || User.IsInRole(Roles.DataManager))
+                    {
+                        <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username"><i class="fas fa-trash-alt" title="Editar"></i></button>
+                    }
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<form id="deleteLanguage" asp-action="DeleteLanguage">
-    <input type="hidden" id="languageId" name="Id" />
+<form id="deleteWorkerUniform" asp-action="DeleteWorkerUniform">
+    <input type="hidden" id="workerUniformId" name="Id" />
     <input type="hidden" id="identifier" name="identifier" />
     <input type="hidden" id="username" name="username" />
 </form>
@@ -90,10 +104,10 @@
                         var id = btn.data("id");
                         var identifier = btn.data("identifier");
                         var username = btn.data("username");
-                        $('#languageId').val(id);
+                        $('#workerUniformId').val(id);
                         $('#identifier').val(identifier);
                         $('#username').val(username);
-                        $('#deleteLanguage').submit();
+                        $('#deleteWorkerUniform').submit();
 
                     }
                 });

@@ -16,6 +16,11 @@ namespace PortalEquador.Domain.Uniforms.ViewModels
         [DataType(DataType.Date)]
         public DateTime? Date { get; set; }
 
+        [Display(Name = StringConstants.Display.RETURN_DATE)]
+        [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
+        [DataType(DataType.Date)]
+        public DateTime? ReturnDate { get; set; }
+
         [Display(Name = StringConstants.Display.UNIFORM)]
         public UniformViewModel? Uniform { get; set; }
 

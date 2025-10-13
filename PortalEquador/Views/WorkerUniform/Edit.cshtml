@@ -20,7 +20,7 @@
             <input type="hidden" asp-for="DateCreated" />
 
 
-            <dl class="row" id="Major">
+            <dl class="row">
                 <dt class="col-sm-4">
                     @Html.DisplayNameFor(model => model.Uniform)
                 </dt>
@@ -90,15 +90,6 @@
 @section Scripts {
     <script>
 
-        function MajorSelect() {
-
-            var response = document.getElementById('MajorNotDeclaredId').checked;
-            var major = document.getElementById('Major');
-            major.hidden = response;
-        }
-
-        window.onload = function () {
-            MajorSelect()
-        };
+ 
     </script>
 }

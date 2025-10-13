@@ -27,28 +27,28 @@ namespace PortalEquador.Data.Uniforms.Repository
     {
         public async Task<List<WorkerUniformViewModel>> GetAll(int personalInformationId)
         {
- 
             var result = await (from uniform in context.WorkerUniformEntity.Include(u => u.UniformItemEntity).Include(u => u.PersonalInformationEntity)
                                 where uniform.PersonalInformationId == personalInformationId
-                                orderby uniform.Date descending 
-                                
-                                join sizeItem in context.GroupItemEntity 
-                                on new { Size = uniform.Size, GroupId = Groups.CLOTHES_SIZES } 
-                                    equals new { Size = sizeItem.Id.ToString(), GroupId = sizeItem.GroupEntityId } 
-                                    into sizeItemGroup 
+                                orderby uniform.Date descending
+
+                                join sizeItem in context.GroupItemEntity
+                                on new { Size = uniform.Size, GroupId = Groups.CLOTHES_SIZES }
+                                    equals new { Size = sizeItem.Id.ToString(), GroupId = sizeItem.GroupEntityId }
+                                    into sizeItemGroup
                                 from sizeItem in sizeItemGroup.DefaultIfEmpty()
                                 select new WorkerUniformViewModel
                                 {
                                     Id = uniform.Id,
                                     PersonaInformationId = uniform.PersonalInformationEntity.Id,
                                     Date = uniform.Date,
+                                    ReturnDate = uniform.ReturnDate,
                                     Quantity = uniform.Quantity,
                                     Size = sizeItem.Description ?? uniform.Size,
                                     Uniform = new UniformViewModel
                                     {
                                         Description = uniform.UniformItemEntity.Description,
                                     },
-                                } 
+                                }
                                 ).ToListAsync();
 
             return result;
@@ -117,6 +117,25 @@ namespace PortalEquador.Data.Uniforms.Repository
             return model;
         }
 
+        public async Task<int> Save(WorkerUniformReturnDateViewModel model)
+        {
+            var entity = mapper.Map<WorkerUniformEntity>(model);
+
+            // set Modified flag in your entry
+            var local = context.Set<UniformEntity>().Local.FirstOrDefault(entry => entry.Id.Equals(model.Id));
+
+            // check if local is not null 
+            if (local != null)
+            {
+                // detach
+                context.Entry(local).State = EntityState.Detached;
+            }
+            context.Entry(entity).State = EntityState.Modified;
+
+
+            return await Save(entity, model.Id);
+        }
+
         public async Task<int> Save(WorkerUniformEditViewModel model)
         {
             var entity = mapper.Map<WorkerUniformEntity>(model);
@@ -136,7 +155,7 @@ namespace PortalEquador.Data.Uniforms.Repository
             return await Save(entity, model.Id);
         }
 
-            public async Task<int> Save(WorkerUniformCreateViewModel model)
+        public async Task<int> Save(WorkerUniformCreateViewModel model)
         {
             var entity = mapper.Map<WorkerUniformEntity>(model);
             return await Save(entity, model.Id);
@@ -159,5 +178,13 @@ namespace PortalEquador.Data.Uniforms.Repository
             }
         }
 
+
+        public async Task<WorkerUniformReturnDateViewModel> GetReturnDateModel(int id)
+        {
+            var model = await GetEdit(id);
+            var result = mapper.Map<WorkerUniformReturnDateViewModel>(model);
+            result.ReturnDate = DateTime.Now;
+            return result;
+        }
     }
 }

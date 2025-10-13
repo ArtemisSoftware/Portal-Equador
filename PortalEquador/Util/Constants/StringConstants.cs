@@ -114,6 +114,7 @@
             public const string REASON_TO_BE_FIRED = "Razão da dispensa";
             public const string REMAINING_TIME = "Tempo remanescente";
             public const string RESULT = "Resultado";
+            public const string RETURN_DATE = "Data de devolução";
 
             // S
             public const string SERVICE = "Serviço";

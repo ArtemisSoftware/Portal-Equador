@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PortalEquador.Domain.Uniforms.ViewModels
 {
-    public class WorkerUniformEditViewModel : ViewModel
+    public class WorkerUniformReturnDateViewModel : ViewModel
     {
         public int Id { get; set; }
 

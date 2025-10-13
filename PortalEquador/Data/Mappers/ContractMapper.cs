@@ -225,9 +225,26 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonaInformationId))
                 .ForMember(dest => dest.UniformId, opt => opt.MapFrom(src => src.Uniform.Id))
                 .ReverseMap();
-            
+
+            CreateMap<WorkerUniformEditViewModel, WorkerUniformReturnDateViewModel>()
+                  .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.Editor))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonaInformationId))
+                .ReverseMap();
+
 
             CreateMap<WorkerUniformEntity, WorkerUniformEditViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => (src.PersonalInformationEntity.FirstName + " " + src.PersonalInformationEntity.LastName)))
+               .ForMember(dest => dest.Uniform, opt => opt.MapFrom(src => src.UniformItemEntity))
+                .ReverseMap()
+                .ForMember(dest => dest.Size, opt => opt.MapFrom(src =>
+                    src.Uniform.isSizeNumeric
+                        ? src.Size : src.LabelSizeId.ToString()
+                ));
+
+            CreateMap<WorkerUniformEntity, WorkerUniformReturnDateViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationId))
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => (src.PersonalInformationEntity.FirstName + " " + src.PersonalInformationEntity.LastName)))
