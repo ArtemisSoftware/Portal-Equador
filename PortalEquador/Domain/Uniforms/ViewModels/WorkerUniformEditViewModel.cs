@@ -13,10 +13,15 @@ namespace PortalEquador.Domain.Uniforms.ViewModels
 
         public required string FullName { get; set; }
 
-        [Display(Name = StringConstants.Display.DATE)]
+        [Display(Name = StringConstants.Display.DELIVERY_DATE)]
         [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
         [DataType(DataType.Date)]
         public DateTime? Date { get; set; } = DateTime.Now;
+
+        [Display(Name = StringConstants.Display.RETURN_DATE)]
+        [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
+        [DataType(DataType.Date)]
+        public DateTime? ReturnDate { get; set; }
 
         [Display(Name = StringConstants.Display.UNIFORM)]
         public UniformViewModel? Uniform { get; set; }

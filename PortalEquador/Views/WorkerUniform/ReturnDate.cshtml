@@ -1,0 +1,132 @@
+﻿@model PortalEquador.Domain.Uniforms.ViewModels.WorkerUniformReturnDateViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@{
+    var selectedLabel = Model.LabelSizes?.FirstOrDefault(l => l.Value == Model.LabelSizeId?.ToString());
+}
+
+<h1>Devolução de Farda</h1>
+<h4>Para: @Model.FullName</h4>
+<hr />
+<br />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ReturnDate">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="PersonaInformationId" />
+            <input type="hidden" asp-for="FullName" />
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="DateCreated" />
+            <input type="hidden" asp-for="Date" />
+            <input type="hidden" asp-for="Observation" />
+            <input type="hidden" asp-for="Quantity" />
+            <input type="hidden" asp-for="LabelSizeId" />
+            <input type="hidden" asp-for="Size" />
+
+
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Uniform)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Uniform.Description)
+                </dd>
+            </dl>
+
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Date)
+                </dt>
+                <dd class="col-sm-8" id="examDate" data-date="@Model.Date?.ToString("yyyy-MM-dd")">
+                    @Html.DisplayFor(model => model.Date)
+                </dd>
+            </dl>
+
+            <div class="form-group">
+                <label asp-for="ReturnDate" class="control-label"></label>
+                <input asp-for="ReturnDate" class="form-control" type="date" id="ReturnDate" />
+                <span asp-validation-for="ReturnDate" class="text-danger"></span>
+            </div>
+            <br />
+
+
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Quantity)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Quantity)
+                </dd>
+             @if (Model.Uniform.isSizeNumeric)
+            {
+                    <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Size)
+                </dt>
+                    <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Size)
+                    </dd>
+                } else
+                {
+                    <dt class="col-sm-4">
+                        @Html.DisplayNameFor(model => model.LabelSizeId)
+                    </dt>
+                    <dd class="col-sm-8">
+                       @selectedLabel?.Text
+                    </dd>
+                }
+
+
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Observation)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.Observation)
+                </dd>
+               
+            </dl>
+
+            <br />
+
+
+            @if (Model.Error != null)
+            {
+                <div class="form-group">
+                    <div class="alert alert-danger" role="alert">
+                        <span asp-validation-for="Error"></span>
+                    </div>
+                </div>
+            }
+
+            <br />
+            <div>
+                <a asp-action="Index" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-dark">Regressar ao index</a> &nbsp;
+                <input type="submit" value="Guardar Alterações" class="btn btn-warning" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const returnInput = document.getElementById('ReturnDate');
+            const dateContainer = document.getElementById('examDate');
+            const examDate = dateContainer.getAttribute('data-date');
+
+            if (returnInput && examDate) {
+                // Limit selection to the same or future date
+                returnInput.min = examDate;
+
+                // Optional: if the current return date is before the minimum, fix it
+                if (returnInput.value && returnInput.value < examDate) {
+                    returnInput.value = examDate;
+                }
+            }
+        });
+    </script>
+}

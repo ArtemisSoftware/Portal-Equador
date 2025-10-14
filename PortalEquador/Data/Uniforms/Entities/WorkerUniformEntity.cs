@@ -24,6 +24,8 @@ namespace PortalEquador.Data.Uniforms.Entities
 
         public DateTime Date { get; set; }
 
+        public DateTime? ReturnDate { get; set; } = null;
+
         public string? Observation { get; set; }
     }
 }
