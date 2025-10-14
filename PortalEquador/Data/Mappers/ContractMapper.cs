@@ -230,6 +230,7 @@ namespace PortalEquador.Data.Mappers
                   .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.Editor))
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.FullName))
                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonaInformationId))
+                .ForMember(dest => dest.Uniform, opt => opt.MapFrom(src => src.Uniform))
                 .ReverseMap();
 
 

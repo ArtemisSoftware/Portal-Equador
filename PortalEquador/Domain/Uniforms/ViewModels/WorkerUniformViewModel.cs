@@ -11,7 +11,7 @@ namespace PortalEquador.Domain.Uniforms.ViewModels
 
         public int PersonaInformationId { get; set; }
 
-        [Display(Name = StringConstants.Display.DATE)]
+        [Display(Name = StringConstants.Display.DELIVERY_DATE)]
         [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
         [DataType(DataType.Date)]
         public DateTime? Date { get; set; }

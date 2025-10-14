@@ -44,6 +44,7 @@
             public const string DEGREE = "Grau";
             public const string DECISION = "Decisao do MVC";
             public const string DATE = "Data";
+            public const string DELIVERY_DATE = "Data de entrega";
             public const string DESCRIPTION = "Descrição";
             public const string DRIVERS_LICENCE_TYPE = "Tipo de carta";
             public const string DRIVERS_LICENCE = "Carta de condução";

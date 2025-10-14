@@ -31,6 +31,9 @@
                 @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.ReturnDate)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Uniform)
             </th>
             <th>
@@ -50,6 +53,9 @@
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
                 <td class="align-middle">
+                    @Html.DisplayFor(modelItem => item.ReturnDate)
+                </td>
+                <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.Uniform.Description)
                 </td>
                 <td class="align-middle">
@@ -59,17 +65,27 @@
                     @Html.DisplayFor(modelItem => item.Size)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
-
+                    
                     @if (@item.ReturnDate == null)
                     {
-                        <a asp-action="ReturnDate" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning">
+                        <a asp-action="Edit" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
+
+                        <a asp-action="ReturnDate" asp-route-id="@item.Id" asp-route-identifier="@ViewBag.identifier" asp-route-fullName="@ViewBag.username" class="btn btn-success">
                            Registar devolução
                          </a>
                     }
 
                     @if (User.IsInRole(Roles.Administrator) || User.IsInRole(Roles.DataManager))
                     {
+                         @if (@item.ReturnDate != null)
+                        {
+                            <a asp-action="Edit" 
+                                    asp-route-id="@item.Id" 
+                                    asp-route-identifier="@ViewBag.identifier" 
+                                    asp-route-fullName="@ViewBag.username" class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i>
+                             </a>
+                        }
+
                         <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username"><i class="fas fa-trash-alt" title="Editar"></i></button>
                     }
                 </td>

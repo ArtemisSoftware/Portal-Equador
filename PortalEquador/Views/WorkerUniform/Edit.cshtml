@@ -18,6 +18,7 @@
             <input type="hidden" asp-for="FullName" />
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="DateCreated" />
+            <input type="hidden" asp-for="DateModified" />
 
 
             <dl class="row">
@@ -35,6 +36,15 @@
                 <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <br />
+
+             @if (Model.ReturnDate != null){
+                <div class="form-group">
+                    <label asp-for="ReturnDate" class="control-label"></label>
+                    <input asp-for="ReturnDate" class="form-control" />
+                    <span asp-validation-for="ReturnDate" class="text-danger"></span>
+                </div>
+                <br />
+            }
             
             <div class="form-group">
                 <label asp-for="Quantity" class="control-label"></label>
@@ -90,6 +100,24 @@
 @section Scripts {
     <script>
 
- 
+        document.addEventListener('DOMContentLoaded', function () {
+            const dateInput = document.querySelector('[name="Date"]');
+            const returnInput = document.querySelector('[name="ReturnDate"]');
+
+            // initialize min value
+            if (dateInput && returnInput) {
+                returnInput.min = dateInput.value;
+
+                dateInput.addEventListener('change', function () {
+                    const selectedDate = dateInput.value;
+                    returnInput.min = selectedDate;
+
+                    // If return date is before new min, clear it
+                    if (returnInput.value && returnInput.value < selectedDate) {
+                        returnInput.value = selectedDate;
+                    }
+                });
+            }
+        }); 
     </script>
 }

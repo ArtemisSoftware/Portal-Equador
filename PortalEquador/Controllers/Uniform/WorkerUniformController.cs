@@ -130,7 +130,8 @@ namespace PortalEquador.Controllers.Uniform
             ViewData[ViewBagConstants.PERSONAL_ID] = model.PersonaInformationId;
             ViewData[ViewBagConstants.FULL_NAME] = model.FullName;
 
-            await repository.Save(model);
+            var result = await repository.RecoverReturnDateModel(model);
+            await repository.Save(result);
             return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
         }
 
