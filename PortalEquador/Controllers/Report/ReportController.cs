@@ -337,7 +337,7 @@ namespace PortalEquador.Controllers.Report
         {
             try
             {
-                return await ExportUniformReportInExcel(viewmodel.ContractId);
+                return await ExportUniformReportInExcel(viewmodel.ContractId, viewmodel.AddUniformReturn);
             }
             catch (Exception ex)
             {
@@ -346,9 +346,9 @@ namespace PortalEquador.Controllers.Report
         }
 
         [HttpGet]
-        public async Task<FileResult> ExportUniformReportInExcel(int contractId)
+        public async Task<FileResult> ExportUniformReportInExcel(int contractId, bool addUniformReturn)
         {
-            var result = await getUniformsReportUseCase.Invoke(contractId);
+            var result = await getUniformsReportUseCase.Invoke(contractId, addUniformReturn);
             var report = UniformsReport.GenerateReport(result);
             return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
         }

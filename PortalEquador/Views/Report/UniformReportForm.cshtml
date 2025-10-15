@@ -16,13 +16,20 @@
                 <label asp-for="ContractId" class="form-label"></label>
                 <select asp-for="ContractId" class="form-select" asp-items="Model.Contracts"></select>
             </div>
-
             <br />
 
             <div class="mb-3">
                 <label asp-for="UniformId" class="form-label"></label>
                 <select asp-for="UniformId" class="form-select" asp-items="Model.Uniforms"></select>
             </div>
+            <br />
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="AddUniformReturn" /> @Html.DisplayNameFor(model => model.AddUniformReturn)
+                </label>
+            </div>
+            <br />
 
             @if (Model.Error != null)
             {

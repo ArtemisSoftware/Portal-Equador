@@ -23,5 +23,8 @@ namespace PortalEquador.Domain.Report.ViewModels.Uniforms
 
         public List<int> ContractIds { get; set; } = new List<int>();
 
+        [Display(Name = StringConstants.Display.ADD_UNIFORM_RETURN)]
+        [Required]
+        public bool AddUniformReturn { get; set; }
     }
 }

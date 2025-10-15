@@ -845,7 +845,7 @@ namespace PortalEquador.Data.Report.Repository
             return model;
         }
 
-        public async Task<UniformsReportViewModel> GetUniformsReport(string description, List<int> accessibleContracts)
+        public async Task<UniformsReportViewModel> GetUniformsReport(string description, List<int> accessibleContracts, bool addUniformReturn)
         {
 
             var latestContractIds = GetLatestContracts();
@@ -863,8 +863,9 @@ namespace PortalEquador.Data.Report.Repository
                         
                         // UNIFORMS (one line per uniform)
                         join uniform in context.WorkerUniformEntity
-                        on personal.Id equals uniform.PersonalInformationId 
-                        
+                        on personal.Id equals uniform.PersonalInformationId
+                        where addUniformReturn || uniform.ReturnDate == null
+
                         join uniformItem in context.UniformEntity 
                         on uniform.UniformId equals uniformItem.Id
 
@@ -877,13 +878,11 @@ namespace PortalEquador.Data.Report.Repository
                         select new UniformsReportItemViewModel
                         {
                             FullName = personal.FirstName + " " + personal.LastName,
-
                             WorkStation = workStationItem.Description,
-
                             Quantity = uniform.Quantity,
                             Size = sizeItem.Description ?? uniform.Size,
                             Date = uniform.Date,
-
+                            ReturnDate = uniform.ReturnDate,
                             UniformId = uniform.Id,
                             Uniform = uniformItem.Description,
                             //Observation = workerUniform.Observation
