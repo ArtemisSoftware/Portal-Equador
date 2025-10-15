@@ -22,6 +22,7 @@
             public const string AGE = "Idade";
             public const string AGENCY = "Agência";
             public const string ACADEMIC_HABILITATION = " Habilitações académicas";
+            public const string ADD_UNIFORM_RETURN = "Incluir uniformes devolvidos";
 
             //B
             public const string BULLETIN_NUMBER = "Buletim nº";

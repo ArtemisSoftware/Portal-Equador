@@ -13,7 +13,7 @@ namespace PortalEquador.Domain.Report.UseCases
         IUniformRepository uniformRepository
         )
     {
-        public async Task<UniformsReportViewModel> Invoke(int contractId)
+        public async Task<UniformsReportViewModel> Invoke(int contractId, bool addUniformReturn)
         {
             List<int> accessibleContracts = await contractRepository.GetAccessibleContractsForUser(contractId);
 
@@ -21,9 +21,10 @@ namespace PortalEquador.Domain.Report.UseCases
 
             var uniforms = await uniformRepository.GetAllUniforms(OrderType.Alphabetic);
 
-            var result = await reportRepository.GetUniformsReport(description, accessibleContracts);
+            var result = await reportRepository.GetUniformsReport(description, accessibleContracts, addUniformReturn);
 
             result.Uniforms = uniforms;
+            result.AddUniformReturn = addUniformReturn;
             return result;
         }
     }

@@ -11,5 +11,6 @@ namespace PortalEquador.Domain.Report.ViewModels.Uniforms
 
         public string FileName { get; set; } = "relatorio_uniformes";
         public List<UniformViewModel> Uniforms { get; set; } = new List<UniformViewModel>();
+        public bool AddUniformReturn { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace PortalEquador.Domain.Report.ViewModels.Uniforms
         public int Quantity { get; set; }
         public string Size { get; set; }
         public DateTime Date { get; set; }
+        public DateTime? ReturnDate { get; set; }
 
     }
 }

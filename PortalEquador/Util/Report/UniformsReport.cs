@@ -15,13 +15,14 @@ namespace PortalEquador.Util.Report
 
             var worksheet = package.Workbook.Worksheets.Add("UniformsReport");
 
-            var nextRow = AddHeader(worksheet, viewModel.Uniforms);
+            var nextRow = AddHeader(worksheet, viewModel.Uniforms, viewModel.AddUniformReturn);
 
             AddContent(
                 worksheet,
                 nextRow,
                 viewModel.Uniforms,
-                viewModel.Report
+                viewModel.Report, 
+                viewModel.AddUniformReturn
              );
 
             worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
@@ -33,7 +34,7 @@ namespace PortalEquador.Util.Report
             return package;
         }
 
-        private static int AddHeader(ExcelWorksheet ws, List<UniformViewModel> uniforms)
+        private static int AddHeader(ExcelWorksheet ws, List<UniformViewModel> uniforms, bool addUniformReturn)
         {
             int row = 1;
             int column = 1;
@@ -65,6 +66,13 @@ namespace PortalEquador.Util.Report
             ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
+            if (addUniformReturn)
+            {
+                ++column;
+                ws.Cells[row, column].Value = StringConstants.Display.RETURN_DATE;
+                ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            }
             return ++row;
         }
 
@@ -73,7 +81,8 @@ namespace PortalEquador.Util.Report
             ExcelWorksheet ws, 
             int row,
             List<UniformViewModel> uniforms,
-            List<UniformsReportItemViewModel> report
+            List<UniformsReportItemViewModel> report,
+            bool addUniformReturn
             )
         {
             foreach (var item in report)
@@ -112,6 +121,15 @@ namespace PortalEquador.Util.Report
                 ws.Cells[row, column].Value = item.Size;
                 ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                if (addUniformReturn)
+                {
+                    ++column;
+                    ws.Cells[row, column].Value = item.ReturnDate?.ToString(TimeUtil.dd_MM_yyyy) ?? string.Empty;
+                    ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                }
+                
 
                 ++row;
             }
