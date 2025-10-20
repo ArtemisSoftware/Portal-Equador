@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.MechanicalWorkshop;
+using PortalEquador.Data.Migrations;
 using PortalEquador.Data.Profession.Experience.Entity;
 using PortalEquador.Domain.Accident.ViewModels;
 using PortalEquador.Domain.GroupTypes.ViewModels;
@@ -25,9 +26,11 @@ using PortalEquador.Domain.Report.ViewModels.Trainning;
 using PortalEquador.Domain.Report.ViewModels.Uniforms;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using GroupItemEntity = PortalEquador.Data.GroupTypes.entities.GroupItemEntity;
 
 namespace PortalEquador.Data.Report.Repository
 {
@@ -849,45 +852,44 @@ namespace PortalEquador.Data.Report.Repository
         {
 
             var latestContractIds = GetLatestContracts();
+            var query =
+                    from contract in context.ContractEntity
+                    where latestContractIds.Contains(contract.Id)
+                          && contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED
+                          && accessibleContracts.Contains((int)contract.ContractId)
 
-            var query = from contract in context.ContractEntity
-                        where latestContractIds.Contains(contract.Id)
-                        where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED && accessibleContracts.Contains((int)contract.ContractId)
-                        let personal = contract.PersonalInformationEntity
-                        orderby personal.FirstName 
-                        
-                        // WorkStation
-                        join workStationItem in context.GroupItemEntity 
-                        on contract.ContractId equals workStationItem.Id into workStationItemGroup 
-                        from workStationItem in workStationItemGroup.DefaultIfEmpty() 
-                        
-                        // UNIFORMS (one line per uniform)
-                        join uniform in context.WorkerUniformEntity
-                        on personal.Id equals uniform.PersonalInformationId
-                        where addUniformReturn || uniform.ReturnDate == null
+                    join uniform in context.WorkerUniformEntity
+                        on contract.PersonalInformationId equals uniform.PersonalInformationId
+                    let personal = uniform.PersonalInformationEntity
 
-                        join uniformItem in context.UniformEntity 
+                    join sizeItem in context.GroupItemEntity
+                        on new { Size = uniform.Size, GroupId = Groups.CLOTHES_SIZES }
+                        equals new { Size = sizeItem.Id.ToString(), GroupId = sizeItem.GroupEntityId }
+                        into sizeItemGroup
+                    from sizeItem in sizeItemGroup.DefaultIfEmpty()
+
+                    join uniformItem in context.UniformEntity
                         on uniform.UniformId equals uniformItem.Id
+                    orderby personal.FirstName
 
-                        join sizeItem in context.GroupItemEntity 
-                        on new { Size = uniform.Size, GroupId = Groups.CLOTHES_SIZES } 
-                            equals new { Size = sizeItem.Id.ToString(), GroupId = sizeItem.GroupEntityId } 
-                            into sizeItemGroup
-                        from sizeItem in sizeItemGroup.DefaultIfEmpty()
+                    join workStationItem in context.GroupItemEntity
+                    on contract.ContractId equals workStationItem.Id into workStationItemGroup
+                    from workStationItem in workStationItemGroup.DefaultIfEmpty()
 
-                        select new UniformsReportItemViewModel
+                    select new UniformsReportItemViewModel
                         {
                             FullName = personal.FirstName + " " + personal.LastName,
+                            
                             WorkStation = workStationItem.Description,
                             Quantity = uniform.Quantity,
                             Size = sizeItem.Description ?? uniform.Size,
                             Date = uniform.Date,
                             ReturnDate = uniform.ReturnDate,
-                            UniformId = uniform.Id,
+                            UniformId = uniform.UniformId,
                             Uniform = uniformItem.Description,
+                            
                             //Observation = workerUniform.Observation
                         };
-
             var result = await query.OrderBy(x => x.FullName).ToListAsync();
 
             return new UniformsReportViewModel
