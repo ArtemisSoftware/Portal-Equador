@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data;
 using PortalEquador.Data.Accident.Repository;
+using PortalEquador.Data.Administrator.Repository;
 using PortalEquador.Data.Contract.Repository;
 using PortalEquador.Data.Curriculum.Repository;
 using PortalEquador.Data.DisciplinaryNotification.Repository;
@@ -25,6 +26,7 @@ using PortalEquador.Data.Trainning.Repository;
 using PortalEquador.Data.Uniforms.Repository;
 using PortalEquador.Domain.Accident.Repository;
 using PortalEquador.Domain.Accident.UseCases;
+using PortalEquador.Domain.Administrator.Repository;
 using PortalEquador.Domain.Contract.Repository;
 using PortalEquador.Domain.Curriculum.Repository;
 using PortalEquador.Domain.DisciplinaryNotification.Repository;
@@ -141,6 +143,7 @@ builder.Services.AddScoped <SaveAccidentUseCase>();
 
 builder.Services.AddScoped<IUniformRepository, UniformRepositoryImpl>();
 builder.Services.AddScoped<IWorkerUniformRepository, WorkerUniformRepositoryImpl>();
+builder.Services.AddScoped<IAdministratorRepository, AdministratorRepositoryImpl>();
 
 
 

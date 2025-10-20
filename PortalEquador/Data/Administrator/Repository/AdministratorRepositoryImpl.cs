@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
+using PortalEquador.Data.MechanicalWorkshop.Admin.Entity;
 using PortalEquador.Domain.Administrator.Repository;
 using PortalEquador.Domain.Administrator.ViewModels;
 
@@ -12,9 +13,9 @@ namespace PortalEquador.Data.Administrator.Repository
         IMapper mapper,
         IHttpContextAccessor httpContextAccessor,
         IWebHostEnvironment hostEnvironment,
-         UserManager<IdentityUser> userManager,
+        UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager
-        ) : GenericRepository<BaseEntity>(context, httpContextAccessor), IAdministratorRepository
+        ) : GenericRepository<AdminMechanicalWorkShopContractEntity>(context, httpContextAccessor), IAdministratorRepository
     {
         public async Task<List<AdministratorViewModel>> GetAll()
         {
@@ -22,7 +23,7 @@ namespace PortalEquador.Data.Administrator.Repository
                 from user in context.Users
                 join userRole in context.UserRoles on user.Id equals userRole.UserId
                 join role in context.Roles on userRole.RoleId equals role.Id
-                orderby user.FirstName
+                orderby role.Name, user.FirstName 
                 select new AdministratorViewModel
                 {
                     Id = user.Id,
@@ -111,12 +112,12 @@ namespace PortalEquador.Data.Administrator.Repository
                     await userManager.RemoveFromRolesAsync(user, currentRoles);
 
                 // Ensure new role exists
-                var roleExists = await roleManager.RoleExistsAsync((model.Role);
+                var roleExists = await roleManager.RoleExistsAsync(model.Role);
                 if (!roleExists)
-                    await roleManager.CreateAsync(new IdentityRole((model.Role));
+                    await roleManager.CreateAsync(new IdentityRole(model.Role));
 
                 // Assign new role
-                await userManager.AddToRoleAsync(user, (model.Role);
+                await userManager.AddToRoleAsync(user, model.Role);
             }
 
             return IdentityResult.Success;
