@@ -769,10 +769,14 @@ namespace PortalEquador.Data.Report.Repository
                 let personal = contract.PersonalInformationEntity
                 orderby personal.FirstName
 
+                join workStationItem in context.GroupItemEntity
+                on contract.ContractId equals workStationItem.Id into workStationItemGroup
+                from workStationItem in workStationItemGroup.DefaultIfEmpty()
+
                 select new AccidentReportItemViewModel
                 {
                     FullName = personal.FirstName + " " + personal.LastName,
-                    WorkStation = description,
+                    WorkStation = workStationItem.Description,
                     // ✅ get all accidents for this person
                     Accidents = context.AccidentEntity
                         .Where(a => a.PersonalInformationId == personal.Id)

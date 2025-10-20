@@ -136,7 +136,7 @@
                         @Html.DisplayFor(modelItem => item.DateOfContract)
                     </td>
                     <td class="align-middle">
-                        @switch (item.ContractStateDescription())
+                        @switch (item.ContractHistoryStateDescription())
                         {
                             case PortalEquador.Domain.Contract.ContractState.Unassigned:
                                 <span class="badge bg-secondary">@PortalEquador.Util.Constants.StringConstants.ContractStatus.UNASSIGNED </span>
@@ -148,6 +148,10 @@
 
                             case PortalEquador.Domain.Contract.ContractState.Fired:
                                 <span class="badge bg-danger">@Html.DisplayFor(modelItem => item.ContractState.Description)</span>
+                                break;
+
+                            case PortalEquador.Domain.Contract.ContractState.Replaced:
+                                <span class="badge bg-primary">@PortalEquador.Util.Constants.StringConstants.ContractStatus.CONTRACT_REPLACED </span>
                                 break;
 
                             default:

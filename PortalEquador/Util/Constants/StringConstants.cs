@@ -270,6 +270,7 @@
             public const int UNASSIGNED_ID = -1;
             public const string CONTRACTED = "Contratado";
             public const string FIRED = "Dispensado";
+            public const string CONTRACT_REPLACED = "Contrato substituido";
         }
 
         public static class SchedulerStatus

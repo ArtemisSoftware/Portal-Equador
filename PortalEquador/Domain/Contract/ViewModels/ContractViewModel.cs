@@ -26,9 +26,25 @@ namespace PortalEquador.Domain.Contract.ViewModels
 
         public int ContractStateDescription()
         {
-            if (ContractState.Id == GroupTypesConstants.ItemFromGroup.ContractStates.CONTRACTED)
+             if (ContractState.Id == GroupTypesConstants.ItemFromGroup.ContractStates.CONTRACTED)
             {
                 return PortalEquador.Domain.Contract.ContractState.Contracted;
+            }
+            else if (ContractState.Id == GroupTypesConstants.ItemFromGroup.ContractStates.FIRED)
+            {
+                return PortalEquador.Domain.Contract.ContractState.Fired;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
+        public int ContractHistoryStateDescription()
+        {
+            if (ContractState.Id == GroupTypesConstants.ItemFromGroup.ContractStates.CONTRACTED)
+            {
+                return Domain.Contract.ContractState.Replaced;
             }
             else if (ContractState.Id == GroupTypesConstants.ItemFromGroup.ContractStates.FIRED)
             {
