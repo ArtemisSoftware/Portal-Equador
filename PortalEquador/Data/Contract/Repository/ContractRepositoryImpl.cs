@@ -188,6 +188,7 @@ namespace PortalEquador.Data.Contract.Repository
                             .Include(d => d.ContractGroupItemEntity)
                 .Where(item => item.PersonalInformationId == personalInformationId)
                 .OrderByDescending(item => item.DateOfContract)
+                .ThenByDescending(item => item.Id)
                 .ToListAsync();
 
             var model = mapper.Map<List<ContractViewModel>>(result);
