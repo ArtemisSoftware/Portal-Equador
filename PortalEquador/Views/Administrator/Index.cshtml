@@ -1,0 +1,109 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using PortalEquador.Data.Generic
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using PortalEquador.Util
+@model IEnumerable<PortalEquador.Domain.Administrator.ViewModels.AdministratorViewModel>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>Administradores</h1>
+
+
+<p>
+    <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Administrador</a>
+</p>
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Role)
+            </th>
+            <th> </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Role)
+                </td>
+                <td class="align-middle">
+                    <a asp-action="ResetPassword" asp-route-id="@item.Id"  class="btn btn-warning">Restaurar password</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form id="deactivateItem" asp-action="DeactivateItem" asp-route-groupId="@ViewBag.groupId" asp-route-groupName="@ViewBag.groupName">
+    <input type="hidden" id="groupDeactiviationItemId" name="Id" />
+</form>
+
+<form id="activateItem" asp-action="ActivateItem" asp-route-groupId="@ViewBag.groupId" asp-route-groupName="@ViewBag.groupName">
+    <input type="hidden" id="groupActiviationItemId" name="Id" />
+</form>
+
+<br />
+<a asp-controller="Group" asp-action="Index" class="btn btn-dark"> <i class="fas fa-chevron-left" title="Regressar aos grupos "></i> Regressar aos grupos</a>
+
+@section Scripts {
+    <script>
+        $(function () {
+            var table = $('.table').DataTable({
+                order: [] // keep server-side order
+            });
+
+            // Delegated event binding for delete button
+            $('.table').on('click', '.deleteBtn', function () {
+                swal({
+                    title: "Desativar item",
+                    text: "Tem a certeza que pretende desativar o registo?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var id = $(this).data("id");
+                        $('#groupDeactiviationItemId').val(id);
+                        $('#deactivateItem').submit();
+                    }
+                });
+            });
+
+            // Delegated event binding for activate button
+            $('.table').on('click', '.allocateBtn', function () {
+                swal({
+                    title: "Ativar item",
+                    text: "Tem a certeza que pretende ativar o registo?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var id = $(this).data("id");
+                        $('#groupActiviationItemId').val(id);
+                        $('#activateItem').submit();
+                    }
+                });
+            });
+        });
+    </script>
+}

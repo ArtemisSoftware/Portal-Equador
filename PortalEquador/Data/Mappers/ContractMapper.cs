@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Spreadsheet;
 using PortalEquador.Data.Accident.Entities;
 using PortalEquador.Data.Contract.Entities;
 using PortalEquador.Data.DisciplinaryNotification.Entity;
@@ -7,6 +8,7 @@ using PortalEquador.Data.MedicalExam.Entity;
 using PortalEquador.Data.Trainning.Entity;
 using PortalEquador.Data.Uniforms.Entities;
 using PortalEquador.Domain.Accident.ViewModels;
+using PortalEquador.Domain.Administrator.ViewModels;
 using PortalEquador.Domain.Contract.ViewModels;
 using PortalEquador.Domain.DisciplinaryNotification.ViewModels;
 using PortalEquador.Domain.GroupTypes.ViewModels;
