@@ -79,7 +79,7 @@
 
             $('.table').DataTable();
 
-            $('.deactivateBtn').click(function (e) {
+            $('.table').on('click', '.deactivateBtn', function () {
                 swal({
                     title: "Desativar item",
                     text: "Tem a certeza que pretende desativar o registo?",

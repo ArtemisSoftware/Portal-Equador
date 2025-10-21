@@ -107,7 +107,7 @@
 
             $('.table').DataTable();
 
-            $('.deleteBtn').click(function (e) {
+            $('.table').on('click', '.deleteBtn', function () {
                 swal({
                     title: "Eliminar farda",
                     text: "Tem a certeza que pretende eliminar a farda?",
