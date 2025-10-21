@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
+using PortalEquador.Data.MechanicalWorkshop;
 using PortalEquador.Data.MechanicalWorkshop.Admin.Entity;
 using PortalEquador.Domain.Administrator.Repository;
 using PortalEquador.Domain.Administrator.ViewModels;
+using PortalEquador.Util;
 
 namespace PortalEquador.Data.Administrator.Repository
 {
@@ -20,7 +22,9 @@ namespace PortalEquador.Data.Administrator.Repository
     {
         public async Task<List<AdministratorViewModel>> GetAll()
         {
-            var usersWithRoles = await(
+            var hasFullAccess = AdministratorUtil.HasFullAccess(GetCurrentUserRole());
+
+            var usersWithRolesQuery = (
                 from user in context.Users
                 join userRole in context.UserRoles on user.Id equals userRole.UserId
                 join role in context.Roles on userRole.RoleId equals role.Id
@@ -31,9 +35,18 @@ namespace PortalEquador.Data.Administrator.Repository
                     UserName  = user.FirstName + " " + user.LastName,
                     Email  = user.NormalizedEmail.ToLower(),
                     Role = role.Name,
-                    Active = !user.LockoutEnabled
+                    Active = !user.LockoutEnabled,
+                    Password = user.PasswordHash
                 }
-            ).ToListAsync();
+            );
+
+            if (!hasFullAccess)
+            {
+                usersWithRolesQuery = usersWithRolesQuery
+                    .Where(u => u.Role != "Administrator" );
+            }
+
+            var usersWithRoles = await usersWithRolesQuery.ToListAsync();
 
             return usersWithRoles;
         }
@@ -50,7 +63,37 @@ namespace PortalEquador.Data.Administrator.Repository
 
         private async Task<SelectList> GetAllRolesAsync()
         {
-            var roles = await context.Roles
+
+            var role = GetCurrentUserRole();
+            var hasFullAccess = AdministratorUtil.HasFullAccess(role);
+
+            var rolesQuery = context.Roles.AsQueryable();
+
+            if(role == Roles.DataManager)
+            {
+                rolesQuery = rolesQuery.Where(r =>
+                r.Name != "Administrator" &&
+                r.Name != "Employee" &&
+                r.Name != "Guest"
+                );
+            } else if (hasFullAccess == false)
+            {
+                rolesQuery = rolesQuery.Where(r => 
+                r.Name != "Administrator" && 
+                r.Name != "DataManager" &&
+                r.Name != "Employee" && 
+                r.Name != "Guest"
+                );
+
+            } else
+            {
+                rolesQuery = rolesQuery.Where(r => 
+                r.Name != "Employee" && 
+                r.Name != "Guest"
+                );
+            }
+
+            var roles = await rolesQuery
                 .Select(r => new
                 {
                     Id = r.Id,
@@ -92,12 +135,26 @@ namespace PortalEquador.Data.Administrator.Repository
             // Add role if provided
             if (!string.IsNullOrEmpty(model.RoleId))
             {
-                var roleExists = await roleManager.RoleExistsAsync(model.RoleId);
-                if (!roleExists)
-                    await roleManager.CreateAsync(new IdentityRole(model.RoleId));
-
-                await userManager.AddToRoleAsync(user, model.RoleId);
+                var role = await roleManager.FindByIdAsync(model.RoleId);
+                if (role != null)
+                {
+                    await userManager.AddToRoleAsync(user, role.Name);
+                }
             }
+
+            return result;
+        }
+
+        public async Task<IdentityResult> ResetPasswordAsync(string userId, string newPassword)
+        {
+            var user = await userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new Exception("User not found.");
+
+            var token = await userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await userManager.ResetPasswordAsync(user, token, newPassword);
+
+
 
             return result;
         }
@@ -121,6 +178,31 @@ namespace PortalEquador.Data.Administrator.Repository
 
             return admin;
         }
+
+        public async Task<AdministratorResetPasswordViewModel> GetResetPasswordAdmin(string userId)
+        {
+
+
+
+            var admin = await (
+                from user in context.Users
+                join userRole in context.UserRoles on user.Id equals userRole.UserId
+                join role in context.Roles on userRole.RoleId equals role.Id
+                where user.Id == userId
+                select new AdministratorResetPasswordViewModel
+                {
+                    Id = user.Id,
+                    UserName = user.FirstName + " " + user.LastName,
+                    Email = user.Email,
+                }
+            ).FirstOrDefaultAsync();
+
+            var password = PasswordGenerator.GeneratePassword(admin.UserName);
+            admin.Password = password;
+
+            return admin;
+        }
+
 
         public async Task<IdentityResult> Update(AdministratorEditViewModel model)
         {

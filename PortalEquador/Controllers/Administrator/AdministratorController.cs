@@ -48,6 +48,28 @@ namespace PortalEquador.Controllers.Administrator
             return View(model);
         }
 
+        public async Task<IActionResult> ResetPassword(string id)
+        {
+            var result = await repository.GetResetPasswordAdmin(id);
+            return View(result);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(AdministratorResetPasswordViewModel model)
+        {
+                if (ModelState.IsValid)
+                {
+                    await repository.ResetPasswordAsync(model.Id, model.Password);
+                    return RedirectToAction(nameof(Index));
+                }
+            else
+            {
+                return View(model);
+            }   
+        }
+
+
         // GET: AdministratorController/Details/5
         public ActionResult Details(int id)
         {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PortalEquador.Domain.Administrator.ViewModels
 {
-    public class AdministratorViewModel
+    public class AdministratorResetPasswordViewModel
     {
         public string Id { get; set; }
 
@@ -13,13 +13,8 @@ namespace PortalEquador.Domain.Administrator.ViewModels
         [Display(Name = StringConstants.Display.EMAIL)]
         public string Email { get; set; }
 
-        [Display(Name = StringConstants.Display.ROLE)]
-        public string Role { get; set; }
-
-        [Display(Name = StringConstants.Display.STATE)]
-        public bool Active { get; set; }
-
         [Display(Name = StringConstants.Display.PASSWORD)]
+        [Required]
         public string Password { get; set; }
     }
 }
