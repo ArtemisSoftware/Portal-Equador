@@ -1,4 +1,9 @@
 ﻿@model PortalEquador.Domain.Contract.ViewModels.ContractHistoryViewModel
+@using Microsoft.AspNetCore.Identity
+@using PortalEquador.Data.Generic
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using PortalEquador.Util
 
 @{
     ViewData["Title"] = "Index";
@@ -133,7 +138,7 @@
             {
                 <tr>
                     <td class="align-middle">
-                        @Html.DisplayFor(modelItem => item.DateOfContract)
+                       @Html.DisplayFor(modelItem => item.DateOfContract)
                     </td>
                     <td class="align-middle">
                         @switch (item.ContractHistoryStateDescription())
@@ -170,6 +175,17 @@
                     </td>
 
                     <td>
+                        @if (User.IsInRole(Roles.Administrator) || User.IsInRole(Roles.DataManager))
+                        {
+                            <button 
+                                data-id="@item.Id"
+                                    data-identifier="@ViewBag.identifier" 
+                                    data-username="@ViewBag.username"
+                                class="btn btn-danger deleteBtn"
+                                    type="button">
+                                <i class="fas fa-trash-alt" title="Apagar"></i>
+                            </button>
+                        }
                     </td>
                 </tr>
             }
@@ -178,10 +194,42 @@
 
 }
 
+<form id="deleteContractHistory" asp-action="DeleteContractHistory">
+    <input type="hidden" id="contractId" name="Id" />
+    <input type="hidden" id="identifier" name="identifier" />
+    <input type="hidden" id="username" name="username" />
+</form>
+
 @section Scripts {
     <script>
         $(function () {
-            $('.table').DataTable();
+           var table = $('.table').DataTable({
+                order: [] // keep server-side order
+    });
+
+                $('.table').on('click', '.deleteBtn', function () {
+                    swal({
+                            title: "Eliminar histórico",
+                            text: "Tem a certeza que pretende eliminar o histórico?",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true
+                        }).then((confirm) => {
+                            if (confirm) {
+                                var btn = $(this);
+                                var id = btn.data("id");
+                                var identifier = btn.data("identifier");
+                                var username = btn.data("username");
+                                $('#contractId').val(id);
+                                $('#identifier').val(identifier);
+                                $('#username').val(username);
+                                $('#deleteContractHistory').submit();
+
+                            }
+                        });
+                    });
+
+
         });
 
     </script>

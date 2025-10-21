@@ -48,6 +48,7 @@ namespace PortalEquador.Data.Report.Repository
                 .GroupBy(c => c.PersonalInformationId)
                 .Select(g => g
                     .OrderByDescending(c => c.DateOfContract)
+                    .ThenByDescending(item => item.Id)
                     .Select(c => c.Id)
                     .FirstOrDefault()
                 );

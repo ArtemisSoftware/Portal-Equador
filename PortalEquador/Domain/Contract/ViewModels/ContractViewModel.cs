@@ -7,6 +7,8 @@ namespace PortalEquador.Domain.Contract.ViewModels
 {
     public class ContractViewModel : ViewModel
     {
+        public int Id { get; set; }
+
         [Display(Name = StringConstants.Display.STATE_OF_HIRED)]
         public GroupItemViewModel ContractState { get; set; }
 
