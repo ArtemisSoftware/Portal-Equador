@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.MechanicalWorkshop.Admin.Entity;
@@ -28,14 +29,43 @@ namespace PortalEquador.Data.Administrator.Repository
                 {
                     Id = user.Id,
                     UserName  = user.FirstName + " " + user.LastName,
-                    Email  = user.Email,
+                    Email  = user.NormalizedEmail.ToLower(),
                     Role = role.Name,
-                    Active = user.LockoutEnabled
+                    Active = !user.LockoutEnabled
                 }
             ).ToListAsync();
 
             return usersWithRoles;
         }
+
+        public async Task<AdministratorCreateViewModel> GetCreateModel()
+        {
+            var roles = await GetAllRolesAsync();
+
+            return new AdministratorCreateViewModel
+            {
+                Roles = roles,
+            };
+        }
+
+        private async Task<SelectList> GetAllRolesAsync()
+        {
+            var roles = await context.Roles
+                .Select(r => new
+                {
+                    Id = r.Id,
+                    Description = r.Name
+                })
+                .ToListAsync();
+
+            return new SelectList(roles, "Id", "Description");
+        }
+
+        public async Task<bool> EmailExistsAsync(string email)
+        {
+            return await context.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower());
+        }
+
 
         public async Task<IdentityResult> Save(AdministratorCreateViewModel model)
         {
@@ -60,13 +90,13 @@ namespace PortalEquador.Data.Administrator.Repository
                 return result;
 
             // Add role if provided
-            if (!string.IsNullOrEmpty(model.Role))
+            if (!string.IsNullOrEmpty(model.RoleId))
             {
-                var roleExists = await roleManager.RoleExistsAsync(model.Role);
+                var roleExists = await roleManager.RoleExistsAsync(model.RoleId);
                 if (!roleExists)
-                    await roleManager.CreateAsync(new IdentityRole(model.Role));
+                    await roleManager.CreateAsync(new IdentityRole(model.RoleId));
 
-                await userManager.AddToRoleAsync(user, model.Role);
+                await userManager.AddToRoleAsync(user, model.RoleId);
             }
 
             return result;

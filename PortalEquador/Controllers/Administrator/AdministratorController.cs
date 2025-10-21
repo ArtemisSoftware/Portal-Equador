@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.Administrator.Repository;
+using PortalEquador.Domain.Administrator.ViewModels;
+using PortalEquador.Domain.Generic;
+using PortalEquador.Domain.GroupTypes.Repository;
+using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.Administrator
 {
@@ -15,32 +19,42 @@ namespace PortalEquador.Controllers.Administrator
             return View(result);
         }
 
+        // GET: AdministratorController/Create
+        public async Task<IActionResult> Create()
+        {
+            var result = await repository.GetCreateModel();
+            return View(result);
+        }
+
+        // POST: AdministratorController/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(AdministratorCreateViewModel model)
+        {
+            var emailExists = await repository.EmailExistsAsync(model.Email);
+
+            if (emailExists)
+            {
+                ModelState.AddModelError(nameof(model.Error), StringConstants.Error.EXISTING_USER);
+            }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    await repository.Save(model);
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            return View(model);
+        }
+
         // GET: AdministratorController/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: AdministratorController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
 
-        // POST: AdministratorController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
 
         // GET: AdministratorController/Edit/5
         public ActionResult Edit(int id)

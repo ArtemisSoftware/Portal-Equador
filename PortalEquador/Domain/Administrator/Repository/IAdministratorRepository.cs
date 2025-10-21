@@ -7,6 +7,8 @@ namespace PortalEquador.Domain.Administrator.Repository
     public interface IAdministratorRepository
     {
         Task<List<AdministratorViewModel>> GetAll();
+        Task<AdministratorCreateViewModel> GetCreateModel();
+        Task<bool> EmailExistsAsync(string email);
         Task<IdentityResult> Save(AdministratorCreateViewModel model);
         Task<AdministratorEditViewModel> GetAdmin(string userId);
         Task<IdentityResult> Update(AdministratorEditViewModel model);

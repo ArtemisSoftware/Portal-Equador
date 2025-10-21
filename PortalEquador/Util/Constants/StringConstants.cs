@@ -106,6 +106,7 @@
             public const string PROFESSIONAL_COMPETENCE = "Habilitações profissionais";
             public const string PROVISIONAL_DRIVERS_LICENCE = "Verbete";
             public const string PERIOD = "Periodo";
+            public const string PASSWORD = "Palavra-chave";
 
             // Q
             public const string QUANTITY = "Quantidade";
@@ -223,6 +224,7 @@
             public const string EXISTING_ACCIDENT_NUMBER = "A número de acidente já se encontra registado";
             public const string NO_ACCIDENT_CAUSES = "Não foram selecionadas causas para o acidente";
             public const string NON_EXISTING_UNIFORM = "A farda não existe";
+            public const string EXISTING_USER = "O utilizador já se encontra registado";
         }
 
         public static class Dates
