@@ -12,17 +12,12 @@ namespace PortalEquador.Domain.Report.UseCases
         IContractRepository contractRepository
         )
     {
-        public async Task<TrainningReportViewModel> Invoke(string year, int contractId, int trainningId)
+        public async Task<TrainningReportViewModel> Invoke(string year, int contractId)
         {
             List<int> accessibleContracts = await contractRepository.GetAccessibleContractsForUser(contractId);
 
-            var result = await reportRepository.GetTrainningReport(Int32.Parse(year), accessibleContracts, trainningId);
-            /*
-            if (result.report.IsNullOrEmpty())
-            {
-                throw new Exception(StringConstants.Exception.REPORT_WITH_NO_DATA);
-            }
-            */
+            var result = await reportRepository.GetTrainningReport(Int32.Parse(year), accessibleContracts);
+           
             return result;
         }
     }

@@ -212,11 +212,11 @@ namespace PortalEquador.Controllers.Report
             return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
         }
 
-        /*--------------DefensiveDrivingReport---------------*/
+        /*--------------TrainningReport---------------*/
 
-        public async Task<IActionResult> DefensiveDrivingReportForm(string? error)
+        public async Task<IActionResult> TrainningReportForm(string? error)
         {
-            var model = await repository.GetTrainningForm(ItemFromGroup.Trainning.DEFENSIVE_DRIVING);
+            var model = await repository.GetTrainningForm();
             if (error != null)
             {
                 model.Error = error;
@@ -226,23 +226,23 @@ namespace PortalEquador.Controllers.Report
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DefensiveDrivingReportForm(TrainningReportFormViewModel viewmodel)
+        public async Task<IActionResult> TrainningReportForm(TrainningReportFormViewModel viewmodel)
         {
             try
             {
-                return await ExportDefensiveDrivingReportInExcel(viewmodel.Year, viewmodel.ContractId);
+                return await ExportTrainningReportInExcel(viewmodel.Year, viewmodel.ContractId);
             }
             catch (Exception ex)
             {
-                return await DefensiveDrivingReportForm(ex.Message.ToString());
+                return await TrainningReportForm(ex.Message.ToString());
             }
         }
 
         [HttpGet]
-        public async Task<FileResult> ExportDefensiveDrivingReportInExcel(string year, int contractId)
+        public async Task<FileResult> ExportTrainningReportInExcel(string year, int contractId)
         {
-            var result = await getTrainningReportUseCase.Invoke(year, contractId, GroupTypesConstants.ItemFromGroup.Trainning.DEFENSIVE_DRIVING);
-            var report = DefensiveDriveReport.GenerateReport(result);
+            var result = await getTrainningReportUseCase.Invoke(year, contractId);
+            var report = TrainningReport.GenerateReport(result);
             return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
         }
 

@@ -4,23 +4,25 @@ using PortalEquador.Domain.Report.ViewModels.MedicalExam;
 using PortalEquador.Util.Constants;
 using System.Globalization;
 using PortalEquador.Domain.Report.ViewModels.Trainning;
+using PortalEquador.Domain.Uniforms.ViewModels;
+using PortalEquador.Domain.GroupTypes.ViewModels;
+using PortalEquador.Domain.Report.ViewModels.Uniforms;
 
 namespace PortalEquador.Util.Report
 {
-    public class DefensiveDriveReport
+    public class TrainningReport
     {
         public static ExcelPackage GenerateReport(TrainningReportViewModel viewModel)
         {
             ExcelPackage.License.SetNonCommercialOrganization("My Noncommercial organization");
             var package = new ExcelPackage();
 
-            var worksheet = package.Workbook.Worksheets.Add("DefensiveDriveReport");
+            var worksheet = package.Workbook.Worksheets.Add("TrainningReport");
+     
 
-            var nextRow = AddHeader(worksheet, viewModel.Date);
-            nextRow = AddSubHeader(worksheet, nextRow);
-
-            AddContent(worksheet, nextRow, viewModel.report);
-
+            var nextRow = AddTitleHeader(worksheet, viewModel.Date);
+            nextRow = AddHeader(worksheet, nextRow, viewModel.Trainnings);
+            AddContent(worksheet, nextRow, viewModel.Trainnings, viewModel.report);
             worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
             /*
             
@@ -30,17 +32,11 @@ namespace PortalEquador.Util.Report
             return package;
         }
 
-        private static int AddHeader(ExcelWorksheet ws, int date)
+        private static int AddTitleHeader(ExcelWorksheet ws, int date)
         {
             int row = 1;
             int column = 1;
 
-            ws.Cells[row, column].Value = StringConstants.Report.DEFENSIVE_DRIVE;
-            ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-            ws.Cells[row, column, row, column + 5].Merge = true;
-
-            column = 7;
             ws.Cells[row, column].Value = StringConstants.Display.EXERCISE + " " + date;
             ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
@@ -49,7 +45,7 @@ namespace PortalEquador.Util.Report
             return 2;
         }
 
-        private static int AddSubHeader(ExcelWorksheet ws, int row)
+        private static int AddHeader(ExcelWorksheet ws, int row, List<GroupItemViewModel> trainnings)
         {
             int column = 1;
 
@@ -62,29 +58,29 @@ namespace PortalEquador.Util.Report
             ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-            CultureInfo culture = new CultureInfo("pt-PT");
-            string[] monthAbbr = culture.DateTimeFormat.AbbreviatedMonthNames;
-
-            foreach (string month in monthAbbr)
+            foreach (var item in trainnings)
             {
-                if (!string.IsNullOrEmpty(month)) // last element is empty
-                {
-                    ++column;
-                    ws.Cells[row, column].Value = month;
-                    ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                    ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                }
+                ++column;
+                ws.Cells[row, column].Value = item.Description;
+                ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             }
 
-            return row + 1;
+            return ++row;
         }
 
 
-        private static void AddContent(ExcelWorksheet ws, int row, List<TrainningReportItemViewModel> report)
+        private static void AddContent(
+            ExcelWorksheet ws,
+            int row,
+            List<GroupItemViewModel> trainnings,
+            List<TrainningReportItemViewModel> report
+            )
         {
             foreach (var item in report)
             {
                 var column = 1;
+
                 ws.Cells[row, column].Value = item.FullName;
                 ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -94,23 +90,23 @@ namespace PortalEquador.Util.Report
                 ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                ++column;
-                CultureInfo culture = new CultureInfo("pt-PT");
+                var index = 0;
 
-                for (int month = 1; month <= 12; month++)
+                foreach (var trainning in trainnings)
                 {
-                    if (item.Date.Month == month)
+                    ++column;
+
+                    if (trainning.Id == item.TrainningId)
                     {
-                        var monthColumn = column + month;
-                        ws.Cells[row, monthColumn].Value = item.Date.ToString(TimeUtil.dd_MM_yyyy);
-                        ws.Cells[row, monthColumn].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                        ws.Cells[row, monthColumn].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                        break;
+                        ws.Cells[row, column].Value = item.Date.ToString(TimeUtil.dd_MM_yyyy);
+                        ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                     }
                 }
 
                 ++row;
             }
         }
+
     }
 }

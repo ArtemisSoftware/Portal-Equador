@@ -29,8 +29,8 @@ namespace PortalEquador.Domain.Report.Repository
         Task<ProfessionalExperienceReportFormViewModel> GetProfessionalExperienceForm();
         Task<ProfessionalExperienceReportViewModel> GetProfessionalExperienceReport(int experienceId, List<int> accessibleContracts);
 
-        Task<TrainningReportFormViewModel> GetTrainningForm(int trainningId);
-        Task<TrainningReportViewModel> GetTrainningReport(int year, List<int> accessibleContracts, int trainningId);
+        Task<TrainningReportFormViewModel> GetTrainningForm();
+        Task<TrainningReportViewModel> GetTrainningReport(int year, List<int> accessibleContracts);
 
         Task<EducationReportFormViewModel> GetEducationForm();
         Task<EducationReportViewModel> GetEducationReport(int educationId);
