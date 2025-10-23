@@ -84,7 +84,9 @@
             });
 
             // Delete button logic
-            $('.table').on('click', '.deleteBtn').click(function (e) {
+            $('.table').on('click', '.deleteBtn', function (e) {
+                e.preventDefault(); // prevent any default form behavior just in case
+
                 swal({
                     title: "Eliminar formação",
                     text: "Tem a certeza que pretende eliminar a formação?",
@@ -97,9 +99,11 @@
                         var id = btn.data("id");
                         var identifier = btn.data("identifier");
                         var username = btn.data("username");
+
                         $('#id').val(id);
                         $('#identifier').val(identifier);
                         $('#username').val(username);
+
                         $('#deleteTrainning').submit();
                     }
                 });
