@@ -1,19 +1,11 @@
 ﻿using AutoMapper;
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using DocumentFormat.OpenXml.Drawing.Diagrams;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PortalEquador.Data.Generic;
-using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.MechanicalWorkshop;
-using PortalEquador.Data.Migrations;
 using PortalEquador.Data.Profession.Experience.Entity;
-using PortalEquador.Domain.Accident.ViewModels;
 using PortalEquador.Domain.GroupTypes.ViewModels;
-using PortalEquador.Domain.MedicalExam.ViewModels;
 using PortalEquador.Domain.Report.Repository;
 using PortalEquador.Domain.Report.ViewModels;
 using PortalEquador.Domain.Report.ViewModels.Accident;
@@ -27,10 +19,8 @@ using PortalEquador.Domain.Report.ViewModels.Trainning;
 using PortalEquador.Domain.Report.ViewModels.Uniforms;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using GroupItemEntity = PortalEquador.Data.GroupTypes.entities.GroupItemEntity;
 
 namespace PortalEquador.Data.Report.Repository
