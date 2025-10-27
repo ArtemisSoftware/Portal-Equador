@@ -37,12 +37,19 @@ namespace PortalEquador.Util.Report
             int row = 1;
             int column = 1;
 
+            ws.Cells[row, column].Value = StringConstants.Report.TRAINNING.ToUpper();
+            ws.Cells[row, column].Style.Font.Bold = true;
+            ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+            ws.Cells[row, column, row, column + 7].Merge = true;
+
+            ++row;
             ws.Cells[row, column].Value = StringConstants.Display.EXERCISE + " " + date;
             ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
             ws.Cells[row, column, row, column + 7].Merge = true;
 
-            return 2;
+            return row + 1;
         }
 
         private static int AddHeader(ExcelWorksheet ws, int row, List<GroupItemViewModel> trainnings)
@@ -55,6 +62,11 @@ namespace PortalEquador.Util.Report
 
             ++column;
             ws.Cells[row, column].Value = StringConstants.Display.CONTRACT;
+            ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+            ++column;
+            ws.Cells[row, column].Value = StringConstants.Display.DATE;
             ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
@@ -90,6 +102,12 @@ namespace PortalEquador.Util.Report
                 ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
+                ++column;
+                ws.Cells[row, column].Value = item.Date/*.ToString(TimeUtil.dd_MM_yyyy)*/;
+                ws.Cells[row, column].Style.Numberformat.Format = "dd-MM-yyyy";
+                ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
                 var index = 0;
 
                 foreach (var trainning in trainnings)
@@ -98,9 +116,11 @@ namespace PortalEquador.Util.Report
 
                     if (trainning.Id == item.TrainningId)
                     {
-                        ws.Cells[row, column].Value = item.Date.ToString(TimeUtil.dd_MM_yyyy);
-                        ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        ws.Cells[row, column].Value = "✓";
+                        ws.Cells[row, column].Style.Font.Color.SetColor(System.Drawing.Color.Green);
+                        ws.Cells[row, column].Style.Font.Bold = true;
                         ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     }
                 }
 

@@ -635,7 +635,10 @@ namespace PortalEquador.Data.Report.Repository
                             Trainning = trainningItem.Description,
                         };
 
-            var result = await query.OrderBy(x => x.FullName).ToListAsync();
+            var result = await query
+                .OrderBy(x => x.FullName)
+                .ThenByDescending(x => x.Date)
+                .ToListAsync();
 
             return new TrainningReportViewModel
             {
