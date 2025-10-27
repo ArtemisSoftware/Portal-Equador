@@ -101,7 +101,7 @@ namespace PortalEquador.Util.Report
             ExcelWorksheet ws,
             int row,
             List<GroupItemViewModel> trainnings,
-            List<TrainningReportItemViewModel> report
+            List<TrainningPerDayViewModel> report
             )
         {
             foreach (var item in report)
@@ -129,7 +129,7 @@ namespace PortalEquador.Util.Report
                 {
                     ++column;
 
-                    if (trainning.Id == item.TrainningId)
+                    if (item.Trainings.Contains(trainning.Id))
                     {
                         ws.Cells[row, column].Value = "✓";
                         ws.Cells[row, column].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
