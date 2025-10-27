@@ -23,12 +23,27 @@ namespace PortalEquador.Util.Report
             var nextRow = AddTitleHeader(worksheet, viewModel.Date);
             nextRow = AddHeader(worksheet, nextRow, viewModel.Trainnings);
             AddContent(worksheet, nextRow, viewModel.Trainnings, viewModel.report);
+
             worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
-            /*
-            
-            worksheet.Row(2).Height = 40;
-            */
-            worksheet.Row(1).Height = 30;
+            worksheet.Cells[worksheet.Dimension.Address].Style.WrapText = true;
+            int totalColumns = worksheet.Dimension.End.Column;
+            double maxWidth = 0;
+
+            // find the widest column
+            for (int col = 1; col <= totalColumns; col++)
+            {
+                if (worksheet.Column(col).Width > maxWidth)
+                    maxWidth = worksheet.Column(col).Width;
+            }
+
+            // set all columns to that width
+            for (int col = 4; col <= totalColumns; col++)
+            {
+                worksheet.Column(col).Width = maxWidth * 2 /3;
+            }
+
+            worksheet.Row(1).Height = 40;
+            worksheet.Row(2).Height = 30;
             return package;
         }
 
@@ -117,7 +132,7 @@ namespace PortalEquador.Util.Report
                     if (trainning.Id == item.TrainningId)
                     {
                         ws.Cells[row, column].Value = "✓";
-                        ws.Cells[row, column].Style.Font.Color.SetColor(System.Drawing.Color.Green);
+                        ws.Cells[row, column].Style.Font.Color.SetColor(System.Drawing.Color.Blue);
                         ws.Cells[row, column].Style.Font.Bold = true;
                         ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                         ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
