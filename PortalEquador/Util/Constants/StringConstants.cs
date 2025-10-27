@@ -184,7 +184,8 @@
             public const string ALCHOOL_TEST = "Relatório de testes de alcool";
             public const string MEDICAL_EXAM = "Relatório dos exames médicos realizados";
             public const string DEFENSIVE_DRIVE = "Relatório da formação condução defensiva";
-            public const string ACCIDENT = "Relatório de acidents";
+            public const string ACCIDENT = "Relatório de acidentes";
+            public const string TRAINNING = "Relatório de formações regulares";
 
             public const int ALL_ID = -1;
             public const string ALL_CONTRACTS = "Todos os contractos";
