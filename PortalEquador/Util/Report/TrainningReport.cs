@@ -39,7 +39,7 @@ namespace PortalEquador.Util.Report
             // set all columns to that width
             for (int col = 4; col <= totalColumns; col++)
             {
-                worksheet.Column(col).Width = maxWidth * 2 /3;
+                worksheet.Column(col).Width = maxWidth /3;
             }
 
             worksheet.Row(1).Height = 40;
