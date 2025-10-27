@@ -603,46 +603,101 @@ namespace PortalEquador.Data.Report.Repository
 
 
             var latestContractIds = GetLatestContracts();
+            /*
+                        var query =
 
-            var query =
+                            from contract in context.ContractEntity
+                            where latestContractIds.Contains(contract.Id)
+                                  && contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED
+                                  && accessibleContracts.Contains((int)contract.ContractId)
 
+                            join trainning in context.TrainningEntity
+                                on contract.PersonalInformationId equals trainning.PersonalInformationId
+
+                            where trainning.Date.Year == year
+
+                            let personal = trainning.PersonalInformationEntity
+
+                            join trainningItem in context.GroupItemEntity
+                            on trainning.TrainningId equals trainningItem.Id into trainningItemGroup
+                            from trainningItem in trainningItemGroup.DefaultIfEmpty()
+
+                            join workStationItem in context.GroupItemEntity
+                            on contract.ContractId equals workStationItem.Id into workStationItemGroup
+                            from workStationItem in workStationItemGroup.DefaultIfEmpty()
+
+                            select new TrainningReportItemViewModel
+                                    {
+                                        FullName = personal.FirstName + " " + personal.LastName,
+                                        Date = trainning.Date,
+                                        WorkStation = workStationItem.Description,
+                                        TrainningId = trainningItem.Id,
+                                        Trainning = trainningItem.Description,
+                                    };
+
+                        var result = await query
+                            .OrderBy(x => x.FullName)
+                            .ThenByDescending(x => x.Date)
+                            .ToListAsync();
+            */
+
+            var raw = await (
                 from contract in context.ContractEntity
                 where latestContractIds.Contains(contract.Id)
                       && contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED
                       && accessibleContracts.Contains((int)contract.ContractId)
-
                 join trainning in context.TrainningEntity
                     on contract.PersonalInformationId equals trainning.PersonalInformationId
-
                 where trainning.Date.Year == year
-
                 let personal = trainning.PersonalInformationEntity
-
                 join trainningItem in context.GroupItemEntity
-                on trainning.TrainningId equals trainningItem.Id into trainningItemGroup
+                    on trainning.TrainningId equals trainningItem.Id into trainningItemGroup
                 from trainningItem in trainningItemGroup.DefaultIfEmpty()
-
                 join workStationItem in context.GroupItemEntity
-                on contract.ContractId equals workStationItem.Id into workStationItemGroup
+                    on contract.ContractId equals workStationItem.Id into workStationItemGroup
                 from workStationItem in workStationItemGroup.DefaultIfEmpty()
+                select new
+                {
+                    PersonalId = personal.Id,
+                    FirstName = personal.FirstName,
+                    LastName = personal.LastName,
+                    TrainDate = trainning.Date,
+                    WorkStation = workStationItem.Description,
+                    TrainningId = trainningItem.Id,
+                    Trainning = trainningItem.Description
+                }
+            ).ToListAsync(); // <--- Forces DB evaluation before grouping
 
-                select new TrainningReportItemViewModel
-                        {
-                            FullName = personal.FirstName + " " + personal.LastName,
-                            Date = trainning.Date,
-                            WorkStation = workStationItem.Description,
-                            TrainningId = trainningItem.Id,
-                            Trainning = trainningItem.Description,
-                        };
 
-            var result = await query
+            // Step 2: Do grouping and projections in memory
+            var grouped = raw
+                .GroupBy(x => new
+                {
+                    x.PersonalId,
+                    x.FirstName,
+                    x.LastName,
+                    x.WorkStation,
+                    Year = x.TrainDate.Year,
+                    Month = x.TrainDate.Month,
+                    Day = x.TrainDate.Day
+                })
+                .Select(g => new TrainningPerDayViewModel
+                {
+                    FullName = g.Key.FirstName + " " + g.Key.LastName,
+                    Date = new DateTime(g.Key.Year, g.Key.Month, g.Key.Day),
+                    WorkStation = g.Key.WorkStation,
+                    Trainings = g
+                        .OrderBy(t => t.Trainning)
+                        .Select(t => t.TrainningId)
+                        .ToList()
+                })
                 .OrderBy(x => x.FullName)
                 .ThenByDescending(x => x.Date)
-                .ToListAsync();
+                .ToList();
 
             return new TrainningReportViewModel
             {
-                report = result,
+                report = grouped,
                 Date = year,
                 Trainnings = trainnings,
             };
