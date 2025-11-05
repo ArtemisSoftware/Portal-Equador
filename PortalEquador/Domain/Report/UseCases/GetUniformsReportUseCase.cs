@@ -13,15 +13,13 @@ namespace PortalEquador.Domain.Report.UseCases
         IUniformRepository uniformRepository
         )
     {
-        public async Task<UniformsReportViewModel> Invoke(int contractId, bool addUniformReturn)
+        public async Task<UniformsReportViewModel> Invoke(int contractId, bool addUniformReturn, int year)
         {
             List<int> accessibleContracts = await contractRepository.GetAccessibleContractsForUser(contractId);
 
-            var description = await contractRepository.GetContractDescription(accessibleContracts);
-
             var uniforms = await uniformRepository.GetAllUniforms(OrderType.Alphabetic);
 
-            var result = await reportRepository.GetUniformsReport(description, accessibleContracts, addUniformReturn);
+            var result = await reportRepository.GetUniformsReport(year, accessibleContracts, addUniformReturn);
 
             result.Uniforms = uniforms;
             result.AddUniformReturn = addUniformReturn;

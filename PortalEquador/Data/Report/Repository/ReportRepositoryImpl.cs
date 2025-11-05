@@ -379,54 +379,7 @@ namespace PortalEquador.Data.Report.Repository
              );
             var medicalExams = mapper.Map<List<GroupItemViewModel>>(resultMedialExams);
 
-
             var latestContractIds = GetLatestContracts();
-            /*
-            var query = from contract in context.ContractEntity
-                        where latestContractIds.Contains(contract.Id)
-                        where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED && accessibleContracts.Contains((int)contract.ContractId)
-
-                        let personal = contract.PersonalInformationEntity
-                        orderby personal.FirstName
-
-                        join medical in (
-                            from medicalInfo in context.MedicalExamEntity
-                            where medicalInfo.Date.Year == year
-                            select new
-                            {
-                                medicalInfo.PersonalInformationId,
-                                medicalInfo.ExamId,
-                                medicalInfo.Date,
-                                medicalInfo.ResultId,
-                            }
-                        )
-                        on contract.PersonalInformationEntity.Id equals medical.PersonalInformationId into contractJoin
-                        from contractResult in contractJoin.DefaultIfEmpty()
-                        where contractResult.PersonalInformationId != null
-
-                        join workStationItem in context.GroupItemEntity
-                        on contract.ContractId equals workStationItem.Id into workStationItemGroup
-                        from workStationItem in workStationItemGroup.DefaultIfEmpty()
-
-                        join examItem in context.GroupItemEntity
-                        on contractResult.ExamId equals examItem.Id into examItemGroup
-                        from examItem in examItemGroup.DefaultIfEmpty()
-
-                        join examResultItem in context.GroupItemEntity
-                        on contractResult.ResultId equals examResultItem.Id into examResultItemGroup
-                        from examResultItem in examResultItemGroup.DefaultIfEmpty()
-
-                        select new MedicalExamReportItemViewModel
-                        {
-                            FullName = personal.FirstName + " " + personal.LastName,
-                            Date = contractResult.Date,
-                            WorkStation = workStationItem.Description,
-                            Exam = examItem.Description,
-                            Situation = examResultItem.Description
-                        };
-
-            var result = await query.ToListAsync();
-            */
 
             var raw = await (
                 from contract in context.ContractEntity
@@ -956,6 +909,24 @@ namespace PortalEquador.Data.Report.Repository
             var userId = GetCurrentUserId();
             var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
 
+            var yearDates = context.WorkerUniformEntity
+                .GroupBy(d => new { d.Date.Year })
+                .Select(g => g.OrderBy(x => x.Date).First().Date)
+                .OrderBy(x => x.Date)
+                .ToList();
+
+            var dates = new SelectList(
+                yearDates
+                .OrderByDescending(d => d)
+                .Select(
+                    d => new {
+                        Value = d.ToString(TimeUtil.yyyy), // or just d if you're binding to a DateTime
+                        Text = d.ToString(TimeUtil.yyyy, new CultureInfo("pt-PT")) // e.g., "julho 2025"
+                    }
+                  ), "Value", "Text"
+            );
+
+
             SelectList? contracts;
 
             if (hasFullAccess)
@@ -983,16 +954,18 @@ namespace PortalEquador.Data.Report.Repository
 
             var model = new UniformsReportFormViewModel
             {
+                Dates = dates,
                 Contracts = contracts,
             };
 
             return model;
         }
 
-        public async Task<UniformsReportViewModel> GetUniformsReport(string description, List<int> accessibleContracts, bool addUniformReturn)
+        public async Task<UniformsReportViewModel> GetUniformsReport(int year, List<int> accessibleContracts, bool addUniformReturn)
         {
 
             var latestContractIds = GetLatestContracts();
+            /*
             var query =
                     from contract in context.ContractEntity
                     where latestContractIds.Contains(contract.Id)
@@ -1032,6 +1005,59 @@ namespace PortalEquador.Data.Report.Repository
                             //Observation = workerUniform.Observation
                         };
             var result = await query.OrderBy(x => x.FullName).ToListAsync();
+            */
+
+            var query =
+                from contract in context.ContractEntity
+                where latestContractIds.Contains(contract.Id)
+                      && contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED
+                      && accessibleContracts.Contains((int)contract.ContractId)
+
+                let personal = contract.PersonalInformationEntity
+
+                // LEFT JOIN uniforms
+                join uniform in context.WorkerUniformEntity
+                    .Where(u => u.Date.Year == year)
+                    on personal.Id equals uniform.PersonalInformationId into uniformJoin
+                from uniform in uniformJoin.DefaultIfEmpty()   // <-- this allows null uniform
+
+                    // LEFT JOIN sizes
+                join sizeItem in context.GroupItemEntity
+                    on new { Size = uniform != null ? uniform.Size : null, GroupId = Groups.CLOTHES_SIZES }
+                    equals new { Size = sizeItem.Id.ToString(), GroupId = sizeItem.GroupEntityId }
+                    into sizeItemGroup
+                from sizeItem in sizeItemGroup.DefaultIfEmpty()
+
+                    // LEFT JOIN uniform item (type)
+                join uniformItem in context.UniformEntity
+                    on uniform != null ? uniform.UniformId : (int?)null equals uniformItem.Id into uniformItemGroup
+                from uniformItem in uniformItemGroup.DefaultIfEmpty()
+
+                    // LEFT join workstation
+                join workStationItem in context.GroupItemEntity
+                    on contract.ContractId equals workStationItem.Id into workStationItemGroup
+                from workStationItem in workStationItemGroup.DefaultIfEmpty()
+
+                orderby personal.FirstName
+
+                select new UniformsReportItemViewModel
+                {
+                    FullName = personal.FirstName + " " + personal.LastName,
+                    WorkStation = workStationItem.Description,
+
+                    // if no uniform → these become null
+                    Quantity = uniform != null ? uniform.Quantity : null,
+                    Size = sizeItem != null ? sizeItem.Description : uniform != null ? uniform.Size : null,
+                    Date = uniform != null ? (DateTime?)uniform.Date : null,
+                    ReturnDate = uniform != null ? (DateTime?)uniform.ReturnDate : null,
+                    UniformId = uniform != null ? (int?)uniform.UniformId : null,
+                    Uniform = uniformItem != null ? uniformItem.Description : null
+                };
+
+            var result = await query
+                .OrderBy(x => x.FullName)
+                .ThenBy(x => x.Date)
+                .ToListAsync();
 
             return new UniformsReportViewModel
             {

@@ -3,6 +3,7 @@ using OfficeOpenXml;
 using PortalEquador.Util.Constants;
 using PortalEquador.Domain.Report.ViewModels.Uniforms;
 using PortalEquador.Domain.Uniforms.ViewModels;
+using static PortalEquador.Util.Constants.GroupTypesConstants.ItemFromGroup;
 
 namespace PortalEquador.Util.Report
 {
@@ -103,17 +104,16 @@ namespace PortalEquador.Util.Report
                 ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
-                var index = 0;
-
                 foreach (var uniform in uniforms)
                 {
                     ++column;
 
                     if(uniform.Id == item.UniformId)
                     {
-                        ws.Cells[row, column].Value = item.Date.ToString(TimeUtil.dd_MM_yyyy);
+                        ws.Cells[row, column].Value = item.Date;
+                        ws.Cells[row, column].Style.Numberformat.Format = TimeUtil.dd_MM_yyyy;
                         ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-                        ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                     }
                 }
 
@@ -129,7 +129,12 @@ namespace PortalEquador.Util.Report
                     ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 }
-                
+
+                if (!item.Date.HasValue)
+                {
+                    ws.Cells[row, 1, row, column + uniforms.Count - 2].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    ws.Cells[row, 1, row, column + uniforms.Count - 2].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
+                }
 
                 ++row;
             }

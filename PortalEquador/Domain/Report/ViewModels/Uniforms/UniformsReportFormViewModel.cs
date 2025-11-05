@@ -26,5 +26,13 @@ namespace PortalEquador.Domain.Report.ViewModels.Uniforms
         [Display(Name = StringConstants.Display.ADD_UNIFORM_RETURN)]
         [Required]
         public bool AddUniformReturn { get; set; }
+
+        [Display(Name = StringConstants.Display.DATE)]
+        [Required]
+        public SelectList? Dates { get; set; }
+
+        [Display(Name = StringConstants.Display.YEAR)]
+        [Required]
+        public string Year { get; set; }
     }
 }
