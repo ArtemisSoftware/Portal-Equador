@@ -135,8 +135,9 @@ namespace PortalEquador.Util.Report
 
                 if (!item.Date.HasValue)
                 {
-                    ws.Cells[row, 1, row, column + trainnings.Count -2].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                    ws.Cells[row, 1, row, column + trainnings.Count-2].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
+                    var endColumn = 3 + trainnings.Count;
+                    ws.Cells[row, 1, row, endColumn].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    ws.Cells[row, 1, row, endColumn].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
                 }
 
                 ++row;
