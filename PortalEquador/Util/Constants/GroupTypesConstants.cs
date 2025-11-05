@@ -82,9 +82,9 @@
         {
             public static class ExamResult
             {
-                public static readonly int APT = (new Item { Debug = 77, Production = 1 }).Value;
-                public static readonly int CONDITIONED = (new Item { Debug = 78, Production = 1 }).Value;
-                public static readonly int INEPT = (new Item { Debug = 79, Production = 1 }).Value;
+                public static readonly int APT = (new Item { Debug = 77, Production = 389 }).Value;
+                public static readonly int CONDITIONED = (new Item { Debug = 78, Production = 391 }).Value;
+                public static readonly int INEPT = (new Item { Debug = 79, Production = 390 }).Value;
             }
 
             public static class Trainning
