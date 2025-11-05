@@ -370,60 +370,94 @@ namespace PortalEquador.Data.Report.Repository
 
             return model;
         }
+        
         public async Task<MedicalExamReportViewModel> GetMedicalExamReport(int year, List<int> accessibleContracts)
         {
+            var resultMedialExams = await GroupItemsList(
+                    Groups.EXAM,
+                    OrderType.Alphabetic
+             );
+            var medicalExams = mapper.Map<List<GroupItemViewModel>>(resultMedialExams);
+
             var latestContractIds = GetLatestContracts();
 
-            var query = from contract in context.ContractEntity
-                        where latestContractIds.Contains(contract.Id)
-                        where contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED && accessibleContracts.Contains((int)contract.ContractId)
+            var raw = await (
+                from contract in context.ContractEntity
+                where latestContractIds.Contains(contract.Id)
+                      && contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED
+                      && accessibleContracts.Contains((int)contract.ContractId)
 
-                        let personal = contract.PersonalInformationEntity
-                        orderby personal.FirstName
+                let personal = contract.PersonalInformationEntity
 
-                        join medical in (
-                            from medicalInfo in context.MedicalExamEntity
-                            where medicalInfo.Date.Year == year
-                            select new
-                            {
-                                medicalInfo.PersonalInformationId,
-                                medicalInfo.ExamId,
-                                medicalInfo.Date,
-                                medicalInfo.ResultId,
-                            }
-                        )
-                        on contract.PersonalInformationEntity.Id equals medical.PersonalInformationId into contractJoin
-                        from contractResult in contractJoin/*.Take(1)*/.DefaultIfEmpty()
-                        where contractResult.PersonalInformationId != null
+                // left join medical only for THIS year
+                join medical in context.MedicalExamEntity
+                    .Where(m => m.Date.Year == year)
+                    on personal.Id equals medical.PersonalInformationId into medJoin
+                from medical in medJoin.DefaultIfEmpty()
 
-                        join workStationItem in context.GroupItemEntity
-                        on contract.ContractId equals workStationItem.Id into workStationItemGroup
-                        from workStationItem in workStationItemGroup.DefaultIfEmpty()
+                    // workstation
+                join workStationItem in context.GroupItemEntity
+                    on contract.ContractId equals workStationItem.Id into workStationItemGroup
+                from workStationItem in workStationItemGroup.DefaultIfEmpty()
 
-                        join examItem in context.GroupItemEntity
-                        on contractResult.ExamId equals examItem.Id into examItemGroup
-                        from examItem in examItemGroup.DefaultIfEmpty()
+                    // exam item
+                join examItem in context.GroupItemEntity
+                    on medical != null ? medical.ExamId : (int?)null equals examItem.Id into examItemGroup
+                from examItem in examItemGroup.DefaultIfEmpty()
 
-                        join examResultItem in context.GroupItemEntity
-                        on contractResult.ResultId equals examResultItem.Id into examResultItemGroup
-                        from examResultItem in examResultItemGroup.DefaultIfEmpty()
+                    // result item
+                join examResultItem in context.GroupItemEntity
+                    on medical != null ? medical.ResultId : (int?)null equals examResultItem.Id into examResultItemGroup
+                from examResultItem in examResultItemGroup.DefaultIfEmpty()
 
-                        select new MedicalExamReportItemViewModel
+                select new
+                {
+                    PersonalId = personal.Id,
+                    FullName = personal.FirstName + " " + personal.LastName,
+                    Date = medical != null ? (DateTime?)medical.Date : null,
+                    WorkStation = workStationItem != null ? workStationItem.Description : null,
+                    ExamId = medical != null ? (int?)medical.ExamId : null,
+                    ResultId = medical != null ? (int?)medical.ResultId : null,
+                    Result = examResultItem != null ? examResultItem.Description : null
+                }
+            ).ToListAsync();
+
+            var grouped =
+                raw
+                .GroupBy(x => new { x.PersonalId, x.FullName, x.Date, x.WorkStation })
+                .Select(g =>
+                {
+                    var examPairs = g
+                        .Where(x => x.ExamId.HasValue)          // filter
+                        .GroupBy(x => x.ExamId.Value)           // safe
+                        .Select(gr => new MedicalExamInfoViewModel
                         {
-                            FullName = personal.FirstName + " " + personal.LastName,
-                            Date = contractResult.Date,
-                            WorkStation = workStationItem.Description,
-                            Exam = examItem.Description,
-                            Situation = examResultItem.Description
-                        };
+                            Id = gr.Key,
+                            SituationId = gr.Select(r => r.ResultId).FirstOrDefault(rid => rid != null),
+                            Situation = gr.Select(r => r.Result).FirstOrDefault(res => res != null)
+                        })
+                        .ToList();
 
-            var result = await query.ToListAsync();
+                    return new MedicalExamReportItemViewModel
+                    {
+                        FullName = g.Key.FullName,
+                        Date = g.Key.Date,
+                        WorkStation = g.Key.WorkStation,
+                        Exams = examPairs
+                    };
+                })
+                .OrderBy(x => x.FullName)
+                .ThenByDescending(x => x.Date ?? DateTime.MinValue)
+                .ToList();
+
 
             return new MedicalExamReportViewModel
             {
-                report = result,
+                Exams = medicalExams,
+                report = grouped,
                 Date = year
             };
+
         }
 
 
@@ -593,6 +627,7 @@ namespace PortalEquador.Data.Report.Repository
 
             return model;
         }
+        
         public async Task<TrainningReportViewModel> GetTrainningReport(int year, List<int> accessibleContracts)
         {
             var resultTrainnings = await GroupItemsList(
@@ -601,61 +636,28 @@ namespace PortalEquador.Data.Report.Repository
              );
             var trainnings = mapper.Map<List<GroupItemViewModel>>(resultTrainnings);
 
-
             var latestContractIds = GetLatestContracts();
-            /*
-                        var query =
-
-                            from contract in context.ContractEntity
-                            where latestContractIds.Contains(contract.Id)
-                                  && contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED
-                                  && accessibleContracts.Contains((int)contract.ContractId)
-
-                            join trainning in context.TrainningEntity
-                                on contract.PersonalInformationId equals trainning.PersonalInformationId
-
-                            where trainning.Date.Year == year
-
-                            let personal = trainning.PersonalInformationEntity
-
-                            join trainningItem in context.GroupItemEntity
-                            on trainning.TrainningId equals trainningItem.Id into trainningItemGroup
-                            from trainningItem in trainningItemGroup.DefaultIfEmpty()
-
-                            join workStationItem in context.GroupItemEntity
-                            on contract.ContractId equals workStationItem.Id into workStationItemGroup
-                            from workStationItem in workStationItemGroup.DefaultIfEmpty()
-
-                            select new TrainningReportItemViewModel
-                                    {
-                                        FullName = personal.FirstName + " " + personal.LastName,
-                                        Date = trainning.Date,
-                                        WorkStation = workStationItem.Description,
-                                        TrainningId = trainningItem.Id,
-                                        Trainning = trainningItem.Description,
-                                    };
-
-                        var result = await query
-                            .OrderBy(x => x.FullName)
-                            .ThenByDescending(x => x.Date)
-                            .ToListAsync();
-            */
 
             var raw = await (
                 from contract in context.ContractEntity
                 where latestContractIds.Contains(contract.Id)
                       && contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED
                       && accessibleContracts.Contains((int)contract.ContractId)
+
                 join trainning in context.TrainningEntity
                     on contract.PersonalInformationId equals trainning.PersonalInformationId
                 where trainning.Date.Year == year
+                
                 let personal = trainning.PersonalInformationEntity
+                
                 join trainningItem in context.GroupItemEntity
                     on trainning.TrainningId equals trainningItem.Id into trainningItemGroup
                 from trainningItem in trainningItemGroup.DefaultIfEmpty()
+                
                 join workStationItem in context.GroupItemEntity
                     on contract.ContractId equals workStationItem.Id into workStationItemGroup
                 from workStationItem in workStationItemGroup.DefaultIfEmpty()
+                
                 select new
                 {
                     PersonalId = personal.Id,
@@ -695,9 +697,44 @@ namespace PortalEquador.Data.Report.Repository
                 .ThenByDescending(x => x.Date)
                 .ToList();
 
+
+            var contractedPeopleQuery =
+                from contract in context.ContractEntity
+                where latestContractIds.Contains(contract.Id)
+                      && contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED
+                      && accessibleContracts.Contains((int)contract.ContractId)
+                select new
+                {
+                    PersonalId = contract.PersonalInformationId,
+                    WorkStationItem = context.GroupItemEntity.FirstOrDefault(x => x.Id == contract.ContractId)
+                };
+            var contractedPeople = await contractedPeopleQuery.ToListAsync();
+
+            var peopleWithTrainingIds = raw.Select(x => x.PersonalId).Distinct();
+
+            var peopleWithoutTraining = contractedPeople
+                .Where(x => !peopleWithTrainingIds.Contains(x.PersonalId))
+                .Select(x => new TrainningPerDayViewModel
+                {
+                    FullName = context.PersonalInformationEntity
+                                .Where(p => p.Id == x.PersonalId)
+                                .Select(p => p.FirstName + " " + p.LastName)
+                                .FirstOrDefault(),
+
+                    Date = null, 
+                    WorkStation = x.WorkStationItem.Description,
+                    Trainings = new List<int>()
+                })
+                .ToList();
+
+            var finalReport = grouped.Concat(peopleWithoutTraining)
+                                     .OrderBy(x => x.FullName)
+                                     .ThenByDescending(x => x.Date)
+                                     .ToList();
+
             return new TrainningReportViewModel
             {
-                report = grouped,
+                report = finalReport,
                 Date = year,
                 Trainnings = trainnings,
             };
@@ -872,6 +909,24 @@ namespace PortalEquador.Data.Report.Repository
             var userId = GetCurrentUserId();
             var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
 
+            var yearDates = context.WorkerUniformEntity
+                .GroupBy(d => new { d.Date.Year })
+                .Select(g => g.OrderBy(x => x.Date).First().Date)
+                .OrderBy(x => x.Date)
+                .ToList();
+
+            var dates = new SelectList(
+                yearDates
+                .OrderByDescending(d => d)
+                .Select(
+                    d => new {
+                        Value = d.ToString(TimeUtil.yyyy), // or just d if you're binding to a DateTime
+                        Text = d.ToString(TimeUtil.yyyy, new CultureInfo("pt-PT")) // e.g., "julho 2025"
+                    }
+                  ), "Value", "Text"
+            );
+
+
             SelectList? contracts;
 
             if (hasFullAccess)
@@ -899,16 +954,18 @@ namespace PortalEquador.Data.Report.Repository
 
             var model = new UniformsReportFormViewModel
             {
+                Dates = dates,
                 Contracts = contracts,
             };
 
             return model;
         }
 
-        public async Task<UniformsReportViewModel> GetUniformsReport(string description, List<int> accessibleContracts, bool addUniformReturn)
+        public async Task<UniformsReportViewModel> GetUniformsReport(int year, List<int> accessibleContracts, bool addUniformReturn)
         {
 
             var latestContractIds = GetLatestContracts();
+            /*
             var query =
                     from contract in context.ContractEntity
                     where latestContractIds.Contains(contract.Id)
@@ -948,6 +1005,59 @@ namespace PortalEquador.Data.Report.Repository
                             //Observation = workerUniform.Observation
                         };
             var result = await query.OrderBy(x => x.FullName).ToListAsync();
+            */
+
+            var query =
+                from contract in context.ContractEntity
+                where latestContractIds.Contains(contract.Id)
+                      && contract.ContractStateId == ItemFromGroup.ContractStates.CONTRACTED
+                      && accessibleContracts.Contains((int)contract.ContractId)
+
+                let personal = contract.PersonalInformationEntity
+
+                // LEFT JOIN uniforms
+                join uniform in context.WorkerUniformEntity
+                    .Where(u => u.Date.Year == year)
+                    on personal.Id equals uniform.PersonalInformationId into uniformJoin
+                from uniform in uniformJoin.DefaultIfEmpty()   // <-- this allows null uniform
+
+                    // LEFT JOIN sizes
+                join sizeItem in context.GroupItemEntity
+                    on new { Size = uniform != null ? uniform.Size : null, GroupId = Groups.CLOTHES_SIZES }
+                    equals new { Size = sizeItem.Id.ToString(), GroupId = sizeItem.GroupEntityId }
+                    into sizeItemGroup
+                from sizeItem in sizeItemGroup.DefaultIfEmpty()
+
+                    // LEFT JOIN uniform item (type)
+                join uniformItem in context.UniformEntity
+                    on uniform != null ? uniform.UniformId : (int?)null equals uniformItem.Id into uniformItemGroup
+                from uniformItem in uniformItemGroup.DefaultIfEmpty()
+
+                    // LEFT join workstation
+                join workStationItem in context.GroupItemEntity
+                    on contract.ContractId equals workStationItem.Id into workStationItemGroup
+                from workStationItem in workStationItemGroup.DefaultIfEmpty()
+
+                orderby personal.FirstName
+
+                select new UniformsReportItemViewModel
+                {
+                    FullName = personal.FirstName + " " + personal.LastName,
+                    WorkStation = workStationItem.Description,
+
+                    // if no uniform → these become null
+                    Quantity = uniform != null ? uniform.Quantity : null,
+                    Size = sizeItem != null ? sizeItem.Description : uniform != null ? uniform.Size : null,
+                    Date = uniform != null ? (DateTime?)uniform.Date : null,
+                    ReturnDate = uniform != null ? (DateTime?)uniform.ReturnDate : null,
+                    UniformId = uniform != null ? (int?)uniform.UniformId : null,
+                    Uniform = uniformItem != null ? uniformItem.Description : null
+                };
+
+            var result = await query
+                .OrderBy(x => x.FullName)
+                .ThenBy(x => x.Date)
+                .ToListAsync();
 
             return new UniformsReportViewModel
             {

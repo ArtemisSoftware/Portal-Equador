@@ -80,6 +80,13 @@
 
         public static class ItemFromGroup
         {
+            public static class ExamResult
+            {
+                public static readonly int APT = (new Item { Debug = 77, Production = 389 }).Value;
+                public static readonly int CONDITIONED = (new Item { Debug = 78, Production = 391 }).Value;
+                public static readonly int INEPT = (new Item { Debug = 79, Production = 390 }).Value;
+            }
+
             public static class Trainning
             {
                 public static readonly int DEFENSIVE_DRIVING = (new Item { Debug = 59, Production = 1 }).Value; //--299 356

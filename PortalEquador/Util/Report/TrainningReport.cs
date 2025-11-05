@@ -1,12 +1,8 @@
 ﻿using OfficeOpenXml.Style;
 using OfficeOpenXml;
-using PortalEquador.Domain.Report.ViewModels.MedicalExam;
 using PortalEquador.Util.Constants;
-using System.Globalization;
 using PortalEquador.Domain.Report.ViewModels.Trainning;
-using PortalEquador.Domain.Uniforms.ViewModels;
 using PortalEquador.Domain.GroupTypes.ViewModels;
-using PortalEquador.Domain.Report.ViewModels.Uniforms;
 
 namespace PortalEquador.Util.Report
 {
@@ -119,11 +115,9 @@ namespace PortalEquador.Util.Report
 
                 ++column;
                 ws.Cells[row, column].Value = item.Date/*.ToString(TimeUtil.dd_MM_yyyy)*/;
-                ws.Cells[row, column].Style.Numberformat.Format = "dd-MM-yyyy";
+                ws.Cells[row, column].Style.Numberformat.Format = TimeUtil.dd_MM_yyyy;
                 ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                 ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
-
-                var index = 0;
 
                 foreach (var trainning in trainnings)
                 {
@@ -137,6 +131,12 @@ namespace PortalEquador.Util.Report
                         ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                         ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                     }
+                }
+
+                if (!item.Date.HasValue)
+                {
+                    ws.Cells[row, 1, row, column + trainnings.Count -2].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    ws.Cells[row, 1, row, column + trainnings.Count-2].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
                 }
 
                 ++row;

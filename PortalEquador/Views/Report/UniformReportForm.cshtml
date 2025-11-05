@@ -11,6 +11,11 @@
 <div class="d-flex justify-content-center mt-5">
     <div style="width: 40%;">
         <form asp-action="UniformReportForm">
+
+            <div class="mb-3">
+                <label asp-for="Year" class="form-label"></label>
+                <select asp-for="Year" class="form-select" asp-items="Model.Dates"></select>
+            </div>
             
             <div class="mb-3">
                 <label asp-for="ContractId" class="form-label"></label>
