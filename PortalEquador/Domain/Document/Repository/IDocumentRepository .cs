@@ -3,6 +3,7 @@ using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Domain.DriversLicence.ViewModels;
 using PortalEquador.Domain.Generic;
 using PortalEquador.Util.EnumTypes;
+using PortalEquador.Util.Files.models;
 
 namespace PortalEquador.Domain.Document.Repository
 {
@@ -16,6 +17,8 @@ namespace PortalEquador.Domain.Document.Repository
         Task<DocumentViewModel> GetCreateModel(DocumentViewModel model);
         Task<bool> DocumentExists(int personaInformationId, int documentTypeId);
         Task Save(DocumentViewModel model);
+
+        Task Save(DocumentViewModel model, FileResource file);
 
         Task Save(DocumentViewModel model, FolderType folder);
 

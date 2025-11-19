@@ -46,6 +46,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Level)
             </th>
+            <th>Documento</th>
             <th></th>
         </tr>
     </thead>
@@ -67,6 +68,17 @@
                 </td>
                 <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.Level.Description)
+                </td>
+                <td class="align-middle">
+                    @if (item.Url != null)
+                    {
+                        <a class="link-offset-2"
+                           href="#"
+                           onclick="window.open('@Url.Content(item.Url)', '_blank'); return false;">
+                            Documento    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    }
+
                 </td>
                 <td>
                     @if (User.IsInRole(Roles.Administrator) || User.IsInRole(Roles.DataManager))

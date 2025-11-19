@@ -10,12 +10,19 @@ using PortalEquador.Domain.GroupTypes.Repository;
 using PortalEquador.Domain.PersonalInformation.Repository;
 using PortalEquador.Util;
 using PortalEquador.Util.EnumTypes;
+using PortalEquador.Util.Files;
+using PortalEquador.Util.Files.models;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 using static PortalEquador.Util.Constants.GroupTypesConstants.ItemFromGroup;
 
 namespace PortalEquador.Data.Document.Repository
 {
-    public class DocumentRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment hostEnvironment)
+    public class DocumentRepositoryImpl(
+        ApplicationDbContext context, 
+        IMapper mapper, 
+        IHttpContextAccessor httpContextAccessor, 
+        IWebHostEnvironment hostEnvironment
+        )
         : GenericRepository<DocumentEntity>(context, httpContextAccessor), IDocumentRepository
     {
         public async Task<List<DocumentViewModel>> GetAllDocuments(int PersonalInformationId)
@@ -160,6 +167,38 @@ namespace PortalEquador.Data.Document.Repository
             var entity = mapper.Map<DocumentEntity>(model);
             entity.Extension = extension;
             entity.EditorId = GetCurrentUserId();
+
+            if (model.Id == 0)
+            {
+                await AddAsync(entity);
+            }
+            else
+            {
+                entity.DateModified = DateTime.UtcNow;
+                await UpdateAsync(entity);
+            }
+        }
+
+        public async Task Save(DocumentViewModel model, FileResource file)
+        {
+            var fileUtil = new FileUtil();
+            await fileUtil.SaveFile(hostEnvironment, file);
+
+
+            var entity = mapper.Map<DocumentEntity>(model);
+            entity.Extension = file.GetExtension();
+            entity.EditorId = GetCurrentUserId();
+
+            // set Modified flag in your entry
+            var local = context.Set<DocumentEntity>().Local.FirstOrDefault(entry => entry.Id.Equals(model.Id));
+
+            // check if local is not null 
+            if (local != null)
+            {
+                // detach
+                context.Entry(local).State = EntityState.Detached;
+            }
+            context.Entry(entity).State = EntityState.Modified;
 
             if (model.Id == 0)
             {

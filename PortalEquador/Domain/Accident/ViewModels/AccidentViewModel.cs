@@ -105,6 +105,12 @@ namespace PortalEquador.Domain.Accident.ViewModels
         public int LevelId { get; set; }
 
         public SelectList? Levels { get; set; }
+
+
+        [Display(Name = StringConstants.Display.FILE)]
+        [NotMapped]
+        public IFormFile? PdfFile { get; set; }
+
     }
 
 
