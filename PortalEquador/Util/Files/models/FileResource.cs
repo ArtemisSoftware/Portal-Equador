@@ -1,5 +1,6 @@
 ﻿using PortalEquador.Data.Migrations;
 using PortalEquador.Domain.Accident.ViewModels;
+using PortalEquador.Domain.Report.ViewModels.Accident;
 using PortalEquador.Util.Constants;
 using PortalEquador.Util.EnumTypes;
 
@@ -119,6 +120,16 @@ namespace PortalEquador.Util.Files.models
                 folder: model.PersonaInformationId,
                 fileName: fileName + "",
                 formFile: model.FormFile
+            );
+        }
+
+        public static FileResource AccidentResource(AccidentResultViewModel model)
+        {
+            return new FileResource(
+                directory: FolderType.Accident,
+                folder: model.PersonalInformationId,
+                fileName: model.Id.ToString(),
+                extension: model.FileExtension
             );
         }
     }

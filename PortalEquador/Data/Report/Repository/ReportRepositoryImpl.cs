@@ -24,6 +24,7 @@ using PortalEquador.Util.Files;
 using PortalEquador.Util.Files.models;
 using System.Globalization;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
+using static PortalEquador.Util.Constants.GroupTypesConstants.ItemFromGroup;
 using GroupItemEntity = PortalEquador.Data.GroupTypes.entities.GroupItemEntity;
 
 namespace PortalEquador.Data.Report.Repository
@@ -895,7 +896,7 @@ namespace PortalEquador.Data.Report.Repository
                                 .ToList(),
 
                             FileExtension = context.DocumentEntity
-                                .Where(d => d.ParentId == a.Id)
+                                .Where(d => d.ParentId == a.Id && d.DocumentTypeId == Documents.ACCIDENT)
                                 .Select(d => d.Extension)
                                 .FirstOrDefault()
 
@@ -911,13 +912,7 @@ namespace PortalEquador.Data.Report.Repository
                 {
                     if (!string.IsNullOrEmpty(accident.FileExtension))
                     {
-                        var resource = new FileResource(
-                            directory: Util.EnumTypes.FolderType.Accident,
-                            folder: accident.PersonalInformationId,
-                            fileName: accident.Id.ToString(),
-                            extension: accident.FileExtension
-                        );
-
+                        var resource = FileResource.AccidentResource(accident);
                         accident.Url = FileUtil.GetFileAbsoluteLink(httpContextAccessor, resource);
                     }
                 });
