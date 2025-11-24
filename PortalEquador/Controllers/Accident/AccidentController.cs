@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PortalEquador.Domain.Accident.Repository;
 using PortalEquador.Domain.Accident.UseCases;
 using PortalEquador.Domain.Accident.ViewModels;
+using PortalEquador.Domain.Document;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.UseCases;
 using PortalEquador.Util.Constants;
 
@@ -13,6 +14,8 @@ namespace PortalEquador.Controllers.Accident
         GetVehiclesUseCase getVehiclesUseCase,
         GetVehicleUseCase getVehicleUse,
         SaveAccidentUseCase saveAccidentUseCase,
+        DeleteAccidentUseCase deleteAccidentUseCase,
+        DeleteDocumentUseCase deleteDocumentUseCase,
          IMapper mapper
 ) : Controller { 
 
@@ -142,8 +145,10 @@ namespace PortalEquador.Controllers.Accident
             {
                 if (ModelState.IsValid)
                 {
+                    var pdf = model.PdfFile;
                     model = await repository.GetAccidentForEdition(model.Id, model);
                     var newModel = mapper.Map<AccidentViewModel>(model);
+                    newModel.FormFile = pdf;
                     await saveAccidentUseCase.Invoke(newModel);
                     return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
                 }
@@ -158,7 +163,15 @@ namespace PortalEquador.Controllers.Accident
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteAccident(int id, int identifier, string username)
         {
-            await repository.DeleteAccident(id);
+            await deleteAccidentUseCase.Invoke(id);
+            return RedirectToAction(nameof(Index), new { identifier = identifier, fullName = username });
+        }
+
+        [HttpPost, ActionName("DeleteAccidentDocument")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAccidentDocument(int id, int identifier, string username)
+        {
+            await deleteDocumentUseCase.Invoke(id, Util.EnumTypes.FolderType.Accident);
             return RedirectToAction(nameof(Index), new { identifier = identifier, fullName = username });
         }
     }

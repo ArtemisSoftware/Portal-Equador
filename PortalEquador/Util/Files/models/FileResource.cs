@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using PortalEquador.Domain.Document.ViewModels;
+﻿using PortalEquador.Data.Migrations;
+using PortalEquador.Domain.Accident.ViewModels;
 using PortalEquador.Util.Constants;
 using PortalEquador.Util.EnumTypes;
-using static PortalEquador.Util.Constants.GroupTypesConstants;
 
 namespace PortalEquador.Util.Files.models
 {
@@ -107,6 +106,20 @@ namespace PortalEquador.Util.Files.models
             }
 
             return result;
+        }
+
+
+        //---------------------
+        //---------------------
+
+        public static FileResource AccidentResource(AccidentViewModel model, int fileName)
+        {
+            return  new FileResource(
+                directory: FolderType.Accident,
+                folder: model.PersonaInformationId,
+                fileName: fileName + "",
+                formFile: model.FormFile
+            );
         }
     }
 }

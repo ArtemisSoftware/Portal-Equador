@@ -1,29 +1,25 @@
-﻿using PortalEquador.Domain.Document.ViewModels;
-using PortalEquador.Util.Constants;
-using PortalEquador.Util.EnumTypes;
-using PortalEquador.Util.Files.models;
-using static PortalEquador.Util.Constants.GroupTypesConstants;
-using static PortalEquador.Util.Constants.GroupTypesConstants.ItemFromGroup;
+﻿using PortalEquador.Util.Files.models;
+using File = System.IO.File;
 
 namespace PortalEquador.Util.Files
 {
-    public class FileUtil
+    public static class FileUtil
     {
       
-        private string GetAbsoluteFullPath(IWebHostEnvironment hostEnvironment, FileResource file)
+        private static string GetAbsoluteFullPath(IWebHostEnvironment hostEnvironment, FileResource file)
         {
             string root = hostEnvironment.WebRootPath + file.GetFullPath();
             return root;
         }
 
-        private string GetAbsoluteFilePath(IWebHostEnvironment hostEnvironment, FileResource file)
+        private static string GetAbsoluteFilePath(IWebHostEnvironment hostEnvironment, FileResource file)
         {
             string root = GetAbsoluteFullPath(hostEnvironment, file);
             return Path.Combine(root, file.GetFullFileName());
         }
 
 
-        private void DeleteFile(IWebHostEnvironment hostEnvironment, FileResource file)
+        public static void DeleteFile(IWebHostEnvironment hostEnvironment, FileResource file)
         {
             List<string> matchingFilesPath = new List<string>();
             var fullPath = GetAbsoluteFullPath(hostEnvironment, file);
@@ -37,7 +33,7 @@ namespace PortalEquador.Util.Files
 
                 // Search for the image by name
                 matchingFilesPath = files
-                    .Where(filePath => Path.GetFileNameWithoutExtension(filePath).Equals(file.GetFullFileName(), StringComparison.OrdinalIgnoreCase))
+                    .Where(filePath => Path.GetFileName(filePath).Equals(file.GetFullFileName(), StringComparison.OrdinalIgnoreCase))
                     .ToList();
 
                 foreach (string filePath in matchingFilesPath)
@@ -51,7 +47,7 @@ namespace PortalEquador.Util.Files
             catch (DirectoryNotFoundException ex) { }
         }
 
-        public async Task SaveFile(IWebHostEnvironment hostEnvironment, FileResource file)
+        public static async Task SaveFile(IWebHostEnvironment hostEnvironment, FileResource file)
         {
             DeleteFile(hostEnvironment, file);
 
@@ -70,18 +66,30 @@ namespace PortalEquador.Util.Files
         }
 
 
-        public string GetFileLink(FileResource file)
+
+        public static string GetFileAbsoluteLink(IWebHostEnvironment hostEnvironment, FileResource file)
+        {
+            return GetAbsoluteFilePath(hostEnvironment, file) + CacheBustingValue();
+        }
+
+        public static string GetFileAbsoluteLink(IHttpContextAccessor http, FileResource file)
+        {
+            var request = http.HttpContext.Request;
+
+            var baseUrl = $"{request.Scheme}://{request.Host}";
+            var urlPath = $"/{file.GetFullPath().TrimStart('/')}{file.GetFullFileName()}";
+            return baseUrl + urlPath + CacheBustingValue();
+        }
+
+
+        public static string GetFileLink(FileResource file)
         {
             return "~" + file.GetFullFilePath() + CacheBustingValue();
         }
 
-        private string CacheBustingValue()
+        private static string CacheBustingValue()
         {
             return $"?v={DateTime.UtcNow.Ticks}";
         }
-
-
-        //protected abstract string[] GetExtensions();
-
     }
 }

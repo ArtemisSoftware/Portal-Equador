@@ -156,7 +156,6 @@ namespace PortalEquador.Data.Accident.Repository
 
             if (!documents.IsNullOrEmpty())
             {
-                var fileUtil = new FileUtil();
                 foreach (var accident in accidents)
                 {
                     var document = documents.FirstOrDefault(d => d.ParentId == accident.Id);
@@ -168,7 +167,7 @@ namespace PortalEquador.Data.Accident.Repository
                             folder: accident.PersonaInformationId,
                             fileName: accident.Id.ToString()
                          );
-                        accident.Url = fileUtil.GetFileLink(resource);
+                        accident.Url = FileUtil.GetFileLink(resource);
                     }
                 }
             }

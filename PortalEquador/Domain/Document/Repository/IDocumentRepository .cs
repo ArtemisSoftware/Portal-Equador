@@ -13,17 +13,24 @@ namespace PortalEquador.Domain.Document.Repository
         Task<List<DocumentViewModel>> GetDocumentByParentId(int id, List<int> documentTypeIds);
 
         Task<DocumentViewModel?> GetDocumentByParentId(int id, int documentTypeId);
+
         Task<DocumentViewModel> GetCreateModel(int personaInformationId, string fullName);
         Task<DocumentViewModel> GetCreateModel(DocumentViewModel model);
         Task<bool> DocumentExists(int personaInformationId, int documentTypeId);
         Task Save(DocumentViewModel model);
 
-        Task Save(DocumentViewModel model, FileResource file);
 
         Task Save(DocumentViewModel model, FolderType folder);
 
         Task DeleteDocument(int personaInformationId, int documentTypeId);
         Task DeleteDocument(int personaInformationId, DocumentViewModel model);
         Task DeleteDocument(FolderType folder, int personaInformationId, int fileId, DocumentViewModel model);
+
+
+
+        //-----
+        Task<DocumentViewModel?> GetDocumentByParentId_v2(int id, int documentTypeId);
+        Task Save(DocumentViewModel model, FileResource file);
+        Task DeleteDocument(int documentId, FileResource file);
     }
 }
