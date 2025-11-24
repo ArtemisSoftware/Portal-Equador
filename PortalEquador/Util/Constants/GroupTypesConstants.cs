@@ -123,7 +123,7 @@
                 public static readonly int MEDICAL_EXAM = (new Item { Debug = 65, Production = 296 }).Value;
                 public static readonly int TRAINNIG = (new Item { Debug = 66, Production = 298 }).Value;
                 public static readonly int DISCIPLINARY_NOTIFICATION = (new Item { Debug = 67, Production = 297 }).Value;
-                public static readonly int ACCIDENT = (new Item { Debug = 67, Production =-1 }).Value;
+                public static readonly int ACCIDENT = (new Item { Debug = 67, Production =458 }).Value;
 
 
 
