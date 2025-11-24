@@ -46,6 +46,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Level)
             </th>
+            <th>Documento</th>
             <th></th>
         </tr>
     </thead>
@@ -68,6 +69,17 @@
                 <td class="align-middle">
                     @Html.DisplayFor(modelItem => item.Level.Description)
                 </td>
+                <td class="align-middle">
+                    @if (item.Url != null)
+                    {
+                        <a class="link-offset-2"
+                           href="#"
+                           onclick="window.open('@Url.Content(item.Url)', '_blank'); return false;">
+                            Documento    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                        </a>
+                    }
+
+                </td>
                 <td>
                     @if (User.IsInRole(Roles.Administrator) || User.IsInRole(Roles.DataManager))
                     {
@@ -77,7 +89,15 @@
 
                     @if (User.IsInRole(Roles.Administrator) || User.IsInRole(Roles.DataManager))
                     {
-                        <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username"><i class="fas fa-trash-alt" title="Editar"></i></button>
+                        <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username">
+                            <i class="fas fa-trash-alt" title="Editar"></i>
+                         </button>
+                        @if (item.Url != null)
+                        {
+                            <button data-id="@item.Id" class="btn btn-danger deleteDocBtn" type="button" data-identifier="@ViewBag.identifier" data-username="@ViewBag.username">
+                                Remover documento
+                             </button>
+                        }
                     }
                     
                 </td>
@@ -92,6 +112,12 @@
     <input type="hidden" id="username" name="username" />
 </form>
 
+<form id="deleteDocument" asp-action="DeleteAccidentDocument">
+    <input type="hidden" id="accidentIdDoc" name="Id" />
+    <input type="hidden" id="identifierDoc" name="identifier" />
+    <input type="hidden" id="usernameDoc" name="username" />
+</form>
+
 @section Scripts {
 
     <script>
@@ -99,7 +125,7 @@
 
             $('.table').DataTable();
 
-            $('.deleteBtn').click(function (e) {
+            $('.table').on('click', '.deleteBtn', function () {
                 swal({
                     title: "Eliminar acidente",
                     text: "Tem a certeza que pretende eliminar o acidente?",
@@ -120,6 +146,30 @@
                     }
                 });
             });
+
+             $('.table').on('click', '.deleteDocBtn', function () {
+                swal({
+                    title: "Eliminar documento",
+                    text: "Tem a certeza que pretende eliminar o documento?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var btn = $(this);
+                        var id = btn.data("id");
+                        var identifier = btn.data("identifier");
+                        var username = btn.data("username");
+                                $('#accidentIdDoc').val(id);
+                                $('#identifierDoc').val(identifier);
+                                $('#usernameDoc').val(username);
+                       $('#deleteDocument').submit();
+
+                    }
+                });
+            });
+
+
         });
 
     </script>

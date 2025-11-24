@@ -117,6 +117,7 @@ namespace PortalEquador.Data.Mappers
             CreateMap<AccidentEntity, AccidentDetailViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.PersonalInformationEntity.FirstName + " " + src.PersonalInformationEntity.LastName))
+                 .ForMember(dest => dest.PersonaInformationId, opt => opt.MapFrom(src => src.PersonalInformationEntity.Id))
                 .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.CityGroupItemEntity))
                 .ForMember(dest => dest.Level, opt => opt.MapFrom(src => src.LevelGroupItemEntity))
                 .ForMember(dest => dest.EstimatedValue, opt => opt.MapFrom(src => src.EstimatedValueGroupItemEntity))

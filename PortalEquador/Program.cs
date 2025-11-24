@@ -31,6 +31,7 @@ using PortalEquador.Domain.Contract.Repository;
 using PortalEquador.Domain.Curriculum.Repository;
 using PortalEquador.Domain.DisciplinaryNotification.Repository;
 using PortalEquador.Domain.DisciplinaryNotification.UseCases;
+using PortalEquador.Domain.Document;
 using PortalEquador.Domain.Document.Repository;
 using PortalEquador.Domain.DriversLicence.Repository;
 using PortalEquador.Domain.DriversLicence.UseCases;
@@ -86,6 +87,7 @@ builder.Services.AddScoped<IProfessionalExperienceRepository, ProfessionalExperi
 builder.Services.AddScoped<IDriversLicenceRepository, DriversLicenceRepositoryImpl>();
 builder.Services.AddScoped<IUniversityRepository, UniversityRepositoryImpl>();
 builder.Services.AddScoped<ISchoolRepository, SchoolRepositoryImpl>();
+builder.Services.AddScoped<DeleteDocumentUseCase>();
 
 //Drivers Licence
 builder.Services.AddScoped<IDriversLicenceRepository, DriversLicenceRepositoryImpl>();
@@ -140,6 +142,7 @@ builder.Services.AddScoped<GetUniformsReportUseCase>();
 builder.Services.AddScoped<IAccidentRepository, AccidentRepositoryImpl>();
 builder.Services.AddScoped<IAccidentCauseRepository, AccidentCauseRepositoryImpl>();
 builder.Services.AddScoped <SaveAccidentUseCase>();
+builder.Services.AddScoped<DeleteAccidentUseCase>();
 
 builder.Services.AddScoped<IUniformRepository, UniformRepositoryImpl>();
 builder.Services.AddScoped<IWorkerUniformRepository, WorkerUniformRepositoryImpl>();

@@ -67,17 +67,23 @@ namespace PortalEquador.Util.Report
             ws.Cells[row, column, row + 1, column].Merge = true;
 
             ++column;
+            ws.Cells[row, column].Value = StringConstants.Display.DOCUMENT;
+            ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+            ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+            ws.Cells[row, column, row + 1, column].Merge = true;
+
+            ++column;
             ws.Cells[row, column].Value = StringConstants.Display.CAUSES;
             ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            ws.Cells[row, column, row, column + numberOfCauses -1].Merge = true;
-
+            ws.Cells[row, column, row, column + numberOfCauses - 1 ].Merge = true;
+            
             column = column + numberOfCauses;
             ws.Cells[row, column].Value = StringConstants.Display.VALUE;
             ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-            ws.Cells[row, column, row, column + numberOfLevels -1].Merge = true;
-
+            ws.Cells[row, column, row, column + numberOfLevels - 1 ].Merge = true;
+            
             column = column + numberOfLevels;
             ws.Cells[row, column].Value = StringConstants.Display.HUMAN_DAMAGE;
             ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
@@ -91,14 +97,14 @@ namespace PortalEquador.Util.Report
             ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
             ws.Cells[row, column, row + 1, column].Merge = true;
             ws.Cells[row, column].Style.WrapText = true;
-
+            
             return row + 1;
         }
 
         private static int AddSubHeader(ExcelWorksheet ws, int row, List<GroupItemViewModel> causes, List<GroupItemViewModel> estimatedValues)
         {
-            int column = 6;
-
+            int column = 7;
+            
             foreach (var item in causes)
             {
                 ws.Cells[row, column].Value = item.Description;
@@ -106,7 +112,6 @@ namespace PortalEquador.Util.Report
                 ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 ++column;
             }
-
 
             foreach (var item in estimatedValues)
             {
@@ -162,6 +167,19 @@ namespace PortalEquador.Util.Report
                         ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
 
                         ++column;
+                        if(accident.Url != null)
+                        {
+                            var cell = ws.Cells[row, column];
+                            cell.Value = "Abrir documento";
+                            cell.Hyperlink = new Uri(accident.Url);
+                            cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                            cell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                            cell.Style.Font.UnderLine = true;
+                            cell.Style.Font.Color.SetColor(System.Drawing.Color.Blue);
+                        }
+                        
+
+                        ++column;
                         for (int index = 0; index < causes.Count; ++index)
                         {
                             if (accidentIndex < accident.Causes.Count && causes[index].Id == accident.Causes[accidentIndex].Id)
@@ -175,7 +193,7 @@ namespace PortalEquador.Util.Report
                             }
                             ++column;
                         }
-
+                        
                         for (int index = 0; index < estimatedValues.Count; ++index)
                         {
                             if (estimatedValues[index].Id == accident.EstimatedValueId)
@@ -189,7 +207,7 @@ namespace PortalEquador.Util.Report
                             }
                             ++column;
                         }
-
+                        
                         ws.Cells[row, column].Value = accident.HumanDamage;
                         ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                         ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
@@ -199,15 +217,13 @@ namespace PortalEquador.Util.Report
                         ws.Cells[row, column].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
                         ws.Cells[row, column].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                         ++column;
-
+                        
                         ++row;
                         column = 1;
                         accidentIndex = 0;
                         levelIndex = 0;
                     }
-
                 }
-
             }
         }
     }

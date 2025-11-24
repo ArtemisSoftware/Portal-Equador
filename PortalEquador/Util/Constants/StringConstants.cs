@@ -66,6 +66,7 @@
 
             public const string FULL_NAME = "Nome completo";
             public const string FILTER = "Filtro";
+            public const string FILE = "Ficheiro";
 
             //H
             public const string HUMAN_DAMAGE = "Danos humanos";
@@ -170,7 +171,6 @@
 
             public const string FATHER = "Pai";
             public const string FINANTIAL_IDENTITY = "Nif";
-            public const string FILE = "Ficheiro";
 
 
 

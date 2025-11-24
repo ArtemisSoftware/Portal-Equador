@@ -10,12 +10,19 @@ using PortalEquador.Domain.GroupTypes.Repository;
 using PortalEquador.Domain.PersonalInformation.Repository;
 using PortalEquador.Util;
 using PortalEquador.Util.EnumTypes;
+using PortalEquador.Util.Files;
+using PortalEquador.Util.Files.models;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 using static PortalEquador.Util.Constants.GroupTypesConstants.ItemFromGroup;
 
 namespace PortalEquador.Data.Document.Repository
 {
-    public class DocumentRepositoryImpl(ApplicationDbContext context, IMapper mapper, IHttpContextAccessor httpContextAccessor, IWebHostEnvironment hostEnvironment)
+    public class DocumentRepositoryImpl(
+        ApplicationDbContext context, 
+        IMapper mapper, 
+        IHttpContextAccessor httpContextAccessor, 
+        IWebHostEnvironment hostEnvironment
+        )
         : GenericRepository<DocumentEntity>(context, httpContextAccessor), IDocumentRepository
     {
         public async Task<List<DocumentViewModel>> GetAllDocuments(int PersonalInformationId)
@@ -102,6 +109,10 @@ namespace PortalEquador.Data.Document.Repository
                 return model;
             }
         }
+
+
+
+
 
         public async Task<DocumentViewModel> GetCreateModel(DocumentViewModel model)
         {
@@ -204,6 +215,9 @@ namespace PortalEquador.Data.Document.Repository
             }
         }
 
+
+
+
         public async Task DeleteDocument(FolderType folder, int personaInformationId, int fileId, DocumentViewModel model)
         {
             ImagesUtil.DeleteImage_(hostEnvironment, folder,  personaInformationId, fileId, model);
@@ -215,6 +229,8 @@ namespace PortalEquador.Data.Document.Repository
             ImagesUtil.DeleteImage_(hostEnvironment, model);
             await DeleteAsync(model.Id);
         }
+
+
 
         public async Task DeleteDocument(int personaInformationId, int documentId)
         {
@@ -238,5 +254,66 @@ namespace PortalEquador.Data.Document.Repository
         }
 
 
+
+
+
+
+
+        //---------------------
+
+        public async Task<DocumentViewModel?> GetDocumentByParentId_v2(int id, int documentTypeId)
+        {
+            var result = await context.DocumentEntity
+               .Include(d => d.DocumentTypeGroupItemEntity)
+               .Include(d => d.SubTypeGroupItemEntity)
+               .Where(item => item.ParentId == id && item.DocumentTypeId == documentTypeId)
+               .FirstOrDefaultAsync();
+
+            if (result == null)
+            {
+                return null;
+            }
+            else
+            {
+                var model = mapper.Map<DocumentViewModel>(result);
+                return model;
+            }
+        }
+
+        public async Task Save(DocumentViewModel model, FileResource file)
+        {
+            await FileUtil.SaveFile(hostEnvironment, file);
+
+            var entity = mapper.Map<DocumentEntity>(model);
+            entity.Extension = file.GetExtension();
+            entity.EditorId = GetCurrentUserId();
+
+            // set Modified flag in your entry
+            var local = context.Set<DocumentEntity>().Local.FirstOrDefault(entry => entry.Id.Equals(model.Id));
+
+            // check if local is not null 
+            if (local != null)
+            {
+                // detach
+                context.Entry(local).State = EntityState.Detached;
+            }
+            context.Entry(entity).State = EntityState.Modified;
+
+            if (model.Id == 0)
+            {
+                await AddAsync(entity);
+            }
+            else
+            {
+                entity.DateModified = DateTime.UtcNow;
+                await UpdateAsync(entity);
+            }
+        }
+
+        public async Task DeleteDocument(int documentId, FileResource file)
+        {
+            FileUtil.DeleteFile(hostEnvironment, file);
+            await DeleteAsync(documentId);
+        }
     }
 }

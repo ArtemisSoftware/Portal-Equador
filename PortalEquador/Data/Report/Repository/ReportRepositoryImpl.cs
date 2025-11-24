@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -19,6 +20,8 @@ using PortalEquador.Domain.Report.ViewModels.Trainning;
 using PortalEquador.Domain.Report.ViewModels.Uniforms;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
+using PortalEquador.Util.Files;
+using PortalEquador.Util.Files.models;
 using System.Globalization;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 using GroupItemEntity = PortalEquador.Data.GroupTypes.entities.GroupItemEntity;
@@ -28,7 +31,8 @@ namespace PortalEquador.Data.Report.Repository
     public class ReportRepositoryImpl(
         ApplicationDbContext context,
         IMapper mapper,
-        IHttpContextAccessor httpContextAccessor
+        IHttpContextAccessor httpContextAccessor,
+        IWebHostEnvironment hostEnvironment
         ) : GenericRepository<ProfessionalExperienceEntity>(context, httpContextAccessor), IReportRepository
     {
 
@@ -873,6 +877,7 @@ namespace PortalEquador.Data.Report.Repository
                         .Select(a => new AccidentResultViewModel
                         {
                             Id = a.Id,
+                            PersonalInformationId = a.PersonalInformationId,
                             Date = a.Date,
                             Address = a.Address,
                             Level = a.LevelGroupItemEntity.Description,
@@ -887,12 +892,36 @@ namespace PortalEquador.Data.Report.Repository
                                     Id = c.CauseId,
                                     Description = c.CauseGroupItemEntity.Description,
                                 })
-                                .ToList()
+                                .ToList(),
+
+                            FileExtension = context.DocumentEntity
+                                .Where(d => d.ParentId == a.Id)
+                                .Select(d => d.Extension)
+                                .FirstOrDefault()
+
                         })
                         .ToList()
                 };
 
             var result = await query.ToListAsync();
+
+            result.ForEach(item =>
+            {
+                item.Accidents.ForEach(accident =>
+                {
+                    if (!string.IsNullOrEmpty(accident.FileExtension))
+                    {
+                        var resource = new FileResource(
+                            directory: Util.EnumTypes.FolderType.Accident,
+                            folder: accident.PersonalInformationId,
+                            fileName: accident.Id.ToString(),
+                            extension: accident.FileExtension
+                        );
+
+                        accident.Url = FileUtil.GetFileAbsoluteLink(httpContextAccessor, resource);
+                    }
+                });
+            });
 
             return new AccidentReportViewModel
             {
