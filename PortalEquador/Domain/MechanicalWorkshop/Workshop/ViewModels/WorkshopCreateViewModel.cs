@@ -6,6 +6,8 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels
 {
     public class WorkshopCreateViewModel : ViewModel
     {
+        public int Id { get; set; }
+
         [Display(Name = StringConstants.Display.DESCRIPTION)]
         [Required(ErrorMessage = StringConstants.Error.MANDATORY_FIELD)]
         public required string Description { get; set; }

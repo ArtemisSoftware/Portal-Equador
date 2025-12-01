@@ -20,14 +20,12 @@ namespace PortalEquador.Data.MechanicalWorkshop.Workshop.Repository
         }
 
         public async Task<List<WorkshopDetailViewModel>> GetAllWorkshops()
-        {/*
+        {
             var result = await context.WorkshopEntity
                 .ToListAsync();
 
             var mapped = mapper.Map<List<WorkshopDetailViewModel>>(result);
             return mapped;
-            */
-            throw new NotImplementedException();
         }
 
         public async Task<WorkshopDetailViewModel> GetWorkshop(int id)
@@ -44,7 +42,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Workshop.Repository
 
         public async Task Save(WorkshopCreateViewModel model)
         {
-            /*
+            
             var tracked = context.ChangeTracker.Entries<WorkshopEntity>()
           .FirstOrDefault(e => e.Entity.Id == model.Id);
 
@@ -85,10 +83,6 @@ namespace PortalEquador.Data.MechanicalWorkshop.Workshop.Repository
                 await UpdateAsync(entity);
                 id = entity.Id;
             }
-
-            return id;
-            */
-            throw new NotImplementedException();
         }
     }
 }
