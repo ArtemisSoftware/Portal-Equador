@@ -24,6 +24,7 @@ using PortalEquador.Data.Trainning.Entity;
 using PortalEquador.Data.DisciplinaryNotification.Entity;
 using PortalEquador.Data.Accident.Entities;
 using PortalEquador.Data.Uniforms.Entities;
+using PortalEquador.Data.MechanicalWorkshop.Workshop.Entities;
 
 namespace PortalEquador.Data
 {
@@ -69,5 +70,7 @@ namespace PortalEquador.Data
         public DbSet<AccidentCauseEntity> AccidentCauseEntity { get; set; }
         public DbSet<UniformEntity> UniformEntity { get; set; }
         public DbSet<WorkerUniformEntity> WorkerUniformEntity { get; set; }
+        public DbSet<WorkshopEntity> WorkshopEntity { get; set; }
+        public DbSet<WorkshopLaneEntity> WorkshopLaneEntity { get; set; }
     }
 }

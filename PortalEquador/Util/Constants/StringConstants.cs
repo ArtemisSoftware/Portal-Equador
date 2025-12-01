@@ -95,6 +95,7 @@
             public const string NAME = "Nome";
             public const string NOTIFICATION = "Notificação";
             public const string NUMBER = "Número";
+            public const string NUMBER_OF_LANES = "Numero de baias";
 
 
             // O

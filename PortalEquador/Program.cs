@@ -17,6 +17,7 @@ using PortalEquador.Data.MechanicalWorkshop.Admin.Repository;
 using PortalEquador.Data.MechanicalWorkshop.CarWash.Repository;
 using PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Repository;
+using PortalEquador.Data.MechanicalWorkshop.Workshop.Repository;
 using PortalEquador.Data.MedicalExam.Repository;
 using PortalEquador.Data.PersonalInformation.Repository;
 using PortalEquador.Data.Profession.Competence.Repository;
@@ -47,6 +48,7 @@ using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.UseCase;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.UseCases;
+using PortalEquador.Domain.MechanicalWorkshop.Workshop.Repository;
 using PortalEquador.Domain.MedicalExam.Repository;
 using PortalEquador.Domain.MedicalExam.UseCases;
 using PortalEquador.Domain.PersonalInformation.Repository;
@@ -113,6 +115,7 @@ builder.Services.AddScoped<GetDayPlanUseCase>();
 builder.Services.AddScoped<SearchDayPlanUseCase>();
 builder.Services.AddScoped<GetVehiclesUseCase> ();
 builder.Services.AddScoped<GetVehicleUseCase> ();
+builder.Services.AddScoped<IWorkshopRepository, WorkshopRepositoryImpl>();
 
 //Contract
 builder.Services.AddScoped<IContractRepository, ContractRepositoryImpl>();

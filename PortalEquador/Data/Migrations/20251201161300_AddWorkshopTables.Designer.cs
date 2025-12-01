@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PortalEquador.Data;
 
@@ -11,9 +12,11 @@ using PortalEquador.Data;
 namespace PortalEquador.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251201161300_AddWorkshopTables")]
+    partial class AddWorkshopTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -979,77 +982,6 @@ namespace PortalEquador.Data.Migrations
                     b.ToTable("MechanicalWorkshopVehicleEntity");
                 });
 
-            modelBuilder.Entity("PortalEquador.Data.MechanicalWorkshop.Workshop.Entities.WorkshopEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EditorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EditorId");
-
-                    b.ToTable("WorkshopEntity");
-                });
-
-            modelBuilder.Entity("PortalEquador.Data.MechanicalWorkshop.Workshop.Entities.WorkshopLaneEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("DateCreated")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EditorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WorkshopId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EditorId");
-
-                    b.HasIndex("WorkshopId");
-
-                    b.ToTable("WorkshopLaneEntity");
-                });
-
             modelBuilder.Entity("PortalEquador.Data.MedicalExam.Entity.MedicalExamEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -1972,36 +1904,6 @@ namespace PortalEquador.Data.Migrations
                     b.Navigation("ContractGroupItemEntity");
                 });
 
-            modelBuilder.Entity("PortalEquador.Data.MechanicalWorkshop.Workshop.Entities.WorkshopEntity", b =>
-                {
-                    b.HasOne("PortalEquador.Data.Generic.ApplicationUser", "ApplicationUserEntity")
-                        .WithMany()
-                        .HasForeignKey("EditorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUserEntity");
-                });
-
-            modelBuilder.Entity("PortalEquador.Data.MechanicalWorkshop.Workshop.Entities.WorkshopLaneEntity", b =>
-                {
-                    b.HasOne("PortalEquador.Data.Generic.ApplicationUser", "ApplicationUserEntity")
-                        .WithMany()
-                        .HasForeignKey("EditorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PortalEquador.Data.MechanicalWorkshop.Workshop.Entities.WorkshopEntity", "WorkshopEntity")
-                        .WithMany("Lanes")
-                        .HasForeignKey("WorkshopId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUserEntity");
-
-                    b.Navigation("WorkshopEntity");
-                });
-
             modelBuilder.Entity("PortalEquador.Data.MedicalExam.Entity.MedicalExamEntity", b =>
                 {
                     b.HasOne("PortalEquador.Data.Generic.ApplicationUser", "ApplicationUserEntity")
@@ -2216,11 +2118,6 @@ namespace PortalEquador.Data.Migrations
             modelBuilder.Entity("PortalEquador.Data.Accident.Entities.AccidentEntity", b =>
                 {
                     b.Navigation("Accidents");
-                });
-
-            modelBuilder.Entity("PortalEquador.Data.MechanicalWorkshop.Workshop.Entities.WorkshopEntity", b =>
-                {
-                    b.Navigation("Lanes");
                 });
 #pragma warning restore 612, 618
         }

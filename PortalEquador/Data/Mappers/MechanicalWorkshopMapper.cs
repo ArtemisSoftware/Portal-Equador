@@ -1,13 +1,17 @@
 ﻿using AutoMapper;
+using PortalEquador.Data.Accident.Entities;
 using PortalEquador.Data.MechanicalWorkshop.Admin.Entity;
 using PortalEquador.Data.MechanicalWorkshop.CarWash.Entity;
 using PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity;
+using PortalEquador.Data.MechanicalWorkshop.Workshop.Entities;
+using PortalEquador.Domain.Accident.ViewModels;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Admin.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
+using PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels;
 
 namespace PortalEquador.Data.Mappers
 {
@@ -69,6 +73,16 @@ namespace PortalEquador.Data.Mappers
             .ForMember(dest => dest.ContractId, opt => opt.MapFrom(src => src.ContractId))
             .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
             .ReverseMap();
+
+            CreateMap<WorkshopEntity, WorkshopDetailViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ForMember(dest => dest.Lanes, opt => opt.MapFrom(src => src.Lanes))
+                .ReverseMap();
+
+            CreateMap<WorkshopEntity, WorkshopCreateViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+               .ReverseMap();
+
         }
     }
 }
