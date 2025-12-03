@@ -9,12 +9,13 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels
     {
         public int Id { get; set; }
 
-        [Display(Name = StringConstants.Display.NAME)]
+        [Display(Name = StringConstants.Display.WORKSHOP)]
         public string Name { get; set; }
 
         [Display(Name = StringConstants.Display.STATE)]
         public bool Active { get; set; } = true;
 
+        [Display(Name = StringConstants.Display.NUMBER_OF_LANES)]
         public List<WorkshopLaneViewModel> Lanes { get; set; } = new List<WorkshopLaneViewModel>();
     }
 }

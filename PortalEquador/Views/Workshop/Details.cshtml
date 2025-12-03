@@ -1,0 +1,106 @@
+﻿@model PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels.WorkshopDetailViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detalhes da oficina</h1>
+
+<hr />
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <dl class="row">
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Name)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Active)
+            </dt>
+            <dd class="col-sm-8">
+                @if (@Model.Active)
+                {
+                    <span class="badge bg-success">Ativo</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Inativo</span>
+                }
+            </dd>
+
+        </dl>
+
+
+        <div class="row">
+            <div class="col-md-8">
+                <h6>Baias</h6>
+                <hr />
+            </div>
+        </div>
+
+
+        <dl class="row">
+
+            @foreach (var item in Model.Lanes)
+        {
+            <dt class="col-sm-4">
+                    @Html.DisplayFor(item => item.Name)
+            </dt>
+            <dd class="col-sm-8">
+                    @if (item.Active)
+                    {
+                        <span class="badge bg-success">Ativo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inativo</span>
+                    }
+            </dd>
+        }
+
+        </dl>
+
+        <br />
+
+        <dl class="row">
+            @if (@Model.DateModified != null)
+            {
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DateModified)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.DateModified)
+                </dd>
+            }
+            else
+            {
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DateCreated)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.DateCreated)
+                </dd>
+            }
+
+
+            <dt class="col-sm-4">
+                @Html.DisplayNameFor(model => model.Editor)
+            </dt>
+            <dd class="col-sm-8">
+                @Html.DisplayFor(model => model.Editor)
+            </dd>
+        </dl>
+    </div>
+
+
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-dark">Regressar ao index</a> &nbsp;
+</div>

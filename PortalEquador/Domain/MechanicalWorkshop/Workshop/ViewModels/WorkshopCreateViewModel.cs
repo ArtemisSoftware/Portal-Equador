@@ -8,11 +8,11 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels
     {
         public int Id { get; set; }
 
-        [Display(Name = StringConstants.Display.DESCRIPTION)]
+        [Display(Name = StringConstants.Display.WORKSHOP)]
         [Required(ErrorMessage = StringConstants.Error.MANDATORY_FIELD)]
-        public required string Description { get; set; }
+        public required string Name { get; set; }
 
         [Display(Name = StringConstants.Display.NUMBER_OF_LANES)]
-        public int NumberOfLanes { get; set; }
+        public int NumberOfLanes { get; set; } = 1;
     }
 }

@@ -149,6 +149,7 @@
             //  W
             public const string WRITTEN_LEVEL = "Nível escrito";
             public const string WORKSTATION = "Posto";
+            public const string WORKSHOP = "Oficina";
 
             //  Y
             public const string YEAR = "Ano";
@@ -227,6 +228,7 @@
             public const string NO_ACCIDENT_CAUSES = "Não foram selecionadas causas para o acidente";
             public const string NON_EXISTING_UNIFORM = "A farda não existe";
             public const string EXISTING_USER = "O utilizador já se encontra registado";
+            public const string EXISTING_WORKSHOP = "A oficina já se encontra registado";
         }
 
         public static class Dates

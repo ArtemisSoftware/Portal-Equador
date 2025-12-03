@@ -83,6 +83,9 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                .ReverseMap();
 
+            CreateMap<WorkshopLaneEntity, WorkshopLaneViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+               .ReverseMap();
         }
     }
 }
