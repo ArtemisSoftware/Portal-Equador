@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.MechanicalWorkshop.Workshop.Entities;
@@ -14,6 +15,27 @@ namespace PortalEquador.Data.MechanicalWorkshop.Workshop.Repository
         IWebHostEnvironment hostEnvironment
         ) : GenericRepository<WorkshopEntity>(context, httpContextAccessor), IWorkshopRepository
     {
+        public async Task<List<WorkshopDetailViewModel>> GetDashboard()
+        {
+            var result = await context.WorkshopEntity
+                .Where(a => a.Active == true)
+                 .ToListAsync();
+
+            var mapped = mapper.Map<List<WorkshopDetailViewModel>>(result);
+            return mapped;
+        }
+
+        public async Task<List<WorkshopLaneViewModel>> GetLanes(int workshopId)
+        {
+            var result = await context.WorkshopLaneEntity
+                .Where(a => a.WorkshopId == workshopId)
+                 .ToListAsync();
+
+            var mapped = mapper.Map<List<WorkshopLaneViewModel>>(result);
+            return mapped;
+        }
+
+
         public async Task<bool> WorkshopExists(string name)
         {
             return await context.WorkshopEntity.AnyAsync(item => item.Name == name);
@@ -83,5 +105,6 @@ namespace PortalEquador.Data.MechanicalWorkshop.Workshop.Repository
                 id = entity.Id;
             }
         }
+
     }
 }

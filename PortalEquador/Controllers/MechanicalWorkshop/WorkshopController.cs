@@ -12,14 +12,59 @@ using PortalEquador.Domain.Accident.UseCases;
 using PortalEquador.Domain.MechanicalWorkshop.Admin.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Workshop.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels;
+using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.MechanicalWorkshop
 {
     public class WorkshopController(
-        IWorkshopRepository repository
+        IWorkshopRepository repository,
+        IWorkshopLaneRepository workshopLaneRepository
         ) : Controller
     {
+
+        public async Task<IActionResult> Dashboard()
+        {
+            var model = await repository.GetDashboard();
+            return View(model);
+        }
+
+        public async Task<IActionResult> Management(int id, string name)
+        {
+            ViewData[ViewBagConstants.WORKSHOP_ID] = id;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = name;
+
+            return View();
+        }
+
+        public async Task<IActionResult> LanesIndex(int workshopid, string workshopname)
+        {
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
+
+            var model = await repository.GetLanes(workshopid);
+
+            return View(model);
+        }
+
+
+        public async Task<IActionResult> AddLane(int workshopid, string workshopname)
+        {
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
+            await workshopLaneRepository.Save(workshopid);
+
+            return RedirectToAction(nameof(LanesIndex), new { workshopid  = workshopid, workshopname  = workshopname });
+
+        }
+
+
+
+
+
+
+
+
 
         // GET: Workshop
         public async Task<IActionResult> Index()

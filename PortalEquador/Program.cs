@@ -116,6 +116,7 @@ builder.Services.AddScoped<SearchDayPlanUseCase>();
 builder.Services.AddScoped<GetVehiclesUseCase> ();
 builder.Services.AddScoped<GetVehicleUseCase> ();
 builder.Services.AddScoped<IWorkshopRepository, WorkshopRepositoryImpl>();
+builder.Services.AddScoped<IWorkshopLaneRepository, WorkshopLaneRepositoryImpl>();
 
 //Contract
 builder.Services.AddScoped<IContractRepository, ContractRepositoryImpl>();

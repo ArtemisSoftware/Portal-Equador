@@ -1,0 +1,100 @@
+﻿@model IEnumerable<PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels.WorkshopLaneViewModel>
+@using PortalEquador.Util.Constants
+
+@{
+    ViewData["Title"] = "Index";
+}
+<h1>Oficina -  @ViewData[ViewBagConstants.WORKSHOP_NAME]</h1>
+
+<p>
+    <a asp-action="AddLane"
+       asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+       asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+    class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Nova Baia</a>
+</p>
+<br />
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            var item = Model.ToList()[i];
+            <tr>
+                <td class="align-middle">
+                    Baia @(i + 1)
+                </td>
+                <td>
+                    @if (@item.Active)
+                    {
+                        <span class="badge bg-success">Ativo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inativo</span>
+                    }
+                </td>
+
+                <td class="align-middle">
+                    @if (@item.Active)
+                    {
+                        <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button">Desativar</button>
+                    }
+                    else
+                    {
+                        <button data-id="@item.Id" class="btn btn-success allocateBtn" type="button">Ativar</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form id="deleteLanguage" asp-action="DeleteLanguage">
+    <input type="hidden" id="languageId" name="Id" />
+    <input type="hidden" id="identifier" name="identifier" />
+    <input type="hidden" id="username" name="username" />
+</form>
+
+
+@section Scripts {
+    <script>
+        $(function () {
+
+            $('.table').DataTable();
+
+            $('.table').on('click', '.deleteBtn', function () {
+                swal({
+                    title: "Eliminar lingua",
+                    text: "Tem a certeza que pretende eliminar a lingua?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var btn = $(this);
+                        var id = btn.data("id");
+                        var identifier = btn.data("identifier");
+                        var username = btn.data("username");
+                        $('#languageId').val(id);
+                        $('#identifier').val(identifier);
+                        $('#username').val(username);
+                        $('#deleteLanguage').submit();
+
+                    }
+                });
+            });
+        });
+
+    </script>
+}
+

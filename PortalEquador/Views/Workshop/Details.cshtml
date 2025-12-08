@@ -48,12 +48,14 @@
 
         <dl class="row">
 
-            @foreach (var item in Model.Lanes)
-        {
-            <dt class="col-sm-4">
-                    @Html.DisplayFor(item => item.Name)
-            </dt>
-            <dd class="col-sm-8">
+            @for (int i = 0; i < Model.Lanes.Count; i++)
+            {
+                var item = Model.Lanes[i];
+
+                <dt class="col-sm-4">
+                    Baia @(i + 1)
+                </dt>
+                <dd class="col-sm-8">
                     @if (item.Active)
                     {
                         <span class="badge bg-success">Ativo</span>
@@ -62,8 +64,8 @@
                     {
                         <span class="badge bg-danger">Inativo</span>
                     }
-            </dd>
-        }
+                </dd>
+            }
 
         </dl>
 

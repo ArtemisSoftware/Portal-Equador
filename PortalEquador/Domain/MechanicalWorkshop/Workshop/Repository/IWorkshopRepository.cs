@@ -7,13 +7,18 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Workshop.Repository
 {
     public interface IWorkshopRepository: IGenericRepository<WorkshopEntity>
     {
+        Task<List<WorkshopDetailViewModel>> GetDashboard();
+
+        Task<List<WorkshopLaneViewModel>> GetLanes(int workshopId);
+
         Task<bool> WorkshopExists(string name);
         Task<List<WorkshopDetailViewModel>> GetAllWorkshops();
         Task<WorkshopDetailViewModel> GetWorkshop(int id);
 
         Task Save(WorkshopCreateViewModel model);
-/*
-        Task DeactivateLane();
-        */
+
+        /*
+                Task DeactivateLane();
+                */
     }
 }
