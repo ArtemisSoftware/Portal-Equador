@@ -9,9 +9,9 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.UseCase
         IAdminMechanicalWorkShopRepository adminRepository
         )
     {
-        public async Task<DayPlannerViewModel> Invoke(DateOnly date)
+        public async Task<DayPlannerViewModel> Invoke(DateOnly date, int workshopid, string workshopname)
         {
-            var model = await mechanicalWorkshopSchedulerRepository.GetDayPlan(date);
+            var model = await mechanicalWorkshopSchedulerRepository.GetDayPlan(date, workshopid, workshopname);
             model.AdminContracts = await adminRepository.GetUserContracts();
             model.OrderAppointements();
             return model;

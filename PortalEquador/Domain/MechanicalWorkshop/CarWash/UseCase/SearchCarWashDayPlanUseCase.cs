@@ -9,9 +9,9 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.UseCase
         IAdminMechanicalWorkShopRepository adminRepository
         )
     {
-        public async Task<CarWashSearchDayPlannerViewModel> Invoke(string licencePlate)
+        public async Task<CarWashSearchDayPlannerViewModel> Invoke(string licencePlate, int workshopid, string workshopname)
         {
-            var model = await carWashSchedulerRepository.SearchGetDayPlan(licencePlate);
+            var model = await carWashSchedulerRepository.SearchGetDayPlan(licencePlate, workshopid, workshopname);
             if (model.hasFullAccess == false)
             {
                 var adminContracts = await adminRepository.GetUserContracts();

@@ -11,9 +11,9 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.UseCase
         IAdminMechanicalWorkShopRepository adminRepository
         )
     {
-        public async Task<CarWashDayPlannerViewModel> Invoke(DateOnly date)
+        public async Task<CarWashDayPlannerViewModel> Invoke(DateOnly date, int workshopid, string workshopname)
         {
-            var model = await carWashSchedulerRepository.GetDayPlan(date);
+            var model = await carWashSchedulerRepository.GetDayPlan(date, workshopid, workshopname);
             model.AdminContracts = await adminRepository.GetUserContracts();
             model.OrderAppointements();
             return model;

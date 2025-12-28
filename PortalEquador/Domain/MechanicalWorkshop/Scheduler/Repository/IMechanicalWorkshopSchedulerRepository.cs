@@ -6,8 +6,8 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository
 {
     public interface IMechanicalWorkshopSchedulerRepository : IGenericRepository<MechanicalWorkshopSchedulerEntity>
     {
-        Task<DayPlannerViewModel> GetDayPlan(DateOnly date);
-        Task<SchedulerViewModel> GetCreateModel(string scheduleDate, int mechanicId, int interventionTimeId);
+        Task<DayPlannerViewModel> GetDayPlan(DateOnly date, int workshopid, string workshopname);
+        Task<SchedulerViewModel> GetCreateModel(string scheduleDate, int mechanicId, int interventionTimeId, int workshopid, string workshopname);
         Task<SchedulerViewModel> GetCreateModel(SchedulerViewModel model);
         Task Save(SchedulerViewModel model);
         Task<SchedulerViewModel> GetSchedule(int id);
@@ -15,6 +15,6 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository
         Task ConfirmRevision(int id);
         Task NotPerformed(int id);
 
-        Task<SearchDayPlannerViewModel> SearchGetDayPlan(string? vehicleId);
+        Task<SearchDayPlannerViewModel> SearchGetDayPlan(string? vehicleId, int workshopid);
     }
 }

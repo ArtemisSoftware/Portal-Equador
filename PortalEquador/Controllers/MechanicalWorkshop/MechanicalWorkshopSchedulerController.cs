@@ -17,8 +17,11 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
     {
 
         // GET: MechanicalWorkshopScheduler
-        public async Task<IActionResult> Index(string? time)
+        public async Task<IActionResult> Index(string? time, int workshopid, string workshopname)
         {
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
+
             DateOnly currentDate = DateOnly.MinValue;
 
             if (time == null)
@@ -29,14 +32,16 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             {
                 currentDate = DateOnly.FromDateTime(DateTime.Parse(time));
             }
-            var model = await getDayPlanUseCase.Invoke(currentDate);
+            var model = await getDayPlanUseCase.Invoke(currentDate, workshopid, workshopname);
             return View(model);
         }
 
         // GET: MechanicalWorkshopScheduler/Create
-        public async Task<IActionResult> Create(string date, int interventionTimeId, int mechanicId)
+        public async Task<IActionResult> Create(string date, int workshopid, string workshopname, int interventionTimeId, int mechanicId)
         {
-            var model = await repository.GetCreateModel(date, mechanicId, interventionTimeId);
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
+            var model = await repository.GetCreateModel(date, mechanicId, interventionTimeId, workshopid, workshopname);
             return View(model);
         }
 
@@ -130,9 +135,12 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
         }
 
         // GET: MechanicalWorkshopScheduler
-        public async Task<IActionResult> Search(string? vehicleId)
+        public async Task<IActionResult> Search(string? vehicleId, int workshopid, string workshopname)
         {
-            var model = await searchDayPlanUseCase.Invoke(vehicleId);
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
+
+            var model = await searchDayPlanUseCase.Invoke(vehicleId, workshopid);
             return View(model);
         }
     }

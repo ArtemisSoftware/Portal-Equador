@@ -2,6 +2,8 @@
 @using PortalEquador.Domain.MechanicalWorkshop.Scheduler
 @using PortalEquador.Domain.MechanicalWorkshop.CarWash
 @model PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels.CarWashSearchDayPlannerViewModel
+@using PortalEquador.Util
+@using PortalEquador.Util.Constants
 
 @{
     ViewData["Title"] = "Pesquisa";
@@ -11,11 +13,14 @@
 
 <div class="row align-items-center">
     <div class="col-md-10">
-        <h1>Oficina Morro Bento</h1>
+        <h1>Oficina @ViewData[ViewBagConstants.WORKSHOP_NAME]</h1>
         <h4> Pesquisa - Lavagens </h4>
     </div>
     <div class="col-md-2 text-right">
-        <a asp-controller="MechanicalWorkshop" asp-action="Index" class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+        <a asp-controller="MechanicalWorkshop" asp-action="Index"
+           asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+           asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+        class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
     </div>
 </div>
 <hr />

@@ -38,7 +38,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
         }
 
 
-        public async Task<DayPlannerViewModel> GetDayPlan(DateOnly date)
+        public async Task<DayPlannerViewModel> GetDayPlan(DateOnly date, int workshopid, string workshopname)
         {
             var mechanics = await GroupItemsList(GroupTypesConstants.Groups.MECHANICAL_SHOP_MECHANICS);
             var schedules = await GroupItemsList(GroupTypesConstants.Groups.MECHANICAL_SHOP_SCHEDULES);
@@ -52,6 +52,8 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
 
             var model = new DayPlannerViewModel
             {
+                WorkshopId = workshopid,
+                WorkshopName = workshopname,
                 Mechanics = mapper.Map<List<GroupItemViewModel>>(mechanics),
                 InterventionTimes = colabTime(schedulesList),
                 Schedules = schedulesList,
@@ -71,7 +73,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             }
         }
 
-        public async Task<SearchDayPlannerViewModel> SearchGetDayPlan(string? vehicleId)
+        public async Task<SearchDayPlannerViewModel> SearchGetDayPlan(string? vehicleId, int workshopid)
         {
             var model = new SearchDayPlannerViewModel();
 
@@ -98,7 +100,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             return model;
         }
 
-        public async Task<SchedulerViewModel> GetCreateModel(string scheduleDate, int mechanicId, int interventionTimeId)
+        public async Task<SchedulerViewModel> GetCreateModel(string scheduleDate, int mechanicId, int interventionTimeId, int workshopid, string workshopname)
         {
             var mechanic = await GroupItem(mechanicId);
             var selectedMechanic = mapper.Map<GroupItemViewModel>(mechanic);
@@ -111,6 +113,8 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
 
             var model = new SchedulerViewModel
             {
+                WorkshopId = workshopid,
+                WorkshopName = workshopname,
                 ScheduleDate = dateOnly,
                 MechanicId = mechanicId,
                 Mechanic = selectedMechanic,

@@ -12,6 +12,12 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
     {
         public int Id { get; set; }
 
+        public int WorkshopId { get; set; }
+
+        [Display(Name = StringConstants.Display.WORKSHOP)]
+        public string WorkshopName { get; set; }
+
+        [Display(Name = StringConstants.Display.DATE)]
         [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
         public DateOnly ScheduleDate { get; set; }
 

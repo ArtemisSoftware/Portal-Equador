@@ -19,7 +19,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
         IWebHostEnvironment hostEnvironment
         ) : GenericRepository<CarWashSchedulerEntity>(context, httpContextAccessor), ICarWashSchedulerRepository
     {
-        public async Task<CarWashViewModel> GetCreateModel(string scheduleDate, int laneId,  int interventionTimeId)
+        public async Task<CarWashViewModel> GetCreateModel(string scheduleDate, int laneId,  int interventionTimeId, int workshopid, string workshopname)
         {
             var lane = await GroupItem(laneId);
             var selectedLane = mapper.Map<GroupItemViewModel>(lane);
@@ -29,6 +29,8 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
 
             var model = new CarWashViewModel
             {
+                WorkshopId = workshopid,
+                WorkshopName = workshopname,
                 ScheduleDate = dateOnly,
                 InterventionTimeId = interventionTimeId,
                 InterventionTime = selectedSchedule,
@@ -52,7 +54,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
             return model;
         }
 
-        public async Task<CarWashDayPlannerViewModel> GetDayPlan(DateOnly date)
+        public async Task<CarWashDayPlannerViewModel> GetDayPlan(DateOnly date, int workshopid, string workshopname)
         {
             var lanes = await GroupItemsList(GroupTypesConstants.Groups.WASH_LANE);
             var schedules = await GroupItemsList(GroupTypesConstants.Groups.CAR_WASH_SCHEDULES);
@@ -67,6 +69,8 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
             
             var model = new CarWashDayPlannerViewModel
             {
+                WorkshopId = workshopid,
+                WorkshopName = workshopname,
                 Lanes = mapper.Map<List<GroupItemViewModel>>(lanes),
                 Schedules = schedulesList,
                 MainTime = TimeUtil.ToDateTime(date),
@@ -230,7 +234,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Repository
             return new SelectList(vehicles, "Id", "LicencePlate");
         }
 
-        public async Task<CarWashSearchDayPlannerViewModel> SearchGetDayPlan(string? vehicleId)
+        public async Task<CarWashSearchDayPlannerViewModel> SearchGetDayPlan(string? vehicleId, int workshopid, string workshopname)
         {
             var model = new CarWashSearchDayPlannerViewModel();
             

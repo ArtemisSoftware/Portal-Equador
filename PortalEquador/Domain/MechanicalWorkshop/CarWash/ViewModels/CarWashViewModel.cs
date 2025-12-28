@@ -12,9 +12,14 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
     {
         public int Id { get; set; }
 
+        [Display(Name = StringConstants.Display.DATE)]
         [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
         public DateOnly ScheduleDate { get; set; }
 
+        public int WorkshopId { get; set; }
+
+        [Display(Name = StringConstants.Display.WORKSHOP)]
+        public string WorkshopName { get; set; }
 
         [Required]
         public int LaneId { get; set; }

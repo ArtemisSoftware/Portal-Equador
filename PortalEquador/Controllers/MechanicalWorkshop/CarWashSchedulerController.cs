@@ -18,8 +18,10 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
     {
 
         // GET: CarWashScheduler
-        public async Task<IActionResult> Index(string? time)
+        public async Task<IActionResult> Index(string? time, int workshopid, string workshopname)
         {
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
             DateOnly currentDate = DateOnly.MinValue;
 
             if (time == null)
@@ -30,14 +32,17 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             {
                 currentDate = DateOnly.FromDateTime(DateTime.Parse(time));
             }
-            var model = await getCarWashDayPlanUseCase.Invoke(currentDate);
+            var model = await getCarWashDayPlanUseCase.Invoke(currentDate, workshopid, workshopname);
             return View(model);
         }
 
         // GET: CarWashScheduler/Create
-        public async Task<IActionResult> Create(string date, int laneId, int interventionTimeId)
+        public async Task<IActionResult> Create(string date, int laneId, int interventionTimeId, int workshopid, string workshopname)
         {
-            var model = await repository.GetCreateModel(date, laneId, interventionTimeId);
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
+
+            var model = await repository.GetCreateModel(date, laneId, interventionTimeId, workshopid, workshopname);
             return View(model);
         }
 
@@ -132,9 +137,12 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             }
         }
 
-        public async Task<IActionResult> Search(string? vehicleId)
+        public async Task<IActionResult> Search(string? vehicleId, int workshopid, string workshopname)
         {
-            var model = await searchCarWashDayPlanUseCase.Invoke(vehicleId);
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
+
+            var model = await searchCarWashDayPlanUseCase.Invoke(vehicleId, workshopid, workshopname);
             if(vehicleId != null)
             {
                 model.VehicleId = int.Parse(vehicleId);

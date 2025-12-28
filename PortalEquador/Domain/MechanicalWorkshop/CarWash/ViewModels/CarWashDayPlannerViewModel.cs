@@ -24,6 +24,9 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
         public List<AdminMechanicalWorkshopContractViewModel> AdminContracts { get; set; } = new List<AdminMechanicalWorkshopContractViewModel>();
         public bool hasFullAccess { get; set; } = false;
 
+        public int WorkshopId { get; set; } 
+        public string WorkshopName { get; set; } 
+
         public void OrderAppointements()
         {
 
