@@ -1,6 +1,7 @@
 ﻿using PortalEquador.Data.Generic;
 using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity;
+using PortalEquador.Data.MechanicalWorkshop.Workshop.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity
@@ -35,5 +36,10 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity
         public GroupItemEntity MechanicGroupItemEntity { get; set; }
 
         public int CurrentState { get; set; }
+
+        public int? WorkshopId { get; set; } = null;
+
+        [ForeignKey("WorkshopId")]
+        public WorkshopEntity WorkshopCentralEntity { get; set; }
     }
 }

@@ -135,12 +135,12 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
         }
 
         // GET: MechanicalWorkshopScheduler
-        public async Task<IActionResult> Search(string? vehicleId, int workshopid, string workshopname)
+        public async Task<IActionResult> Search(string? vehicleId, int workshopId, string workshopName)
         {
-            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
-            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopId;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopName;
 
-            var model = await searchDayPlanUseCase.Invoke(vehicleId, workshopid);
+            var model = await searchDayPlanUseCase.Invoke(vehicleId, workshopId);
             return View(model);
         }
     }

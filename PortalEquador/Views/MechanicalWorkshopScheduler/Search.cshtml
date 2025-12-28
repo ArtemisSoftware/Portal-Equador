@@ -154,8 +154,19 @@
 
     <script>
 
+     const workshopId = '@ViewData[ViewBagConstants.WORKSHOP_ID]';
+const workshopName = '@Html.Raw(
+        System.Web.HttpUtility.JavaScriptStringEncode(
+            ViewData[ViewBagConstants.WORKSHOP_NAME]?.ToString()
+        )
+    )';
+
         function handleVehicle(vehicleId) {
-            window.location.href = `/MechanicalWorkshopScheduler/Search?vehicleId=${vehicleId}`;
+        window.location.href =
+            `/MechanicalWorkshopScheduler/Search?` +
+            `workshopId=${workshopId}&` +
+            `workshopName=${encodeURIComponent(workshopName)}&` +
+            `vehicleId=${vehicleId}`;
         }
 
         function handleVehicleChange() {

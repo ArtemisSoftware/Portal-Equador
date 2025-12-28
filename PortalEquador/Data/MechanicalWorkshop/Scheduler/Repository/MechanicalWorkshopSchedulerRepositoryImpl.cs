@@ -47,7 +47,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             var results = await context.MechanicalWorkshopSchedulerEntity
                             .Include(item => item.VehicleEntity)
                             .Include(item => item.ContractGroupItemEntity)
-                           .Where(item => item.ScheduleDate == date)
+                           .Where(item => item.ScheduleDate == date && item.WorkshopId == workshopid)
                            .ToListAsync();
 
             var model = new DayPlannerViewModel
@@ -84,7 +84,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
                                       .Include(item => item.MechanicGroupItemEntity)
                                       .Include(item => item.ContractGroupItemEntity)
                                       .Include(item => item.InterventionTimeGroupItemEntity)
-                                     .Where(item => item.VehicleEntity.Id == int.Parse(vehicleId))
+                                     .Where(item => item.VehicleEntity.Id == int.Parse(vehicleId) && item.WorkshopId == workshopid)
                                      .OrderByDescending(item => item.ScheduleDate)
                                      .Take(20)
                                      .ToListAsync();
