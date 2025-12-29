@@ -10,7 +10,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository
         Task<SchedulerViewModel> GetCreateModel(string scheduleDate, int mechanicId, int interventionTimeId, int workshopid, string workshopname);
         Task<SchedulerViewModel> GetCreateModel(SchedulerViewModel model);
         Task Save(SchedulerViewModel model);
-        Task<SchedulerViewModel> GetSchedule(int id);
+        Task<SchedulerDetailViewModel> GetSchedule(int id);
 
         Task ConfirmRevision(int id);
         Task NotPerformed(int id);

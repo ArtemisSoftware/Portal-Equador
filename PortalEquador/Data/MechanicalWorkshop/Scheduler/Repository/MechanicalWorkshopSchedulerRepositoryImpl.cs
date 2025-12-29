@@ -47,6 +47,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             var results = await context.MechanicalWorkshopSchedulerEntity
                             .Include(item => item.VehicleEntity)
                             .Include(item => item.ContractGroupItemEntity)
+                            .Include(item => item.WorkshopCentralEntity)
                            .Where(item => item.ScheduleDate == date && item.WorkshopId == workshopid)
                            .ToListAsync();
 
@@ -247,7 +248,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             return new SelectList(vehicles, "Id", "LicencePlate");
         }
 
-        public async Task<SchedulerViewModel> GetSchedule(int id)
+        public async Task<SchedulerDetailViewModel> GetSchedule(int id)
         {
             var result = await context.MechanicalWorkshopSchedulerEntity
                             .Include(item => item.VehicleEntity)
@@ -255,10 +256,11 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
                             .Include(item => item.MechanicGroupItemEntity)
                             .Include(item => item.ContractGroupItemEntity)
                             .Include(item => item.ApplicationUserEntity)
+                            .Include(item => item.WorkshopCentralEntity)
                            .Where(item => item.Id == id)
                            .FirstOrDefaultAsync();
 
-            return mapper.Map<SchedulerViewModel>(result);
+            return mapper.Map<SchedulerDetailViewModel>(result);
         }
 
 

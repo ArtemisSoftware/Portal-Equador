@@ -55,7 +55,7 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             if (ModelState.IsValid)
             {
                 await repository.Save(viewModel);
-                return RedirectToAction(nameof(Index), new { time = TimeUtil.ToDateTime(viewModel.ScheduleDate).ToString() });
+                return RedirectToAction(nameof(Index), new { time = TimeUtil.ToDateTime(viewModel.ScheduleDate).ToString(), workshopid = viewModel.WorkshopId, workshopname = viewModel.WorkshopName });
             }
 
             viewModel = await RecoverModel(viewModel);
@@ -67,46 +67,52 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
         {
             ViewData[ViewBagConstants.ORIGIN] = origin;
             var model = await repository.GetSchedule(id);
+
+            ViewData[ViewBagConstants.WORKSHOP_ID] = model.Workshop.Id;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = model.Workshop.Name;
+
             return View(model);
         }
 
 
         // GET: MechanicalWorkshopScheduler/Delete/5
-        public async Task<IActionResult> Delete(int id, string time, string? origin, string? vehicleId)
+        public async Task<IActionResult> Delete(int id, string time, int workshopid, string workshopname, string? origin, string? vehicleId)
         {
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
             await repository.DeleteAsync(id);
             if(origin == null)
             {
-                return RedirectToAction(nameof(Index), new { time = time });
+                return RedirectToAction(nameof(Index), new { time = time, workshopid = workshopid, workshopname = workshopname });
             } else
             {
-                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId });
+                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId, workshopid = workshopid, workshopname = workshopname });
             }
         }
 
-        public async Task<IActionResult> Confirm(int id, string? time, string? origin, string? vehicleId)
+        public async Task<IActionResult> Confirm(int id, string? time, int workshopid, string workshopname, string? origin, string? vehicleId)
         {
             await repository.ConfirmRevision(id);
             if (origin == null)
             {
-                return RedirectToAction(nameof(Index), new { time = time });
+                return RedirectToAction(nameof(Index), new { time = time, workshopid = workshopid, workshopname = workshopname });
             }
             else
             {
-                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId });
+                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId, workshopid = workshopid, workshopname = workshopname });
             }
         }
 
-        public async Task<IActionResult> NotPerformed(int id, string? time, string? origin, string? vehicleId)
+        public async Task<IActionResult> NotPerformed(int id, string? time, int workshopid, string workshopname, string? origin, string? vehicleId)
         {
             await repository.NotPerformed(id);
             if (origin == null)
             {
-                return RedirectToAction(nameof(Index), new { time = time });
+                return RedirectToAction(nameof(Index), new { time = time, workshopid = workshopid, workshopname = workshopname });
             }
             else
             {
-                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId });
+                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId, workshopid = workshopid, workshopname = workshopname });
             }
         }
 

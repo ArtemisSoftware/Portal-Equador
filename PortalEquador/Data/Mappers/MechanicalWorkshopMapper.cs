@@ -29,12 +29,29 @@ namespace PortalEquador.Data.Mappers
                 .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity))
                 .ReverseMap();
 
+            CreateMap<WorkshopEntity, WorkshopViewModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                //.ForMember(dest => dest.NumberOfLanes, opt => opt.MapFrom(src => src.NumberOfLanes))
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ReverseMap();
+
             CreateMap<MechanicalWorkshopSchedulerEntity, SchedulerViewModel>()
                 .ForMember(dest => dest.InterventionTime, opt => opt.MapFrom(src => src.InterventionTimeGroupItemEntity))
                 .ForMember(dest => dest.Mechanic, opt => opt.MapFrom(src => src.MechanicGroupItemEntity))
                 .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.VehicleEntity))
                 .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity))
                 .ForMember(dest => dest.ContractDescription, opt => opt.MapFrom(src => src.ContractGroupItemEntity.Description))
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+                .ReverseMap();
+
+            CreateMap<MechanicalWorkshopSchedulerEntity, SchedulerDetailViewModel>()
+                .ForMember(dest => dest.InterventionTime, opt => opt.MapFrom(src => src.InterventionTimeGroupItemEntity))
+                .ForMember(dest => dest.Mechanic, opt => opt.MapFrom(src => src.MechanicGroupItemEntity))
+                .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.VehicleEntity))
+                .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity))
+                .ForMember(dest => dest.ContractDescription, opt => opt.MapFrom(src => src.ContractGroupItemEntity.Description))
+                .ForMember(dest => dest.Workshop, opt => opt.MapFrom(src => src.WorkshopCentralEntity))
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ReverseMap();
 
