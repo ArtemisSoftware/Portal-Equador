@@ -66,7 +66,9 @@ namespace PortalEquador.Data.Mappers
 
             CreateMap<CarWashSchedulerEntity, CarWashViewModel>()
             .ForMember(dest => dest.InterventionTime, opt => opt.MapFrom(src => src.InterventionTimeGroupItemEntity))
-            .ForMember(dest => dest.Lane, opt => opt.MapFrom(src => src.LaneGroupItemEntity))
+            .ForMember(dest => dest.Lane, opt => opt.MapFrom(src => src.WorkshopLaneEntity))
+            .ForMember(dest => dest.Workshop, opt => opt.MapFrom(src => src.WorkshopCentralEntity))
+            .ForMember(dest => dest.LaneId, opt => opt.MapFrom(src => src.WorkshopLaneId))
             .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.VehicleEntity))
             .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity))
             .ForMember(dest => dest.ContractDescription, opt => opt.MapFrom(src => src.ContractGroupItemEntity.Description))

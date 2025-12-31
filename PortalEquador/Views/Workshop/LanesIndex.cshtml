@@ -4,7 +4,19 @@
 @{
     ViewData["Title"] = "Index";
 }
-<h1>Oficina -  @ViewData[ViewBagConstants.WORKSHOP_NAME]</h1>
+
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>Oficina -  @ViewData[ViewBagConstants.WORKSHOP_NAME]</h1>
+        <h3>Baias</h3>
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="Workshop" asp-action="Management"
+           asp-route-id="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+           asp-route-name="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+           class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
+</div>
 
 <p>
     <a asp-action="AddLane"
@@ -31,9 +43,9 @@
             var item = Model.ToList()[i];
             <tr>
                 <td class="align-middle">
-                    Baia @(i + 1)
+                    Baia @(i + 1) @item.Id
                 </td>
-                <td>
+                <td class="align-middle">
                     @if (@item.Active)
                     {
                         <span class="badge bg-success">Ativo</span>
@@ -59,11 +71,19 @@
     </tbody>
 </table>
 
-<form id="deleteLanguage" asp-action="DeleteLanguage">
-    <input type="hidden" id="languageId" name="Id" />
-    <input type="hidden" id="identifier" name="identifier" />
-    <input type="hidden" id="username" name="username" />
+
+<form id="deactivateLane" asp-action="DeactivateLane"
+      asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+      asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]">
+    <input type="hidden" id="deactivateId" name="Id" />
 </form>
+
+<form id="activateLane" asp-action="ActivateLane"
+      asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+      asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]">
+    <input type="hidden" id="activateId" name="Id" />
+</form>
+
 
 
 @section Scripts {
@@ -72,24 +92,36 @@
 
             $('.table').DataTable();
 
+            // Delegated event binding for delete button
             $('.table').on('click', '.deleteBtn', function () {
                 swal({
-                    title: "Eliminar lingua",
-                    text: "Tem a certeza que pretende eliminar a lingua?",
+                    title: "Desativar item",
+                    text: "Tem a certeza que pretende desativar o registo?",
                     icon: "warning",
                     buttons: true,
                     dangerMode: true
                 }).then((confirm) => {
                     if (confirm) {
-                        var btn = $(this);
-                        var id = btn.data("id");
-                        var identifier = btn.data("identifier");
-                        var username = btn.data("username");
-                        $('#languageId').val(id);
-                        $('#identifier').val(identifier);
-                        $('#username').val(username);
-                        $('#deleteLanguage').submit();
+                        var id = $(this).data("id");
+                        $('#deactivateId').val(id);
+                        $('#deactivateLane').submit();
+                    }
+                });
+            });
 
+            // Delegated event binding for activate button
+            $('.table').on('click', '.allocateBtn', function () {
+                swal({
+                    title: "Ativar item",
+                    text: "Tem a certeza que pretende ativar o registo?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var id = $(this).data("id");
+                        $('#activateId').val(id);
+                        $('#activateLane').submit();
                     }
                 });
             });

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
 using PortalEquador.Data.MechanicalWorkshop.Workshop.Entities;
@@ -148,6 +149,19 @@ namespace PortalEquador.Data.MechanicalWorkshop.Workshop.Repository
             }
         }
 
+        public async Task Save(WorkshopDetailViewModel model)
+        {
+            WorkshopEntity? entity = await GetAsync(model.Id);
+
+            if (entity != null)
+            {
+                entity.Name = model.Name;
+                entity.EditorId = GetCurrentUserId();
+                entity.DateModified = DateTime.UtcNow;
+                await UpdateAsync(entity);
+            }
+        }
+
         public async Task UpdateState(int id, bool active)
         {
             WorkshopEntity? entity = await GetAsync(id);
@@ -160,5 +174,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Workshop.Repository
                 await UpdateAsync(entity);
             }
         }
+
+
     }
 }

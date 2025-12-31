@@ -3,14 +3,20 @@
 @{
     ViewData["Title"] = "Index";
 }
-<h1>Oficinas</h1>
-
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>Oficinas </h1>
+        <h4>Index </h4>
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="Workshop" asp-action="Dashboard" class="btn btn-dark"> <i class="fas fa-chevron-left" title="Regressar aos painel "></i>Regressar aos painel</a>
+    </div>
+</div>
+<hr />
 <p>
-    <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
+    <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Criar oficina</a>
 </p>
 <br />
-
-
 <table class="table">
     <thead>
         <tr>
@@ -70,11 +76,11 @@
 
 
 <form id="deactivateWorkshop" asp-action="DeactivateWorkshop" >
-    <input type="hidden" id="id" name="Id" />
+    <input type="hidden" id="deactivateid" name="Id" />
 </form>
 
 <form id="activateWorkshop" asp-action="ActivateWorkshop">
-    <input type="hidden" id="id" name="Id" />
+    <input type="hidden" id="activateid" name="Id" />
 </form>
 
 
@@ -96,7 +102,7 @@
                     }).then((confirm) => {
                         if (confirm) {
                             var id = $(this).data("id");
-                            $('#id').val(id);
+                            $('#deactivateid').val(id);
                             $('#deactivateWorkshop').submit();
                         }
                     });
@@ -113,7 +119,7 @@
                     }).then((confirm) => {
                         if (confirm) {
                             var id = $(this).data("id");
-                            $('#id').val(id);
+                            $('#activateid').val(id);
                             $('#activateWorkshop').submit();
                         }
                     });

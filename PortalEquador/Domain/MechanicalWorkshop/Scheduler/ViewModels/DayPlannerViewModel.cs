@@ -29,6 +29,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
 
         public int WorkshopId { get; set; }
         public string WorkshopName { get; set; }
+        public WorkshopViewModel Workshop { get; set; }
 
 
 
@@ -61,6 +62,8 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
 
         private SchedulerViewModel GetAdminIntervention(SchedulerViewModel? model, WorkshopMechanicViewModel mechanic, GroupItemViewModel schedule)
         {
+            SchedulerViewModel result;
+
             if (model != null)
             {
                 return model;
@@ -71,8 +74,15 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
                 {
                     return InactiveSchedule(mechanic, schedule);
                 }
-                return FreeSchedule(mechanic, schedule);
+                result = FreeSchedule(mechanic, schedule);
             }
+
+            if (Workshop.Active == false)
+            {
+                return InactiveSchedule(mechanic, schedule);
+            }
+
+            return result;
         }
 
         private SchedulerViewModel GetUserIntervention(SchedulerViewModel? model, WorkshopMechanicViewModel mechanic, GroupItemViewModel schedule)
@@ -98,7 +108,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
                     break;
             }
 
-            if(result.ScheduleType != SchedulerType.InSchedule && mechanic.Active == false)
+            if(result.ScheduleType != SchedulerType.InSchedule && (mechanic.Active == false || Workshop.Active == false))
             {
                 result = InactiveSchedule(mechanic, schedule);
             }

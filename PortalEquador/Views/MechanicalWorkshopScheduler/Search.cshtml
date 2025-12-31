@@ -11,7 +11,10 @@
 
 <div class="row align-items-center">
     <div class="col-md-10">
-        <h1>Oficina @ViewData[ViewBagConstants.WORKSHOP_NAME]</h1>
+        <h1>Oficina @ViewData[ViewBagConstants.WORKSHOP_NAME]  @if (Model.Workshop.Active == false)
+            {
+                 <span class="badge bg-danger">Inactiva</span>
+            }</h1>
         <h4> Pesquisa - Revisão de veículos da frota </h4>
     </div>
     <div class="col-md-2 text-right">

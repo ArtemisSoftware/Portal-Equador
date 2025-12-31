@@ -1,5 +1,10 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using PortalEquador.Data.MechanicalWorkshop.Workshop.Entities;
 using PortalEquador.Domain.GroupTypes.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Workshop.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels;
@@ -50,6 +55,36 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
 
         }
 
+        [HttpPost, ActionName("DeactivateLane")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeactivateLane(int id, int workshopid, string workshopname)
+        {
+            return await UpdateLaneState(id, workshopid, workshopname, false);
+        }
+
+        [HttpPost, ActionName("ActivateLane")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActivateLane(int id, int workshopid, string workshopname)
+        {
+            return await UpdateLaneState(id, workshopid, workshopname, true);
+        }
+
+        public async Task<IActionResult> UpdateLaneState(int id, int workshopid, string workshopname, bool activate)
+        {
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
+
+            await workshopLaneRepository.UpdateState(id, activate);
+            return RedirectToAction(nameof(LanesIndex), new { workshopid = workshopid, workshopname = workshopname });
+        }
+
+
+
+
+
+
+
+
         public async Task<IActionResult> MechanicsIndex(int workshopid, string workshopname)
         {
             ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
@@ -59,10 +94,6 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
 
             return View(model);
         }
-
-
-
-
 
         public async Task<IActionResult> AddMechanic(int workshopid, string workshopname)
         {
@@ -179,9 +210,20 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             return RedirectToAction(nameof(Index));
         }
 
+        // GET: Workshop/Edit/5
+        public async Task<IActionResult> Edit(int id)
+        {
+            var model = await repository.GetWorkshop(id);
+            return View(model);
+        }
 
-
-
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(WorkshopDetailViewModel model)
+        {
+                await repository.Save(model);
+                return RedirectToAction(nameof(Dashboard));
+        }
 
 
 
@@ -208,58 +250,12 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
 
 
 
-        // GET: Workshop/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
 
-            var workshopEntity = await _context.WorkshopEntity.FindAsync(id);
-            if (workshopEntity == null)
-            {
-                return NotFound();
-            }
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", workshopEntity.EditorId);
-            return View(workshopEntity);
-        }
 
         // POST: Workshop/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name,Active,Id,EditorId,DateCreated,DateModified")] WorkshopEntity workshopEntity)
-        {
-            if (id != workshopEntity.Id)
-            {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(workshopEntity);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!WorkshopEntityExists(workshopEntity.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["EditorId"] = new SelectList(_context.Users, "Id", "Id", workshopEntity.EditorId);
-            return View(workshopEntity);
-        }
 
         // GET: Workshop/Delete/5
         public async Task<IActionResult> Delete(int? id)

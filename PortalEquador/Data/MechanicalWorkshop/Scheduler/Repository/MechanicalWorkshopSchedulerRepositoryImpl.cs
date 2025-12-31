@@ -38,11 +38,16 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
 
         public async Task<DayPlannerViewModel> GetDayPlan(DateOnly date, int workshopid, string workshopname)
         {
-            var mechanics = await GroupItemsList(GroupTypesConstants.Groups.MECHANICAL_SHOP_MECHANICS);
-            var mechanics_ = await GetMechanics(workshopid);
+            var mechanics = await GetMechanics(workshopid);
 
             var schedules = await GroupItemsList(GroupTypesConstants.Groups.MECHANICAL_SHOP_SCHEDULES);
             var schedulesList = mapper.Map<List<GroupItemViewModel>>(schedules);
+
+            var workshop = await context.WorkshopEntity
+               .Where(item => item.Id == workshopid)
+               .FirstAsync();
+
+            var workshopModel = mapper.Map<WorkshopViewModel>(workshop);
 
             var results = await context.MechanicalWorkshopSchedulerEntity
                             .Include(item => item.VehicleEntity)
@@ -55,23 +60,24 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             {
                 WorkshopId = workshopid,
                 WorkshopName = workshopname,
+                Workshop = workshopModel,
                 InterventionTimes = colabTime(schedulesList),
                 Schedules = schedulesList,
                 Interventions = new List<SchedulerViewModel>(),
                 MainTime = TimeUtil.ToDateTime(date),
                 hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole()),
-            };
+            }; 
 
             if (results.Count == 0)
             {
-                model.Mechanics = mechanics_.Where(m => m.Active) .ToList();
+                model.Mechanics = mechanics.Where(m => m.Active) .ToList();
                 return model;
             } else
             {
                 var interventions = mapper.Map<List<SchedulerViewModel>>(results);
                 var mechanicIdsInUse = interventions .Select(s => s.MechanicId).ToHashSet();
 
-                model.Mechanics = mechanics_.Where(m => m.Active || mechanicIdsInUse.Contains(m.Id)) .ToList();
+                model.Mechanics = mechanics.Where(m => m.Active || mechanicIdsInUse.Contains(m.Id)) .ToList();
                 model.Interventions = interventions;
                 return model;
             }
@@ -131,6 +137,14 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
 
             model.hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
             model.Vehicles = Vehicles();
+
+            var workshop = await context.WorkshopEntity
+               .Where(item => item.Id == workshopid)
+               .FirstAsync();
+
+            var workshopModel = mapper.Map<WorkshopViewModel>(workshop);
+            model.Workshop = workshopModel;
+
             return model;
         }
 
@@ -215,6 +229,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             entity.CurrentState = state;
             entity.EditorId = GetCurrentUserId();
             entity.DateModified = DateTime.UtcNow;
+            entity.MechanicId = 3; //apagar no fim
 
             // set Modified flag in your entry
             var local = context.Set<MechanicalWorkshopSchedulerEntity>().Local.FirstOrDefault(entry => entry.Id.Equals(model.Id));

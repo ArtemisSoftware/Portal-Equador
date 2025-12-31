@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.IdentityModel.Tokens;
 using PortalEquador.Domain.Generic;
+using PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels;
 using PortalEquador.Util.Constants;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,6 +10,8 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
 {
     public class SearchDayPlannerViewModel : ViewModel
     {
+        public WorkshopViewModel Workshop { get; set; }
+
         [NotMapped]
         public string LicencePlatePosition0 { get; set; }
 

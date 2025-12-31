@@ -7,5 +7,6 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Workshop.Repository
     public interface IWorkshopLaneRepository : IGenericRepository<WorkshopLaneEntity>
     {
         Task Save(int workshopId);
+        Task UpdateState(int id, bool active);
     }
 }

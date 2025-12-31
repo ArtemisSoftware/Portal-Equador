@@ -10,7 +10,10 @@
 
 <div class="row align-items-center">
     <div class="col-md-10">
-        <h1>Oficina @ViewData[ViewBagConstants.WORKSHOP_NAME]</h1>
+        <h1>Oficina @ViewData[ViewBagConstants.WORKSHOP_NAME] @if (Model.Workshop.Active == false)
+            {
+                <span class="badge bg-danger">Inactiva</span>
+            }</h1>
         <h4>Planificação de trabalhos - Revisão dos veículos da frota</h4>
     </div>
     <div class="col-md-2 text-right">
@@ -54,10 +57,10 @@
                         
                         @for (int i = 0; i < Model.Mechanics.Count; i++)
                         {
-                            var mechanic = Model.Mechanics[i];
+                            var item = Model.Mechanics[i];
                             <th scope="col">
                                 Mecânico @(i + 1)
-                                @if (!mechanic.Active)
+                                @if (!item.Active)
                                 {
                                     <span class="badge bg-danger ms-1">Inativo</span>
                                 }
@@ -104,7 +107,7 @@
 
                                                 case SchedulerType.InactiveMechanic:
                                                     <h5 class="card-title">Inativo</h5>
-                                                    <p class="card-text">Horário indisiponível</p>
+                                                    <p class="card-text">Horário indisponível</p>
                                                     <a href="#" class="btn btn-light">
                                                         <i class="fas fa-solid fa-lock"></i>
                                                     </a>

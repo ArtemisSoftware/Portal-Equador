@@ -23,5 +23,19 @@ namespace PortalEquador.Data.MechanicalWorkshop.Workshop.Repository
 
             await AddAsync(entity);
         }
+
+        public async Task UpdateState(int id, bool active)
+        {
+            WorkshopLaneEntity? entity = await GetAsync(id);
+
+            if (entity != null)
+            {
+                entity.Active = active;
+                entity.EditorId = GetCurrentUserId();
+                entity.DateModified = DateTime.UtcNow;
+                await UpdateAsync(entity);
+            }
+        }
+
     }
 }

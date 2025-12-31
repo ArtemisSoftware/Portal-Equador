@@ -37,5 +37,10 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Entity
 
         [ForeignKey("WorkshopId")]
         public WorkshopEntity WorkshopCentralEntity { get; set; }
+
+        public int? WorkshopLaneId { get; set; } = null;
+
+        [ForeignKey("WorkshopLaneId")]
+        public WorkshopLaneEntity WorkshopLaneEntity { get; set; }
     }
 }

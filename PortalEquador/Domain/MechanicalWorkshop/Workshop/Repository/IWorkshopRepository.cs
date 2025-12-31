@@ -17,7 +17,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Workshop.Repository
         Task<WorkshopDetailViewModel> GetWorkshop(int id);
 
         Task Save(WorkshopCreateViewModel model);
-
+        Task Save(WorkshopDetailViewModel model);
         Task UpdateState(int id, bool active);
     }
 }
