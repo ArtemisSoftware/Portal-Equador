@@ -9,6 +9,9 @@
     ViewData["Title"] = "Dashboard";
 }
 
+
+
+
 <div class="text-center">
     <h1 class="display-4">Oficinas</h1>
     <br />
@@ -22,9 +25,15 @@
 
             <div class="col-sm-4">
                 <div class="card">
+
                     <div class="card-body">
-                        <h3 class="card-title">@item.Name</h3>
-                        <p class="card-text">Gestão de lavagens e agendamentos</p>
+                        <h3 class="card-title">@item.Name </h3>
+                       <p class="card-text">Gestão de lavagens e agendamentos</p>
+                       
+  @if(item.Active == false){
+                                     <h4 ><span class="badge bg-danger">Oficina Inativa</span> </h4>
+                                     
+                        }
                         <div class="d-grid gap-2 col-6 mx-auto">
                             <a asp-controller="Workshop" asp-action="Management"
                                asp-route-id="@item.Id"

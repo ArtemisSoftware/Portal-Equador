@@ -49,7 +49,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
         public int MechanicId { get; set; }
 
         [Display(Name = StringConstants.Display.MECHANIC)]
-        public GroupItemViewModel? Mechanic { get; set; }
+        public WorkshopMechanicViewModel? Mechanic { get; set; }
 
         [Required]
         public int InterventionTimeId { get; set; }

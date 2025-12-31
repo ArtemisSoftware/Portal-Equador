@@ -1,12 +1,29 @@
-﻿@model IEnumerable<PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels.WorkshopDetailViewModel>
+﻿@model IEnumerable<PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels.WorkshopMechanicViewModel>
+@using PortalEquador.Util.Constants
 
 @{
     ViewData["Title"] = "Index";
 }
-<h1>Oficinas</h1>
+
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>Oficina -  @ViewData[ViewBagConstants.WORKSHOP_NAME]</h1>
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="Workshop" asp-action="Management" 
+               asp-route-id="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+       asp-route-name="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+        class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
+</div>
+
+
 
 <p>
-    <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
+    <a asp-action="AddMechanic"
+       asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+       asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+    class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Novo Mecânico</a>
 </p>
 <br />
 
@@ -18,23 +35,18 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th></th>
-            <th>
-                @Html.DisplayNameFor(model => model.Lanes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Mechanics)
-            </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @for (int i = 0; i < Model.Count(); i++)
         {
+            var item = Model.ToList()[i];
             <tr>
                 <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.Name)
+                    Mecânico @(i + 1)
                 </td>
-                <td class="align-middle">
+                <td  class="align-middle">
                     @if (@item.Active)
                     {
                         <span class="badge bg-success">Ativo</span>
@@ -44,15 +56,8 @@
                         <span class="badge bg-danger">Inativo</span>
                     }
                 </td>
+
                 <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.Lanes.Count)
-                </td>
-                <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.Mechanics.Count)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id"  class="btn btn-warning"><i class="fas fa-pencil-alt" title="Editar"></i></a>
-                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
                     @if (@item.Active)
                     {
                         <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button">Desativar</button>
@@ -67,13 +72,15 @@
     </tbody>
 </table>
 
-
-
-<form id="deactivateWorkshop" asp-action="DeactivateWorkshop" >
+<form id="deactivateMechanic" asp-action="DeactivateMechanic" 
+       asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+       asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]">
     <input type="hidden" id="id" name="Id" />
 </form>
 
-<form id="activateWorkshop" asp-action="ActivateWorkshop">
+<form id="activateMechanic" asp-action="ActivateMechanic"        
+        asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+       asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]">
     <input type="hidden" id="id" name="Id" />
 </form>
 
@@ -97,7 +104,7 @@
                         if (confirm) {
                             var id = $(this).data("id");
                             $('#id').val(id);
-                            $('#deactivateWorkshop').submit();
+                            $('#deactivateMechanic').submit();
                         }
                     });
                 });
@@ -114,7 +121,7 @@
                         if (confirm) {
                             var id = $(this).data("id");
                             $('#id').val(id);
-                            $('#activateWorkshop').submit();
+                            $('#activateMechanic').submit();
                         }
                     });
                 });
@@ -122,3 +129,4 @@
 
     </script>
 }
+

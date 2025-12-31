@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 using PortalEquador.Domain.MechanicalWorkshop.Admin.ViewModels;
 using PortalEquador.Data.MechanicalWorkshop;
+using PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels;
 
 namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
 {
@@ -17,7 +18,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
         [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
         [DataType(DataType.Date)]
         public DateTime MainTime { get; set; } = DateTime.Now;
-        public List<GroupItemViewModel> Mechanics { get; set; }
+        public List<WorkshopMechanicViewModel> Mechanics { get; set; }
         public List<GroupItemViewModel> Schedules { get; set; }
         public Dictionary<int, GroupItemViewModel> InterventionTimes { get; set; }
         public List<SchedulerViewModel> Interventions { get; set; }
@@ -58,7 +59,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
             }
         }
 
-        private SchedulerViewModel GetAdminIntervention(SchedulerViewModel? model, GroupItemViewModel mechanic, GroupItemViewModel schedule)
+        private SchedulerViewModel GetAdminIntervention(SchedulerViewModel? model, WorkshopMechanicViewModel mechanic, GroupItemViewModel schedule)
         {
             if (model != null)
             {
@@ -66,11 +67,15 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
             }
             else
             {
+                if (mechanic.Active == false)
+                {
+                    return InactiveSchedule(mechanic, schedule);
+                }
                 return FreeSchedule(mechanic, schedule);
             }
         }
 
-        private SchedulerViewModel GetUserIntervention(SchedulerViewModel? model, GroupItemViewModel mechanic, GroupItemViewModel schedule)
+        private SchedulerViewModel GetUserIntervention(SchedulerViewModel? model, WorkshopMechanicViewModel mechanic, GroupItemViewModel schedule)
         {
             var result = model;
 
@@ -91,6 +96,11 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
                 default:
                     result = model;
                     break;
+            }
+
+            if(result.ScheduleType != SchedulerType.InSchedule && mechanic.Active == false)
+            {
+                result = InactiveSchedule(mechanic, schedule);
             }
 
             return result;
@@ -116,7 +126,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
 
         }
 
-        private SchedulerViewModel FreeSchedule(GroupItemViewModel mechanic, GroupItemViewModel schedule)
+        private SchedulerViewModel FreeSchedule(WorkshopMechanicViewModel mechanic, GroupItemViewModel schedule)
         {
             return new SchedulerViewModel
             {
@@ -128,13 +138,25 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
             };
         }
 
-        private SchedulerViewModel BlockedSchedule(GroupItemViewModel mechanic, GroupItemViewModel schedule)
+        private SchedulerViewModel BlockedSchedule(WorkshopMechanicViewModel mechanic, GroupItemViewModel schedule)
         {
             return new SchedulerViewModel
             {
                 Id = -1,
                 ScheduleDate = TimeUtil.ToDateOnly(MainTime),
                 ScheduleType = SchedulerType.Blocked,
+                Mechanic = mechanic,
+                InterventionTime = schedule
+            };
+        }
+
+        private SchedulerViewModel InactiveSchedule(WorkshopMechanicViewModel mechanic, GroupItemViewModel schedule)
+        {
+            return new SchedulerViewModel
+            {
+                Id = -1,
+                ScheduleDate = TimeUtil.ToDateOnly(MainTime),
+                ScheduleType = SchedulerType.InactiveMechanic,
                 Mechanic = mechanic,
                 InterventionTime = schedule
             };

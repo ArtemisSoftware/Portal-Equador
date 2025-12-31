@@ -117,6 +117,7 @@ builder.Services.AddScoped<GetVehiclesUseCase> ();
 builder.Services.AddScoped<GetVehicleUseCase> ();
 builder.Services.AddScoped<IWorkshopRepository, WorkshopRepositoryImpl>();
 builder.Services.AddScoped<IWorkshopLaneRepository, WorkshopLaneRepositoryImpl>();
+builder.Services.AddScoped<IWorkshopMechanicRepository, WorkshopMechanicRepositoryImpl>();
 
 //Contract
 builder.Services.AddScoped<IContractRepository, ContractRepositoryImpl>();

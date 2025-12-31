@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PortalEquador.Data;
 
@@ -11,9 +12,11 @@ using PortalEquador.Data;
 namespace PortalEquador.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251229133454_WorkshopMechanicEntity")]
+    partial class WorkshopMechanicEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -930,9 +933,6 @@ namespace PortalEquador.Data.Migrations
                     b.Property<int?>("WorkshopId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("WorkshopMechanicId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ContractId");
@@ -946,8 +946,6 @@ namespace PortalEquador.Data.Migrations
                     b.HasIndex("VehicleId");
 
                     b.HasIndex("WorkshopId");
-
-                    b.HasIndex("WorkshopMechanicId");
 
                     b.ToTable("MechanicalWorkshopSchedulerEntity");
                 });
@@ -2005,10 +2003,6 @@ namespace PortalEquador.Data.Migrations
                         .WithMany()
                         .HasForeignKey("WorkshopId");
 
-                    b.HasOne("PortalEquador.Data.MechanicalWorkshop.Workshop.Entities.WorkshopMechanicEntity", "WorkshopCentralMechanicEntity")
-                        .WithMany()
-                        .HasForeignKey("WorkshopMechanicId");
-
                     b.Navigation("ApplicationUserEntity");
 
                     b.Navigation("ContractGroupItemEntity");
@@ -2020,8 +2014,6 @@ namespace PortalEquador.Data.Migrations
                     b.Navigation("VehicleEntity");
 
                     b.Navigation("WorkshopCentralEntity");
-
-                    b.Navigation("WorkshopCentralMechanicEntity");
                 });
 
             modelBuilder.Entity("PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity.MechanicalWorkshopVehicleEntity", b =>

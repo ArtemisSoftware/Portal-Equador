@@ -38,7 +38,8 @@ namespace PortalEquador.Data.Mappers
 
             CreateMap<MechanicalWorkshopSchedulerEntity, SchedulerViewModel>()
                 .ForMember(dest => dest.InterventionTime, opt => opt.MapFrom(src => src.InterventionTimeGroupItemEntity))
-                .ForMember(dest => dest.Mechanic, opt => opt.MapFrom(src => src.MechanicGroupItemEntity))
+                .ForMember(dest => dest.MechanicId, opt => opt.MapFrom(src => src.WorkshopMechanicId))
+                .ForMember(dest => dest.Mechanic, opt => opt.MapFrom(src => src.WorkshopCentralMechanicEntity))
                 .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.VehicleEntity))
                 .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity))
                 .ForMember(dest => dest.ContractDescription, opt => opt.MapFrom(src => src.ContractGroupItemEntity.Description))
@@ -47,7 +48,8 @@ namespace PortalEquador.Data.Mappers
 
             CreateMap<MechanicalWorkshopSchedulerEntity, SchedulerDetailViewModel>()
                 .ForMember(dest => dest.InterventionTime, opt => opt.MapFrom(src => src.InterventionTimeGroupItemEntity))
-                .ForMember(dest => dest.Mechanic, opt => opt.MapFrom(src => src.MechanicGroupItemEntity))
+                .ForMember(dest => dest.MechanicId, opt => opt.MapFrom(src => src.WorkshopMechanicId))
+                .ForMember(dest => dest.Mechanic, opt => opt.MapFrom(src => src.WorkshopCentralMechanicEntity))
                 .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.VehicleEntity))
                 .ForMember(dest => dest.Contract, opt => opt.MapFrom(src => src.ContractGroupItemEntity))
                 .ForMember(dest => dest.ContractDescription, opt => opt.MapFrom(src => src.ContractGroupItemEntity.Description))
@@ -94,6 +96,7 @@ namespace PortalEquador.Data.Mappers
             CreateMap<WorkshopEntity, WorkshopDetailViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                 .ForMember(dest => dest.Lanes, opt => opt.MapFrom(src => src.Lanes))
+               .ForMember(dest => dest.Mechanics, opt => opt.MapFrom(src => src.Mechanics))
                 .ReverseMap();
 
             CreateMap<WorkshopEntity, WorkshopCreateViewModel>()
@@ -101,6 +104,10 @@ namespace PortalEquador.Data.Mappers
                .ReverseMap();
 
             CreateMap<WorkshopLaneEntity, WorkshopLaneViewModel>()
+                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
+               .ReverseMap();
+
+            CreateMap<WorkshopMechanicEntity, WorkshopMechanicViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.ApplicationUserEntity.FirstName + " " + src.ApplicationUserEntity.LastName))
                .ReverseMap();
         }

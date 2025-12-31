@@ -41,5 +41,10 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity
 
         [ForeignKey("WorkshopId")]
         public WorkshopEntity WorkshopCentralEntity { get; set; }
+
+        public int? WorkshopMechanicId { get; set; } = null;
+
+        [ForeignKey("WorkshopMechanicId")]
+        public WorkshopMechanicEntity WorkshopCentralMechanicEntity { get; set; }
     }
 }

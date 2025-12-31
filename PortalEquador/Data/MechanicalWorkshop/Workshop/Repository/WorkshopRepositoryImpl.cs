@@ -17,9 +17,21 @@ namespace PortalEquador.Data.MechanicalWorkshop.Workshop.Repository
     {
         public async Task<List<WorkshopDetailViewModel>> GetDashboard()
         {
-            var result = await context.WorkshopEntity
+            var userId = GetCurrentUserId();
+            var hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
+            List <WorkshopEntity> result;
+
+            if (hasFullAccess)
+            {
+                result = await context.WorkshopEntity
+                     .ToListAsync();
+            }
+            else
+            {
+                result =  await context.WorkshopEntity
                 .Where(a => a.Active == true)
                  .ToListAsync();
+            }
 
             var mapped = mapper.Map<List<WorkshopDetailViewModel>>(result);
             return mapped;
@@ -35,6 +47,16 @@ namespace PortalEquador.Data.MechanicalWorkshop.Workshop.Repository
             return mapped;
         }
 
+        public async Task<List<WorkshopMechanicViewModel>> GetMechanics(int workshopId)
+        {
+            var result = await context.WorkshopMechanicEntity
+                .Where(a => a.WorkshopId == workshopId)
+                 .ToListAsync();
+
+            var mapped = mapper.Map<List<WorkshopMechanicViewModel>>(result);
+            return mapped;
+        }
+
 
         public async Task<bool> WorkshopExists(string name)
         {
@@ -45,6 +67,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Workshop.Repository
         {
             var result = await context.WorkshopEntity
                  .Include(a => a.Lanes)
+                .Include(a => a.Mechanics)
                 .ToListAsync();
 
             var mapped = mapper.Map<List<WorkshopDetailViewModel>>(result);
@@ -54,7 +77,8 @@ namespace PortalEquador.Data.MechanicalWorkshop.Workshop.Repository
         public async Task<WorkshopDetailViewModel> GetWorkshop(int id)
         {
             var result = await context.WorkshopEntity
-                .Include(a => a.Lanes) 
+                .Include(a => a.Lanes)
+                .Include(a => a.Mechanics)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             var mapped = mapper.Map<WorkshopDetailViewModel>(result);
@@ -90,8 +114,26 @@ namespace PortalEquador.Data.MechanicalWorkshop.Workshop.Repository
                     }
                 );
             }
+
+            var mechanics = new List<WorkshopMechanicEntity>();
+
+            for (int i = 0; i < model.NumberOfMechanics; ++i)
+            {
+                mechanics.Add(
+                    new WorkshopMechanicEntity
+                    {
+                        ApplicationUserEntity = entity.ApplicationUserEntity,
+                        Id = 0,
+                        EditorId = editorId,
+                        Name = (model.NumberOfMechanics + i).ToString(),
+                        Active = true
+                    }
+                );
+            }
+
             entity.Active = true;
             entity.Lanes = lanes;
+            entity.Mechanics = mechanics;
             var id = 0;
 
             if (model.Id == 0)
@@ -106,5 +148,17 @@ namespace PortalEquador.Data.MechanicalWorkshop.Workshop.Repository
             }
         }
 
+        public async Task UpdateState(int id, bool active)
+        {
+            WorkshopEntity? entity = await GetAsync(id);
+
+            if (entity != null)
+            {
+                entity.Active = active;
+                entity.EditorId = GetCurrentUserId();
+                entity.DateModified = DateTime.UtcNow;
+                await UpdateAsync(entity);
+            }
+        }
     }
 }

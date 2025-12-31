@@ -9,8 +9,19 @@
     ViewData["Title"] = "Dashboard";
 }
 
+<div class="row align-items-center">
+    <div class="col-md-10">
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="Workshop" asp-action="Dashboard" class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
+</div>
+
 <div class="text-center">
     <h1 class="display-4">Oficina -  @ViewData[ViewBagConstants.WORKSHOP_NAME]</h1>
+
+
+
     <br />
     <br />
 
@@ -71,8 +82,23 @@
 
         @if (User.IsInRole(Roles.Administrator) || User.IsInRole(Roles.DataManager))
         {
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Mecânicos</h4>
+                        <p class="card-text">Gestão de mecânicos</p>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <a asp-controller="Workshop"
+                               asp-action="MechanicsIndex"
+                               asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                               asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+                               class="btn btn-primary">Gerir</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Baias</h4>
@@ -87,6 +113,8 @@
                     </div>
                 </div>
             </div>
+
+          
         }
     </div>
 

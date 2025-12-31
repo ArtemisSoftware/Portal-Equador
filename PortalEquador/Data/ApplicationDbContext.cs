@@ -72,5 +72,6 @@ namespace PortalEquador.Data
         public DbSet<WorkerUniformEntity> WorkerUniformEntity { get; set; }
         public DbSet<WorkshopEntity> WorkshopEntity { get; set; }
         public DbSet<WorkshopLaneEntity> WorkshopLaneEntity { get; set; }
+        public DbSet<WorkshopMechanicEntity> WorkshopMechanicEntity { get; set; }
     }
 }

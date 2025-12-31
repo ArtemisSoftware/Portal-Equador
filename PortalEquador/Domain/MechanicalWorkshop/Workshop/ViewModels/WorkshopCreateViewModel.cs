@@ -14,5 +14,8 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels
 
         [Display(Name = StringConstants.Display.NUMBER_OF_LANES)]
         public int NumberOfLanes { get; set; } = 1;
+
+        [Display(Name = StringConstants.Display.NUMBER_OF_MECHANICS)]
+        public int NumberOfMechanics { get; set; } = 1;
     }
 }

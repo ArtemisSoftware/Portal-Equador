@@ -1,25 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DocumentFormat.OpenXml.InkML;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using PortalEquador.Data;
-using PortalEquador.Data.MechanicalWorkshop.Workshop.Entities;
-using PortalEquador.Domain.Accident.UseCases;
-using PortalEquador.Domain.MechanicalWorkshop.Admin.Repository;
+using PortalEquador.Domain.GroupTypes.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Workshop.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels;
-using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 
 namespace PortalEquador.Controllers.MechanicalWorkshop
 {
     public class WorkshopController(
         IWorkshopRepository repository,
-        IWorkshopLaneRepository workshopLaneRepository
+        IWorkshopLaneRepository workshopLaneRepository,
+        IWorkshopMechanicRepository workshopMechanicRepository
         ) : Controller
     {
 
@@ -37,6 +28,8 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             return View();
         }
 
+
+
         public async Task<IActionResult> LanesIndex(int workshopid, string workshopname)
         {
             ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
@@ -46,7 +39,6 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
 
             return View(model);
         }
-
 
         public async Task<IActionResult> AddLane(int workshopid, string workshopname)
         {
@@ -58,10 +50,52 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
 
         }
 
+        public async Task<IActionResult> MechanicsIndex(int workshopid, string workshopname)
+        {
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
+
+            var model = await repository.GetMechanics(workshopid);
+
+            return View(model);
+        }
 
 
 
 
+
+        public async Task<IActionResult> AddMechanic(int workshopid, string workshopname)
+        {
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
+            await workshopMechanicRepository.Save(workshopid);
+
+            return RedirectToAction(nameof(MechanicsIndex), new { workshopid = workshopid, workshopname = workshopname });
+
+        }
+
+        [HttpPost, ActionName("DeactivateMechanic")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeactivateMechanic(int id, int workshopid, string workshopname)
+        {
+            return await UpdateMechanicState(id, workshopid, workshopname, false);
+        }
+
+        [HttpPost, ActionName("ActivateMechanic")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActivateMechanic(int id, int workshopid, string workshopname)
+        {
+            return await UpdateMechanicState(id, workshopid, workshopname, true);
+        }
+
+        public async Task<IActionResult> UpdateMechanicState(int id, int workshopid, string workshopname, bool activate)
+        {
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
+
+            await workshopMechanicRepository.UpdateState(id, activate);
+            return RedirectToAction(nameof(MechanicsIndex), new { workshopid = workshopid, workshopname = workshopname });
+        }
 
 
 
@@ -125,6 +159,25 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
 
 
 
+        [HttpPost, ActionName("DeactivateWorkshop")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeactivateWorkshop(int id)
+        {
+            return await UpdateWorkshopState(id, false);
+        }
+
+        [HttpPost, ActionName("ActivateWorkshop")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActivateWorkshop(int id)
+        {
+            return await UpdateWorkshopState(id, true);
+        }
+
+        public async Task<IActionResult> UpdateWorkshopState(int id, bool activate)
+        {
+            await repository.UpdateState(id, activate);
+            return RedirectToAction(nameof(Index));
+        }
 
 
 

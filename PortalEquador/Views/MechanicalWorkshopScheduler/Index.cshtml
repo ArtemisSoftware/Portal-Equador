@@ -34,11 +34,14 @@
                 <dt class="col-sm-2">
                     <input id="interventionDate" asp-for="MainTime" class="form-control" />
                 </dt>
+                
                 <dd class="col-sm-10">
                     <a href="#" id="searchButton" class="btn btn-info">
                         <i class="fas fa-search" title="Pesquisar"></i>
                     </a>
                 </dd>
+
+
             </dl>
 
             <br />
@@ -48,9 +51,17 @@
                 <thead>
                     <tr>
                         <th scope="col">Horário</th>
-                        @foreach (var mechanic in Model.Mechanics)
+                        
+                        @for (int i = 0; i < Model.Mechanics.Count; i++)
                         {
-                            <th scope="col">@Html.DisplayFor(modelItem => mechanic.Description)</th>
+                            var mechanic = Model.Mechanics[i];
+                            <th scope="col">
+                                Mecânico @(i + 1)
+                                @if (!mechanic.Active)
+                                {
+                                    <span class="badge bg-danger ms-1">Inativo</span>
+                                }
+                            </th>
                         }
                     </tr>
                 </thead>
@@ -86,6 +97,14 @@
                                                case SchedulerType.BlockedFree:
                                                     <h5 class="card-title">Fechado</h5>
                                                     <p class="card-text">Horário não preenchido</p>
+                                                    <a href="#" class="btn btn-light">
+                                                        <i class="fas fa-solid fa-lock"></i>
+                                                    </a>
+                                                    break;
+
+                                                case SchedulerType.InactiveMechanic:
+                                                    <h5 class="card-title">Inativo</h5>
+                                                    <p class="card-text">Horário indisiponível</p>
                                                     <a href="#" class="btn btn-light">
                                                         <i class="fas fa-solid fa-lock"></i>
                                                     </a>

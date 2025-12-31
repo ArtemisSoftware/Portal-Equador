@@ -96,6 +96,7 @@
             public const string NOTIFICATION = "Notificação";
             public const string NUMBER = "Número";
             public const string NUMBER_OF_LANES = "Numero de baias";
+            public const string NUMBER_OF_MECHANICS = "Numero de mecânicos";
 
 
             // O

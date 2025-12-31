@@ -26,6 +26,13 @@
             </div>
             <br />
 
+            <div class="form-group col-sm-4">
+                <label asp-for="NumberOfMechanics" class="control-label"></label>
+                <input asp-for="NumberOfMechanics" class="form-control" min="1" />
+                <span asp-validation-for="NumberOfMechanics" class="text-danger"></span>
+            </div>
+            <br />
+
             @if (Model.Error != null)
             {
                 <div class="form-group">

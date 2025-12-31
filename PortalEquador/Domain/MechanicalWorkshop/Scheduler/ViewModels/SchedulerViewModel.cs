@@ -2,6 +2,7 @@
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
+using PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 using System.ComponentModel.DataAnnotations;
@@ -51,7 +52,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels
         public int MechanicId { get; set; }
 
         [Display(Name = StringConstants.Display.MECHANIC)]
-        public GroupItemViewModel? Mechanic { get; set; }
+        public WorkshopMechanicViewModel? Mechanic { get; set; }
 
         [Required]
         public int InterventionTimeId { get; set; }

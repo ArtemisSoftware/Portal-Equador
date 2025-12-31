@@ -10,6 +10,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Workshop.Repository
         Task<List<WorkshopDetailViewModel>> GetDashboard();
 
         Task<List<WorkshopLaneViewModel>> GetLanes(int workshopId);
+        Task<List<WorkshopMechanicViewModel>> GetMechanics(int workshopId);
 
         Task<bool> WorkshopExists(string name);
         Task<List<WorkshopDetailViewModel>> GetAllWorkshops();
@@ -17,8 +18,6 @@ namespace PortalEquador.Domain.MechanicalWorkshop.Workshop.Repository
 
         Task Save(WorkshopCreateViewModel model);
 
-        /*
-                Task DeactivateLane();
-                */
+        Task UpdateState(int id, bool active);
     }
 }
