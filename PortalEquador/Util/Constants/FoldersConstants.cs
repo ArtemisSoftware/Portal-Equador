@@ -10,6 +10,9 @@
             public const string PLACEHOLDER = IMAGES + "/placeholder";
             public const string CURRICULUM = IMAGES + "/curriculum";
             public const string DRIVERS_LICENCE = IMAGES + "/driverslicence";
+
+
+            public const string REPORT_DIR = "/report";
         }
     }
 }

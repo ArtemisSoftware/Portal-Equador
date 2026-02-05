@@ -3,6 +3,7 @@ using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
 using PortalEquador.Util.Constants;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PortalEquador.Domain.Accident.ViewModels
 {
@@ -107,5 +108,9 @@ namespace PortalEquador.Domain.Accident.ViewModels
         public int LevelId { get; set; }
 
         public SelectList? Levels { get; set; }
+
+        [Display(Name = StringConstants.Display.FILE)]
+        [NotMapped]
+        public IFormFile? PdfFile { get; set; }
     }
 }

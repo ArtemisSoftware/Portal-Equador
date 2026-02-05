@@ -1,25 +1,40 @@
-﻿@model PortalEquador.Domain.Report.ViewModels.Trainning.TrainningReportFormViewModel
+﻿@model PortalEquador.Domain.Report.ViewModels.Uniforms.UniformsReportFormViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
 <br />
-<h1>Relatório de condução defensiva</h1>
+<h1>Relatório de fardas</h1>
 <hr />
 
 <div class="d-flex justify-content-center mt-5">
     <div style="width: 40%;">
-        <form asp-action="DefensiveDrivingReportForm">
+        <form asp-action="UniformReportForm">
+
             <div class="mb-3">
                 <label asp-for="Year" class="form-label"></label>
                 <select asp-for="Year" class="form-select" asp-items="Model.Dates"></select>
             </div>
-
+            
             <div class="mb-3">
                 <label asp-for="ContractId" class="form-label"></label>
                 <select asp-for="ContractId" class="form-select" asp-items="Model.Contracts"></select>
             </div>
+            <br />
+
+            <div class="mb-3">
+                <label asp-for="UniformId" class="form-label"></label>
+                <select asp-for="UniformId" class="form-select" asp-items="Model.Uniforms"></select>
+            </div>
+            <br />
+
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="AddUniformReturn" /> @Html.DisplayNameFor(model => model.AddUniformReturn)
+                </label>
+            </div>
+            <br />
 
             @if (Model.Error != null)
             {

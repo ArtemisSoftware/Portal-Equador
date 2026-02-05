@@ -22,6 +22,7 @@
             public const string AGE = "Idade";
             public const string AGENCY = "Agência";
             public const string ACADEMIC_HABILITATION = " Habilitações académicas";
+            public const string ADD_UNIFORM_RETURN = "Incluir uniformes devolvidos";
 
             //B
             public const string BULLETIN_NUMBER = "Buletim nº";
@@ -44,6 +45,7 @@
             public const string DEGREE = "Grau";
             public const string DECISION = "Decisao do MVC";
             public const string DATE = "Data";
+            public const string DELIVERY_DATE = "Data de entrega";
             public const string DESCRIPTION = "Descrição";
             public const string DRIVERS_LICENCE_TYPE = "Tipo de carta";
             public const string DRIVERS_LICENCE = "Carta de condução";
@@ -64,6 +66,7 @@
 
             public const string FULL_NAME = "Nome completo";
             public const string FILTER = "Filtro";
+            public const string FILE = "Ficheiro";
 
             //H
             public const string HUMAN_DAMAGE = "Danos humanos";
@@ -82,6 +85,7 @@
             public const string MAJOR_UNVAILABLE = "Curso não disponível";
             public const string MATERNAL_LANGUANGE = "Língua materna";
             public const string MECHANIC = "Mecânico";
+            public const string MEASURE = "Medida";
             public const string MODEL = "Modelo";
             public const string MODIFIED_BY = "Alterado por";
             public const string MONTHS = "Meses";
@@ -91,6 +95,8 @@
             public const string NAME = "Nome";
             public const string NOTIFICATION = "Notificação";
             public const string NUMBER = "Número";
+            public const string NUMBER_OF_LANES = "Numero de baias";
+            public const string NUMBER_OF_MECHANICS = "Numero de mecânicos";
 
 
             // O
@@ -103,12 +109,18 @@
             public const string PROFESSIONAL_COMPETENCE = "Habilitações profissionais";
             public const string PROVISIONAL_DRIVERS_LICENCE = "Verbete";
             public const string PERIOD = "Periodo";
+            public const string PASSWORD = "Palavra-chave";
+
+            // Q
+            public const string QUANTITY = "Quantidade";
+
 
             //R
             public const string ROLE = "Tipo de administrador";
             public const string REASON_TO_BE_FIRED = "Razão da dispensa";
             public const string REMAINING_TIME = "Tempo remanescente";
             public const string RESULT = "Resultado";
+            public const string RETURN_DATE = "Data de devolução";
 
             // S
             public const string SERVICE = "Serviço";
@@ -117,6 +129,8 @@
             public const string SURNAME = "Apelido";
             public const string STATE_OF_HIRED = "Estado da contratação";
             public const string STEP = "Intervalo";
+            public const string SIZE_IS_NUMERIC = "Medida numérica?";
+            public const string SIZE = "Medida";
 
             //  T
             public const string TELEPHONE = "Telefone";
@@ -126,6 +140,9 @@
             public const string TOTAL_TESTS = "Total Testes";
             public const string TOTAL_TESTS_PERCENTAGE = "%T/D";
 
+            // U
+            public const string UNIFORM = "Uniforme";
+
             //  V
             public const string VEHICLE = "Veículo";
             public const string VALUE = "Valor";
@@ -133,6 +150,7 @@
             //  W
             public const string WRITTEN_LEVEL = "Nível escrito";
             public const string WORKSTATION = "Posto";
+            public const string WORKSHOP = "Oficina";
 
             //  Y
             public const string YEAR = "Ano";
@@ -156,7 +174,6 @@
 
             public const string FATHER = "Pai";
             public const string FINANTIAL_IDENTITY = "Nif";
-            public const string FILE = "Ficheiro";
 
 
 
@@ -171,7 +188,8 @@
             public const string ALCHOOL_TEST = "Relatório de testes de alcool";
             public const string MEDICAL_EXAM = "Relatório dos exames médicos realizados";
             public const string DEFENSIVE_DRIVE = "Relatório da formação condução defensiva";
-            public const string ACCIDENT = "Relatório de acidents";
+            public const string ACCIDENT = "Relatório de acidentes";
+            public const string TRAINNING = "Relatório de formações regulares";
 
             public const int ALL_ID = -1;
             public const string ALL_CONTRACTS = "Todos os contractos";
@@ -181,6 +199,9 @@
             public const int ALL_WORK_EXPERIENCE_ID = -1;
 
             public const string ALL_EDUCATION = "Todas as habilitações académicas";
+
+            public const string ALL_UNIFORMS = "Todas os uniformes";
+            public const int ALL_UNIFORMS_ID = -1;
         }
 
         public static class Error
@@ -190,6 +211,7 @@
             public const string EXISTING_GROUP_DESCRIPTION = "A descrição já existe para o grupo especificado";
             public const string EXISTING_IDENTITY_CARD = "O numero do bilhete de identidade já se encontra registado";
             public const string EXISTING_DOCUMENT = "O tipo de documento já se encontra registado";
+            public const string EXISTING_DESCRIPTION = "A descrição já existe";
             public const string MANDATORY_FILE = "A escolha de um ficheiro é obrigatória";
             public const string MANDATORY_CONTRACT_SELECTION = "A escolha de um contracto é obrigatória";
             public const string EXISTING_REGISTER = "O item já se encontra registado";
@@ -205,6 +227,9 @@
             public const string INVALID_IMAGE_EXTENSION = "A imagem possui uma extensão inválida";
             public const string EXISTING_ACCIDENT_NUMBER = "A número de acidente já se encontra registado";
             public const string NO_ACCIDENT_CAUSES = "Não foram selecionadas causas para o acidente";
+            public const string NON_EXISTING_UNIFORM = "A farda não existe";
+            public const string EXISTING_USER = "O utilizador já se encontra registado";
+            public const string EXISTING_WORKSHOP = "A oficina já se encontra registado";
         }
 
         public static class Dates
@@ -252,6 +277,7 @@
             public const int UNASSIGNED_ID = -1;
             public const string CONTRACTED = "Contratado";
             public const string FIRED = "Dispensado";
+            public const string CONTRACT_REPLACED = "Contrato substituido";
         }
 
         public static class SchedulerStatus

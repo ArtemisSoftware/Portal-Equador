@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data;
 using PortalEquador.Data.Accident.Repository;
+using PortalEquador.Data.Administrator.Repository;
 using PortalEquador.Data.Contract.Repository;
 using PortalEquador.Data.Curriculum.Repository;
 using PortalEquador.Data.DisciplinaryNotification.Repository;
@@ -16,18 +17,22 @@ using PortalEquador.Data.MechanicalWorkshop.Admin.Repository;
 using PortalEquador.Data.MechanicalWorkshop.CarWash.Repository;
 using PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Repository;
+using PortalEquador.Data.MechanicalWorkshop.Workshop.Repository;
 using PortalEquador.Data.MedicalExam.Repository;
 using PortalEquador.Data.PersonalInformation.Repository;
 using PortalEquador.Data.Profession.Competence.Repository;
 using PortalEquador.Data.Profession.Experience.Repository;
 using PortalEquador.Data.Report.Repository;
 using PortalEquador.Data.Trainning.Repository;
+using PortalEquador.Data.Uniforms.Repository;
 using PortalEquador.Domain.Accident.Repository;
 using PortalEquador.Domain.Accident.UseCases;
+using PortalEquador.Domain.Administrator.Repository;
 using PortalEquador.Domain.Contract.Repository;
 using PortalEquador.Domain.Curriculum.Repository;
 using PortalEquador.Domain.DisciplinaryNotification.Repository;
 using PortalEquador.Domain.DisciplinaryNotification.UseCases;
+using PortalEquador.Domain.Document;
 using PortalEquador.Domain.Document.Repository;
 using PortalEquador.Domain.DriversLicence.Repository;
 using PortalEquador.Domain.DriversLicence.UseCases;
@@ -43,6 +48,7 @@ using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.UseCase;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.UseCases;
+using PortalEquador.Domain.MechanicalWorkshop.Workshop.Repository;
 using PortalEquador.Domain.MedicalExam.Repository;
 using PortalEquador.Domain.MedicalExam.UseCases;
 using PortalEquador.Domain.PersonalInformation.Repository;
@@ -52,6 +58,7 @@ using PortalEquador.Domain.Report.Repository;
 using PortalEquador.Domain.Report.UseCases;
 using PortalEquador.Domain.Trainning.Repository;
 using PortalEquador.Domain.Trainning.UseCases;
+using PortalEquador.Domain.Uniforms.Repository;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -82,6 +89,7 @@ builder.Services.AddScoped<IProfessionalExperienceRepository, ProfessionalExperi
 builder.Services.AddScoped<IDriversLicenceRepository, DriversLicenceRepositoryImpl>();
 builder.Services.AddScoped<IUniversityRepository, UniversityRepositoryImpl>();
 builder.Services.AddScoped<ISchoolRepository, SchoolRepositoryImpl>();
+builder.Services.AddScoped<DeleteDocumentUseCase>();
 
 //Drivers Licence
 builder.Services.AddScoped<IDriversLicenceRepository, DriversLicenceRepositoryImpl>();
@@ -107,6 +115,9 @@ builder.Services.AddScoped<GetDayPlanUseCase>();
 builder.Services.AddScoped<SearchDayPlanUseCase>();
 builder.Services.AddScoped<GetVehiclesUseCase> ();
 builder.Services.AddScoped<GetVehicleUseCase> ();
+builder.Services.AddScoped<IWorkshopRepository, WorkshopRepositoryImpl>();
+builder.Services.AddScoped<IWorkshopLaneRepository, WorkshopLaneRepositoryImpl>();
+builder.Services.AddScoped<IWorkshopMechanicRepository, WorkshopMechanicRepositoryImpl>();
 
 //Contract
 builder.Services.AddScoped<IContractRepository, ContractRepositoryImpl>();
@@ -129,11 +140,18 @@ builder.Services.AddScoped<GetMedicalExamReportUseCase>();
 builder.Services.AddScoped<GetProfessionalExperienceReportUseCase>();
 builder.Services.AddScoped<GetTrainningReportUseCase> ();
 builder.Services.AddScoped<GetAccidentReportUseCase> ();
+builder.Services.AddScoped<GetUniformsReportFormUseCase>();
+builder.Services.AddScoped<GetUniformsReportUseCase>();
 
 
 builder.Services.AddScoped<IAccidentRepository, AccidentRepositoryImpl>();
 builder.Services.AddScoped<IAccidentCauseRepository, AccidentCauseRepositoryImpl>();
 builder.Services.AddScoped <SaveAccidentUseCase>();
+builder.Services.AddScoped<DeleteAccidentUseCase>();
+
+builder.Services.AddScoped<IUniformRepository, UniformRepositoryImpl>();
+builder.Services.AddScoped<IWorkerUniformRepository, WorkerUniformRepositoryImpl>();
+builder.Services.AddScoped<IAdministratorRepository, AdministratorRepositoryImpl>();
 
 
 

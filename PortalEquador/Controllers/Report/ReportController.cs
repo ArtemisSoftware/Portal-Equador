@@ -10,6 +10,7 @@ using PortalEquador.Domain.Report.ViewModels.Education;
 using PortalEquador.Domain.Report.ViewModels.MedicalExam;
 using PortalEquador.Domain.Report.ViewModels.Profession.Competence;
 using PortalEquador.Domain.Report.ViewModels.Trainning;
+using PortalEquador.Domain.Report.ViewModels.Uniforms;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 using PortalEquador.Util.Report;
@@ -25,7 +26,9 @@ namespace PortalEquador.Controllers.Report
         GetMedicalExamReportUseCase getMedicalExamReportUseCase,
         GetProfessionalExperienceReportUseCase getProfessionalExperienceReportUseCase,
         GetTrainningReportUseCase getTrainningReportUseCase,
-        GetAccidentReportUseCase getAccidentReportUseCase
+        GetAccidentReportUseCase getAccidentReportUseCase,
+        GetUniformsReportUseCase getUniformsReportUseCase,
+        GetUniformsReportFormUseCase getUniformsReportFormUseCase
         ) : Controller
     {
 
@@ -209,11 +212,11 @@ namespace PortalEquador.Controllers.Report
             return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
         }
 
-        /*--------------DefensiveDrivingReport---------------*/
+        /*--------------TrainningReport---------------*/
 
-        public async Task<IActionResult> DefensiveDrivingReportForm(string? error)
+        public async Task<IActionResult> TrainningReportForm(string? error)
         {
-            var model = await repository.GetTrainningForm(ItemFromGroup.Trainning.DEFENSIVE_DRIVING);
+            var model = await repository.GetTrainningForm();
             if (error != null)
             {
                 model.Error = error;
@@ -223,23 +226,23 @@ namespace PortalEquador.Controllers.Report
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DefensiveDrivingReportForm(TrainningReportFormViewModel viewmodel)
+        public async Task<IActionResult> TrainningReportForm(TrainningReportFormViewModel viewmodel)
         {
             try
             {
-                return await ExportDefensiveDrivingReportInExcel(viewmodel.Year, viewmodel.ContractId);
+                return await ExportTrainningReportInExcel(viewmodel.Year, viewmodel.ContractId);
             }
             catch (Exception ex)
             {
-                return await DefensiveDrivingReportForm(ex.Message.ToString());
+                return await TrainningReportForm(ex.Message.ToString());
             }
         }
 
         [HttpGet]
-        public async Task<FileResult> ExportDefensiveDrivingReportInExcel(string year, int contractId)
+        public async Task<FileResult> ExportTrainningReportInExcel(string year, int contractId)
         {
-            var result = await getTrainningReportUseCase.Invoke(year, contractId, GroupTypesConstants.ItemFromGroup.Trainning.DEFENSIVE_DRIVING);
-            var report = DefensiveDriveReport.GenerateReport(result);
+            var result = await getTrainningReportUseCase.Invoke(year, contractId);
+            var report = TrainningReport.GenerateReport(result);
             return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
         }
 
@@ -312,6 +315,41 @@ namespace PortalEquador.Controllers.Report
         {
             var result = await getAccidentReportUseCase.Invoke(contractId);
             var report = AccidentReport.GenerateReport(result);
+            return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
+        }
+
+        /*--------------Uniforms---------------*/
+
+        public async Task<IActionResult> UniformReportForm(string? error)
+        {
+            var model = await getUniformsReportFormUseCase.Invoke();
+            if (error != null)
+            {
+                model.Error = error;
+            }
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UniformReportForm(UniformsReportFormViewModel viewmodel)
+        {
+            try
+            {
+                return await ExportUniformReportInExcel(viewmodel.ContractId, viewmodel.AddUniformReturn, viewmodel.Year);
+            }
+            catch (Exception ex)
+            {
+                return await UniformReportForm(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        public async Task<FileResult> ExportUniformReportInExcel(int contractId, bool addUniformReturn, string year)
+        {
+            var result = await getUniformsReportUseCase.Invoke(contractId, addUniformReturn, Int32.Parse(year));
+            var report = UniformsReport.GenerateReport(result);
             return await ReportBuilderUtil.GenerateExcel(this, report, result.FileName);
         }
 

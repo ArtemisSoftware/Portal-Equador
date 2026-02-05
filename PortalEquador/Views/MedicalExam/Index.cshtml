@@ -83,7 +83,7 @@
 
             $('.table').DataTable();
 
-            $('.deleteBtn').click(function (e) {
+            $('.table').on('click', '.deleteBtn', function (e) {
                 swal({
                     title: "Eliminar o exame",
                     text: "Tem a certeza que pretende eliminar o exame?",
@@ -100,7 +100,6 @@
                         $('#identifier').val(identifier);
                         $('#username').val(username);
                         $('#deleteMedicalExam').submit();
-
                     }
                 });
             });

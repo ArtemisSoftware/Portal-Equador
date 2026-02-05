@@ -1,27 +1,45 @@
-﻿@model PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels.SchedulerViewModel
+﻿@model PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels.SchedulerDetailViewModel
+@using PortalEquador.Util
+@using PortalEquador.Util.Constants
 
 @{
     ViewData["Title"] = "Detalhe";
 }
 
 <h1>Detalhe do Agendamento</h1>
-<h4>Data: @Html.DisplayFor(model => model.ScheduleDate)</h4>
 <div>
 
     <hr />
     <dl class="row">
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Workshop.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Workshop.Name)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ScheduleDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ScheduleDate)
+        </dd>
+
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.InterventionTime)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.InterventionTime.Description)
         </dd>
+        
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Mechanic)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Mechanic.Description)
+            @Html.DisplayFor(model => model.Mechanic.Name)
         </dd>
+        
     </dl>
 
     <div class="row">
@@ -109,10 +127,16 @@
 <div>
     @if (ViewBag.origin == "search")
     {
-        <a asp-action="Search" asp-route-vehicleId="@Model?.Vehicle.Id" class="btn btn-dark">Regressar ao index</a>
+        <a asp-controller="MechanicalWorkshopScheduler"
+           asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+           asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+            asp-action="Search" asp-route-vehicleId="@Model?.Vehicle.Id" class="btn btn-dark">Regressar ao index</a>
     }
     else
     {
-        <a asp-action="Index" class="btn btn-dark" asp-route-id="@Model?.Id">Regressar ao index</a>
+        <a asp-controller="MechanicalWorkshopScheduler"
+           asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+           asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+            asp-action="Index" class="btn btn-dark" asp-route-id="@Model?.Id">Regressar ao index</a>
     }
 </div>

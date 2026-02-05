@@ -4,11 +4,21 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index de viaturas</h1>
 
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>Viaturas </h1>
+        <h4>Index </h4>
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="Workshop" asp-action="Dashboard" class="btn btn-dark"> <i class="fas fa-chevron-left" title="Regressar aos painel "></i>Regressar aos painel</a>
+    </div>
+</div>
+<hr />
 <p>
-    <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Criar Novo Registo</a>
+    <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Criar viatura</a>
 </p>
+
 <br />
 <table class="table">
     <thead>
@@ -68,8 +78,6 @@
     <input type="hidden" id="groupDeactiviationItemId" name="Id" />
 </form>
 
-<br />
-<a asp-controller="MechanicalWorkshop" asp-action="Index" class="btn btn-dark"> <i class="fas fa-chevron-left" title="Regressar aos grupos "></i> Regressar à oficina</a>
 
 
 
@@ -79,7 +87,7 @@
 
             $('.table').DataTable();
 
-            $('.deactivateBtn').click(function (e) {
+            $('.table').on('click', '.deactivateBtn', function () {
                 swal({
                     title: "Desativar item",
                     text: "Tem a certeza que pretende desativar o registo?",

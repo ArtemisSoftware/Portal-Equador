@@ -6,6 +6,7 @@ using PortalEquador.Domain.MechanicalWorkshop.Scheduler;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 using System.ComponentModel.DataAnnotations;
+using PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels;
 
 namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
 {
@@ -16,13 +17,18 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
         [DataType(DataType.Date)]
         public DateTime MainTime { get; set; } = DateTime.Now;
         public List<CarWashViewModel> Interventions { get; set; }
-        public List<GroupItemViewModel> Lanes { get; set; }
+        public List<WorkshopLaneViewModel> Lanes { get; set; }
         public List<GroupItemViewModel> Schedules { get; set; }
         public Dictionary<int, GroupItemViewModel> InterventionTimes { get; set; }
         public Dictionary<int, List<CarWashViewModel>> Appointements { get; set; } = new Dictionary<int, List<CarWashViewModel>>();
 
         public List<AdminMechanicalWorkshopContractViewModel> AdminContracts { get; set; } = new List<AdminMechanicalWorkshopContractViewModel>();
         public bool hasFullAccess { get; set; } = false;
+
+        public int WorkshopId { get; set; } 
+        public string WorkshopName { get; set; }
+
+        public WorkshopViewModel Workshop { get; set; }
 
         public void OrderAppointements()
         {
@@ -54,26 +60,39 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
 
         }
 
-        private CarWashViewModel GetAdminIntervention(CarWashViewModel? model, GroupItemViewModel mechanic, GroupItemViewModel schedule)
+        private CarWashViewModel GetAdminIntervention(CarWashViewModel? model, WorkshopLaneViewModel lane, GroupItemViewModel schedule)
         {
+            CarWashViewModel result;
+
             if (model != null)
             {
                 return model;
             }
             else
             {
-                return FreeSchedule(mechanic, schedule);
+                if (lane.Active == false)
+                {
+                    return InactiveSchedule(lane, schedule);
+                }
+                result =  FreeSchedule(lane, schedule);
             }
+
+            if (Workshop.Active == false)
+            {
+                return InactiveSchedule(lane, schedule);
+            }
+
+            return result;
         }
 
-        private CarWashViewModel GetUserIntervention(CarWashViewModel? model, GroupItemViewModel mechanic, GroupItemViewModel schedule)
+        private CarWashViewModel GetUserIntervention(CarWashViewModel? model, WorkshopLaneViewModel lane, GroupItemViewModel schedule)
         {
             var result = model;
 
             switch (GetSchedulerType(model))
             {
                 case CarWashSchedulerType.Free:
-                    result = FreeSchedule(mechanic, schedule);
+                    result = FreeSchedule(lane, schedule);
                     break;
 
                 case CarWashSchedulerType.InSchedule:
@@ -81,12 +100,17 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
                     break;
 
                 case CarWashSchedulerType.Blocked:
-                    result = BlockSchedule(mechanic, schedule);
+                    result = BlockSchedule(lane, schedule);
                     break;
 
                 default:
                     result = model;
                     break;
+            }
+
+            if(model.ScheduleType != CarWashSchedulerType.InSchedule && (lane.Active == false || Workshop.Active == false))
+            {
+                result = InactiveSchedule(lane, schedule);
             }
 
             return result;
@@ -114,7 +138,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
 
         }
 
-        private CarWashViewModel FreeSchedule(GroupItemViewModel lane, GroupItemViewModel schedule)
+        private CarWashViewModel FreeSchedule(WorkshopLaneViewModel lane, GroupItemViewModel schedule)
         {
             return new CarWashViewModel
             {
@@ -127,13 +151,26 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
             };
         }
 
-        private CarWashViewModel BlockSchedule(GroupItemViewModel lane, GroupItemViewModel schedule)
+        private CarWashViewModel BlockSchedule(WorkshopLaneViewModel lane, GroupItemViewModel schedule)
         {
             return new CarWashViewModel
             {
                 Id = -1,
                 ScheduleDate = TimeUtil.ToDateOnly(MainTime),
                 ScheduleType = CarWashSchedulerType.Blocked,
+                InterventionTime = schedule,
+                InterventionTimeId = schedule.Id,
+                Lane = lane,
+            };
+        }
+
+        private CarWashViewModel InactiveSchedule(WorkshopLaneViewModel lane, GroupItemViewModel schedule)
+        {
+            return new CarWashViewModel
+            {
+                Id = -1,
+                ScheduleDate = TimeUtil.ToDateOnly(MainTime),
+                ScheduleType = CarWashSchedulerType.InactiveLane,
                 InterventionTime = schedule,
                 InterventionTimeId = schedule.Id,
                 Lane = lane,

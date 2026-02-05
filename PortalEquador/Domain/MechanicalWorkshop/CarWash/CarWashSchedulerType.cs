@@ -11,5 +11,6 @@
         Complete,
         NoShow,
         Blocked, // slot has filled but user cannot have access to it
+        InactiveLane
     }
 }

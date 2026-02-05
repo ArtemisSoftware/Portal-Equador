@@ -2,6 +2,7 @@
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
 using PortalEquador.Util.Constants;
+using PortalEquador.Util.Files.models;
 using System.ComponentModel.DataAnnotations;
 
 namespace PortalEquador.Domain.Accident.ViewModels
@@ -12,6 +13,8 @@ namespace PortalEquador.Domain.Accident.ViewModels
 
         [Display(Name = StringConstants.Display.NUMBER)]
         public int Number { get; set; }
+
+        public int PersonaInformationId { get; set; }
 
         public required string FullName { get; set; }
 
@@ -40,5 +43,9 @@ namespace PortalEquador.Domain.Accident.ViewModels
         public GroupItemViewModel Level { get; set; }
 
         public List<AccidentCauseViewModel> Causes { get; set; } = new List<AccidentCauseViewModel>();
+
+        [Display(Name = StringConstants.Display.FILE)]
+        public string? Url { get; set; }
+
     }
 }

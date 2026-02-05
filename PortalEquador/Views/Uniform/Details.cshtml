@@ -1,0 +1,86 @@
+﻿@model PortalEquador.Domain.Uniforms.ViewModels.UniformViewModel
+
+
+@{
+    ViewData["Title"] = "Details";
+}
+<br />
+<h1>Detalhes</h1>
+<h3>Item: @Model.Description</h3>
+<div>
+    <hr />
+    <br />
+    <dl class="row">
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.isSizeNumeric)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.isSizeNumeric)
+        </dd>
+
+        @if (@Model.Observation != null)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Observation)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Observation)
+            </dd>
+        }
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Active)
+        </dt>
+        <dd class="col-sm-10">
+            @if (@Model.Active)
+            {
+                <span class="badge bg-success">Ativo</span>
+            }
+            else
+            {
+                <span class="badge bg-danger">Inativo</span>
+            }
+        </dd>
+
+        @if (@Model.DateModified != null)
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DateModified)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DateModified)
+            </dd>
+        }
+        else
+        {
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DateCreated)
+            </dd>
+        }
+
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Editor)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Editor)
+        </dd>
+
+
+
+    </dl>
+</div>
+<div>
+    <a asp-action="Index" class="btn btn-dark" asp-route-id="@Model?.Id">Regressar ao index</a> &nbsp;
+</div>

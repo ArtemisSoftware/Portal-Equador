@@ -10,6 +10,7 @@ namespace PortalEquador.Domain.Report.ViewModels.Trainning
 
         public DateTime Date { get; set; }
 
+        public int TrainningId { get; set; }
         public string Trainning { get; set; }
 
     }

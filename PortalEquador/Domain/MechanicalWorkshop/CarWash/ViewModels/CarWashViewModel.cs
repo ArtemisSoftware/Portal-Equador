@@ -2,6 +2,7 @@
 using PortalEquador.Domain.Generic;
 using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.ViewModels;
+using PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
 using System.ComponentModel.DataAnnotations;
@@ -12,15 +13,22 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
     {
         public int Id { get; set; }
 
+        [Display(Name = StringConstants.Display.DATE)]
         [DisplayFormat(DataFormatString = StringConstants.Dates.DD_MM_YYYY)]
         public DateOnly ScheduleDate { get; set; }
+
+        public int WorkshopId { get; set; }
+
+        [Display(Name = StringConstants.Display.WORKSHOP)]
+        public string WorkshopName { get; set; }
+        public WorkshopViewModel? Workshop { get; set; }
 
 
         [Required]
         public int LaneId { get; set; }
 
         [Display(Name = StringConstants.Display.LANE)]
-        public GroupItemViewModel? Lane { get; set; }
+        public WorkshopLaneViewModel? Lane { get; set; }
 
 
 

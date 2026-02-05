@@ -188,6 +188,7 @@ namespace PortalEquador.Data.Contract.Repository
                             .Include(d => d.ContractGroupItemEntity)
                 .Where(item => item.PersonalInformationId == personalInformationId)
                 .OrderByDescending(item => item.DateOfContract)
+                .ThenByDescending(item => item.Id)
                 .ToListAsync();
 
             var model = mapper.Map<List<ContractViewModel>>(result);
@@ -291,6 +292,17 @@ namespace PortalEquador.Data.Contract.Repository
                         on personal.Id equals accidentsCount.PersonalInformationId into resultAccidents
                         from resultAccidentsValues in resultAccidents.DefaultIfEmpty()
 
+                        join uniformsCount in
+                            (from uniforms in context.WorkerUniformEntity
+                             where uniforms.PersonalInformationId == id
+                             select uniforms).GroupBy(d => d.PersonalInformationId)
+                            .Select(grouped => new
+                            {
+                                PersonalInformationId = grouped.Key,
+                                UniformCount = grouped.Count()
+                            })
+                        on personal.Id equals uniformsCount.PersonalInformationId into resultUniform
+                        from resultUniformValues in resultUniform.DefaultIfEmpty()
 
                         where personal.Id == id
 
@@ -306,6 +318,7 @@ namespace PortalEquador.Data.Contract.Repository
                             ContractId = resultContract.ContractStateId == null ? 0 : resultContract.ContractStateId,
                             TotalContracts = resultContracts.ContractCount == null ? 0 : resultContracts.ContractCount,
                             TotalAccidents = resultAccidentsValues.AccidentsCount == null ? 0 : resultAccidentsValues.AccidentsCount,
+                            TotalUniforms = resultUniformValues.UniformCount == null ? 0 : resultUniformValues.UniformCount,
                         };
 
             var result = await query.FirstOrDefaultAsync();

@@ -74,10 +74,19 @@
             public static readonly int ACCIDENT_CAUSES = (new Item { Debug = 32, Production = 38 }).Value;
             public static readonly int ESTIMATED_VALUE = (new Item { Debug = 33, Production = 39 }).Value;
             public static readonly int OCORRED_ACCIDENT_LEVEL = (new Item { Debug = 34, Production = 40 }).Value;
+
+            public static readonly int CLOTHES_SIZES = (new Item { Debug = 35, Production = 41 }).Value;
         }
 
         public static class ItemFromGroup
         {
+            public static class ExamResult
+            {
+                public static readonly int APT = (new Item { Debug = 77, Production = 389 }).Value;
+                public static readonly int CONDITIONED = (new Item { Debug = 78, Production = 391 }).Value;
+                public static readonly int INEPT = (new Item { Debug = 79, Production = 390 }).Value;
+            }
+
             public static class Trainning
             {
                 public static readonly int DEFENSIVE_DRIVING = (new Item { Debug = 59, Production = 1 }).Value; //--299 356
@@ -114,6 +123,7 @@
                 public static readonly int MEDICAL_EXAM = (new Item { Debug = 65, Production = 296 }).Value;
                 public static readonly int TRAINNIG = (new Item { Debug = 66, Production = 298 }).Value;
                 public static readonly int DISCIPLINARY_NOTIFICATION = (new Item { Debug = 67, Production = 297 }).Value;
+                public static readonly int ACCIDENT = (new Item { Debug = 67, Production =458 }).Value;
 
 
 

@@ -6,16 +6,14 @@
 
 <div class="row align-items-center">
     <div class="col-md-10">
-        <h1>Oficina Morro Bento</h1>
-        <h4>Administradores</h4>
+        <h1>Administradores </h1>
+        <h4>Index </h4>
     </div>
     <div class="col-md-2 text-right">
-        <a asp-controller="MechanicalWorkshop" asp-action="Index" class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+        <a asp-controller="Workshop" asp-action="Dashboard" class="btn btn-dark"> <i class="fas fa-chevron-left" title="Regressar aos painel "></i>Regressar aos painel</a>
     </div>
 </div>
 <hr />
-<br />
-
 
 <p>
     <a asp-action="Create" class="btn btn-success"><i class="fas fa-plus"></i> Criar Administrador</a>
@@ -74,6 +72,7 @@
 <form id="deleteContracts" asp-action="DeleteContracts">
     <input type="hidden" id="identifier" name="identifier" />
 </form>
+
 
 
 @section Scripts {

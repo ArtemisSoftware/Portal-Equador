@@ -117,6 +117,22 @@
             </div>
         </div>
 
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Fardas</h5>
+                    <p class="card-text">Fardas associadas</p>
+
+                    @if (Model.TotalUniforms != 0)
+                    {
+                        <a asp-controller="WorkerUniform" asp-action="Index" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-warning"><i class="fas fa-list" title="Index"></i></a>
+                    }
+                    <a asp-controller="WorkerUniform" asp-action="Create" asp-route-identifier="@Model.PersonaInformationId" asp-route-fullName="@Model.FullName" class="btn btn-success"><i class="fas fa-plus" title="Criar"></i></a>
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <br />

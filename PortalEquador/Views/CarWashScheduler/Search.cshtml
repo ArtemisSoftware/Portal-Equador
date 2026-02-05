@@ -2,6 +2,8 @@
 @using PortalEquador.Domain.MechanicalWorkshop.Scheduler
 @using PortalEquador.Domain.MechanicalWorkshop.CarWash
 @model PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels.CarWashSearchDayPlannerViewModel
+@using PortalEquador.Util
+@using PortalEquador.Util.Constants
 
 @{
     ViewData["Title"] = "Pesquisa";
@@ -11,11 +13,14 @@
 
 <div class="row align-items-center">
     <div class="col-md-10">
-        <h1>Oficina Morro Bento</h1>
+        <h1>Oficina @ViewData[ViewBagConstants.WORKSHOP_NAME]  @if(Model.Workshop.Active == false){ <span class="badge bg-danger">Inactiva</span>}</h1>
         <h4> Pesquisa - Lavagens </h4>
     </div>
     <div class="col-md-2 text-right">
-        <a asp-controller="MechanicalWorkshop" asp-action="Index" class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+        <a asp-controller="Workshop" asp-action="Management"
+           asp-route-id="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+           asp-route-name="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+        class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
     </div>
 </div>
 <hr />
@@ -63,7 +68,7 @@
                                 <h6 class="card-title">Data: @Html.DisplayFor(modelItem => intervention.ScheduleDate)</h6>
                                 <p class="card-text">Hora: @Html.DisplayFor(modelItem => intervention.InterventionTime.Description)</p>
                                 <p class="card-text">
-                                    @Html.DisplayFor(modelItem => intervention.Lane.Description)
+                                    Baia: @Html.DisplayFor(modelItem => intervention.Lane.Name)
                                     <br />
                                     Contracto: @Html.DisplayFor(modelItem => intervention.Contract.Description)
                                 </p>
@@ -91,9 +96,21 @@
                                     case CarWashState.Open:
                                         <br />
                                         <hr />
-                                        <a asp-action="Confirm" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-vehicleId="@intervention.Vehicle.Id" class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
+                                        <a asp-action="Confirm" 
+                                        asp-route-id="@intervention.Id" 
+                                        asp-route-origin="search" 
+                                        asp-route-vehicleId="@intervention.Vehicle.Id"
+                                           asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                                           asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+                                        class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
                                         <br /> <br />
-                                        <a asp-action="NotPerformed" asp-route-id="@intervention.Id" asp-route-origin="search" asp-route-vehicleId="@intervention.Vehicle.Id" class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
+                                        <a asp-action="NotPerformed" 
+                                        asp-route-id="@intervention.Id" 
+                                        asp-route-origin="search" 
+                                        asp-route-vehicleId="@intervention.Vehicle.Id"
+                                           asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                                           asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+                                        class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
 
                                         break;
 
@@ -152,8 +169,20 @@
 
     <script>
 
+        const workshopId = '@ViewData[ViewBagConstants.WORKSHOP_ID]';
+        const workshopName = '@Html.Raw(
+            System.Web.HttpUtility.JavaScriptStringEncode(
+                ViewData[ViewBagConstants.WORKSHOP_NAME]?.ToString()
+            )
+        )';
+
         function handleVehicle(vehicleId) {
-            window.location.href = `/CarWashScheduler/Search?vehicleId=${vehicleId}`;
+
+                    window.location.href =
+            `/CarWashScheduler/Search?` +
+            `workshopId=${workshopId}&` +
+            `workshopName=${encodeURIComponent(workshopName)}&` +
+            `vehicleId=${vehicleId}`;
         }
 
         function handleVehicleChange() {

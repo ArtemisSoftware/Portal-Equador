@@ -2,16 +2,14 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PortalEquador.Data.Generic;
-using PortalEquador.Data.MechanicalWorkshop.CarWash.Entity;
 using PortalEquador.Data.MechanicalWorkshop.Scheduler.Entity;
 using PortalEquador.Domain.GroupTypes.ViewModels;
-using PortalEquador.Domain.MechanicalWorkshop;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.Repository;
 using PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels;
+using PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels;
 using PortalEquador.Util;
 using PortalEquador.Util.Constants;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
 {
@@ -38,40 +36,74 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
         }
 
 
-        public async Task<DayPlannerViewModel> GetDayPlan(DateOnly date)
+        public async Task<DayPlannerViewModel> GetDayPlan(DateOnly date, int workshopid, string workshopname)
         {
-            var mechanics = await GroupItemsList(GroupTypesConstants.Groups.MECHANICAL_SHOP_MECHANICS);
+            var mechanics = await GetMechanics(workshopid);
+
             var schedules = await GroupItemsList(GroupTypesConstants.Groups.MECHANICAL_SHOP_SCHEDULES);
             var schedulesList = mapper.Map<List<GroupItemViewModel>>(schedules);
+
+            var workshop = await context.WorkshopEntity
+               .Where(item => item.Id == workshopid)
+               .FirstAsync();
+
+            var workshopModel = mapper.Map<WorkshopViewModel>(workshop);
 
             var results = await context.MechanicalWorkshopSchedulerEntity
                             .Include(item => item.VehicleEntity)
                             .Include(item => item.ContractGroupItemEntity)
-                           .Where(item => item.ScheduleDate == date)
+                            .Include(item => item.WorkshopCentralEntity)
+                           .Where(item => item.ScheduleDate == date && item.WorkshopId == workshopid)
                            .ToListAsync();
 
             var model = new DayPlannerViewModel
             {
-                Mechanics = mapper.Map<List<GroupItemViewModel>>(mechanics),
+                WorkshopId = workshopid,
+                WorkshopName = workshopname,
+                Workshop = workshopModel,
                 InterventionTimes = colabTime(schedulesList),
                 Schedules = schedulesList,
                 Interventions = new List<SchedulerViewModel>(),
                 MainTime = TimeUtil.ToDateTime(date),
                 hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole()),
-            };
+            }; 
 
             if (results.Count == 0)
             {
+                model.Mechanics = mechanics.Where(m => m.Active) .ToList();
                 return model;
             } else
             {
                 var interventions = mapper.Map<List<SchedulerViewModel>>(results);
+                var mechanicIdsInUse = interventions .Select(s => s.MechanicId).ToHashSet();
+
+                model.Mechanics = mechanics.Where(m => m.Active || mechanicIdsInUse.Contains(m.Id)) .ToList();
                 model.Interventions = interventions;
                 return model;
             }
         }
 
-        public async Task<SearchDayPlannerViewModel> SearchGetDayPlan(string? vehicleId)
+        private async Task<List<WorkshopMechanicViewModel>> GetMechanics(int workshopid)
+        {
+            var results = await context.WorkshopMechanicEntity
+                .Include(item => item.WorkshopEntity)
+               .Where(item => item.WorkshopId == workshopid)
+               .ToListAsync();
+
+            return mapper.Map<List<WorkshopMechanicViewModel>>(results);
+        }
+
+        private async Task<WorkshopMechanicViewModel> GetMechanic(int id)
+        {
+            var results = await context.WorkshopMechanicEntity
+                .Include(item => item.WorkshopEntity)
+               .Where(item => item.Id == id)
+               .FirstAsync();
+
+            return mapper.Map<WorkshopMechanicViewModel>(results);
+        }
+
+        public async Task<SearchDayPlannerViewModel> SearchGetDayPlan(string? vehicleId, int workshopid)
         {
             var model = new SearchDayPlannerViewModel();
 
@@ -79,29 +111,50 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             {
                 var results = await context.MechanicalWorkshopSchedulerEntity
                                       .Include(item => item.VehicleEntity)
-                                      .Include(item => item.MechanicGroupItemEntity)
+                                      .Include(item => item.WorkshopCentralEntity)
+                                      .Include(item => item.WorkshopCentralMechanicEntity)
                                       .Include(item => item.ContractGroupItemEntity)
                                       .Include(item => item.InterventionTimeGroupItemEntity)
-                                     .Where(item => item.VehicleEntity.Id == int.Parse(vehicleId))
+                                     .Where(item => item.VehicleEntity.Id == int.Parse(vehicleId) && item.WorkshopId == workshopid)
                                      .OrderByDescending(item => item.ScheduleDate)
                                      .Take(20)
                                      .ToListAsync();
                 if (results.Count != 0)
                 {
+                    var mechanics = await GetMechanics(results[0].WorkshopCentralEntity.Id);
+
                     var interventions = mapper.Map<List<SchedulerViewModel>>(results);
+
+                    foreach (var intervention in interventions)
+                    {
+                        var index = mechanics.FindIndex(m => m.Id == intervention.Mechanic.Id);
+                        intervention.Mechanic.Name = (index + 1).ToString();
+                    }
+
                     model.Interventions = interventions;
                 }
             }
 
             model.hasFullAccess = MechanicalWorkshopUtil.HasFullAccess(GetCurrentUserRole());
             model.Vehicles = Vehicles();
+
+            var workshop = await context.WorkshopEntity
+               .Where(item => item.Id == workshopid)
+               .FirstAsync();
+
+            var workshopModel = mapper.Map<WorkshopViewModel>(workshop);
+            model.Workshop = workshopModel;
+
             return model;
         }
 
-        public async Task<SchedulerViewModel> GetCreateModel(string scheduleDate, int mechanicId, int interventionTimeId)
+        public async Task<SchedulerViewModel> GetCreateModel(string scheduleDate, int mechanicId, int interventionTimeId, int workshopid, string workshopname)
         {
-            var mechanic = await GroupItem(mechanicId);
-            var selectedMechanic = mapper.Map<GroupItemViewModel>(mechanic);
+            var mechanic = await GetMechanic(mechanicId);
+            var selectedMechanic = mapper.Map<WorkshopMechanicViewModel>(mechanic);
+
+            var mechanics = await GetMechanics(workshopid);
+            selectedMechanic.Name = (mechanics.FindIndex(e => e.Id == selectedMechanic.Id) + 1).ToString();
 
             var schedule = await GroupItem(interventionTimeId);
             var selectedSchedule = mapper.Map<GroupItemViewModel>(schedule);
@@ -111,6 +164,8 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
 
             var model = new SchedulerViewModel
             {
+                WorkshopId = workshopid,
+                WorkshopName = workshopname,
                 ScheduleDate = dateOnly,
                 MechanicId = mechanicId,
                 Mechanic = selectedMechanic,
@@ -123,8 +178,8 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
 
         public async Task<SchedulerViewModel> GetCreateModel(SchedulerViewModel model)
         {
-            var mechanic = await GroupItem(model.MechanicId);
-            var selectedMechanic = mapper.Map<GroupItemViewModel>(mechanic);
+            var mechanic = await GetMechanic(model.MechanicId);
+            var selectedMechanic = mapper.Map<WorkshopMechanicViewModel>(mechanic);
 
             var schedule = await GroupItem(model.InterventionTimeId);
             var selectedSchedule = mapper.Map<GroupItemViewModel>(schedule);
@@ -143,6 +198,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             entity.EditorId = GetCurrentUserId();
             entity.ContractId = vehicle.ContractId;
             entity.ContractGroupItemEntity = null;
+            entity.MechanicId = 3; //apagar no fim
             if (model.Id == 0)
             {
                 await AddAsync(entity);
@@ -173,6 +229,7 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             entity.CurrentState = state;
             entity.EditorId = GetCurrentUserId();
             entity.DateModified = DateTime.UtcNow;
+            entity.MechanicId = 3; //apagar no fim
 
             // set Modified flag in your entry
             var local = context.Set<MechanicalWorkshopSchedulerEntity>().Local.FirstOrDefault(entry => entry.Id.Equals(model.Id));
@@ -243,18 +300,23 @@ namespace PortalEquador.Data.MechanicalWorkshop.Scheduler.Repository
             return new SelectList(vehicles, "Id", "LicencePlate");
         }
 
-        public async Task<SchedulerViewModel> GetSchedule(int id)
+        public async Task<SchedulerDetailViewModel> GetSchedule(int id)
         {
             var result = await context.MechanicalWorkshopSchedulerEntity
                             .Include(item => item.VehicleEntity)
                             .Include(item => item.InterventionTimeGroupItemEntity)
-                            .Include(item => item.MechanicGroupItemEntity)
+                            .Include(item => item.WorkshopCentralMechanicEntity)
                             .Include(item => item.ContractGroupItemEntity)
                             .Include(item => item.ApplicationUserEntity)
+                            .Include(item => item.WorkshopCentralEntity)
                            .Where(item => item.Id == id)
                            .FirstOrDefaultAsync();
 
-            return mapper.Map<SchedulerViewModel>(result);
+            var model = mapper.Map<SchedulerDetailViewModel>(result);
+
+            var mechanics = await GetMechanics(result.WorkshopCentralEntity.Id);
+            model.Mechanic.Name = (mechanics.FindIndex(e => e.Id == model.Mechanic.Id) + 1).ToString();
+            return model;
         }
 
 

@@ -1,0 +1,132 @@
+﻿@model IEnumerable<PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels.WorkshopLaneViewModel>
+@using PortalEquador.Util.Constants
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row align-items-center">
+    <div class="col-md-10">
+        <h1>Oficina -  @ViewData[ViewBagConstants.WORKSHOP_NAME]</h1>
+        <h3>Baias</h3>
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="Workshop" asp-action="Management"
+           asp-route-id="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+           asp-route-name="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+           class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
+</div>
+
+<p>
+    <a asp-action="AddLane"
+       asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+       asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+    class="btn btn-success"><i class="fas fa-plus"></i> Adicionar Nova Baia</a>
+</p>
+<br />
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+            var item = Model.ToList()[i];
+            <tr>
+                <td class="align-middle">
+                    Baia @(i + 1) @item.Id
+                </td>
+                <td class="align-middle">
+                    @if (@item.Active)
+                    {
+                        <span class="badge bg-success">Ativo</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inativo</span>
+                    }
+                </td>
+
+                <td class="align-middle">
+                    @if (@item.Active)
+                    {
+                        <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button">Desativar</button>
+                    }
+                    else
+                    {
+                        <button data-id="@item.Id" class="btn btn-success allocateBtn" type="button">Ativar</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<form id="deactivateLane" asp-action="DeactivateLane"
+      asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+      asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]">
+    <input type="hidden" id="deactivateId" name="Id" />
+</form>
+
+<form id="activateLane" asp-action="ActivateLane"
+      asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+      asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]">
+    <input type="hidden" id="activateId" name="Id" />
+</form>
+
+
+
+@section Scripts {
+    <script>
+        $(function () {
+
+            $('.table').DataTable();
+
+            // Delegated event binding for delete button
+            $('.table').on('click', '.deleteBtn', function () {
+                swal({
+                    title: "Desativar item",
+                    text: "Tem a certeza que pretende desativar o registo?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var id = $(this).data("id");
+                        $('#deactivateId').val(id);
+                        $('#deactivateLane').submit();
+                    }
+                });
+            });
+
+            // Delegated event binding for activate button
+            $('.table').on('click', '.allocateBtn', function () {
+                swal({
+                    title: "Ativar item",
+                    text: "Tem a certeza que pretende ativar o registo?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+                    if (confirm) {
+                        var id = $(this).data("id");
+                        $('#activateId').val(id);
+                        $('#activateLane').submit();
+                    }
+                });
+            });
+        });
+
+    </script>
+}
+

@@ -5,6 +5,7 @@ using PortalEquador.Domain.Document.ViewModels;
 using PortalEquador.Domain.DriversLicence.Repository;
 using PortalEquador.Domain.DriversLicence.ViewModels;
 using PortalEquador.Util;
+using PortalEquador.Util.Files.models;
 using System.Xml.XPath;
 using static PortalEquador.Util.Constants.GroupTypesConstants;
 
@@ -35,6 +36,7 @@ namespace PortalEquador.Domain.DriversLicence.UseCases
 
         private async Task SaveDocument(DriversLicenceViewModel model, int driversLicenceId, DocumentViewModel? document)
         {
+
             if (model.ImageFile != null)
             {
                 if (document == null)

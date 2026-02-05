@@ -1,6 +1,7 @@
 ﻿using PortalEquador.Data.Generic;
 using PortalEquador.Data.GroupTypes.entities;
 using PortalEquador.Data.MechanicalWorkshop.Vehicle.Entity;
+using PortalEquador.Data.MechanicalWorkshop.Workshop.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Entity
@@ -31,5 +32,15 @@ namespace PortalEquador.Data.MechanicalWorkshop.CarWash.Entity
         public GroupItemEntity InterventionTimeGroupItemEntity { get; set; }
 
         public int CurrentState { get; set; }
+
+        public int? WorkshopId { get; set; } = null;
+
+        [ForeignKey("WorkshopId")]
+        public WorkshopEntity WorkshopCentralEntity { get; set; }
+
+        public int? WorkshopLaneId { get; set; } = null;
+
+        [ForeignKey("WorkshopLaneId")]
+        public WorkshopLaneEntity WorkshopLaneEntity { get; set; }
     }
 }

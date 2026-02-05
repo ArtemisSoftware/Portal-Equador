@@ -5,11 +5,14 @@ using PortalEquador.Util.Constants;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PortalEquador.Domain.MechanicalWorkshop.Workshop.ViewModels;
 
 namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
 {
     public class CarWashSearchDayPlannerViewModel : ViewModel
     {
+        public WorkshopViewModel Workshop { get; set; }
+
         [Display(Name = StringConstants.Display.VEHICLE)]
         [Required]
         public int VehicleId { get; set; }
@@ -103,5 +106,7 @@ namespace PortalEquador.Domain.MechanicalWorkshop.CarWash.ViewModels
             }
             else return false;
         }
+
+
     }
 }

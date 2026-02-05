@@ -123,7 +123,6 @@ namespace PortalEquador.Controllers.Contract
 
         private async Task<IActionResult> Redirect()
         {
-
             var origin = ViewData[ViewBagConstants.ORIGIN];
             var identifier = ViewData[ViewBagConstants.PERSONAL_ID];
 
@@ -135,6 +134,14 @@ namespace PortalEquador.Controllers.Contract
             {
                 return RedirectToAction(nameof(Dashboard), "Contract", new { identifier = identifier });
             }
+        }
+
+        [HttpPost, ActionName("DeleteContractHistory")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteContractHistory(int id, int identifier, string username)
+        {
+            await repository.DeleteAsync(id);
+            return RedirectToAction(nameof(History), new { identifier = identifier, fullName = username });
         }
 
     }

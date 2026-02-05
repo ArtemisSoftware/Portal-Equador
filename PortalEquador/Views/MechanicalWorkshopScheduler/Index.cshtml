@@ -1,5 +1,7 @@
 ﻿@using PortalEquador.Domain.MechanicalWorkshop.Scheduler
 @model PortalEquador.Domain.MechanicalWorkshop.Scheduler.ViewModels.DayPlannerViewModel
+@using PortalEquador.Util
+@using PortalEquador.Util.Constants
 
 @{
     ViewData["Title"] = "Index";
@@ -8,11 +10,17 @@
 
 <div class="row align-items-center">
     <div class="col-md-10">
-        <h1>Oficina Morro Bento</h1>
+        <h1>Oficina @ViewData[ViewBagConstants.WORKSHOP_NAME] @if (Model.Workshop.Active == false)
+            {
+                <span class="badge bg-danger">Inactiva</span>
+            }</h1>
         <h4>Planificação de trabalhos - Revisão dos veículos da frota</h4>
     </div>
     <div class="col-md-2 text-right">
-        <a asp-controller="MechanicalWorkshop" asp-action="Index" class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+        <a asp-controller="Workshop" asp-action="Management"
+           asp-route-id="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+           asp-route-name="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+        class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
     </div>
 </div>
 <hr />
@@ -29,11 +37,14 @@
                 <dt class="col-sm-2">
                     <input id="interventionDate" asp-for="MainTime" class="form-control" />
                 </dt>
+                
                 <dd class="col-sm-10">
                     <a href="#" id="searchButton" class="btn btn-info">
                         <i class="fas fa-search" title="Pesquisar"></i>
                     </a>
                 </dd>
+
+
             </dl>
 
             <br />
@@ -43,9 +54,17 @@
                 <thead>
                     <tr>
                         <th scope="col">Horário</th>
-                        @foreach (var mechanic in Model.Mechanics)
+                        
+                        @for (int i = 0; i < Model.Mechanics.Count; i++)
                         {
-                            <th scope="col">@Html.DisplayFor(modelItem => mechanic.Description)</th>
+                            var item = Model.Mechanics[i];
+                            <th scope="col">
+                                Mecânico @(i + 1)
+                                @if (!item.Active)
+                                {
+                                    <span class="badge bg-danger ms-1">Inativo</span>
+                                }
+                            </th>
                         }
                     </tr>
                 </thead>
@@ -69,7 +88,9 @@
                                                     <p class="card-text">Horário livre</p>
 
                                                     <a asp-action="Create" class="btn btn-success" 
-                                                        asp-route-date="@Model.MainTime" 
+                                                        asp-route-date="@Model.MainTime"
+                                                       asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                                                       asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
                                                         asp-route-interventionTimeId="@interventionTime.Value.Id" 
                                                         asp-route-mechanicId="@appointement.Mechanic.Id">
                                                         <i class="fas fa-plus"></i> Agendar
@@ -79,6 +100,14 @@
                                                case SchedulerType.BlockedFree:
                                                     <h5 class="card-title">Fechado</h5>
                                                     <p class="card-text">Horário não preenchido</p>
+                                                    <a href="#" class="btn btn-light">
+                                                        <i class="fas fa-solid fa-lock"></i>
+                                                    </a>
+                                                    break;
+
+                                                case SchedulerType.InactiveMechanic:
+                                                    <h5 class="card-title">Inativo</h5>
+                                                    <p class="card-text">Horário indisponível</p>
                                                     <a href="#" class="btn btn-light">
                                                         <i class="fas fa-solid fa-lock"></i>
                                                     </a>
@@ -103,10 +132,20 @@
                                                         </a>
                                                         <br />
                                                         <hr />
-                                                        <a asp-action="NotPerformed" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
+                                                        <a asp-action="NotPerformed" 
+                                                        asp-route-id="@appointement.Id" 
+                                                        asp-route-time="@Model.MainTime" 
+                                                         asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                                                        asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+                                                        class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
 
                                                         <br /> <br />
-                                                        <a asp-action="Confirm" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
+                                                        <a asp-action="Confirm"
+                                                        asp-route-id="@appointement.Id" 
+                                                        asp-route-time="@Model.MainTime" 
+                                                         asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                                                        asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+                                                        class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
                                                     }
                                                     else
                                                     {
@@ -130,13 +169,28 @@
                                                     if (appointement.CurrentState == SchedulerState.Open)
                                                     {
                                                         <a asp-action="Details" asp-route-id="@appointement.Id" class="btn btn-info"><i class="fas fa-eye" title="Detalhe"></i></a>
-                                                        <a asp-action="Delete" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-danger"><i class="fas fa-trash-can" title="Remover"></i></a>
+                                                        <a asp-action="Delete" 
+                                                        asp-route-id="@appointement.Id" 
+                                                        asp-route-time="@Model.MainTime"
+                                                         asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                                                           asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+                                                        class="btn btn-danger"><i class="fas fa-trash-can" title="Remover"></i></a>
                                                         <br />
                                                         <hr />
-                                                        <a asp-action="NotPerformed" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
+                                                        <a asp-action="NotPerformed" 
+                                                        asp-route-id="@appointement.Id" 
+                                                        asp-route-time="@Model.MainTime"
+                                                           asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                                                           asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+                                                        class="btn btn-danger"><i class="fas fa-xmark"></i> Não realizada</a>
 
                                                         <br /> <br />
-                                                        <a asp-action="Confirm" asp-route-id="@appointement.Id" asp-route-time="@Model.MainTime" class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
+                                                        <a asp-action="Confirm" 
+                                                        asp-route-id="@appointement.Id" 
+                                                        asp-route-time="@Model.MainTime"
+                                                           asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                                                           asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+                                                        class="btn btn-success"><i class="fas fa-check"></i> Realizada</a>
                                                     }
                                                     else
                                                     {
@@ -171,19 +225,28 @@
 
 @section Scripts{
 <script>
-    document.getElementById("searchButton").addEventListener("click", function () {
-        // Get the selected time
-            var selectedTime = document.getElementById("interventionDate").value;
-        // Check if a time is selected
-        if (selectedTime) {
-            // Build the URL with the time as a route parameter
-            var url = '@Url.Action("Index")' + '?Time=' + encodeURIComponent(selectedTime);
+    const workshopId = '@ViewData[ViewBagConstants.WORKSHOP_ID]';
+    const workshopName = '@Html.Raw(
+        System.Web.HttpUtility.JavaScriptStringEncode(
+            ViewData[ViewBagConstants.WORKSHOP_NAME]?.ToString()
+        )
+    )';
 
-            // Navigate to the constructed URL
-            window.location.href = url;
-        } else {
+    document.getElementById("searchButton").addEventListener("click", function () {
+        const selectedTime = document.getElementById("interventionDate").value;
+
+        if (!selectedTime) {
             alert("Please select a time.");
+            return;
         }
+
+        const url =
+            '@Url.Action("Index")' +
+            '?Time=' + encodeURIComponent(selectedTime) +
+            '&workshopId=' + encodeURIComponent(workshopId) +
+            '&workshopName=' + encodeURIComponent(workshopName);
+
+        window.location.href = url;
     });
 </script>
 }

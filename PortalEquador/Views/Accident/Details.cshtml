@@ -118,6 +118,22 @@
             <dd class="col-sm-8">
                 @Html.DisplayFor(model => model.Level.Description)
             </dd>
+
+            @if(Model.Url != null)
+            {
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.Url)
+                </dt>
+                <dd class="col-sm-8">
+                    <a class="link-offset-2"
+                       href="#"
+                       onclick="window.open('@Url.Content(Model.Url)', '_blank'); return false;">
+                        Documento    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    </a>
+                </dd>
+            }
+            
+
         </dl>
 
 

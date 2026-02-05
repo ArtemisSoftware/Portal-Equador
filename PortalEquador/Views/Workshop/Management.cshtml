@@ -1,0 +1,126 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using PortalEquador.Data.Generic
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@using PortalEquador.Util
+@using PortalEquador.Util.Constants
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row align-items-center">
+    <div class="col-md-10">
+    </div>
+    <div class="col-md-2 text-right">
+        <a asp-controller="Workshop" asp-action="Dashboard" class="btn btn-dark"> <i class="fas fa-info-circle" title="Regressar ao Painel"></i> Regressar ao Painel</a>
+    </div>
+</div>
+
+<div class="text-center">
+    <h1 class="display-4">Oficina -  @ViewData[ViewBagConstants.WORKSHOP_NAME]</h1>
+
+
+
+    <br />
+    <br />
+
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Agendamentos</h3>
+                    <p class="card-text">Gestão de agendamentos</p>
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <a asp-controller="MechanicalWorkshopScheduler" asp-action="Index"
+                           asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                           asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+                            class="btn btn-primary">Gerir</a>
+                    </div>
+                    <br />
+                    <div class="d-grid gap-2 col-4 mx-auto">
+                        <a asp-controller="MechanicalWorkshopScheduler" asp-action="Search"
+                           asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                           asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+                        class="btn btn-primary">Pesquisar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Lavagens</h3>
+                    <p class="card-text">Gestão de lavagens</p>
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <a asp-controller="CarWashScheduler" asp-action="Index"
+                           asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                           asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+                        class="btn btn-primary">Gerir</a>
+                    </div>
+                    <br />
+                    <div class="d-grid gap-2 col-4 mx-auto">
+                        <a asp-controller="CarWashScheduler" asp-action="Search"
+                           asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                           asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+                        class="btn btn-primary">Pesquisar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <br />
+    <br />
+    <h1 class="display-4">Gestão</h1>
+    <br />
+    <br />
+
+    <div class="row">
+
+        @if (User.IsInRole(Roles.Administrator) || User.IsInRole(Roles.DataManager))
+        {
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Mecânicos</h4>
+                        <p class="card-text">Gestão de mecânicos</p>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <a asp-controller="Workshop"
+                               asp-action="MechanicsIndex"
+                               asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                               asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+                               class="btn btn-primary">Gerir</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Baias</h4>
+                        <p class="card-text">Gestão de baias</p>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <a asp-controller="Workshop" 
+                            asp-action="LanesIndex"
+                               asp-route-workshopid="@ViewData[ViewBagConstants.WORKSHOP_ID]"
+                               asp-route-workshopname="@ViewData[ViewBagConstants.WORKSHOP_NAME]"
+                               class="btn btn-primary">Gerir</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+          
+        }
+    </div>
+
+
+    <br />
+
+
+</div>
+

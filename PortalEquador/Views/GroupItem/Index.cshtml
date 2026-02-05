@@ -75,46 +75,43 @@
 <a asp-controller="Group" asp-action="Index" class="btn btn-dark"> <i class="fas fa-chevron-left" title="Regressar aos grupos "></i> Regressar aos grupos</a>
 
 @section Scripts {
-    <script>
-        $(function () {
+        <script>
+            $(function () {
+                var table = $('.table').DataTable();
 
-            $('.table').DataTable();
+                // Delegated event binding for delete button
+                $('.table').on('click', '.deleteBtn', function () {
+                    swal({
+                        title: "Desativar item",
+                        text: "Tem a certeza que pretende desativar o registo?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true
+                    }).then((confirm) => {
+                        if (confirm) {
+                            var id = $(this).data("id");
+                            $('#groupDeactiviationItemId').val(id);
+                            $('#deactivateItem').submit();
+                        }
+                    });
+                });
 
-            $('.deleteBtn').click(function (e) {
-                swal({
-                    title: "Desativar item",
-                    text: "Tem a certeza que pretende desativar o registo?",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true
-                }).then((confirm) => {
-                    if (confirm) {
-                        var btn = $(this);
-                        var id = btn.data("id");
-                        $('#groupDeactiviationItemId').val(id);
-                        $('#deactivateItem').submit();
-
-                    }
+                // Delegated event binding for activate button
+                $('.table').on('click', '.allocateBtn', function () {
+                    swal({
+                        title: "Ativar item",
+                        text: "Tem a certeza que pretende ativar o registo?",
+                        icon: "warning",
+                        buttons: true,
+                        dangerMode: true
+                    }).then((confirm) => {
+                        if (confirm) {
+                            var id = $(this).data("id");
+                            $('#groupActiviationItemId').val(id);
+                            $('#activateItem').submit();
+                        }
+                    });
                 });
             });
-
-            $('.allocateBtn').click(function (e) {
-                swal({
-                    title: "Ativar item",
-                    text: "Tem a certeza que pretende ativar o registo?",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true
-                }).then((confirm) => {
-                    if (confirm) {
-                        var btn = $(this);
-                        var id = btn.data("id");
-                        $('#groupActiviationItemId').val(id);
-                        $('#activateItem').submit();
-                    }
-                });
-            });
-
-        });
-    </script>
+        </script>
 }

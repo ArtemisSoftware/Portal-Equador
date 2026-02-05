@@ -13,5 +13,8 @@ namespace PortalEquador.Domain.Contract
 
         [Description(StringConstants.ContractStatus.FIRED)]
         public const int Fired = 2;
+
+        [Description(StringConstants.ContractStatus.CONTRACT_REPLACED)]
+        public const int Replaced = 11;
     }
 }

@@ -1,0 +1,16 @@
+﻿using PortalEquador.Domain.Generic;
+using PortalEquador.Domain.Report.ViewModels.Trainning;
+using PortalEquador.Domain.Uniforms.ViewModels;
+
+namespace PortalEquador.Domain.Report.ViewModels.Uniforms
+{
+    public class UniformsReportViewModel : ViewModel
+    {
+        public List<UniformsReportItemViewModel> Report { get; set; } = new List<UniformsReportItemViewModel>();
+        public DateTime EmissionDate { get; set; } = DateTime.Now;
+
+        public string FileName { get; set; } = "relatorio_uniformes";
+        public List<UniformViewModel> Uniforms { get; set; } = new List<UniformViewModel>();
+        public bool AddUniformReturn { get; set; }
+    }
+}

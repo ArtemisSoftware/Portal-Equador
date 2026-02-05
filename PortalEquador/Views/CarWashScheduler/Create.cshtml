@@ -5,7 +5,6 @@
 }
 
 <h1>Criar Novo Agendamento Para lavagem</h1>
-<h4>Data: @Html.DisplayFor(model => model.ScheduleDate)</h4>
 
 <hr />
 <br />
@@ -18,6 +17,26 @@
             <input type="hidden" asp-for="ScheduleDate" />
             <input type="hidden" asp-for="InterventionTimeId" />
             <input type="hidden" asp-for="LaneId" />
+            <input type="hidden" asp-for="WorkshopId" />
+            <input type="hidden" asp-for="WorkshopName" />
+
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.WorkshopName)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.WorkshopName)
+                </dd>
+            </dl>
+
+            <dl class="row">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.ScheduleDate)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.ScheduleDate)
+                </dd>
+            </dl>
 
             <dl class="row">
                 <dt class="col-sm-4">
@@ -33,7 +52,7 @@
                     @Html.DisplayNameFor(model => model.Lane)
                 </dt>
                 <dd class="col-sm-8">
-                    @Html.DisplayFor(model => model.Lane.Description)
+                    @Html.DisplayFor(model => model.Lane.Name)
                 </dd>
             </dl>
 

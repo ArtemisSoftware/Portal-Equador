@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using PortalEquador.Domain.Generic;
-using PortalEquador.Domain.GroupTypes.ViewModels;
 using PortalEquador.Util.Constants;
+using PortalEquador.Util.Files;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PortalEquador.Domain.Accident.ViewModels
 {
-    public class AccidentViewModel : ViewModel
+    public class AccidentViewModel : ViewModel, IFormUploadFile
     {
         public int Id { get; set; }
 
@@ -105,6 +105,11 @@ namespace PortalEquador.Domain.Accident.ViewModels
         public int LevelId { get; set; }
 
         public SelectList? Levels { get; set; }
+
+
+        [Display(Name = StringConstants.Display.FILE)]
+        [NotMapped]
+        public IFormFile? FormFile { get; set; }
     }
 
 

@@ -18,8 +18,10 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
     {
 
         // GET: CarWashScheduler
-        public async Task<IActionResult> Index(string? time)
+        public async Task<IActionResult> Index(string? time, int workshopid, string workshopname)
         {
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
             DateOnly currentDate = DateOnly.MinValue;
 
             if (time == null)
@@ -30,14 +32,17 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             {
                 currentDate = DateOnly.FromDateTime(DateTime.Parse(time));
             }
-            var model = await getCarWashDayPlanUseCase.Invoke(currentDate);
+            var model = await getCarWashDayPlanUseCase.Invoke(currentDate, workshopid, workshopname);
             return View(model);
         }
 
         // GET: CarWashScheduler/Create
-        public async Task<IActionResult> Create(string date, int laneId, int interventionTimeId)
+        public async Task<IActionResult> Create(string date, int laneId, int interventionTimeId, int workshopid, string workshopname)
         {
-            var model = await repository.GetCreateModel(date, laneId, interventionTimeId);
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
+
+            var model = await repository.GetCreateModel(date, laneId, interventionTimeId, workshopid, workshopname);
             return View(model);
         }
 
@@ -51,7 +56,12 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
             if (ModelState.IsValid)
             {
                 await repository.Save(viewModel);
-                return RedirectToAction(nameof(Index), new { time = TimeUtil.ToDateTime(viewModel.ScheduleDate).ToString() });
+                return RedirectToAction(nameof(Index), new { 
+                    time = TimeUtil.ToDateTime(viewModel.ScheduleDate).ToString(), 
+                    workshopid = viewModel.WorkshopId, 
+                    workshopname = viewModel.WorkshopName
+                }
+                );
             }
 
             viewModel = await RecoverModel(viewModel);
@@ -88,53 +98,59 @@ namespace PortalEquador.Controllers.MechanicalWorkshop
         {
             ViewData[ViewBagConstants.ORIGIN] = origin;
             var model = await repository.GetSchedule(id);
+
+            ViewData[ViewBagConstants.WORKSHOP_ID] = model.Workshop.Id;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = model.Workshop.Name;
             return View(model);
         }
 
         // GET: CarWashScheduler/Delete/5
-        public async Task<IActionResult> Delete(int id, string time, string? origin, string? vehicleId)
+        public async Task<IActionResult> Delete(int id, string time, string? origin, string? vehicleId, int workshopid, string workshopname)
         {
             await repository.DeleteAsync(id);
             if (origin == null)
             {
-                return RedirectToAction(nameof(Index), new { time = time });
+                return RedirectToAction(nameof(Index), new { time = time, workshopid = workshopid, workshopname = workshopname });
             }
             else
             {
-                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId });
+                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId, workshopid = workshopid, workshopname = workshopname });
             }
         }
 
         // GET: CarWashScheduler/Delete/5
-        public async Task<IActionResult> Confirm(int id, string? time, string? origin, string? vehicleId)
+        public async Task<IActionResult> Confirm(int id, string? time, string? origin, string? vehicleId, int workshopid, string workshopname)
         {
             await repository.ConfirmWash(id);
             if (origin == null)
             {
-                return RedirectToAction(nameof(Index), new { time = time });
+                return RedirectToAction(nameof(Index), new { time = time, workshopid = workshopid, workshopname = workshopname });
             }
             else
             {
-                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId });
+                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId, workshopid = workshopid, workshopname = workshopname });
             }
         }
 
-        public async Task<IActionResult> NotPerformed(int id, string? time, string? origin, string? vehicleId)
+        public async Task<IActionResult> NotPerformed(int id, string? time, string? origin, string? vehicleId, int workshopid, string workshopname)
         {
             await repository.NotPerformed(id);
             if (origin == null)
             {
-                return RedirectToAction(nameof(Index), new { time = time });
+                return RedirectToAction(nameof(Index), new { time = time, workshopid = workshopid, workshopname = workshopname });
             }
             else
             {
-                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId });
+                return RedirectToAction(nameof(Search), new { vehicleId = vehicleId, workshopid = workshopid, workshopname = workshopname });
             }
         }
 
-        public async Task<IActionResult> Search(string? vehicleId)
+        public async Task<IActionResult> Search(string? vehicleId, int workshopid, string workshopname)
         {
-            var model = await searchCarWashDayPlanUseCase.Invoke(vehicleId);
+            ViewData[ViewBagConstants.WORKSHOP_ID] = workshopid;
+            ViewData[ViewBagConstants.WORKSHOP_NAME] = workshopname;
+
+            var model = await searchCarWashDayPlanUseCase.Invoke(vehicleId, workshopid, workshopname);
             if(vehicleId != null)
             {
                 model.VehicleId = int.Parse(vehicleId);

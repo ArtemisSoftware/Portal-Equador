@@ -82,7 +82,7 @@
 
             $('.table').DataTable();
 
-            $('.deleteBtn').click(function (e) {
+            $('.table').on('click', '.deleteBtn').click(function (e) {
                 swal({
                     title: "Eliminar notificação disciplinar",
                     text: "Tem a certeza que pretende eliminar a notificação disciplinar?",

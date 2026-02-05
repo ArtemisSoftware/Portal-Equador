@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using PortalEquador.Domain.Accident.Repository;
 using PortalEquador.Domain.Accident.UseCases;
 using PortalEquador.Domain.Accident.ViewModels;
+using PortalEquador.Domain.Document;
 using PortalEquador.Domain.MechanicalWorkshop.Vehicle.UseCases;
 using PortalEquador.Util.Constants;
 
@@ -13,6 +15,8 @@ namespace PortalEquador.Controllers.Accident
         GetVehiclesUseCase getVehiclesUseCase,
         GetVehicleUseCase getVehicleUse,
         SaveAccidentUseCase saveAccidentUseCase,
+        DeleteAccidentUseCase deleteAccidentUseCase,
+        DeleteDocumentUseCase deleteDocumentUseCase,
          IMapper mapper
 ) : Controller { 
 
@@ -129,28 +133,40 @@ namespace PortalEquador.Controllers.Accident
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(AccidentEditViewModel model)
         {
-            ViewData[ViewBagConstants.ID] = model.Id;
-            ViewData[ViewBagConstants.FULL_NAME] = model.FullName;
-            ViewData[ViewBagConstants.PERSONAL_ID] = model.PersonaInformationId;
+            try
+            {
+                ViewData[ViewBagConstants.ID] = model.Id;
+                ViewData[ViewBagConstants.FULL_NAME] = model.FullName;
+                ViewData[ViewBagConstants.PERSONAL_ID] = model.PersonaInformationId;
 
-            if (model.HasSelectedCauses() == false)
-            {
-                ModelState.AddModelError(nameof(model.Error), StringConstants.Error.NO_ACCIDENT_CAUSES);
-                model.Error = StringConstants.Error.NO_ACCIDENT_CAUSES;
-            }
-            else
-            {
-                if (ModelState.IsValid)
+                if (model.HasSelectedCauses() == false)
                 {
-                    model = await repository.GetAccidentForEdition(model.Id, model);
-                    var newModel = mapper.Map<AccidentViewModel>(model);
-                    await saveAccidentUseCase.Invoke(newModel);
-                    return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+                    ModelState.AddModelError(nameof(model.Error), StringConstants.Error.NO_ACCIDENT_CAUSES);
+                    model.Error = StringConstants.Error.NO_ACCIDENT_CAUSES;
                 }
+                else
+                {
+                    if (ModelState.IsValid)
+                    {
+                        var pdf = model.PdfFile;
+                        model = await repository.GetAccidentForEdition(model.Id, model);
+                        var newModel = mapper.Map<AccidentViewModel>(model);
+                        newModel.FormFile = pdf;
+                        await saveAccidentUseCase.Invoke(newModel);
+                        return RedirectToAction(nameof(Index), new { identifier = model.PersonaInformationId, fullName = model.FullName });
+                    }
+                }
+
+                model = await repository.GetAccidentForEdition(model.Id, model);
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(nameof(model.Error), ex.InnerException.ToString());
+                model.Error = ">" + ex.InnerException.ToString();
+                return View(model);
             }
 
-            model = await repository.GetAccidentForEdition(model.Id, model);
-            return View(model);
 
         }
 
@@ -158,7 +174,15 @@ namespace PortalEquador.Controllers.Accident
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteAccident(int id, int identifier, string username)
         {
-            await repository.DeleteAccident(id);
+            await deleteAccidentUseCase.Invoke(id);
+            return RedirectToAction(nameof(Index), new { identifier = identifier, fullName = username });
+        }
+
+        [HttpPost, ActionName("DeleteAccidentDocument")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAccidentDocument(int id, int identifier, string username)
+        {
+            await deleteDocumentUseCase.Invoke(id, Util.EnumTypes.FolderType.Accident);
             return RedirectToAction(nameof(Index), new { identifier = identifier, fullName = username });
         }
     }
